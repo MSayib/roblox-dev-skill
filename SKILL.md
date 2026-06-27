@@ -7,8 +7,9 @@ description: >
   MUST use this skill whenever the user mentions: 'Roblox', 'Luau', 'Roblox Studio',
   'game development' (in Roblox context), 'DataStoreService', 'RemoteEvent', 'RemoteFunction',
   'ServerScriptService', 'ReplicatedStorage', 'StarterGui', 'MeshPart', 'obby', 'tycoon',
-  'simulator' (Roblox game genre), 'ProfileStore', 'Rojo', 'rbxl', 'rbxlx', 'publish game',
-  'game pass', 'developer product', or any Roblox Engine API reference. Also trigger when
+  'simulator' (Roblox game genre), 'ProfileStore', 'Rojo', 'rbxl', 'rbxlx', 'rbxm', 'rbxmx',
+  'import model', 'export model', 'fbx', 'obj', 'gltf', 'asset manager', 'Universal Importer',
+  'publish game', 'game pass', 'developer product', or any Roblox Engine API reference. Also trigger when
   working with Roblox Studio MCP tools like execute_luau, search_game_tree, script_search,
   inspect_instance, or start_stop_play.
   Do NOT trigger for: Unity, Unreal Engine, Godot, general game design theory without
@@ -83,10 +84,39 @@ Match user intent to the appropriate reference file. Read the file BEFORE genera
 | UI, GUI, ScreenGui, menus, HUD, StyleQuery | `references/ui-systems.md` |
 | Migrating legacy code, deprecated APIs | `references/legacy-migration.md` |
 | Monetization, game passes, donations, transfers | `references/monetization.md` |
+| File formats, import/export, asset management | `references/file-formats-and-assets.md` |
 
 If the intent spans multiple domains, read all relevant files.
-If a reference file doesn't cover a topic sufficiently, use **context7 MCP** to
-look up the latest documentation from `create.roblox.com/docs`.
+If a reference file doesn't cover a topic sufficiently, use the Official
+Documentation Lookup workflow below.
+
+---
+
+## Official Documentation Lookup
+
+Roblox provides AI-optimized documentation endpoints. Use these when reference
+files don't cover a topic or you need the latest API details:
+
+| Resource | URL | Use For |
+|----------|-----|--------|
+| **LLM docs index** | `https://create.roblox.com/docs/llms.txt` | Browse all available doc pages by topic |
+| **Full docs (single file)** | `https://create.roblox.com/docs/llms-full.txt` | Comprehensive single-file reference |
+| **Per-page markdown** | `https://create.roblox.com/docs/en-us/{path}.md` | Read specific doc pages in clean markdown |
+| **Engine API index** | `https://create.roblox.com/docs/reference/engine/llms.txt` | Luau API classes, methods, events |
+| **Open Cloud API index** | `https://create.roblox.com/docs/cloud/llms.txt` | REST API endpoints for external tools |
+| **Deprecated API inventory** | `https://create.roblox.com/docs/reference/engine/deprecated.md` | Check if an API is deprecated |
+
+### Lookup Workflow
+1. Check if a reference file covers the topic (Routing Table above)
+2. If not, use `read_url_content` on the per-page markdown URL
+   - Example: `https://create.roblox.com/docs/en-us/studio/importer.md`
+3. If unsure which page to read, browse `llms.txt` for the right URL
+4. **Fallback**: Use **context7 MCP** (`resolve-library-id` + `query-docs`)
+5. If still unclear, ask the user before proceeding
+
+> **Important**: Engine APIs (Luau via `game:GetService()`) and Open Cloud APIs
+> (HTTP REST via `x-api-key`) are **completely separate systems**. Using the
+> wrong index will produce non-functional code.
 
 ---
 
