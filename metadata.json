@@ -1,0 +1,27 @@
+{
+  "skill_name": "roblox-dev",
+  "version": "2.0.0",
+  "last_updated": "2026-06-25T15:12:00+07:00",
+  "last_updated_by": "human+ai collaborative deep research",
+  "update_source": "https://create.roblox.com/docs, https://devforum.roblox.com, live MCP engine verification",
+  "engine_version_at_update": "0.727.0",
+  "update_interval_days": 7,
+  "update_history": [
+    {
+      "date": "2026-06-25T15:12:00+07:00",
+      "version": "2.0.0",
+      "changes": "Mid-2026 deep refresh: +monetization.md, +UIShadow/StyleQuery/IAS/BanAsync/ScopedUserIds, +Transfers API, +12 deprecated APIs, +negative triggers, +context7 fallback, +AGENTS.md/CLAUDE.md/claudeignore configs",
+      "engine_version": "0.727.0",
+      "decision_by": "user (sayib)",
+      "verified_by": "AI full audit (14/14 fact-checks passed)"
+    },
+    {
+      "date": "2026-06-25T07:30:00+07:00",
+      "version": "1.0.0",
+      "changes": "Initial creation: 9 reference files, SKILL.md router, MCP integration, dual-platform symlink architecture",
+      "engine_version": "0.727.0",
+      "decision_by": "user (sayib)",
+      "verified_by": "AI file integrity + symlink audit"
+    }
+  ]
+}

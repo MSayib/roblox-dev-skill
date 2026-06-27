@@ -1,0 +1,73 @@
+{
+  "skill_name": "roblox-dev",
+  "version": "2.0.0",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Create a coin collection system for my Roblox game",
+      "should_trigger": true,
+      "expected_references": ["project-structure.md", "networking.md"],
+      "notes": "Should trigger roblox-dev skill, generate server-side coin logic with RemoteEvents"
+    },
+    {
+      "id": 2,
+      "prompt": "Fix the DataStore error in my obby game",
+      "should_trigger": true,
+      "expected_references": ["datastore-persistence.md"],
+      "notes": "Should trigger on 'DataStore' and 'obby' keywords"
+    },
+    {
+      "id": 3,
+      "prompt": "Write a Python script to process CSV files",
+      "should_trigger": false,
+      "notes": "Should NOT trigger — non-Roblox, non-Luau task"
+    },
+    {
+      "id": 4,
+      "prompt": "Help me debug this RemoteEvent firing twice",
+      "should_trigger": true,
+      "expected_references": ["networking.md", "security-hardening.md"],
+      "notes": "Should trigger on 'RemoteEvent' keyword"
+    },
+    {
+      "id": 5,
+      "prompt": "Create a React component for user authentication",
+      "should_trigger": false,
+      "notes": "Should NOT trigger — web development, negative trigger"
+    },
+    {
+      "id": 6,
+      "prompt": "Set up player-to-player donations in my Roblox game",
+      "should_trigger": true,
+      "expected_references": ["monetization.md"],
+      "notes": "Should trigger and reference Transfers API"
+    },
+    {
+      "id": 7,
+      "prompt": "Optimize my Roblox game for mobile devices",
+      "should_trigger": true,
+      "expected_references": ["performance-optimization.md"],
+      "notes": "Should trigger on 'Roblox' + optimization context"
+    },
+    {
+      "id": 8,
+      "prompt": "Create a Unity 3D platformer game",
+      "should_trigger": false,
+      "notes": "Should NOT trigger — Unity is in negative triggers"
+    },
+    {
+      "id": 9,
+      "prompt": "Migrate my game from DataStore2 to ProfileStore",
+      "should_trigger": true,
+      "expected_references": ["datastore-persistence.md", "legacy-migration.md"],
+      "notes": "Should trigger on 'ProfileStore' and 'DataStore2' keywords"
+    },
+    {
+      "id": 10,
+      "prompt": "Add BillboardGui health bars above NPCs",
+      "should_trigger": true,
+      "expected_references": ["ui-systems.md"],
+      "notes": "Should trigger on Roblox UI context"
+    }
+  ]
+}
