@@ -1,5 +1,9 @@
 # Roblox Studio MCP Integration
 
+> **Source:**
+> https://create.roblox.com/docs/ai/build ·
+> https://create.roblox.com/docs/studio
+
 > How to use the Roblox_Studio MCP server to interact with Roblox Studio from an AI agent.
 
 ## Table of Contents
