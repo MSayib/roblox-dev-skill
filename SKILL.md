@@ -87,10 +87,49 @@ Documentation Lookup workflow below.
 
 ---
 
-## Official Documentation Lookup
+## API & Documentation Lookup
 
-Roblox provides AI-optimized documentation endpoints. Use these when reference
-files don't cover a topic or you need the latest API details:
+### Priority 1: Local API Reference (`~/RobloxDocs/`)
+
+**Always check local files first** — they are pre-split, token-efficient (845× smaller
+than full dump), and require no network. If `~/RobloxDocs/RobloxAPI/` exists, use it:
+
+```bash
+# Look up a specific class (instant, ~10KB vs 8MB full dump)
+cat ~/RobloxDocs/RobloxAPI/classes/<ClassName>.json
+
+# Query a specific property/method
+jq '.Members[] | select(.Name == "<MemberName>")' ~/RobloxDocs/RobloxAPI/classes/<ClassName>.json
+
+# Find all services
+cat ~/RobloxDocs/RobloxAPI/service-index.json
+
+# Check what's deprecated
+cat ~/RobloxDocs/RobloxAPI/deprecated-index.json
+
+# Search across classes by filename
+ls ~/RobloxDocs/RobloxAPI/classes/ | grep -i <keyword>
+
+# Search for a property across all classes
+grep -l '"<PropertyName>"' ~/RobloxDocs/RobloxAPI/classes/*.json
+```
+
+**Obsolescence check:** Before using local data, verify freshness:
+```bash
+# Check when local data was last updated
+cat ~/RobloxDocs/RobloxAPI/.current-version
+# → {"version":"0.733.0","checkedAt":"2026-08-11T05:07:00Z",...}
+```
+If `checkedAt` is older than 7 days, or if a class/member is not found locally,
+trigger a **background update** and proceed with live web fallback:
+```bash
+# Background update (non-blocking)
+~/RobloxDocs/scripts/roblox-api-monitor.sh &
+```
+
+### Priority 2: Live Web Sources (Fallback)
+
+Use these when local data doesn't cover a topic, is obsolete, or you need prose docs:
 
 | Resource | URL | Use For |
 |----------|-----|--------|
@@ -103,25 +142,26 @@ files don't cover a topic or you need the latest API details:
 | **Deprecated API check** | `https://robloxapi.github.io/ref/class/<Name>.html` | Check individual class/member status (deprecated items marked visually) |
 
 ### Lookup Workflow
-1. Check if a reference file covers the topic (Routing Table above)
-2. If not, use `read_url_content` on the per-page markdown URL
+1. Check if a **reference file** covers the topic (Routing Table above)
+2. Check **`~/RobloxDocs/RobloxAPI/classes/<Name>.json`** for Engine API details
+3. If not found locally, use `read_url_content` on the per-page markdown URL
    - Example: `https://create.roblox.com/docs/en-us/studio/importer.md`
-3. If unsure which page to read, browse `llms.txt` for the right URL
-4. For **Open Cloud / REST API** topics, read `https://create.roblox.com/docs/cloud/llms.txt`
+4. If unsure which page to read, browse `llms.txt` for the right URL
+5. For **Open Cloud / REST API** topics, read `https://create.roblox.com/docs/cloud/llms.txt`
    - Search Features section first, then Domains
    - Prefer Open Cloud endpoints (API key / OAuth) over legacy cookie-auth endpoints
-5. **Fallback**: Use **context7 MCP** (`resolve-library-id` + `query-docs`)
-6. If still unclear, ask the user before proceeding
+6. **Fallback**: Use **context7 MCP** (`resolve-library-id` + `query-docs`)
+7. If still unclear, ask the user before proceeding
 
 > **Important**: Engine APIs (Luau via `game:GetService()`) and Open Cloud APIs
 > (HTTP REST via `x-api-key`) are **completely separate systems**. Using the
 > wrong index will produce non-functional code.
 
-> **Checking deprecated APIs**: Roblox does not provide a single static page listing all
-> deprecated APIs. Instead, use these approaches:
-> 1. Check `robloxapi.github.io/ref/class/<Name>.html` — deprecated members are marked visually
-> 2. Download the Full-API-Dump.json (see below) and filter for `"Tags":["Deprecated"]`
-> 3. Use context7 MCP to query specific APIs
+> **Checking deprecated APIs**: Use these approaches (in priority order):
+> 1. `cat ~/RobloxDocs/RobloxAPI/deprecated-index.json` — instant local lookup
+> 2. `cat ~/RobloxDocs/RobloxAPI/deprecated/<ClassName>.json` — full deprecated class detail
+> 3. Check `robloxapi.github.io/ref/class/<Name>.html` — deprecated members marked visually
+> 4. Use context7 MCP to query specific APIs
 
 ---
 

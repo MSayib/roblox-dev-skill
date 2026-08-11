@@ -1,12 +1,20 @@
 {
   "skill_name": "roblox-dev",
-  "version": "2.3.0",
-  "last_updated": "2026-08-11T11:53:00+07:00",
+  "version": "2.4.0",
+  "last_updated": "2026-08-11T12:20:00+07:00",
   "last_updated_by": "human+ai collaborative improvement",
   "update_source": "https://create.roblox.com/docs, https://create.roblox.com/docs/llms.txt, https://devforum.roblox.com, live MCP engine verification",
   "engine_version_at_update": "0.733.0",
   "update_interval_days": 7,
   "update_history": [
+    {
+      "date": "2026-08-11T12:20:00+07:00",
+      "version": "2.4.0",
+      "changes": "Local-first API lookup: SKILL.md now prioritizes ~/RobloxDocs/ (pre-split JSON, 845× more token-efficient) over live web sources. Obsolescence check via .current-version file. Background auto-update trigger when data >7 days stale. Monitor script rewritten with smart platform detection (uname-based, not hardcoded). Deprecated lookup now local-first (deprecated-index.json). Lookup workflow restructured: reference files → local JSON → web docs → context7",
+      "engine_version": "0.733.0",
+      "decision_by": "user (sayib)",
+      "verified_by": "AI live platform test (Mac vs Win CDN availability confirmed)"
+    },
     {
       "date": "2026-08-11T11:53:00+07:00",
       "version": "2.3.0",
