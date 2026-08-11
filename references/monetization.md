@@ -17,7 +17,7 @@
 
 ## Overview
 
-Roblox monetization in mid-2026 consists of:
+Roblox monetization (as of August 2026) consists of:
 1. **Game Passes** — One-time purchases granting permanent perks
 2. **Developer Products** — Repeatable purchases (consumables)
 3. **Transfers API** — Player-to-player Robux transfers (NEW, replaces cross-game sales)

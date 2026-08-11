@@ -21,9 +21,9 @@
 8. [StarterGui & LocalScript Interaction](#startergui--localscript-interaction)
 9. [ProximityPrompt](#proximityprompt)
 10. [Best Practices](#best-practices)
-11. [UIShadow — Native Drop Shadows (June 2026)](#uishadow--native-drop-shadows-june-2026)
+11. [UIShadow — Native Drop Shadows](#uishadow--native-drop-shadows)
 12. [StyleQuery — Responsive Style Queries (May 2026)](#stylequery--responsive-style-queries-may-2026)
-13. [Per-Corner UICorner Rounding (June 2026)](#per-corner-uicorner-rounding-june-2026)
+13. [Per-Corner UICorner Rounding](#per-corner-uicorner-rounding)
 
 ---
 
@@ -351,7 +351,7 @@ end
 
 ---
 
-## UIShadow — Native Drop Shadows (June 2026)
+## UIShadow — Native Drop Shadows
 
 `UIShadow` renders a native drop shadow beneath its parent `GuiObject`,
 replacing image-based shadow workarounds. Add as a child of any `GuiObject`.
@@ -525,7 +525,7 @@ ScreenGui
 
 ---
 
-## Per-Corner UICorner Rounding (June 2026)
+## Per-Corner UICorner Rounding
 
 `UICorner` now supports individual corner radii, enabling asymmetric rounding
 (e.g. tabs, chat bubbles, notification toasts).
@@ -539,7 +539,7 @@ ScreenGui
 | `BottomLeftRadius` | `UDim` | Bottom-left corner radius |
 
 > **Note:** Per-corner properties require the **New UI Capabilities** beta
-> feature enabled in Studio as of June 2026. Writing to `CornerRadius`
+> feature enabled in Studio since June 2026. Writing to `CornerRadius`
 > overwrites all four individual values.
 
 ```luau

@@ -501,7 +501,7 @@ MyGame/
 
 ## Studio Script Sync
 
-> Full release: mid-June 2026.
+> Released: June 2026 (GA).
 > Source: https://create.roblox.com/docs/studio/script-sync
 
 **Studio Script Sync** enables collaborative scripting between Roblox Studio and
@@ -552,7 +552,7 @@ vice versa.
 
 ## Input Action System (IAS)
 
-> Full release: June 11, 2026.
+> Released: June 11, 2026 (GA).
 > Source: https://create.roblox.com/docs/input/input-action-system
 
 The **Input Action System (IAS)** replaces the legacy per-input-event model

@@ -17,7 +17,7 @@ Expert development companion for building Roblox experiences with Luau. Grounded
 official Roblox documentation (https://create.roblox.com/docs), the Luau language spec
 (https://luau.org), and the Roblox Lua Style Guide (https://roblox.github.io/lua-style-guide/).
 
-> **Engine**: Roblox Studio v727+ (mid-2026). APIs update weekly — when in doubt,
+> **Engine**: Roblox Studio v733+ (August 2026). APIs update weekly — when in doubt,
 > use **context7 MCP** (`resolve-library-id` + `query-docs`) to look up the latest
 > Roblox API documentation, or refer directly to https://create.roblox.com/docs.
 > If information is still unclear, ask the user before proceeding.

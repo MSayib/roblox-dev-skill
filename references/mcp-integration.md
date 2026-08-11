@@ -18,7 +18,7 @@
 ## Overview
 
 The **Roblox_Studio MCP server** is **built-in natively** to Roblox Studio as of
-mid-2026. It exposes Studio functionality through the Model Context Protocol,
+mid-2026 and is now the standard integration path. It exposes Studio functionality through the Model Context Protocol,
 letting AI agents read, write, and test game code without the developer manually
 copy-pasting between the agent and Studio.
 
