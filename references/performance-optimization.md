@@ -221,6 +221,18 @@ Per docs: *"Invoke code on RunService events sparingly, limiting usage to cases 
 high frequency invocation is essential (for example, updating the camera)."* Most code
 can run on other events or less frequently with `task.wait()`.
 
+#### Modern RunService Frame Pipeline (Mid-2026)
+
+| Order | Modern Event | Legacy Alias | Runs On | Use For |
+|-------|-------------|-------------|---------|--------|
+| 1 | `PreRender` | `RenderStepped` | Client only | Camera, UI updates |
+| 2 | `PreAnimation` | — (new) | Client only | Animation prep |
+| 3 | `PreSimulation` | `Stepped` | Client + Server | Input processing, pre-physics |
+| 4 | `PostSimulation` | `Heartbeat` | Client + Server | Post-physics, game logic |
+
+> **Legacy names still work** as aliases but are not recommended for new code.
+> Use the modern names for clarity about execution order.
+
 ---
 
 ## 6. Connection Cleanup

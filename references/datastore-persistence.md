@@ -211,6 +211,50 @@ end
 > **Note:** OrderedDataStore does NOT support versioning or metadata.
 > `DataStoreKeyInfo` is always `nil` for ordered data store keys.
 
+## 7. MemoryStoreService
+
+Temporary, low-latency data storage for cross-server coordination. Data is **not persisted**
+across server restarts — all entries have a TTL (Time-To-Live).
+
+### Data Structures
+
+| Structure | Key Limit | Value Limit | Use Case |
+|-----------|-----------|-------------|----------|
+| `SortedMap` | 128 chars | 1 KB | Leaderboards, matchmaking queues |
+| `Queue` | — | 1 KB per item | Job queues, event pipelines |
+| `HashMap` | 128 chars | 32 KB | Session state, cross-server cache |
+
+### Rate Limits
+
+| Operation | Budget Formula |
+|-----------|---------------|
+| Read | `1000 + 100 × numPlayers` requests/min |
+| Write | `1000 + 100 × numPlayers` requests/min |
+| Total data | 64 MB per partition (per universe) |
+| Max TTL | 45 days |
+| Min TTL | 10 seconds |
+
+### Usage Example
+```lua
+--!strict
+local MemoryStoreService = game:GetService("MemoryStoreService")
+
+local leaderboard = MemoryStoreService:GetSortedMap("GlobalLeaderboard")
+
+-- Write with 1-hour TTL
+local success, err = pcall(function()
+    leaderboard:SetAsync("player_123", 1500, 3600)
+end)
+
+-- Read top 10
+local success, items = pcall(function()
+    return leaderboard:GetRangeAsync(Enum.SortDirection.Descending, 10)
+end)
+```
+
+> **Caution:** MemoryStoreService is for **temporary** data only. It is not a
+> replacement for DataStoreService. Data loss is expected on server restarts.
+
 ---
 
 ## Versioning

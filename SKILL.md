@@ -1,19 +1,14 @@
 ---
-name: roblox-dev
+name: roblox-dev-skill
 description: >
-  Expert Roblox game development companion for Luau scripting, Roblox Studio, and MCP integration.
-  Covers full-lifecycle development: architecture, scripting, debugging, security hardening,
-  performance optimization, data persistence, networking, UI systems, and publishing.
+  Core scripting and engine skill for Roblox game development.
+  Covers full-lifecycle development: architecture, Luau scripting, debugging, security,
+  performance, data persistence, networking, and the Roblox Studio environment.
   MUST use this skill whenever the user mentions: 'Roblox', 'Luau', 'Roblox Studio',
-  'game development' (in Roblox context), 'DataStoreService', 'RemoteEvent', 'RemoteFunction',
-  'ServerScriptService', 'ReplicatedStorage', 'StarterGui', 'MeshPart', 'obby', 'tycoon',
-  'simulator' (Roblox game genre), 'ProfileStore', 'Rojo', 'rbxl', 'rbxlx', 'rbxm', 'rbxmx',
-  'import model', 'export model', 'fbx', 'obj', 'gltf', 'asset manager', 'Universal Importer',
-  'publish game', 'game pass', 'developer product', or any Roblox Engine API reference. Also trigger when
-  working with Roblox Studio MCP tools like execute_luau, search_game_tree, script_search,
-  inspect_instance, or start_stop_play.
-  Do NOT trigger for: Unity, Unreal Engine, Godot, general game design theory without
-  Roblox context, web/mobile app development, or non-Luau scripting languages.
+  'ServerScriptService', 'ReplicatedStorage', 'DataStoreService', 'RemoteEvent',
+  or when working with Roblox Studio MCP tools like execute_luau, search_game_tree.
+  Note: For UI/UX design, refer to roblox-design-skill and roblox-design-intelligence.
+  For Audio, VFX, or Monetization, refer to their respective skills in the suite.
 ---
 
 # Roblox Game Development Skill
@@ -103,20 +98,30 @@ files don't cover a topic or you need the latest API details:
 | **Full docs (single file)** | `https://create.roblox.com/docs/llms-full.txt` | Comprehensive single-file reference |
 | **Per-page markdown** | `https://create.roblox.com/docs/en-us/{path}.md` | Read specific doc pages in clean markdown |
 | **Engine API index** | `https://create.roblox.com/docs/reference/engine/llms.txt` | Luau API classes, methods, events |
-| **Open Cloud API index** | `https://create.roblox.com/docs/cloud/llms.txt` | REST API endpoints for external tools |
-| **Deprecated API inventory** | `https://create.roblox.com/docs/reference/engine/deprecated.md` | Check if an API is deprecated |
+| **Open Cloud API index** | `https://create.roblox.com/docs/cloud/llms.txt` | **Primary discovery** for all Cloud REST API: features, domains, guides, auth |
+| **OpenAPI spec (raw)** | `https://create.roblox.com/docs/cloud/openapi.json` | Machine-readable OpenAPI spec for MCP/code-gen tools |
+| **Deprecated API check** | `https://robloxapi.github.io/ref/class/<Name>.html` | Check individual class/member status (deprecated items marked visually) |
 
 ### Lookup Workflow
 1. Check if a reference file covers the topic (Routing Table above)
 2. If not, use `read_url_content` on the per-page markdown URL
    - Example: `https://create.roblox.com/docs/en-us/studio/importer.md`
 3. If unsure which page to read, browse `llms.txt` for the right URL
-4. **Fallback**: Use **context7 MCP** (`resolve-library-id` + `query-docs`)
-5. If still unclear, ask the user before proceeding
+4. For **Open Cloud / REST API** topics, read `https://create.roblox.com/docs/cloud/llms.txt`
+   - Search Features section first, then Domains
+   - Prefer Open Cloud endpoints (API key / OAuth) over legacy cookie-auth endpoints
+5. **Fallback**: Use **context7 MCP** (`resolve-library-id` + `query-docs`)
+6. If still unclear, ask the user before proceeding
 
 > **Important**: Engine APIs (Luau via `game:GetService()`) and Open Cloud APIs
 > (HTTP REST via `x-api-key`) are **completely separate systems**. Using the
 > wrong index will produce non-functional code.
+
+> **Checking deprecated APIs**: Roblox does not provide a single static page listing all
+> deprecated APIs. Instead, use these approaches:
+> 1. Check `robloxapi.github.io/ref/class/<Name>.html` — deprecated members are marked visually
+> 2. Download the Full-API-Dump.json (see below) and filter for `"Tags":["Deprecated"]`
+> 3. Use context7 MCP to query specific APIs
 
 ---
 

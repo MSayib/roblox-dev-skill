@@ -93,6 +93,58 @@ end
 MarketplaceService.ProcessReceipt = processReceipt
 ```
 
+### 5. Subscriptions (Recurring In-Experience)
+
+Subscriptions allow recurring billing for exclusive perks within an experience.
+Players are charged automatically each billing period.
+
+**Server-side — Check subscription status:**
+```lua
+--!strict
+local MarketplaceService = game:GetService("MarketplaceService")
+
+local SUBSCRIPTION_ID = "EXP-0000000000" -- Your subscription product ID
+
+local function isSubscribed(player: Player): boolean
+    local success, status = pcall(function()
+        return MarketplaceService:GetUserSubscriptionStatusAsync(player, SUBSCRIPTION_ID)
+    end)
+    if success and status then
+        return status.IsSubscribed
+    end
+    return false
+end
+```
+
+**Server-side — Handle subscription state changes:**
+```lua
+MarketplaceService.SubscriptionStatusChanged:Connect(function(player, subscriptionId, newStatus)
+    if subscriptionId == SUBSCRIPTION_ID then
+        if newStatus.IsSubscribed then
+            -- Grant perks
+        else
+            -- Revoke perks
+        end
+    end
+end)
+```
+
+**Client-side — Prompt purchase:**
+```lua
+local MarketplaceService = game:GetService("MarketplaceService")
+local Players = game:GetService("Players")
+
+local player = Players.LocalPlayer
+MarketplaceService:PromptSubscriptionPurchase(player, SUBSCRIPTION_ID)
+```
+
+**Key facts:**
+- Subscriptions are managed in the Creator Dashboard
+- Revenue split: same as other in-experience purchases
+- Players can cancel anytime; access continues until the billing period ends
+- Use `GetUserSubscriptionDetailsAsync` for plan details (price, period)
+- Use `GetUserSubscriptionPaymentHistoryAsync` for payment audit trail
+
 ---
 
 ## Transfers API

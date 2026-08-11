@@ -244,9 +244,17 @@ end
 local damage = calcFunc:Invoke(50, 1.5)  --> 75
 ```
 
-> **Note:** `BindableEvent` and `BindableFunction` pass arguments by **copy**
-> (tables are deep-copied). Changes to a table after firing won't affect the
-> received copy.
+> **BindableEvent/BindableFunction caveats:**
+> 1. Arguments are **deep-copied** — changes after firing don't affect the receiver
+> 2. **Metatables are stripped** during copy — OOP objects lose their methods
+> 3. **Cyclic table references cause errors** — tables referencing themselves fail
+> 4. **Large tables have performance cost** — deep-copy is O(n) on table size
+> 5. `BindableEvent:Fire()` executes listeners **synchronously** before returning
+>    (unlike `RemoteEvent` which is async across the network boundary)
+>
+> **Preference:** For same-context communication (server-to-server or client-to-client),
+> prefer direct `ModuleScript` method calls over BindableEvents. They avoid the
+> deep-copy overhead and preserve metatables.
 
 ---
 

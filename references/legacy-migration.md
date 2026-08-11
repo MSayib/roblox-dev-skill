@@ -26,6 +26,9 @@
 | Legacy GamePass APIs | `MarketplaceService` methods | ⚠️ Mostly | Check April 2026 deprecation notes |
 | Old Type Solver | New Type Solver (GA Nov 2025) | Auto | Auto-enabled; `--!strict` behavior improved |
 | `Instance.new` + parent first | Set `Parent` **last** | ✅ Yes | Avoids redundant replication/events |
+| `RunService.Stepped` | `RunService.PreSimulation` | Same behavior, clearer name | 2024 |
+| `RunService.Heartbeat` | `RunService.PostSimulation` | Same behavior, clearer name | 2024 |
+| `RunService.RenderStepped` | `RunService.PreRender` | Same behavior, clearer name | 2024 |
 
 ---
 
@@ -284,6 +287,15 @@ local success, owns = pcall(function()
     return MarketplaceService:UserOwnsGamePassAsync(player.UserId, gamePassId)
 end)
 ```
+
+**Alternative approaches for asset ownership:**
+
+| Asset Type | Recommended Check |
+|-----------|------------------|
+| Game Passes | `MarketplaceService:UserOwnsGamePassAsync(player.UserId, passId)` |
+| Badges | `BadgeService:UserHasBadgeAsync(player.UserId, badgeId)` |
+| Avatar items | `AvatarEditorService:GetItemDetails()` or Open Cloud Inventory API |
+| Generic assets | Open Cloud `GET /cloud/v2/users/{userId}/inventory-items` |
 
 **Migration**: Use the new Economy API endpoints for asset ownership checks.
 Consult https://create.roblox.com/docs for the latest API reference.

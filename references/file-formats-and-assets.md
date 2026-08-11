@@ -47,6 +47,27 @@
 | Debugging file internals | `.rbxmx` / `.rbxlx` | Can open in text editor |
 | Automated CI/build pipelines | Either | Rojo can produce both |
 
+#### Binary Compression: ZSTD vs LZ4
+
+The Roblox binary format (`.rbxl`/`.rbxm`) compresses data **per chunk**. Two
+algorithms are supported:
+
+| Algorithm | Magic Bytes | Status |
+|-----------|------------|--------|
+| ZSTD | `28 B5 2F FD` | **Current default** — Studio writes ZSTD since ~2025 |
+| LZ4 | (no magic) | **Legacy** — older files and some tools still use LZ4 |
+
+**Why this matters for tooling:**
+- `rbx_binary` (Rust) defaults to LZ4 when writing — produces files **72% larger**
+  than Studio output. Explicitly use `CompressionType::Zstd` when writing.
+- Detection: check first 4 bytes of each chunk payload for ZSTD magic `28 B5 2F FD`;
+  anything else is LZ4.
+- `rbx-dom` (Rust): ✅ supports both ZSTD and LZ4
+- `rbxfile` (Go): ⚠️ LZ4 only — will fail on ZSTD chunks
+
+> Measured 2026-08-11 on `Starship.rbxl`: all 2,984 chunks used ZSTD.
+> Rewriting with LZ4 default: 2.9 MB → 5.0 MB (+72%).
+
 ---
 
 ## 2. Saving & Exporting
@@ -193,6 +214,29 @@ When importing 3D models, the Importer provides these key settings:
 - Browse and insert community/Roblox-made assets
 - Access: **View → Toolbox** or visit `https://create.roblox.com/store`
 - Includes models, plugins, images, meshes, audio, video
+
+#### MeshContent — New-Generation Asset Reference
+
+Roblox is migrating asset reference properties to `Content`-typed properties with
+new names:
+
+| Legacy Name | New Name | Parent Class |
+|-------------|----------|-------------|
+| `MeshId` | `MeshContent` | `MeshPart` |
+| `SoundId` | `AudioContent` | `Sound` / `AudioPlayer` |
+| `AnimationId` | `AnimationContent` | `Animation` |
+| `TextureID` / `Texture` | `TextureContent` | `Decal` / `MeshPart` |
+
+**Important for asset scanning:** Real place files contain a **mix** of both
+generations. Code that only checks legacy names will miss assets saved by
+modern Studio. Always check both names.
+
+**Three URI forms** found in real files:
+```
+rbxassetid://113094071486363
+https://assetdelivery.roblox.com/v1/asset/?id=865...
+http://www.roblox.com/asset/?id=507770677
+```
 
 ---
 
