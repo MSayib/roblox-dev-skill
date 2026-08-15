@@ -1,12 +1,20 @@
 {
   "skill_name": "roblox-dev",
-  "version": "2.0.0",
-  "last_updated": "2026-06-25T15:12:00+07:00",
-  "last_updated_by": "human+ai collaborative deep research",
-  "update_source": "https://create.roblox.com/docs, https://devforum.roblox.com, live MCP engine verification",
-  "engine_version_at_update": "0.727.0",
+  "version": "2.5.0",
+  "last_updated": "2026-08-16T03:35:00+07:00",
+  "last_updated_by": "antigravity",
+  "update_source": "https://create.roblox.com/docs, https://clientsettings.roblox.com, ~/RobloxDocs Full-API-Dump 0.734.0",
+  "engine_version_at_update": "0.734.0",
   "update_interval_days": 7,
   "update_history": [
+    {
+      "date": "2026-08-16T03:35:00+07:00",
+      "version": "2.5.0",
+      "changes": "Roblox Studio v0.734 API dump refresh (0.734.0.7340915): 908 classes (+AudioWindSynthesizer, +Logger, +ViewportCamera), 618 enums, full ~/RobloxDocs split indexes refreshed",
+      "engine_version": "0.734.0",
+      "decision_by": "user (sayib)",
+      "verified_by": "antigravity"
+    },
     {
       "date": "2026-06-25T15:12:00+07:00",
       "version": "2.0.0",
@@ -14,14 +22,6 @@
       "engine_version": "0.727.0",
       "decision_by": "user (sayib)",
       "verified_by": "AI full audit (14/14 fact-checks passed)"
-    },
-    {
-      "date": "2026-06-25T07:30:00+07:00",
-      "version": "1.0.0",
-      "changes": "Initial creation: 9 reference files, SKILL.md router, MCP integration, dual-platform symlink architecture",
-      "engine_version": "0.727.0",
-      "decision_by": "user (sayib)",
-      "verified_by": "AI file integrity + symlink audit"
     }
   ]
 }
