@@ -1,12 +1,20 @@
 {
   "skill_name": "roblox-dev",
-  "version": "2.4.0",
-  "last_updated": "2026-08-11T12:20:00+07:00",
+  "version": "2.5.0",
+  "last_updated": "2026-08-27T12:38:00+07:00",
   "last_updated_by": "human+ai collaborative improvement",
-  "update_source": "https://create.roblox.com/docs, https://create.roblox.com/docs/llms.txt, https://devforum.roblox.com, live MCP engine verification",
-  "engine_version_at_update": "0.733.0",
+  "update_source": "https://create.roblox.com/docs, https://create.roblox.com/docs/llms.txt, https://devforum.roblox.com, https://github.com/luau-lang/luau/releases, live clientsettings & CDN API dump",
+  "engine_version_at_update": "0.735.0.7351131",
   "update_interval_days": 7,
   "update_history": [
+    {
+      "date": "2026-08-27T12:38:00+07:00",
+      "version": "2.5.0",
+      "changes": "Engine & Luau v0.735 upgrade: Full API Dump updated to 0.735.0.7351131 (912 classes, 622 enums, +BranchService, +IntentService, +PlayerControlState, +ScriptScannerService). Luau language updates: LOP_FASTPCALL (~2x lower pcall/xpcall runtime overhead), user-defined type functions support pcall/xpcall with heap limits, built-in setmetatable<T, M> type function, standardized generic naming (T, U, V), exported annotation refinements, pointer encoding with SipHash2-4/Feistel, buffer & vector native library references.",
+      "engine_version": "0.735.0.7351131",
+      "decision_by": "user (sayib)",
+      "verified_by": "AI live CDN fetch + Luau 0.735 release audit + split dump verification"
+    },
     {
       "date": "2026-08-11T12:20:00+07:00",
       "version": "2.4.0",

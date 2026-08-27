@@ -215,6 +215,12 @@ RunService.Heartbeat:Connect(function()
 end)
 ```
 
+### Luau 0.735 Fast Execution & Native CodeGen
+
+- **`LOP_FASTPCALL` VM Opcode (Luau 0.735+)**: `pcall` and `xpcall` have ~2x lower invocation overhead, making error handling and safe execution guards virtually free of performance penalties.
+- **Native CodeGen (`--!native`)**: Compiles hot Luau bytecode directly to AOT/JIT native machine instructions on 64-bit platforms. Use `--!native` on math-heavy modules, custom procedural generation, and complex physics math to achieve 2-5x compute speedups.
+- **Buffer & Vector Types**: Use the `buffer` library (`buffer.create`) for bulk binary state serialization and `vector.create` for SIMD-accelerated math without table allocations or garbage collection pressure.
+
 ### Avoid Expensive Operations on RunService Events
 
 Per docs: *"Invoke code on RunService events sparingly, limiting usage to cases where

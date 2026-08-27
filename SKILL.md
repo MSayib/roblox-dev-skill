@@ -17,7 +17,7 @@ Expert development companion for building Roblox experiences with Luau. Grounded
 official Roblox documentation (https://create.roblox.com/docs), the Luau language spec
 (https://luau.org), and the Roblox Lua Style Guide (https://roblox.github.io/lua-style-guide/).
 
-> **Engine**: Roblox Studio v733+ (August 2026). APIs update weekly — when in doubt,
+> **Engine**: Roblox Studio v735+ (0.735.0.7351131, August 2026). APIs update weekly — when in doubt,
 > use **context7 MCP** (`resolve-library-id` + `query-docs`) to look up the latest
 > Roblox API documentation, or refer directly to https://create.roblox.com/docs.
 > If information is still unclear, ask the user before proceeding.
@@ -118,7 +118,7 @@ grep -l '"<PropertyName>"' ~/RobloxDocs/RobloxAPI/classes/*.json
 ```bash
 # Check when local data was last updated
 cat ~/RobloxDocs/RobloxAPI/.current-version
-# → {"version":"0.733.0","checkedAt":"2026-08-11T05:07:00Z",...}
+# → {"version":"0.735.0.7351131","checkedAt":"2026-08-27T05:35:53Z",...}
 ```
 If `checkedAt` is older than 7 days, or if a class/member is not found locally,
 trigger a **background update** and proceed with live web fallback:
