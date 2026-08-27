@@ -14,7 +14,7 @@ auto-triggers and provides the AI with deep, accurate, research-verified knowled
 about the Roblox platform.
 
 ### Key Features
-- 🧠 **5,800+ lines** of curated Roblox development knowledge across 11 reference files
+- 🧠 **Comprehensive knowledge base** — curated Roblox & Luau development guides across 11 reference topics
 - 📂 **Local-first API lookup** — pre-split `~/RobloxDocs/` JSON files (845× more token-efficient than full dump)
 - 🔄 **Self-updating** — built-in obsolescence detection + background auto-update
 - 🎯 **Smart routing** — automatically selects the right reference based on your intent
