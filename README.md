@@ -4,7 +4,7 @@ An expert-level AI skill for Roblox game development with Luau. Designed for
 [Antigravity IDE](https://antigravity.dev), [Claude Code](https://claude.ai),
 and any AI coding assistant that supports the Skills format.
 
-> **Version:** 2.5.0 | **Engine Version:** v735+ (0.735.0.7351131) | **Knowledge Status:** August 2026 Current
+> **Version:** 2.6.0 | **Engine Version:** v736+ (0.736.0.7361346) | **Knowledge Status:** August 2026 Current
 
 ## What Is This?
 
@@ -55,8 +55,8 @@ The skill integrates with a **local API reference hub** for token-efficient look
 ├── RobloxAPI/
 │   ├── dumps/                         # Full-API-Dump.json per version
 │   │   └── latest.json → (symlink)
-│   ├── classes/                       # 912 individual class JSONs (~10KB each)
-│   ├── enums/                         # 622 enum JSONs
+│   ├── classes/                       # 914 individual class JSONs (~10KB each)
+│   ├── enums/                         # 623 enum JSONs
 │   ├── services/                      # 255 service JSONs (subset)
 │   ├── deprecated/                    # 48 deprecated class JSONs
 │   ├── class-index.json               # Lightweight index for quick lookup
@@ -172,6 +172,7 @@ connected, the skill can:
 
 | Version | Date | Highlights |
 |---------|------|-----------|
+| **2.6.0** | Aug 28, 2026 | Engine update to v0.736 (0.736.0.7361346): Full API Dump updated to 914 classes (+StateMachineDefinition, +StateMachineTransitionDefinition), 623 enums (+AnimationNodeTransitionWhen), +ServerLowMemoryWarning, +CreateDecalAsync, emissive decals |
 | **2.5.0** | Aug 27, 2026 | Engine & Luau v0.735 upgrade: Full API Dump 0.735.0.7351131 (912 classes, +BranchService, +IntentService, +PlayerControlState, +ScriptScannerService), LOP_FASTPCALL (~2x faster pcall/xpcall), type function enhancements & setmetatable |
 | **2.4.0** | Aug 11, 2026 | Local-first `~/RobloxDocs/` lookup, smart platform detection, background auto-update |
 | **2.3.0** | Aug 11, 2026 | Deep reference refresh: 7 files updated with UIFlexItem, ZSTD, Subscriptions, MemoryStoreService, RunService pipeline |

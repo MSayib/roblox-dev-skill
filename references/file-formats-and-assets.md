@@ -138,6 +138,10 @@ The **Universal Importer** handles all third-party 3D asset imports.
 
 **Uses:** Textures, decals, UI image labels, mesh textures, custom materials, special effects.
 
+#### Modern Decal & Texture Capabilities (v736+)
+- **Emissive Decals**: Decals now support `EmissiveMaskContent`, `EmissiveStrength`, and `EmissiveTint` for glowing surfaces, neon signage, and futuristic sci-fi displays without extra light sources.
+- **Runtime Asset Creation**: `AssetService.CreateDecalAsync` and `AssetService.CreateTextureAsync` enable dynamic creation of decals and textures from buffer/image data at runtime.
+
 ### Import Audio
 
 | Format | Notes |

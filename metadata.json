@@ -1,12 +1,20 @@
 {
   "skill_name": "roblox-dev",
-  "version": "2.5.0",
-  "last_updated": "2026-08-27T12:38:00+07:00",
+  "version": "2.6.0",
+  "last_updated": "2026-08-28T09:06:00+07:00",
   "last_updated_by": "human+ai collaborative improvement",
   "update_source": "https://create.roblox.com/docs, https://create.roblox.com/docs/llms.txt, https://devforum.roblox.com, https://github.com/luau-lang/luau/releases, live clientsettings & CDN API dump",
-  "engine_version_at_update": "0.735.0.7351131",
+  "engine_version_at_update": "0.736.0.7361346",
   "update_interval_days": 7,
   "update_history": [
+    {
+      "date": "2026-08-28T09:06:00+07:00",
+      "version": "2.6.0",
+      "changes": "Engine update to v0.736 (0.736.0.7361346): Full API Dump updated to 914 classes (+StateMachineDefinition, +StateMachineTransitionDefinition), 623 enums (+AnimationNodeTransitionWhen), 255 services, 48 deprecated. New engine capabilities: DataModel.ServerLowMemoryWarning for server memory pressure monitoring, Decal emissive properties (EmissiveMaskContent, EmissiveStrength, EmissiveTint), AssetService.CreateDecalAsync & CreateTextureAsync, Player.PauseTeleports, RunService.IsTeamTest, and ScriptEditorService.OpenTemporaryDocumentAsync.",
+      "engine_version": "0.736.0.7361346",
+      "decision_by": "user (sayib)",
+      "verified_by": "AI live CDN fetch + clientsettings check + split dump verification"
+    },
     {
       "date": "2026-08-27T12:38:00+07:00",
       "version": "2.5.0",

@@ -276,10 +276,18 @@ Players.PlayerRemoving:Connect(function(player: Player)
 end)
 ```
 
-**Three ways to disconnect** (from docs):
-1. Call `connection:Disconnect()` manually
-2. Call `instance:Destroy()` — disconnects all events on that instance
-3. Destroy the script object the connection traces back to
+### Server Memory Pressure Monitoring (`ServerLowMemoryWarning`)
+
+Roblox Studio v736+ introduces `game.ServerLowMemoryWarning` allowing server scripts to react proactively when the server instance approaches memory limits:
+
+```luau
+--!strict
+-- Purge non-critical caches or throttle intensive tasks on low memory warning
+game.ServerLowMemoryWarning:Connect(function()
+    warn("[Memory] Server low memory warning triggered! Flushing in-memory caches...")
+    -- Evict unreferenced spatial caches, flush transient query tables, or trim buffer pools
+end)
+```
 
 ---
 
