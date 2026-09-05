@@ -19,9 +19,9 @@
 7. [Data Protection](#7-data-protection)
 8. [Script Security](#8-script-security)
 9. [Complete Example: Secure RemoteEvent Handler](#9-complete-example-secure-remoteevent-handler)
-10. [BanAsync API + Device Blocking (June 2026)](#10-banasync-api--device-blocking-june-2026)
+10. [BanAsync API + Device Blocking](#10-banasync-api--device-blocking)
 11. [Scoped User Identifiers Warning (October 2026)](#11-scoped-user-identifiers-warning-october-2026)
-12. [Mid-2026 Changelog](#12-mid-2026-changelog)
+12. [Changelog (through August 2026)](#12-changelog-through-august-2026)
 
 ---
 
@@ -235,7 +235,7 @@ Per Roblox docs: *"The most reliable solution for preventing physics and movemen
 is server authority, which moves physics simulation and movement validation entirely to
 the server."* See: https://create.roblox.com/docs/en-us/projects/server-authority
 
-> **Mid-2026 Update**: Server Authority has graduated from "Beta" to **"Client Beta"** as
+> **June 2026 Update**: Server Authority has graduated from "Beta" to **"Client Beta"** as
 > of late April 2026. Key changes:
 >
 > - **Live server testing**: You can now **publish** and test Server Authority on live
@@ -497,7 +497,7 @@ end)
 
 ---
 
-## 10. BanAsync API + Device Blocking (June 2026)
+## 10. BanAsync API + Device Blocking
 
 > **Added**: June 2026 — `ApplyDeviceBlock` parameter for `Players:BanAsync()`
 
@@ -506,7 +506,7 @@ a **24-hour device-level block** in addition to the standard account ban. This m
 significantly harder for banned exploiters to rejoin on alt accounts from the same machine.
 
 **Current limitations:**
-- Device blocking is **desktop only** (Windows and macOS) as of June 2026
+- Device blocking is **desktop only** (Windows and macOS) since June 2026
 - The device block lasts **24 hours** regardless of the ban `Duration`
 - Mobile and console device blocking is not yet supported
 
@@ -608,7 +608,7 @@ end
 
 ---
 
-## 12. Mid-2026 Changelog
+## 12. Changelog (through August 2026)
 
 | Date | Change | Section |
 |------|--------|---------|

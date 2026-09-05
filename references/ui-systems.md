@@ -1,5 +1,12 @@
 # Roblox UI Systems
 
+> **Source:**
+> https://create.roblox.com/docs/ui ·
+> https://create.roblox.com/docs/ui/labels ·
+> https://create.roblox.com/docs/ui/buttons ·
+> https://create.roblox.com/docs/ui/scrolling-frames ·
+> https://create.roblox.com/docs/ui/proximity-prompts
+
 > ScreenGui, layout, common elements, 3D-attached UI, animations, and responsive design.
 
 ## Table of Contents
@@ -14,9 +21,9 @@
 8. [StarterGui & LocalScript Interaction](#startergui--localscript-interaction)
 9. [ProximityPrompt](#proximityprompt)
 10. [Best Practices](#best-practices)
-11. [UIShadow — Native Drop Shadows (June 2026)](#uishadow--native-drop-shadows-june-2026)
+11. [UIShadow — Native Drop Shadows](#uishadow--native-drop-shadows)
 12. [StyleQuery — Responsive Style Queries (May 2026)](#stylequery--responsive-style-queries-may-2026)
-13. [Per-Corner UICorner Rounding (June 2026)](#per-corner-uicorner-rounding-june-2026)
+13. [Per-Corner UICorner Rounding](#per-corner-uicorner-rounding)
 
 ---
 
@@ -98,6 +105,32 @@ grid.Parent = containerFrame
 | `UIStroke` | Outline / border |
 | `UIFlexItem` | Per-child flex grow/shrink (with UIListLayout) |
 | `UIScale` | Uniformly scale a subtree |
+
+### UIFlexItem (Flex Layouts)
+
+`UIFlexItem` enables CSS Flexbox-like behavior when used as a child of a `GuiObject`
+that is also a child of a `UIListLayout`. It controls how individual items grow,
+shrink, and align within a flex container.
+
+**Properties:**
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `FlexMode` | `Enum.UIFlexMode` | `None` | `None`, `Grow`, `Shrink`, `Fill`, `Custom` |
+| `GrowRatio` | `number` | 0 | How much this item grows relative to siblings (when `Custom`) |
+| `ShrinkRatio` | `number` | 0 | How much this item shrinks relative to siblings (when `Custom`) |
+| `ItemLineAlignment` | `Enum.ItemLineAlignment` | `Automatic` | Cross-axis alignment override for this item |
+
+**Usage:**
+```lua
+-- Make a frame fill remaining space in a horizontal list
+local flex = Instance.new("UIFlexItem")
+flex.FlexMode = Enum.UIFlexMode.Fill
+flex.Parent = myFrame -- myFrame is a child of a UIListLayout parent
+```
+
+> **Requirement:** The parent container must have a `UIListLayout` for `UIFlexItem`
+> to take effect. Without it, the flex properties are ignored.
 
 ---
 
@@ -318,7 +351,7 @@ end
 
 ---
 
-## UIShadow — Native Drop Shadows (June 2026)
+## UIShadow — Native Drop Shadows
 
 `UIShadow` renders a native drop shadow beneath its parent `GuiObject`,
 replacing image-based shadow workarounds. Add as a child of any `GuiObject`.
@@ -466,9 +499,33 @@ without creating your own `StyleQuery` instances:
 - **Auto-populated selectors**: The editor suggests selectors like
   `@PreferredTextSizeLarge` when creating new rules.
 
+### StyleSheet & StyleRule Architecture
+
+`StyleSheet` and `StyleRule` provide a cascading style system similar to CSS.
+A `StyleSheet` is parented to a `ScreenGui` (or any `GuiObject`) and contains
+`StyleRule` children that match UI elements via `StyleQuery` selectors.
+
+**Hierarchy:**
+```
+ScreenGui
+├─ StyleSheet
+│   ├─ StyleRule (Selector: ".button")
+│   │   ├─ StyleQuery (matches Tag "button")
+│   │   └─ Property overrides (BackgroundColor3, etc.)
+│   └─ StyleRule (Selector: ".header")
+├─ Frame
+│   └─ TextButton (Tag: "button")
+```
+
+**Key points:**
+- `StyleSheet` must be a descendant of the UI tree it styles
+- `StyleRule` children are evaluated in order (later rules override earlier ones)
+- Selectors use `CollectionService` tags for matching
+- Properties set directly on instances override stylesheet values
+
 ---
 
-## Per-Corner UICorner Rounding (June 2026)
+## Per-Corner UICorner Rounding
 
 `UICorner` now supports individual corner radii, enabling asymmetric rounding
 (e.g. tabs, chat bubbles, notification toasts).
@@ -482,7 +539,7 @@ without creating your own `StyleQuery` instances:
 | `BottomLeftRadius` | `UDim` | Bottom-left corner radius |
 
 > **Note:** Per-corner properties require the **New UI Capabilities** beta
-> feature enabled in Studio as of June 2026. Writing to `CornerRadius`
+> feature enabled in Studio since June 2026. Writing to `CornerRadius`
 > overwrites all four individual values.
 
 ```luau

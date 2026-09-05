@@ -215,11 +215,29 @@ RunService.Heartbeat:Connect(function()
 end)
 ```
 
+### Luau 0.735 Fast Execution & Native CodeGen
+
+- **`LOP_FASTPCALL` VM Opcode (Luau 0.735+)**: `pcall` and `xpcall` have ~2x lower invocation overhead, making error handling and safe execution guards virtually free of performance penalties.
+- **Native CodeGen (`--!native`)**: Compiles hot Luau bytecode directly to AOT/JIT native machine instructions on 64-bit platforms. Use `--!native` on math-heavy modules, custom procedural generation, and complex physics math to achieve 2-5x compute speedups.
+- **Buffer & Vector Types**: Use the `buffer` library (`buffer.create`) for bulk binary state serialization and `vector.create` for SIMD-accelerated math without table allocations or garbage collection pressure.
+
 ### Avoid Expensive Operations on RunService Events
 
 Per docs: *"Invoke code on RunService events sparingly, limiting usage to cases where
 high frequency invocation is essential (for example, updating the camera)."* Most code
 can run on other events or less frequently with `task.wait()`.
+
+#### Modern RunService Frame Pipeline (Mid-2026)
+
+| Order | Modern Event | Legacy Alias | Runs On | Use For |
+|-------|-------------|-------------|---------|--------|
+| 1 | `PreRender` | `RenderStepped` | Client only | Camera, UI updates |
+| 2 | `PreAnimation` | — (new) | Client only | Animation prep |
+| 3 | `PreSimulation` | `Stepped` | Client + Server | Input processing, pre-physics |
+| 4 | `PostSimulation` | `Heartbeat` | Client + Server | Post-physics, game logic |
+
+> **Legacy names still work** as aliases but are not recommended for new code.
+> Use the modern names for clarity about execution order.
 
 ---
 
@@ -258,10 +276,18 @@ Players.PlayerRemoving:Connect(function(player: Player)
 end)
 ```
 
-**Three ways to disconnect** (from docs):
-1. Call `connection:Disconnect()` manually
-2. Call `instance:Destroy()` — disconnects all events on that instance
-3. Destroy the script object the connection traces back to
+### Server Memory Pressure Monitoring (`ServerLowMemoryWarning`)
+
+Roblox Studio v736+ introduces `game.ServerLowMemoryWarning` allowing server scripts to react proactively when the server instance approaches memory limits:
+
+```luau
+--!strict
+-- Purge non-critical caches or throttle intensive tasks on low memory warning
+game.ServerLowMemoryWarning:Connect(function()
+    warn("[Memory] Server low memory warning triggered! Flushing in-memory caches...")
+    -- Evict unreferenced spatial caches, flush transient query tables, or trim buffer pools
+end)
+```
 
 ---
 

@@ -1,19 +1,59 @@
 {
   "skill_name": "roblox-dev",
-  "version": "2.5.0",
-  "last_updated": "2026-08-16T03:35:00+07:00",
-  "last_updated_by": "antigravity",
-  "update_source": "https://create.roblox.com/docs, https://clientsettings.roblox.com, ~/RobloxDocs Full-API-Dump 0.734.0",
-  "engine_version_at_update": "0.734.0",
+  "version": "2.6.0",
+  "last_updated": "2026-08-28T09:06:00+07:00",
+  "last_updated_by": "human+ai collaborative improvement",
+  "update_source": "https://create.roblox.com/docs, https://create.roblox.com/docs/llms.txt, https://devforum.roblox.com, https://github.com/luau-lang/luau/releases, live clientsettings & CDN API dump",
+  "engine_version_at_update": "0.736.0.7361346",
   "update_interval_days": 7,
   "update_history": [
     {
-      "date": "2026-08-16T03:35:00+07:00",
-      "version": "2.5.0",
-      "changes": "Roblox Studio v0.734 API dump refresh (0.734.0.7340915): 908 classes (+AudioWindSynthesizer, +Logger, +ViewportCamera), 618 enums, full ~/RobloxDocs split indexes refreshed",
-      "engine_version": "0.734.0",
+      "date": "2026-08-28T09:06:00+07:00",
+      "version": "2.6.0",
+      "changes": "Engine update to v0.736 (0.736.0.7361346): Full API Dump updated to 914 classes (+StateMachineDefinition, +StateMachineTransitionDefinition), 623 enums (+AnimationNodeTransitionWhen), 255 services, 48 deprecated. New engine capabilities: DataModel.ServerLowMemoryWarning for server memory pressure monitoring, Decal emissive properties (EmissiveMaskContent, EmissiveStrength, EmissiveTint), AssetService.CreateDecalAsync & CreateTextureAsync, Player.PauseTeleports, RunService.IsTeamTest, and ScriptEditorService.OpenTemporaryDocumentAsync.",
+      "engine_version": "0.736.0.7361346",
       "decision_by": "user (sayib)",
-      "verified_by": "antigravity"
+      "verified_by": "AI live CDN fetch + clientsettings check + split dump verification"
+    },
+    {
+      "date": "2026-08-27T12:38:00+07:00",
+      "version": "2.5.0",
+      "changes": "Engine & Luau v0.735 upgrade: Full API Dump updated to 0.735.0.7351131 (912 classes, 622 enums, +BranchService, +IntentService, +PlayerControlState, +ScriptScannerService). Luau language updates: LOP_FASTPCALL (~2x lower pcall/xpcall runtime overhead), user-defined type functions support pcall/xpcall with heap limits, built-in setmetatable<T, M> type function, standardized generic naming (T, U, V), exported annotation refinements, pointer encoding with SipHash2-4/Feistel, buffer & vector native library references.",
+      "engine_version": "0.735.0.7351131",
+      "decision_by": "user (sayib)",
+      "verified_by": "AI live CDN fetch + Luau 0.735 release audit + split dump verification"
+    },
+    {
+      "date": "2026-08-11T12:20:00+07:00",
+      "version": "2.4.0",
+      "changes": "Local-first API lookup: SKILL.md now prioritizes ~/RobloxDocs/ (pre-split JSON, 845× more token-efficient) over live web sources. Obsolescence check via .current-version file. Background auto-update trigger when data >7 days stale. Monitor script rewritten with smart platform detection (uname-based, not hardcoded). Deprecated lookup now local-first (deprecated-index.json). Lookup workflow restructured: reference files → local JSON → web docs → context7",
+      "engine_version": "0.733.0",
+      "decision_by": "user (sayib)",
+      "verified_by": "AI live platform test (Mac vs Win CDN availability confirmed)"
+    },
+    {
+      "date": "2026-08-11T11:53:00+07:00",
+      "version": "2.3.0",
+      "changes": "Deep reference refresh: +UIFlexItem & StyleSheet/StyleRule (ui-systems.md), +ZSTD/LZ4 compression & MeshContent (file-formats-and-assets.md), +Subscriptions code examples (monetization.md), +RunService modern frame pipeline (performance-optimization.md, legacy-migration.md), +MemoryStoreService section (datastore-persistence.md), +BindableEvent caveats (networking.md), +PlayerOwnsAsset alternatives (legacy-migration.md). Engine version: 0.727.0→0.733.0",
+      "engine_version": "0.733.0",
+      "decision_by": "user (sayib)",
+      "verified_by": "AI compliance audit + official docs cross-reference + clientsettings version check"
+    },
+    {
+      "date": "2026-08-11T11:42:00+07:00",
+      "version": "2.2.0",
+      "changes": "Fixed broken deprecated.md URL (404), added Open Cloud llms.txt as primary discovery endpoint, added OpenAPI spec URL, added deprecated API checking guidance, updated lookup workflow with Open Cloud priority",
+      "engine_version": "0.727.0",
+      "decision_by": "user (sayib)",
+      "verified_by": "AI compliance audit + live URL verification"
+    },
+    {
+      "date": "2026-06-27T18:10:00+07:00",
+      "version": "2.1.0",
+      "changes": "+file-formats-and-assets.md (rbxl/rbxlx/rbxm/rbxmx/fbx/obj/gltf/glb, Universal Importer, asset management, place file troubleshooting), +Official Documentation Lookup section with llms.txt endpoints, +source URLs for ui-systems.md and mcp-integration.md, +trigger keywords (rbxm, rbxmx, fbx, obj, gltf, import/export model, asset manager, Universal Importer)",
+      "engine_version": "0.727.0",
+      "decision_by": "user (sayib)",
+      "verified_by": "AI analysis + official docs cross-reference"
     },
     {
       "date": "2026-06-25T15:12:00+07:00",
@@ -22,6 +62,14 @@
       "engine_version": "0.727.0",
       "decision_by": "user (sayib)",
       "verified_by": "AI full audit (14/14 fact-checks passed)"
+    },
+    {
+      "date": "2026-06-25T07:30:00+07:00",
+      "version": "1.0.0",
+      "changes": "Initial creation: 9 reference files, SKILL.md router, MCP integration, dual-platform symlink architecture",
+      "engine_version": "0.727.0",
+      "decision_by": "user (sayib)",
+      "verified_by": "AI file integrity + symlink audit"
     }
   ]
 }
