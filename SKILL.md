@@ -17,10 +17,20 @@ Expert development companion for building Roblox experiences with Luau. Grounded
 official Roblox documentation (https://create.roblox.com/docs), the Luau language spec
 (https://luau.org), and the Roblox Lua Style Guide (https://roblox.github.io/lua-style-guide/).
 
-> **Engine**: Roblox Studio v736+ (0.736.0.7361346, August 2026). APIs update weekly — when in doubt,
-> use **context7 MCP** (`resolve-library-id` + `query-docs`) to look up the latest
-> Roblox API documentation, or refer directly to https://create.roblox.com/docs.
-> If information is still unclear, ask the user before proceeding.
+> **Engine**: Roblox Studio **0.737.0.7371584** and **Luau 0.737** (released 2026-09-04), verified
+> 2026-09-06. Roblox ships roughly weekly, so this line is stale by design — never quote it as
+> today's version. Re-derive it instead:
+>
+> ```bash
+> curl -s "https://clientsettings.roblox.com/v2/client-version/MacStudio"   # or WindowsStudio64
+> curl -s "https://api.github.com/repos/luau-lang/luau/releases?per_page=1" | grep tag_name
+> ```
+>
+> The `WindowsStudio` (no `64`) endpoint returns a long-stale value — measured 2026-09-06 it still
+> answered `0.578.0.5780566`. Use `WindowsStudio64` or `MacStudio`.
+>
+> When in doubt about an API, look it up (see **API & Documentation Lookup** below) rather than
+> recalling it. If it is still unclear, ask the user before proceeding.
 
 ---
 
@@ -46,11 +56,25 @@ Check for these tools from the `Roblox_Studio` MCP server:
 | `get_studio_state` | Get current Studio state |
 | `screen_capture` / `store_image` | Capture and store screenshots |
 | `generate_mesh` / `generate_procedural_model` | Generate 3D content |
-| `generate_material` | Generate materials |
+| `generate_material` / `generate_texture` | Generate materials and textures |
+| `segment_mesh` | Segment a mesh into parts |
 | `upload_image` | Upload images to Roblox |
 | `character_navigation` | Navigate character in playtest |
 | `user_mouse_input` / `user_keyboard_input` | Simulate user input |
-| `list_roblox_studios` / `set_active_studio` | Manage Studio instances |
+| `http_get` | Fetch a URL from inside Studio |
+| `run_as_job` / `wait_job_finished` | Run long work as a job and await it |
+| `list_roblox_studios` | Enumerate connected Studio instances |
+
+> **Every call takes a `studio_id`.** There is no "set active studio" tool — call
+> `list_roblox_studios` first and pass the id you want on each subsequent call. Several Studio
+> instances are commonly open at once, so picking the wrong id silently targets the wrong place.
+>
+> Tools also take a `datamodel_type` (`Edit` / `Client` / `Server`). `Edit` is the saved place;
+> `Client` and `Server` exist only during a playtest. Use `get_studio_state` to see which are live.
+>
+> **`script_grep`'s line numbers are unreliable** — measured 2026-09-06, it reported a match at
+> line 171 that `script_read` showed was 15 lines further down. Use it to find *which* script
+> contains a string, then `script_read` for the real location.
 
 If MCP tools are available, prefer using them for:
 - Reading existing scripts before writing new ones (`script_read`, `script_search`)
@@ -80,6 +104,7 @@ Match user intent to the appropriate reference file. Read the file BEFORE genera
 | Migrating legacy code, deprecated APIs | `references/legacy-migration.md` |
 | Monetization, game passes, donations, transfers | `references/monetization.md` |
 | File formats, import/export, asset management | `references/file-formats-and-assets.md` |
+| Plugins, `Script.Source` limits, HttpService/engine limits | `references/studio-plugins-and-limits.md` |
 
 If the intent spans multiple domains, read all relevant files.
 If a reference file doesn't cover a topic sufficiently, use the Official
@@ -91,8 +116,20 @@ Documentation Lookup workflow below.
 
 ### Priority 1: Local API Reference (`~/RobloxDocs/`)
 
-**Always check local files first** — they are pre-split, token-efficient (845× smaller
-than full dump), and require no network. If `~/RobloxDocs/RobloxAPI/` exists, use it:
+**Always check local files first** — they are pre-split, far cheaper to read than the full dump, and
+require no network. If `~/RobloxDocs/RobloxAPI/` exists, use it.
+
+**How much cheaper, measured 2026-09-06 on 0.737.0.7371584** (an earlier "845× smaller" figure was
+not reproducible from any measurement, so here are the real numbers and the command that produced
+them): the full dump is **8,234,036 bytes**; the 916 split class files run **101 B min, 2,009 B
+median, 4,790 B mean, 104,594 B max**. So a typical class lookup reads about **0.02%** of the dump,
+and even the largest class reads under **1.3%** of it. Re-measure with:
+
+```bash
+stat -f %z ~/RobloxDocs/RobloxAPI/dumps/latest.json
+find ~/RobloxDocs/RobloxAPI/classes -name '*.json' -exec stat -f %z {} \; | sort -n \
+  | awk '{a[NR]=$1; s+=$1} END {printf "n=%d median=%d mean=%d max=%d\n", NR, a[int(NR/2)], s/NR, a[NR]}'
+```
 
 ```bash
 # Look up a specific class (instant, ~10KB vs 8MB full dump)
@@ -118,7 +155,7 @@ grep -l '"<PropertyName>"' ~/RobloxDocs/RobloxAPI/classes/*.json
 ```bash
 # Check when local data was last updated
 cat ~/RobloxDocs/RobloxAPI/.current-version
-# → {"version":"0.736.0.7361346","checkedAt":"2026-08-28T09:05:40Z",...}
+# → {"version":"0.737.0.7371584","checkedAt":"2026-09-06T...","platform":"MacStudio",...}
 ```
 If `checkedAt` is older than 7 days, or if a class/member is not found locally,
 trigger a **background update** and proceed with live web fallback:
@@ -144,13 +181,17 @@ Use these when local data doesn't cover a topic, is obsolete, or you need prose 
 ### Lookup Workflow
 1. Check if a **reference file** covers the topic (Routing Table above)
 2. Check **`~/RobloxDocs/RobloxAPI/classes/<Name>.json`** for Engine API details
-3. If not found locally, use `read_url_content` on the per-page markdown URL
+3. If not found locally, fetch the per-page markdown URL with whatever web-fetch tool the host
+   provides (`WebFetch` in Claude Code, `curl` in a shell — the URL is the portable part)
    - Example: `https://create.roblox.com/docs/en-us/studio/importer.md`
 4. If unsure which page to read, browse `llms.txt` for the right URL
 5. For **Open Cloud / REST API** topics, read `https://create.roblox.com/docs/cloud/llms.txt`
    - Search Features section first, then Domains
    - Prefer Open Cloud endpoints (API key / OAuth) over legacy cookie-auth endpoints
-6. **Fallback**: Use **context7 MCP** (`resolve-library-id` + `query-docs`)
+6. **Fallback**: Context7. Its MCP tools are `resolve-library-id` then `get-library-docs` (there is
+   no `query-docs` tool — an earlier version of this file named one that does not exist). Where the
+   MCP server is not connected, the CLI does the same job:
+   `npx ctx7@latest library "Roblox"` then `npx ctx7@latest docs <libraryId> "<question>"`
 7. If still unclear, ask the user before proceeding
 
 > **Important**: Engine APIs (Luau via `game:GetService()`) and Open Cloud APIs
@@ -161,7 +202,7 @@ Use these when local data doesn't cover a topic, is obsolete, or you need prose 
 > 1. `cat ~/RobloxDocs/RobloxAPI/deprecated-index.json` — instant local lookup
 > 2. `cat ~/RobloxDocs/RobloxAPI/deprecated/<ClassName>.json` — full deprecated class detail
 > 3. Check `robloxapi.github.io/ref/class/<Name>.html` — deprecated members marked visually
-> 4. Use context7 MCP to query specific APIs
+> 4. Use Context7 (`resolve-library-id` → `get-library-docs`, or the `ctx7` CLI) to query specific APIs
 
 ---
 
@@ -317,18 +358,19 @@ end
 
 ---
 
-## Knowledge Freshness Check (Auto-Reminder)
+## Knowledge Freshness Check
 
-**On every skill trigger**, read `metadata.json` in this skill directory and check
-the `last_updated` timestamp against the current date.
+Nothing about this is automatic — there is no scheduler, hook, or background job behind it. It is an
+instruction to *you*, the agent reading this file: **when this skill is invoked**, read
+`metadata.json` in this skill directory and compare `last_updated` to the current date.
 
 ### Logic:
 ```
 IF (current_date - last_updated) > update_interval_days (default: 7):
-    REMIND the user:
-    "⏰ Roblox Dev Skill knowledge was last updated on {last_updated}.
-     It's been more than {days} days. Consider running a knowledge update
-     via `/roblox-update` to ensure accuracy with the latest Roblox changes."
+    TELL the user:
+    "⏰ Roblox Dev Skill knowledge was last updated on {last_updated}, {days} days ago.
+     Want me to run a knowledge update before we rely on it?"
+    ...then WAIT. Do not update anything unless they say yes.
 ELSE:
     Proceed normally — knowledge is fresh.
 ```
@@ -344,13 +386,12 @@ ELSE:
 
 ## Manual Knowledge Update
 
-The user can trigger a full knowledge update at any time by saying:
+The user can trigger a full knowledge update at any time by asking for one in plain language —
+"update roblox skill knowledge", "refresh roblox dev skill", "roblox-update".
 
-```
-/roblox-update
-```
-
-Or any natural variation like "update roblox skill knowledge", "refresh roblox dev skill".
+> **`/roblox-update` is NOT a registered slash command.** Earlier versions of this file presented it
+> as one; it has never been installed in `~/.claude/commands/` or shipped by a plugin, so typing it
+> resolves to nothing. It is a phrase this skill listens for, and that is all it has ever been.
 
 ### Update Protocol:
 1. **Research** — Search for latest Roblox changes since `last_updated` timestamp

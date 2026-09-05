@@ -1,12 +1,21 @@
 {
   "skill_name": "roblox-dev",
-  "version": "2.6.0",
-  "last_updated": "2026-08-28T09:06:00+07:00",
+  "version": "2.7.0",
+  "last_updated": "2026-09-06T02:30:00+07:00",
   "last_updated_by": "human+ai collaborative improvement",
   "update_source": "https://create.roblox.com/docs, https://create.roblox.com/docs/llms.txt, https://devforum.roblox.com, https://github.com/luau-lang/luau/releases, live clientsettings & CDN API dump",
-  "engine_version_at_update": "0.736.0.7361346",
+  "engine_version_at_update": "0.737.0.7371584",
+  "luau_version_at_update": "0.737",
   "update_interval_days": 7,
   "update_history": [
+    {
+      "date": "2026-09-06T02:30:00+07:00",
+      "version": "2.7.0",
+      "changes": "Engine 0.737.0.7371584 + Luau 0.737 (released 2026-09-04). Local dump re-split: 916 classes, 629 enums, 256 services, 48 deprecated. API diff computed locally against the 0.736 dump: +CallingService, +WrapContentProvider (no members yet), PlayerControlState RENAMED to ControlState (member lists verified identical), GeometryService.CreateSolidPrimitive REMOVED and replaced by CreateBasicMeshPart (SolidPrimitiveType -> BasicMeshPartShape), newly deprecated DataModel.IsPioneerBuild / .PioneerSource, and 7 new public members incl. AssetService.PromptCreatePlatformContentAsync and Workspace.UseInputSink. ACCURACY PASS -- corrections, each verified: removed MCP tool 'set_active_studio' (does not exist; every call takes studio_id instead) and added the real http_get / run_as_job / wait_job_finished / generate_texture / segment_mesh; corrected Context7's second tool name from the non-existent 'query-docs' to 'get-library-docs' and added the ctx7 CLI fallback; stopped presenting '/roblox-update' as a registered slash command (it is not installed anywhere -- it is a trigger phrase); replaced the unreproducible '845x smaller' figure with measured byte sizes plus the command that re-measures them; removed the invented '2-5x compute speedups' for --!native and documented what the docs actually say (server-side only, no published multiplier, measure it, plus startup-time / memory / silent size-limit costs); softened LOP_FASTPCALL's 'virtually free' to the release note's 'around two times lower'; softened 'self-updating' and the 'Auto-Reminder' framing to what actually happens (an instruction to the agent, human-approved); flagged the unsourced Scoped-vs-Global UserId non-collision claim as unverified; corrected 'task.delay ... guaranteed on first Heartbeat' to at-least-N-seconds; added studio-plugins-and-limits.md to the routing table and README (it existed on disk but was untracked and unreachable); recorded that script_grep's line numbers are unreliable and that the WindowsStudio clientsettings endpoint returns a long-stale version. Documented Luau 0.736/0.737 changes as internals-and-fixes, and marked the Classes and 'if local' prototypes as flag-gated and NOT available in Roblox.",
+      "engine_version": "0.737.0.7371584",
+      "decision_by": "user (sayib)",
+      "verified_by": "live clientsettings (MacStudio + WindowsPlayer), luau-lang/luau GitHub releases API, local 0.736-vs-0.737 Full API Dump diff, create.roblox.com native-code-gen.md, and filesystem checks for ~/.claude/commands and the split dump byte sizes"
+    },
     {
       "date": "2026-08-28T09:06:00+07:00",
       "version": "2.6.0",

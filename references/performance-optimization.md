@@ -215,10 +215,21 @@ RunService.Heartbeat:Connect(function()
 end)
 ```
 
-### Luau 0.735 Fast Execution & Native CodeGen
+### Luau 0.735+ Fast Execution & Native CodeGen
 
-- **`LOP_FASTPCALL` VM Opcode (Luau 0.735+)**: `pcall` and `xpcall` have ~2x lower invocation overhead, making error handling and safe execution guards virtually free of performance penalties.
-- **Native CodeGen (`--!native`)**: Compiles hot Luau bytecode directly to AOT/JIT native machine instructions on 64-bit platforms. Use `--!native` on math-heavy modules, custom procedural generation, and complex physics math to achieve 2-5x compute speedups.
+- **`LOP_FASTPCALL` VM Opcode (Luau 0.735+)**: the release notes say *"pcall/xpcall overhead should be
+  around two times lower."* That is the whole claim — halved overhead on the call itself, not free.
+  `pcall` around a DataStore call or an HTTP request is still dominated by the call, and wrapping a
+  hot inner loop in `pcall` still costs something. Measure before treating it as free.
+- **Native CodeGen (`--!native`)**: **server-side only.** Per the official docs, "server-side scripts
+  in your game can be compiled directly into the machine code instructions that CPUs execute" — a
+  `--!native` client script gains nothing. Roblox publishes **no speedup multiplier**, and an earlier
+  version of this file invented "2-5x"; the docs instead say to *"measure the time a script or a
+  function takes with and without native compilation"* using the Script Profiler. It has real costs
+  the docs name: compilation increases server startup time, native code occupies extra memory, and
+  **when total native code hits an internal size limit, compilation silently stops and the rest runs
+  as ordinary bytecode**. Use `@native` on individual functions when you want a narrower blast radius
+  than a whole-script `--!native`.
 - **Buffer & Vector Types**: Use the `buffer` library (`buffer.create`) for bulk binary state serialization and `vector.create` for SIMD-accelerated math without table allocations or garbage collection pressure.
 
 ### Avoid Expensive Operations on RunService Events
