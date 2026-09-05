@@ -270,6 +270,24 @@ failure recovery. Data loss is irreversible.
 | Input Action System (IAS) full release | June 11 | `Workspace.PlayerScriptsUseInputActionSystem`. See `references/project-structure.md` |
 | Roblox Connect calling APIs **SUNSET** | **July 15** | Remove usage before deadline |
 
+### September 2026 — engine 0.737
+
+Derived by diffing the **0.736 and 0.737 Full API Dumps locally**, not from release-note prose, so
+each row is checkable with `jq` against `~/RobloxDocs/RobloxAPI/dumps/`.
+
+| Change | Action Required |
+|--------|-----------------|
+| `GeometryService:CreateSolidPrimitive()` **REMOVED**, replaced by `GeometryService:CreateBasicMeshPart()` | Rewrite call sites. The enum went with it: `SolidPrimitiveType` was removed and `BasicMeshPartShape` added |
+| `PlayerControlState` **RENAMED** to `ControlState` | Rename references. Verified a pure rename — the member lists are identical, and both are `NotBrowsable` |
+| `DataModel.IsPioneerBuild` / `DataModel.PioneerSource` newly **deprecated** | Stop reading them |
+| `+CallingService` (`CreateCall`, `AnswerIncomingCall`, `EndCall`, `GetCallingState`, `OnCallingStateChange`, `OnCallingRemoved`) | New; note the July 15 Roblox Connect sunset above is a *different*, older API |
+| `+WrapContentProvider` | Service exists but exposes **no members yet** — nothing to call |
+| `+AssetService:PromptCreatePlatformContentAsync()`, `+WrapTarget:CreateTextureInCageSpaceAsync()` / `:CreateTextureInTargetSpaceAsync()`, `+TextChannelWindow.FontFace` / `.UseDefaultFont`, `+Workspace.UseInputSink` | New public surface |
+
+> **`PlayerControlState` is a cautionary tale about writing against brand-new APIs.** It first
+> appeared in 0.735 and was gone by 0.737 — two weeks. An API that is `NotBrowsable` and days old is
+> not a stable contract.
+
 ### `PlayerOwnsAsset` Breaking Change (Early 2026)
 
 Inventory privacy enforcement changed the behavior of `PlayerOwnsAsset` and
@@ -315,7 +333,9 @@ Modified return behavior. Check current documentation for updated return values.
 ### What Does NOT Change
 - **Single-game DataStores**: `Player_{UserId}` pattern **still works**. No migration needed.
 - `player.UserId` continues to return a numeric value (Global for existing players, Scoped for new)
-- No collisions between Scoped and Global IDs guaranteed by platform
+- Scoped and Global IDs are described as non-colliding — but this line is **not verified against a
+  current primary source**; confirm on the Scoped User IDs doc before designing a key scheme that
+  depends on it
 - Friends, chat, avatar services continue working
 
 ### What BREAKS

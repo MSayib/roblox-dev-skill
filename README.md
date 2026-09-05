@@ -4,7 +4,10 @@ An expert-level AI skill for Roblox game development with Luau. Designed for
 [Antigravity IDE](https://antigravity.dev), [Claude Code](https://claude.ai),
 and any AI coding assistant that supports the Skills format.
 
-> **Version:** 2.6.0 | **Engine Version:** v736+ (0.736.0.7361346) | **Knowledge Status:** August 2026 Current
+> **Version:** 2.7.0 | **Engine:** 0.737.0.7371584 | **Luau:** 0.737 | **Verified:** 2026-09-06
+>
+> Roblox ships roughly weekly. Treat that engine number as *when this was last checked*, not as
+> today's version — `SKILL.md` carries the two commands that re-derive both.
 
 ## What Is This?
 
@@ -14,14 +17,14 @@ auto-triggers and provides the AI with deep, accurate, research-verified knowled
 about the Roblox platform.
 
 ### Key Features
-- 🧠 **Comprehensive knowledge base** — curated Roblox & Luau development guides across 11 reference topics
-- 📂 **Local-first API lookup** — pre-split `~/RobloxDocs/` JSON files (845× more token-efficient than full dump)
-- 🔄 **Self-updating** — built-in obsolescence detection + background auto-update
+- 🧠 **Comprehensive knowledge base** — curated Roblox & Luau development guides across 12 reference topics
+- 📂 **Local-first API lookup** — pre-split `~/RobloxDocs/` JSON files: a typical class lookup reads ~2 KB against an 8.2 MB full dump (measured 2026-09-06)
+- 🔄 **Obsolescence detection** — the skill compares `metadata.json` against today's date and *asks* before updating. It is not self-updating and there is no background job; a human runs `roblox-api-monitor.sh`
 - 🎯 **Smart routing** — automatically selects the right reference based on your intent
 - 🔌 **MCP integration** — works with the official Roblox Studio MCP server
 - 🛡️ **Security-first** — server authority, input validation, anti-exploit patterns
 - 📚 **Migration-aware** — guides you through deprecated APIs and breaking changes
-- ⚡ **Multi-fallback** — local JSON → web docs → context7 MCP
+- ⚡ **Multi-fallback** — local JSON → web docs → Context7
 
 ## Directory Structure
 
@@ -69,8 +72,11 @@ The skill integrates with a **local API reference hub** for token-efficient look
 └── README.md
 ```
 
-**Why?** Reading one class file (~10KB) is **845× smaller** than the full API dump (~8MB).
-This dramatically reduces token usage for AI agents.
+**Why?** Measured 2026-09-06 on 0.737.0.7371584: the full dump is **8,234,036 bytes**, while the 916
+split class files are **101 B min / 2,009 B median / 4,790 B mean / 104,594 B max**. A typical class
+lookup therefore reads about **0.02%** of the dump. (An earlier README claimed "845× smaller" from a
+"~10KB" class file; neither number is reproducible — the median class file is ~2 KB. `SKILL.md`
+carries the command that re-measures both.)
 
 ### Setup RobloxDocs
 
@@ -152,19 +158,20 @@ connected, the skill can:
 - Run playtests and read console output
 - Take screenshots for visual verification
 
-## Knowledge Coverage (August 2026)
+## Knowledge Coverage (verified 2026-09-06)
 
 | Topic | Status | Reference File |
 |-------|--------|---------------|
-| Luau language (strict mode, types, generics) | ✅ Current | `luau-fundamentals.md` |
+| Luau language (strict mode, types, generics) | ✅ Luau 0.737 | `luau-fundamentals.md` |
 | Project architecture (services, Rojo, IAS) | ✅ Current | `project-structure.md` |
 | DataStore + ProfileStore + **MemoryStoreService** | ✅ Aug 2026 | `datastore-persistence.md` |
 | Client-Server networking + BindableEvent caveats | ✅ Aug 2026 | `networking.md` |
 | Security (BanAsync, server authority, exploits) | ✅ Current | `security-hardening.md` |
 | Performance (Parallel Luau, **RunService pipeline**) | ✅ Aug 2026 | `performance-optimization.md` |
-| MCP integration (26 tools) | ✅ Current | `mcp-integration.md` |
+| MCP integration (29 tools observed 2026-09-06) | ✅ Current | `mcp-integration.md` |
 | UI (**UIFlexItem**, **StyleSheet/StyleRule**, StyleQuery) | ✅ Aug 2026 | `ui-systems.md` |
-| Legacy migration (RunService events, PlayerOwnsAsset) | ✅ Aug 2026 | `legacy-migration.md` |
+| Legacy migration (RunService events, PlayerOwnsAsset, **0.737 removals**) | ✅ Sep 2026 | `legacy-migration.md` |
+| Studio plugins, `Script.Source` limits, engine limits | ✅ measured Aug 2026 | `studio-plugins-and-limits.md` |
 | Monetization (Transfers, **Subscriptions**) | ✅ Aug 2026 | `monetization.md` |
 | File formats (**ZSTD/LZ4**, **MeshContent**, importing) | ✅ Aug 2026 | `file-formats-and-assets.md` |
 
@@ -172,6 +179,7 @@ connected, the skill can:
 
 | Version | Date | Highlights |
 |---------|------|-----------|
+| **2.7.0** | Sep 6, 2026 | Engine 0.737.0.7371584 + Luau 0.737. Dump re-split: 916 classes / 629 enums / 256 services. **Accuracy pass**: removed the non-existent `set_active_studio` MCP tool and the unreproducible "845×" figure, corrected Context7's tool name (`get-library-docs`, not `query-docs`), stopped presenting `/roblox-update` as a registered slash command, dropped the invented "2-5x" native-codegen speedup and documented its real server-only scope and costs, and softened "self-updating" to what actually happens |
 | **2.6.0** | Aug 28, 2026 | Engine update to v0.736 (0.736.0.7361346): Full API Dump updated to 914 classes (+StateMachineDefinition, +StateMachineTransitionDefinition), 623 enums (+AnimationNodeTransitionWhen), +ServerLowMemoryWarning, +CreateDecalAsync, emissive decals |
 | **2.5.0** | Aug 27, 2026 | Engine & Luau v0.735 upgrade: Full API Dump 0.735.0.7351131 (912 classes, +BranchService, +IntentService, +PlayerControlState, +ScriptScannerService), LOP_FASTPCALL (~2x faster pcall/xpcall), type function enhancements & setmetatable |
 | **2.4.0** | Aug 11, 2026 | Local-first `~/RobloxDocs/` lookup, smart platform detection, background auto-update |

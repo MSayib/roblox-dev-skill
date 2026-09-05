@@ -38,21 +38,26 @@ existing agent code and workflows continue to work without modification.
 
 **Key concepts:**
 
-- Tools are **lazily loaded** — read the schema from
-  `/Users/sayib/.gemini/antigravity/mcp/Roblox_Studio/<toolName>.json` before
-  first use.
-- Call tools via `call_mcp_tool` with server name `Roblox_Studio`.
+- **Host-specific, so check yours before following either line below.** In **Antigravity**, tools are
+  lazily loaded — read the schema from
+  `/Users/sayib/.gemini/antigravity/mcp/Roblox_Studio/<toolName>.json` first, then call via
+  `call_mcp_tool` with server name `Roblox_Studio`. In **Claude Code** there is no `call_mcp_tool`
+  wrapper: the tools appear directly as `mcp__Roblox_Studio__<toolName>` and some are deferred, in
+  which case load the schema with tool-search before calling.
 - Studio must be open and the built-in MCP server enabled for calls to succeed.
-- If multiple Studio windows are open, use `list_roblox_studios` /
-  `set_active_studio` to target the correct one.
-- **ScriptDebuggerService (beta):** Provides programmatic access to Studio's
-  script debugger — set breakpoints, step through code, and inspect variables
-  via MCP. Currently in beta; use `game:GetService("ScriptDebuggerService")` to
-  access. Expect API changes before full release.
-- **Studio Assistant Planning Mode:** Enables the Studio Assistant to generate
-  and execute multi-step test plans automatically. Agents can leverage this for
-  automated testing by triggering Planning Mode workflows through the Assistant
-  widget. Useful for verifying complex game flows without manual playtesting.
+- If multiple Studio windows are open, call `list_roblox_studios` and pass the id you want as
+  `studio_id` on **every** subsequent call. There is no "set active studio" tool — the target is an
+  argument, not a mode, so a forgotten or copy-pasted id silently drives the wrong place.
+- **ScriptDebuggerService — `PluginSecurity`, so NOT reachable from game code.** It does expose
+  `AddBreakpoint`, `RemoveBreakpoint`, `ClearBreakpoints`, `Pause`, `Evaluate`, `GetStackTrace`,
+  `GetThreads`, `GetVariables`, `GetRootVariables`, `SetExceptionBreakMode`, `OnStopped`, `Resumed`
+  — but **every one of those members is `PluginSecurity`** (verified against the 0.737 API dump,
+  2026-09-06). A Script or LocalScript calling them errors. Only a plugin or the command bar can.
+  An earlier version of this file said to reach it with `game:GetService("ScriptDebuggerService")`
+  as though ordinary code could; it cannot.
+- **Studio Assistant "Planning Mode":** no MCP tool exposes it and this file has never carried a
+  source for it, so nothing here should be built on it. If you need multi-step verification, drive
+  it yourself with `start_stop_play` + `get_console_output`, or hand the steps to the user.
 
 ---
 
@@ -124,8 +129,25 @@ These tools return asynchronous jobs. Use `wait_job_finished` to poll completion
 
 | Tool | Purpose |
 |---|---|
-| `list_roblox_studios` | List all open Roblox Studio windows |
-| `set_active_studio` | Switch the active Studio instance for subsequent calls |
+| `list_roblox_studios` | List all open Roblox Studio windows, each with an `id` |
+
+> **There is no `set_active_studio`.** Earlier versions of this file listed one; the tool does not
+> exist. Targeting is per call: read the `id` from `list_roblox_studios` and pass it as `studio_id`
+> every time. Likewise `datamodel_type` (`Edit` / `Client` / `Server`) is a required argument —
+> `Client` and `Server` only exist while a playtest is running, so check `get_studio_state` first.
+
+### Other tools worth knowing
+
+| Tool | Purpose |
+|---|---|
+| `http_get` | Fetch a URL from inside Studio |
+| `run_as_job` / `wait_job_finished` | Run long work as a job and await its completion |
+| `generate_texture` | Generate a texture (alongside `generate_material` / `generate_mesh`) |
+| `segment_mesh` | Segment a mesh into parts |
+
+> **`script_grep` reports unreliable line numbers.** Measured 2026-09-06: it placed a match at
+> line 171 that `script_read` showed was 15 lines lower. Use `script_grep` to find *which* script
+> holds a string, then `script_read` to find *where*.
 
 ---
 

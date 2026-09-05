@@ -1,6 +1,6 @@
 # Luau Language Fundamentals
 
-> Reference for AI coding skill — verified against official Roblox documentation and Luau language release specs (v0.735+).
+> Reference for AI coding skill — verified against official Roblox documentation and Luau language release specs (**v0.737**, released 2026-09-04).
 > Sources: https://create.roblox.com/docs/luau, https://luau.org, https://roblox.github.io/lua-style-guide/
 
 ## Table of Contents
@@ -34,6 +34,26 @@ typed language **derived from Lua 5.1**. Key additions over Lua 5.1:
 - High-performance `buffer` and `vector` native libraries
 - Native code generation (`--!native`) and fast `pcall`/`xpcall` VM execution (`LOP_FASTPCALL`)
 - No `goto` statement
+
+### What landed in 0.736 and 0.737 (source: luau-lang/luau release notes)
+
+Both releases are **fixes and internals, not new syntax you can write today**. Nothing here changes
+how you write Luau for Roblox; it is here so nobody mistakes an internal change for a new feature.
+
+| Release | Change | What it means for your code |
+|---|---|---|
+| 0.736 | Better generalization of lambdas defined in table literals; fewer internal errors on generics | Some previously-annotated tables may now infer correctly on their own |
+| 0.736 | Modules without a `return` can join cyclic groups; better cyclic-require errors | Cycle mistakes report more usefully |
+| 0.737 | Type arguments are now typechecked in explicit instantiation | Code that passed a bad explicit type argument may now error — a **fix**, not a regression |
+| 0.737 | `keyof` produces unions in lexicographic order | `keyof` results are stable across platforms |
+| 0.737 | Table indexers no longer leak their generics into unsealed tables passed as arguments | Fewer spurious inference results |
+| 0.737 | The require-cycle length limit was removed | Long cycles no longer hit an arbitrary cap (they are still bad design) |
+| 0.737 | Fixed upvalue handling in `repeat..until` loops using `continue` | A real miscompile; if you hit odd upvalue behaviour there, it was this |
+
+**Experimental, and NOT usable in Roblox:** the **Classes** RFC prototype and the **`if local`**
+statement both exist in 0.737 only behind `DebugLuau*` fast-flags in the open-source Luau repo. They
+are not enabled in Roblox Studio. Do not write either into game code, and do not tell a user they
+can.
 
 ---
 
@@ -204,12 +224,16 @@ local magnitude = vector.magnitude(v1)
 
 ## Native Code Generation (`--!native`)
 
-For compute-intensive algorithms (pathfinding, procedural generation, ray marching, heavy math), enable Luau Native Code Generation:
+For compute-intensive algorithms (pathfinding, procedural generation, ray marching, heavy math), enable Luau Native Code Generation.
+
+> **Server-side only.** The official docs scope this to "server-side scripts in your game" — a
+> `--!native` LocalScript gains nothing from the comment. Only the script's *functions* are compiled;
+> top-level code usually runs once and does not benefit.
 
 ```luau
 --!strict
 --!native
--- Function compiled directly to machine code on supported 64-bit platforms
+-- Functions in this script are compiled to machine code (server-side)
 local function calculateNoiseGrid(width: number, height: number): { number }
 	local grid = table.create(width * height, 0)
 	for x = 1, width do
@@ -221,7 +245,20 @@ local function calculateNoiseGrid(width: number, height: number): { number }
 end
 ```
 
-> **Best Practice**: Use `--!native` on math-heavy or tight numerical loops. UI and simple event handler scripts do not require native compilation.
+Per-function opt-in, when a whole-script pragma is too blunt:
+
+```luau
+@native
+local function hotPath(x: number): number
+	return x * x + 1
+end
+```
+
+> **Best Practice**: Use `--!native` on math-heavy or tight numerical server loops. UI and simple
+> event handler scripts do not benefit. Roblox publishes **no speedup figure** — the docs tell you to
+> measure with and without, using the Script Profiler, and they list real costs: longer server
+> startup, extra memory for the compiled code, and a native-code size limit past which compilation
+> **silently stops** and the remainder runs as ordinary bytecode.
 
 ---
 
@@ -261,7 +298,8 @@ task.defer(function()
 	print("Deferred execution")
 end)
 
--- task.delay: runs after N seconds (no throttle, guaranteed on first Heartbeat)
+-- task.delay: resumes on a Heartbeat step at least N seconds later -- never earlier,
+-- and later than N under load. Do not treat the delay as exact.
 local thread = task.delay(5, function()
 	print("5 seconds later")
 end)
