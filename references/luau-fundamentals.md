@@ -1,6 +1,6 @@
 # Luau Language Fundamentals
 
-> Reference for AI coding skill — verified against official Roblox documentation and Luau language release specs (**v0.737**, released 2026-09-04).
+> Reference for AI coding skill — verified against official Roblox documentation and Luau language release specs (**v0.738**, released 2026-09-11; engine 0.739 has no Luau language changes).
 > Sources: https://create.roblox.com/docs/luau, https://luau.org, https://roblox.github.io/lua-style-guide/
 
 ## Table of Contents

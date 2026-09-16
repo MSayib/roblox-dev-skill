@@ -1,6 +1,6 @@
 {
   "skill_name": "roblox-dev",
-  "version": "2.6.0",
+  "version": "2.9.0",
   "evals": [
     {
       "id": 1,
@@ -20,7 +20,7 @@
       "id": 3,
       "prompt": "Write a Python script to process CSV files",
       "should_trigger": false,
-      "notes": "Should NOT trigger — non-Roblox, non-Luau task"
+      "notes": "Should NOT trigger — non-Roblox, non-Luau task (negative trigger)"
     },
     {
       "id": 4,
@@ -33,7 +33,7 @@
       "id": 5,
       "prompt": "Create a React component for user authentication",
       "should_trigger": false,
-      "notes": "Should NOT trigger — web development, negative trigger"
+      "notes": "Should NOT trigger — web development (negative trigger)"
     },
     {
       "id": 6,
@@ -51,9 +51,9 @@
     },
     {
       "id": 8,
-      "prompt": "Create a Unity 3D platformer game",
+      "prompt": "Create a Unity 3D platformer game in C#",
       "should_trigger": false,
-      "notes": "Should NOT trigger — Unity is in negative triggers"
+      "notes": "Should NOT trigger — Unity / C# is in negative triggers"
     },
     {
       "id": 9,
@@ -68,6 +68,85 @@
       "should_trigger": true,
       "expected_references": ["ui-systems.md"],
       "notes": "Should trigger on Roblox UI context"
+    },
+    {
+      "id": 11,
+      "prompt": "Write a Lua script for Redis to atomically increment player tokens",
+      "should_trigger": false,
+      "notes": "Should NOT trigger — pure Lua / Redis backend script, false-positive guard"
+    },
+    {
+      "id": 12,
+      "prompt": "Build an Nginx OpenResty handler in Lua to inspect request headers and rate limit",
+      "should_trigger": false,
+      "notes": "Should NOT trigger — web server Lua / OpenResty, false-positive guard"
+    },
+    {
+      "id": 13,
+      "prompt": "Write a World of Warcraft addon in Lua to track player debuffs on party frames",
+      "should_trigger": false,
+      "notes": "Should NOT trigger — WoW game modding in Lua, false-positive guard"
+    },
+    {
+      "id": 14,
+      "prompt": "Write a GDScript character controller for a 3D Godot platformer",
+      "should_trigger": false,
+      "notes": "Should NOT trigger — Godot game engine (negative trigger)"
+    },
+    {
+      "id": 15,
+      "prompt": "Implement a priority queue in Python using heapq for A* pathfinding",
+      "should_trigger": false,
+      "notes": "Should NOT trigger — general Python algorithm, false-positive guard against QueueService confusion"
+    },
+    {
+      "id": 16,
+      "prompt": "How do I type check a generic function in Luau using strict mode?",
+      "should_trigger": true,
+      "expected_references": ["luau-fundamentals.md"],
+      "notes": "Should trigger on Luau type checking and strict mode"
+    },
+    {
+      "id": 17,
+      "prompt": "Inspect the game hierarchy and execute Luau code using Roblox Studio MCP",
+      "should_trigger": true,
+      "expected_references": ["mcp-integration.md"],
+      "notes": "Should trigger on Roblox Studio MCP tools (execute_luau, search_game_tree)"
+    },
+    {
+      "id": 18,
+      "prompt": "How do I import a 3D FBX mesh with textures using Universal Importer in Roblox?",
+      "should_trigger": true,
+      "expected_references": ["file-formats-and-assets.md"],
+      "notes": "Should trigger on 3D asset import, FBX/Universal Importer in Roblox"
+    },
+    {
+      "id": 19,
+      "prompt": "Create a custom Roblox Studio plugin toolbar that uses ScriptEditorService",
+      "should_trigger": true,
+      "expected_references": ["studio-plugins-and-limits.md"],
+      "notes": "Should trigger on Studio plugin development and ScriptEditorService"
+    },
+    {
+      "id": 20,
+      "prompt": "Migrate CallingService.CreateCall to CreateCallAsync and handle the breaking yield in engine 0.739",
+      "should_trigger": true,
+      "expected_references": ["legacy-migration.md"],
+      "notes": "Should trigger on engine 0.739 migration and CallingService rename"
+    },
+    {
+      "id": 21,
+      "prompt": "Implement Parallel Luau with Actor messaging and task.desynchronize",
+      "should_trigger": true,
+      "expected_references": ["performance-optimization.md"],
+      "notes": "Should trigger on Parallel Luau and multithreading optimization"
+    },
+    {
+      "id": 22,
+      "prompt": "Set up experience-wide player bans with duration and display reasons using BanAsync",
+      "should_trigger": true,
+      "expected_references": ["security-hardening.md"],
+      "notes": "Should trigger on BanAsync and server-authoritative security"
     }
   ]
 }

@@ -270,6 +270,21 @@ failure recovery. Data loss is irreversible.
 | Input Action System (IAS) full release | June 11 | `Workspace.PlayerScriptsUseInputActionSystem`. See `references/project-structure.md` |
 | Roblox Connect calling APIs **SUNSET** | **July 15** | Remove usage before deadline |
 
+### September 2026 — engine 0.739 (2026-09-17)
+
+Derived by diffing the **0.738 and 0.739 Full API Dumps locally** (`python3` over
+`~/RobloxDocs/RobloxAPI/dumps/`), 2026-09-17. 925 classes (+4, 0 removed), 636 enums (+3), 259 services, 48 deprecated. Luau unchanged at 0.738.
+
+| Change | Action Required |
+|--------|-----------------|
+| `CallingService.CreateCall` **RENAMED** to `CreateCallAsync` (now **Yields**) | Breaking change for any code invoking `CreateCall`. Update callers to `CreateCallAsync` and handle yielding |
+| `+UGCValidationService:GetLayeredClothingPostDeformationSizeAsync()` (Yields) | New LC/UGC validation method for post-deformation bounding checks |
+| `+StateMachineTransitionDefinition` (`From`, `To`, `Priority`, `TransitionId`) | New class for state machine animation graphs |
+| `+Terrain:SetMaterialInTransformSubregionSlot()`, `:ReplaceMaterialInTransformSubregionSlot()` | New voxel terrain transformation methods |
+| `+ChatWindowConfiguration.TextChannelDisplayMode`, `+TextChannel.IsDefaultTextChannel` (Hidden) | New chat window display configuration knobs |
+| New classes: `+AdPlacement`, `+ExternalIdentityService`, `+QueueService`, `+StandardQueue` | Engine additions; check documentation before building on new queue or ad services |
+| Enums: `+AnimationNodeBlendMode`, `+QueueDecision`, `+TextChannelDisplayMode`; `AnimationNodeType` +`OneShotNode`, +`StateMachineNode`; `PromptCreateOutfitResult` +`UGCValidationFailed` | New enum members and categories |
+
 ### September 2026 — engine 0.738 (2026-09-11)
 
 Derived by diffing the **0.737 and 0.738 Full API Dumps locally** (`python3` over
