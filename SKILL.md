@@ -17,9 +17,10 @@ Expert development companion for building Roblox experiences with Luau. Grounded
 official Roblox documentation (https://create.roblox.com/docs), the Luau language spec
 (https://luau.org), and the Roblox Lua Style Guide (https://roblox.github.io/lua-style-guide/).
 
-> **Engine**: Roblox Studio **0.737.0.7371584** and **Luau 0.737** (released 2026-09-04), verified
-> 2026-09-06. Roblox ships roughly weekly, so this line is stale by design — never quote it as
-> today's version. Re-derive it instead:
+> **Engine**: Roblox Studio **0.739.0.7390687** (verified 2026-09-17) with **Luau 0.738** (the
+> latest Luau release, 2026-09-11 — 0.739 is an *engine-only* bump, no new Luau release, so no
+> language changes). Roblox ships roughly weekly, so this line is stale by design — never quote it
+> as today's version. Re-derive it instead:
 >
 > ```bash
 > curl -s "https://clientsettings.roblox.com/v2/client-version/MacStudio"   # or WindowsStudio64
@@ -155,7 +156,7 @@ grep -l '"<PropertyName>"' ~/RobloxDocs/RobloxAPI/classes/*.json
 ```bash
 # Check when local data was last updated
 cat ~/RobloxDocs/RobloxAPI/.current-version
-# → {"version":"0.737.0.7371584","checkedAt":"2026-09-06T...","platform":"MacStudio",...}
+# → {"version":"0.738.0.7381393","updatedAt":"2026-09-12T...","platform":"MacStudio",...}
 ```
 If `checkedAt` is older than 7 days, or if a class/member is not found locally,
 trigger a **background update** and proceed with live web fallback:

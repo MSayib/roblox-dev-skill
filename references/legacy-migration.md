@@ -270,6 +270,21 @@ failure recovery. Data loss is irreversible.
 | Input Action System (IAS) full release | June 11 | `Workspace.PlayerScriptsUseInputActionSystem`. See `references/project-structure.md` |
 | Roblox Connect calling APIs **SUNSET** | **July 15** | Remove usage before deadline |
 
+### September 2026 — engine 0.738 (2026-09-11)
+
+Derived by diffing the **0.737 and 0.738 Full API Dumps locally** (`python3` over
+`~/RobloxDocs/RobloxAPI/dumps/`), 2026-09-12. 921 classes (+6 −1), 633 enums (+4).
+
+| Change | Action Required |
+|--------|-----------------|
+| `GuiObject:TweenPosition()`, `:TweenSize()`, `:TweenSizeAndPosition()` and `GuiObject.Transparency` newly **Deprecated** | Use `TweenService:Create()` on `Position`/`Size`, and `BackgroundTransparency`/`TextTransparency` etc. Grep for `:TweenPosition(` / `:TweenSize(` — Starship had 0 call sites on 2026-09-12 |
+| `DataModelPatchService` **REMOVED** (`GetLuaVersion`, `GetPatch`, `RegisterPatch`, `UpdatePatch`) | Nothing to do unless you called it; it was `NotBrowsable` and lived one release |
+| `+AnimatedImageService` (`GetTrack`, `Prewarm`, `UnloadTracks`, `GetFrameNames`, `GetTracksChanged`), `+AnimatedImage` GuiBase (`Content`, `PlaybackSpeed`, `Pause`, `Resume`), `+AnimatedImageTrack`, enums `AnimatedImagePlaybackState` / `AnimatedImageScaleType` | New: engine-native animated images. `AnimatedImage` is `NotCreatable` in this dump — read the docs before designing on it |
+| `+RunService:BindToAnimation()` | New, no docs page yet — treat as unstable |
+| `+Workspace.StreamingAdaptiveRadius` | New streaming knob; check the property page before touching streaming tuning |
+| `+TextChannel.AddPlayersOnJoin` | New; relevant to any custom `TextChatService` channel setup |
+| `+MomentsService` (`CreatePostAsync`, `GenerateMomentTextAsync`, `CheckMomentTextStatusAsync`), `+PinShortcutService` members, `+Folder.IconTint`, `+Decal.LocalizedTextureContent` (read-only), `+AnimationImportData.VersionedAssetId` / `.ForceNewVersion`, `+ScriptService:ResolveModulePath()` | New public surface, none required for existing code |
+
 ### September 2026 — engine 0.737
 
 Derived by diffing the **0.736 and 0.737 Full API Dumps locally**, not from release-note prose, so

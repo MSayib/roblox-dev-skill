@@ -35,9 +35,9 @@ typed language **derived from Lua 5.1**. Key additions over Lua 5.1:
 - Native code generation (`--!native`) and fast `pcall`/`xpcall` VM execution (`LOP_FASTPCALL`)
 - No `goto` statement
 
-### What landed in 0.736 and 0.737 (source: luau-lang/luau release notes)
+### What landed in 0.736, 0.737 and 0.738 (source: luau-lang/luau release notes)
 
-Both releases are **fixes and internals, not new syntax you can write today**. Nothing here changes
+All three releases are **fixes and internals, not new syntax you can write today**. Nothing here changes
 how you write Luau for Roblox; it is here so nobody mistakes an internal change for a new feature.
 
 | Release | Change | What it means for your code |
@@ -49,11 +49,20 @@ how you write Luau for Roblox; it is here so nobody mistakes an internal change 
 | 0.737 | Table indexers no longer leak their generics into unsealed tables passed as arguments | Fewer spurious inference results |
 | 0.737 | The require-cycle length limit was removed | Long cycles no longer hit an arbitrary cap (they are still bad design) |
 | 0.737 | Fixed upvalue handling in `repeat..until` loops using `continue` | A real miscompile; if you hit odd upvalue behaviour there, it was this |
+| 0.738 | Free types now generalize at the enclosing *function* scope, not the block | Fewer "could not generalize" false positives inside `if`/`for` blocks |
+| 0.738 | Generic-to-`unknown` replacement narrowed to generics used exactly once in negative position | `local function get(model) model:Find("leg") end` now infers `<T...>` instead of `unknown` |
+| 0.738 | Read-only table indexers infer better; integer types exposed to user-defined type functions | Inference fixes only |
+| 0.738 | Linter reports deprecation inside union/intersection types | `A | DeprecatedThing` now warns where it used to be silent |
+| 0.738 | Bidirectional inference for table literals passed to `setmetatable` (`setmetatable({}, { test = nil })` against `setmetatable<{}, { test: DateTime? }>`) | Fewer annotations needed on metatable-based classes |
+| 0.738 | Zero-trip-count loop unrolling is now free; SCCP pass improved; `luaV_equalval` `__eq` metatable fix | Internals |
 
 **Experimental, and NOT usable in Roblox:** the **Classes** RFC prototype and the **`if local`**
-statement both exist in 0.737 only behind `DebugLuau*` fast-flags in the open-source Luau repo. They
-are not enabled in Roblox Studio. Do not write either into game code, and do not tell a user they
-can.
+statement both exist in 0.737 only behind `DebugLuau*` fast-flags in the open-source Luau repo, and
+0.738 adds two more prototypes of the same kind — **`coroutine.finally`** (RFC #187, VM side only)
+and an experiment that would **require top-level functions to be annotated**. None are enabled in
+Roblox Studio. Do not write any of them into game code, and do not tell a user they can. There is
+NO new standard-library function in 0.736–0.738; if a user asks "what new Luau methods can we use",
+the honest answer for this window is *none* — the changes are inference and internals.
 
 ---
 
