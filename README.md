@@ -4,7 +4,7 @@ An expert-level AI skill for Roblox game development with Luau. Designed for
 [Antigravity IDE](https://antigravity.dev), [Claude Code](https://claude.ai),
 and any AI coding assistant that supports the Skills format.
 
-> **Version:** 2.7.0 | **Engine:** 0.737.0.7371584 | **Luau:** 0.737 | **Verified:** 2026-09-06
+> **Version:** 2.9.0 | **Engine:** 0.739.0.7390687 | **Luau:** 0.738 | **Verified:** 2026-09-17
 >
 > Roblox ships roughly weekly. Treat that engine number as *when this was last checked*, not as
 > today's version — `SKILL.md` carries the two commands that re-derive both.
@@ -162,7 +162,7 @@ connected, the skill can:
 
 | Topic | Status | Reference File |
 |-------|--------|---------------|
-| Luau language (strict mode, types, generics) | ✅ Luau 0.737 | `luau-fundamentals.md` |
+| Luau language (strict mode, types, generics) | ✅ Luau 0.738 | `luau-fundamentals.md` |
 | Project architecture (services, Rojo, IAS) | ✅ Current | `project-structure.md` |
 | DataStore + ProfileStore + **MemoryStoreService** | ✅ Aug 2026 | `datastore-persistence.md` |
 | Client-Server networking + BindableEvent caveats | ✅ Aug 2026 | `networking.md` |
@@ -179,6 +179,8 @@ connected, the skill can:
 
 | Version | Date | Highlights |
 |---------|------|-----------|
+| **2.9.0** | Sep 17, 2026 | Engine 0.739.0.7390687 (Luau **unchanged** at 0.738 — engine-only bump, no language changes). Dump re-split: 925 classes / 636 enums / 259 services / 48 deprecated. Local 0.738→0.739 diff: +4 classes (AdPlacement, ExternalIdentityService, QueueService, StandardQueue); `CallingService.CreateCall`→**`CreateCallAsync`** (renamed, now Yields — breaking); +`UGCValidationService:GetLayeredClothingPostDeformationSizeAsync` (LC/UGC); +StateMachineTransitionDefinition {From,To,Priority,TransitionId}; +Terrain Set/ReplaceMaterialInTransformSubregionSlot; +ChatWindowConfiguration.TextChannelDisplayMode; +3 enums (AnimationNodeBlendMode, QueueDecision, TextChannelDisplayMode); AnimationNodeType +OneShotNode/+StateMachineNode; PromptCreateOutfitResult +UGCValidationFailed. |
+| **2.8.0** | Sep 12, 2026 | Engine 0.738.0.7381393 + Luau 0.738 (2026-09-11). Dump re-split: 921 classes / 633 enums / 257 services. Local 0.737→0.738 diff: `GuiObject:TweenPosition/TweenSize/TweenSizeAndPosition` + `.Transparency` newly deprecated; `DataModelPatchService` removed; +AnimatedImageService/AnimatedImage/AnimatedImageTrack, +MomentsService, +RunService:BindToAnimation, +Workspace.StreamingAdaptiveRadius, +TextChannel.AddPlayersOnJoin. Luau 0.738 = inference fixes + two more flag-gated prototypes (`coroutine.finally`, mandatory top-level annotations); no new stdlib functions. |
 | **2.7.0** | Sep 6, 2026 | Engine 0.737.0.7371584 + Luau 0.737. Dump re-split: 916 classes / 629 enums / 256 services. **Accuracy pass**: removed the non-existent `set_active_studio` MCP tool and the unreproducible "845×" figure, corrected Context7's tool name (`get-library-docs`, not `query-docs`), stopped presenting `/roblox-update` as a registered slash command, dropped the invented "2-5x" native-codegen speedup and documented its real server-only scope and costs, and softened "self-updating" to what actually happens |
 | **2.6.0** | Aug 28, 2026 | Engine update to v0.736 (0.736.0.7361346): Full API Dump updated to 914 classes (+StateMachineDefinition, +StateMachineTransitionDefinition), 623 enums (+AnimationNodeTransitionWhen), +ServerLowMemoryWarning, +CreateDecalAsync, emissive decals |
 | **2.5.0** | Aug 27, 2026 | Engine & Luau v0.735 upgrade: Full API Dump 0.735.0.7351131 (912 classes, +BranchService, +IntentService, +PlayerControlState, +ScriptScannerService), LOP_FASTPCALL (~2x faster pcall/xpcall), type function enhancements & setmetatable |

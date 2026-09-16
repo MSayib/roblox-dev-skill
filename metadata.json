@@ -1,13 +1,29 @@
 {
   "skill_name": "roblox-dev",
-  "version": "2.7.0",
-  "last_updated": "2026-09-06T02:30:00+07:00",
-  "last_updated_by": "human+ai collaborative improvement",
-  "update_source": "https://create.roblox.com/docs, https://create.roblox.com/docs/llms.txt, https://devforum.roblox.com, https://github.com/luau-lang/luau/releases, live clientsettings & CDN API dump",
-  "engine_version_at_update": "0.737.0.7371584",
-  "luau_version_at_update": "0.737",
+  "version": "2.9.0",
+  "last_updated": "2026-09-17T00:30:00+07:00",
+  "last_updated_by": "claude-code (owner request, OutfitCatalog session)",
+  "update_source": "https://create.roblox.com/docs, https://create.roblox.com/docs/llms.txt, https://devforum.roblox.com, https://github.com/luau-lang/luau/releases, live clientsettings & CDN Full-API-Dump 0.738-vs-0.739 local diff",
+  "engine_version_at_update": "0.739.0.7390687",
+  "luau_version_at_update": "0.738",
   "update_interval_days": 7,
   "update_history": [
+    {
+      "date": "2026-09-17T00:30:00+07:00",
+      "version": "2.9.0",
+      "changes": "Engine 0.739.0.7390687 (WindowsStudio64 hash version-55808de4b1914919). Luau UNCHANGED at 0.738 — no new luau-lang/luau release since 0.738 (2026-09-11), so 0.739 is an engine-only bump with NO language changes. Local dump re-split: 925 classes, 636 enums, 259 services, 48 deprecated. API diff computed locally 0.738->0.739 via python3: +4 classes (AdPlacement, ExternalIdentityService, QueueService, StandardQueue); 0 removed classes; CallingService.CreateCall RENAMED to CreateCallAsync (now Yields) — breaking for callers of the old name; +UGCValidationService:GetLayeredClothingPostDeformationSizeAsync (Yields, relevant to layered-clothing/UGC catalog work); +StateMachineTransitionDefinition {From,To,Priority,TransitionId}; +Terrain Set/ReplaceMaterialInTransformSubregionSlot; +ChatWindowConfiguration.TextChannelDisplayMode; +TextChannel.IsDefaultTextChannel (Hidden); +StarterPlayer.PlaceAvatarRules (Hidden); +Workspace.MapTVRemoteToGamepadKeycodes (NotScriptable); +2 hidden LiveScriptingService events. Enums: +3 (AnimationNodeBlendMode, QueueDecision, TextChannelDisplayMode); AnimationNodeType +OneShotNode +StateMachineNode; PromptCreateOutfitResult +UGCValidationFailed. Folds in the previously-uncommitted 2.8.0 (0.738) working-tree changes to README/SKILL/legacy-migration/luau-fundamentals.",
+      "engine_version": "0.739.0.7390687",
+      "decision_by": "user (sayib) -- explicit request 2026-09-17 (Full update ke 0.739)",
+      "verified_by": "live clientsettings MacStudio + WindowsStudio64, luau-lang/luau GitHub releases API (still 0.738), local 0.738-vs-0.739 Full-API-Dump diff via python3, split-api-dump.sh re-split to 925 classes"
+    },
+    {
+      "date": "2026-09-12T13:30:00+07:00",
+      "version": "2.8.0",
+      "changes": "Engine 0.738.0.7381393 + Luau 0.738 (released 2026-09-11). Local dump re-split: 921 classes, 633 enums, 257 services, 48 deprecated. API diff computed locally against the 0.737 dump: GuiObject.TweenPosition/TweenSize/TweenSizeAndPosition and GuiObject.Transparency newly Deprecated (Starship grep: 0 call sites); DataModelPatchService REMOVED (4 members); +AnimatedImage, +AnimatedImageService, +AnimatedImageTrack, +AnimationValueNodeDefinition, +AnimationValueOutputDefinition, +MomentsService; +RunService.BindToAnimation, +Workspace.StreamingAdaptiveRadius, +TextChannel.AddPlayersOnJoin, +Folder.IconTint, +ScriptService.ResolveModulePath, +PinShortcutService members (27 new public members total); enums +AnimatedImagePlaybackState, +AnimatedImageScaleType, +AnimationValueNodeType, +PinExperienceStatus. Luau 0.738 documented as inference fixes (function-scope generalization, narrower generic->unknown replacement, setmetatable bidirectional inference, deprecation lint inside unions) plus two flag-gated prototypes (coroutine.finally RFC #187, mandatory top-level annotations) that are NOT available in Roblox; recorded explicitly that 0.736-0.738 add NO new standard-library functions.",
+      "engine_version": "0.738.0.7381393",
+      "decision_by": "user (sayib) -- explicit request 2026-09-12",
+      "verified_by": "live clientsettings MacStudio, luau-lang/luau GitHub releases API (0.738 body read), local 0.737-vs-0.738 Full API Dump diff via python3, grep of Starship src for the newly deprecated members"
+    },
     {
       "date": "2026-09-06T02:30:00+07:00",
       "version": "2.7.0",
