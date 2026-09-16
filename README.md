@@ -210,3 +210,9 @@ MIT License — see [LICENSE](LICENSE) for details.
   [Luau Language](https://luau.org), [Roblox DevForum](https://devforum.roblox.com),
   [RobloxAPI/ref](https://robloxapi.github.io/ref)
 - **Skills Format**: Pioneered by [Anthropic](https://github.com/anthropics/skills)
+
+## ⭐ Star History
+
+If you find this skill helpful, don't forget to give it a ⭐ **star** on GitHub! It helps more developers discover the project and supports continued development.
+
+[![Star History Chart](https://api.star-history.com/svg?repos=MSayib/roblox-dev-skill&type=Date)](https://star-history.com/#MSayib/roblox-dev-skill&Date)
