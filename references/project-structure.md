@@ -555,61 +555,97 @@ vice versa.
 > Released: June 11, 2026 (GA).
 > Source: https://create.roblox.com/docs/input/input-action-system
 
-The **Input Action System (IAS)** replaces the legacy per-input-event model
-(`UserInputService`, `ContextActionService`) with a declarative, data-driven
-action mapping system. It is the foundation for the upcoming **Character
-Controller Library** and **Server Authority** features.
+The **Input Action System (IAS)** is a declarative, data-driven action-mapping system: you define
+*actions* at edit time and bind them to hardware inputs per device family, instead of handling raw
+input events everywhere.
+
+> **It does not deprecate `UserInputService` or `ContextActionService`.** Verified against the 0.740
+> dump: neither service carries a `Deprecated` tag, and only a handful of individual members on them
+> are deprecated. An earlier version of this file said IAS "replaces the legacy per-input-event
+> model", which overstates it — IAS is the recommended cross-platform approach for new input work,
+> and the older services remain valid.
 
 ### Enabling IAS
 
-IAS is controlled by a Workspace-level property:
-
 ```luau
 --!strict
--- Enable IAS for all PlayerScripts in this place
-workspace.PlayerScriptsUseInputActionSystem = true
+-- Enable IAS for the default PlayerScripts in this place
+workspace.PlayerScriptsUseInputActionSystem = Enum.RolloutState.Enabled
 ```
 
-Set this property in Studio (Workspace → Properties → `PlayerScriptsUseInputActionSystem`)
-or via script. When enabled, the default player scripts use IAS internally.
+> ⚠️ **This property is an `Enum.RolloutState`, not a boolean.** Items: `Default`, `Disabled`,
+> `Enabled`. An earlier version of this file wrote `= true`, which is a type error. You can set it in
+> Studio (Workspace → Properties) instead.
 
 ### Key Concepts
 
-| Concept | Description |
-|---|---|
-| **InputAction** | A named action (e.g., `"Jump"`, `"Sprint"`) decoupled from specific keys/buttons |
-| **Action binding** | Maps one or more physical inputs to an InputAction |
-| **Action handler** | A callback that fires when an InputAction is activated/deactivated |
-| **Composite actions** | Combine multiple inputs into a single action (e.g., WASD → `"Move"` as Vector2) |
+| Concept | Real class / member | Description |
+|---|---|---|
+| **Input context** | `InputContext` | The collection that holds related actions — e.g. a `PlayContext` for gameplay and a `NavContext` for menus. Toggle whole groups with `.Enabled`. `.Priority` plus `.Sink` lets a high-priority context consume inputs before lower ones see them (an open inventory suppressing gameplay keys) |
+| **Action** | `InputAction` | A named mechanic ("Sprint", "Shoot") decoupled from any key. Its `.Type` is an `Enum.InputActionType` |
+| **Binding** | `InputBinding` | Which hardware input triggers the parent action. One per device family — **gamepad, keyboard/mouse, and touch** — for cross-platform support |
+| **Handlers** | `.Pressed`, `.Released`, `.StateChanged` events | What fires when the action changes. There is **no** `Activated`/`Deactivated` |
+| **Composite/analog input** | `Direction1D` / `Direction2D` / `Direction3D` types, with `InputBinding.Up`/`.Down`/`.Left`/`.Right` | WASD or a thumbstick collapsed into one directional action |
+| **Binding display** | `InputAction.PreferredBinding` (read-only) + `InputActionLabel` | Shows the player the binding that matches their current device. Use these for rebinding UI — `GetInputBindings()` is `RobloxScriptSecurity` and **not callable from your code** |
+
+`Enum.InputActionType` items are **`Bool`** (default — press/release), `Direction1D`,
+`Direction2D`, `Direction3D`, `ViewportPosition`. **There is no `Button` item.**
+
+### Recommended structure (edit time)
+
+IAS is designed to be arranged at edit time, not built at runtime:
+
+```text
+ReplicatedStorage/
+└── Inputs/                    (Folder)
+    └── PlayContext            (InputContext — Priority 2000, Sink enabled)
+        └── CharacterSprint    (InputAction — Type = Bool)
+            ├── KeyboardBinding  (InputBinding — KeyCode = LeftShift)
+            ├── GamepadBinding   (InputBinding — KeyCode = ButtonL3)
+            └── TouchBinding     (InputBinding)
+```
 
 ### Example
 
 ```luau
 --!strict
--- StarterPlayerScripts/Controllers/ActionController.client.luau
-local InputActionService = game:GetService("InputActionService")
+-- StarterPlayerScripts/Controllers/SprintController.client.luau
+-- Assumes the hierarchy above was created in Studio (the documented workflow).
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
--- Create an action
-local sprintAction = Instance.new("InputAction")
-sprintAction.Name = "Sprint"
-sprintAction.DisplayName = "Sprint" -- engine 0.740+: player-facing label for rebinding UI
-sprintAction.ActionType = Enum.InputActionType.Button
-sprintAction.Parent = InputActionService
+local playContext = ReplicatedStorage:WaitForChild("Inputs"):WaitForChild("PlayContext")
+local sprintAction = playContext:WaitForChild("CharacterSprint") :: InputAction
 
--- Bind Left Shift to the Sprint action
-local shiftBinding = Instance.new("InputActionBinding")
-shiftBinding.InputType = Enum.UserInputType.Keyboard
-shiftBinding.KeyCode = Enum.KeyCode.LeftShift
-shiftBinding.Parent = sprintAction
-
--- Handle the action
-sprintAction.Activated:Connect(function()
+sprintAction.Pressed:Connect(function()
 	-- Begin sprinting
 end)
 
-sprintAction.Deactivated:Connect(function()
+sprintAction.Released:Connect(function()
 	-- Stop sprinting
 end)
+
+-- For analog / directional actions, read the value instead of listening for press:
+local moveAction = playContext:WaitForChild("CharacterMove") :: InputAction
+moveAction.StateChanged:Connect(function()
+	local direction: Vector2 = moveAction:GetState()
+	-- apply movement from direction
+end)
+```
+
+If you must build IAS instances from a script, the same classes apply — but note the property
+names, because every one of these was wrong in an earlier version of this file:
+
+```luau
+--!strict
+local action = Instance.new("InputAction")
+action.Name = "CharacterSprint"
+action.DisplayName = "Sprint"            -- engine 0.740+: player-facing label for rebinding UI
+action.Type = Enum.InputActionType.Bool  -- property is `Type`, NOT `ActionType`
+action.Parent = playContext              -- parent is an InputContext, not a service
+
+local binding = Instance.new("InputBinding")  -- class is `InputBinding`, NOT `InputActionBinding`
+binding.KeyCode = Enum.KeyCode.LeftShift      -- set KeyCode directly; there is no `InputType`
+binding.Parent = action
 ```
 
 ### Foundation for Future Features

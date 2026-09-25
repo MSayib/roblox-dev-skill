@@ -424,6 +424,24 @@ security risks, as they can contain malicious scripts called backdoors."*
   > docs is unavailable and errors as an `Unassigned` capability.
   >
   > Source: https://create.roblox.com/docs/en-us/scripting/capabilities
+  >
+  > **"Configure minimal Capabilities" is only actionable if you know what ordinary code needs.**
+  > Derived by auditing this skill's own examples against the 0.740 dump — each of these is a
+  > `Security: None` member that nonetheless carries a `Capabilities.Write` requirement, so it works
+  > normally today and **breaks inside a sandboxed container** unless you grant the capability:
+  >
+  > | Ordinary thing you do | Capability the sandbox will demand |
+  > |---|---|
+  > | `humanoid.Health = n` — any damage or healing | `AvatarBehavior` |
+  > | `MarketplaceService.ProcessReceipt = f` — developer products | `Monetization` |
+  > | `remoteFunction.OnServerInvoke = f` / `.OnClientInvoke` | `RemoteEvent` |
+  > | `part.CollisionFidelity = …` (engine 0.740+) | `PluginOrOpenCloud` |
+  >
+  > So a sandboxed third-party model that is *supposed* to deal damage still needs
+  > `AvatarBehavior`, and one that legitimately talks to your systems needs `RemoteEvent`. Grant the
+  > narrow capability the model actually requires; do not grant `Network`, `DataStore`, or
+  > `AssetRequire` to reach it. Re-derive this table after any engine update with
+  > `~/RobloxDocs/scripts/audit-skill-examples.py` (section B).
 
 - **Inspect all scripts** in third-party assets before use
 - **Watch for obfuscated code** or whitespace that hides malicious code off-screen

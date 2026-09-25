@@ -11,6 +11,105 @@ reference content was verified against at that time.
 
 ---
 
+## 2.12.0 — Sep 25, 2026
+
+**Worked examples, a second latent defect found, and the tooling that makes both checkable.**
+No engine change — still 0.740.19.7400931 / Luau 0.739.
+
+### Added — `references/worked-examples.md`
+
+Every other reference answers *"what is true about Roblox?"*. This one answers *"what do I do, in
+order, and how do I know it worked?"* Five end-to-end sequences:
+
+1. **Add a server-authoritative feature** — intent vs outcome, all validation layers, and a
+   verification step that fires junk at the handler rather than only proving the happy path.
+2. **Debug a runtime error through MCP** — with the failure-mode table (`multi_edit` is `Edit`-only,
+   `old_string` is exact-match, stale `studio_id` is silent, `script_grep` line numbers lie).
+3. **Migrate a deprecated API** — confirm the deprecation in the local dump via `jq`, and check
+   whether the replacement **yields** before doing a text substitution.
+4. **Verify an unfamiliar API** — read `Security`, `Capabilities` *and* `Tags`, not just one.
+5. **Refuse and redirect an unsafe request** — a worked example of *not* complying: name the
+   concrete exploit, offer the nearest thing that works, and if the user reaffirms, it is their call.
+
+Each carries a **Not this** list of requests that look similar and route elsewhere, because the
+failure mode of examples is an agent matching one onto a task it does not fit.
+
+### Fixed — the Input Action System example was wrong in six of twelve lines
+
+Found by the new existence audit, not by a release. `project-structure.md` documented:
+
+| Was | Reality in the 0.740 dump |
+|---|---|
+| `game:GetService("InputActionService")` | **No such class.** The container is `InputContext`, recommended under `ReplicatedStorage/Inputs` |
+| `Instance.new("InputActionBinding")` | **No such class** — it is `InputBinding` |
+| `action.ActionType = …` | The property is **`Type`** |
+| `Enum.InputActionType.Button` | **Not an item.** Valid: `Bool`, `Direction1D`, `Direction2D`, `Direction3D`, `ViewportPosition` |
+| `binding.InputType = Enum.UserInputType.Keyboard` | No such property; set `KeyCode` directly |
+| `action.Activated` / `.Deactivated` | The events are **`Pressed`**, **`Released`**, **`StateChanged`** |
+| `workspace.PlayerScriptsUseInputActionSystem = true` | It is an **`Enum.RolloutState`** (`Default`/`Disabled`/`Enabled`) — `= true` is a type error |
+
+An agent following the old text would have failed on the first line. The section is rewritten with
+the documented edit-time hierarchy, the real concept table (including `InputContext`, which was
+missing entirely), and a note that `GetInputBindings()` is `RobloxScriptSecurity` — so rebinding UI
+must use `PreferredBinding` + `InputActionLabel`.
+
+Also corrected: the file claimed IAS "replaces the legacy per-input-event model
+(`UserInputService`, `ContextActionService`)". Neither service carries a `Deprecated` tag; only a
+few individual members do. IAS is the recommended approach for new input work, not a replacement.
+
+### Added — tooling in `~/RobloxDocs/scripts/`
+
+- **`audit-skill-examples.py`** — parses every Luau block in the references and checks it against
+  the dump: elevated-security members, capability-gated writes, unknown classes, unknown enum items,
+  and method calls that do not exist on the resolved service. **Exits non-zero**, so a broken
+  example fails the ingest instead of shipping. Precision matters for a tool that will cry wolf, so
+  it resolves a member name across *all* classes and only reports when every definition is elevated,
+  skips receivers bound from `require()` and a community-library allowlist (`DataStore2:Get()` is not
+  an engine call), and checks method calls only in section E because `ReplicatedStorage.Remotes` is
+  ordinary Luau.
+- **`diff-api-dumps.py`** — member-level diff: added/removed classes, members, `Security`,
+  `Capabilities`, `Tags` and signatures, plus enum items. Triages developer-visible changes ahead of
+  `RobloxScriptSecurity` churn, and **greps back into the references** so "the API changed" is
+  connected to "our docs say something about it".
+
+### Changed — `roblox-api-monitor.sh` v2
+
+- **Member-level diff replaces the count diff.** v1 compared class and enum *counts* only, which is
+  why six `Security` changes in 0.739→0.740 were invisible to it.
+- **Download integrity gate.** The dump is validated as parseable JSON with a plausible shape
+  *before* it becomes `latest.json`. v1 would have symlinked a truncated download as the source of
+  truth. Verified against an empty dump, a truncated dump, and a wrong-typed dump.
+- **Example audit wired in**, so a doc example that cannot execute on the new engine version fails
+  the run.
+- **`.current-version` now always writes both `updatedAt` and `checkedAt`**, fixing the cause of the
+  staleness-check bug that 2.11.0 could only document around. `updatedAt` is preserved across
+  check-only runs.
+- **PID-aware lock that self-clears when stale.** The first version could be left locked by a run
+  killed without its trap firing (a `| head` SIGPIPE did exactly that during testing), which blocked
+  every later run until someone deleted the directory by hand.
+- **Retention is opt-in (`--keep N`), defaulting to keeping everything.** Old dumps are forensic
+  evidence: tracing `CollisionFidelity` across 0.733–0.740 is what proved how long the broken
+  example had been shipping. Deleting them by default to save ~8 MB each would destroy that.
+- `set -u`, pipefail, a dependency check, and version-sorted previous-dump detection instead of
+  mtime.
+
+### Verified — how long the 2.11.0 defect had been shipping
+
+`TriangleMeshPart.CollisionFidelity` was `Write: PluginSecurity` in **every** dump from 0.733
+through 0.739, and `git log -S` puts the broken example in the **initial release of 2026-06-25**. So
+it was wrong for three months and across eight engine versions. 0.740 did not break it — 0.740
+accidentally *fixed* it, and that is the only reason it surfaced.
+
+### Installation — one source of truth
+
+`~/.claude/skills/roblox-dev` and
+`~/.gemini/config/plugins/roblox-dev-suite/skills/roblox-dev-skill` were **separate clones**, at
+v2.9.0 and **v2.6.0** respectively, so Claude Code and Antigravity/Gemini were each serving stale
+content after a merge. Both are now symlinks to the canonical checkout; the old clones are backed up
+under `~/RobloxDocs/.skill-clone-backups/`. A `git pull` in one place now updates every agent.
+
+---
+
 ## 2.11.0 — Sep 25, 2026
 
 **Engine 0.740.19.7400931 + Luau 0.739 (released 2026-09-18).** Dump downloaded, re-split, and
