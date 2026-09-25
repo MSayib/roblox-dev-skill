@@ -388,7 +388,9 @@ obtain_source() {
     fi
     url="https://codeload.github.com/$REPO_OWNER/$REPO_NAME/tar.gz/$REF"
     tarball="$work/src.tar.gz"
-    info "Downloading $REPO_OWNER/$REPO_NAME@$REF…" >&2
+    # ${REF} braced: bash 3.2 in a UTF-8 locale reads a non-ASCII byte right after a name as part
+    # of the name, so "$REF…" looked up a variable called REF\xe2… and died under set -u.
+    info "Downloading ${REPO_OWNER}/${REPO_NAME}@${REF}…" >&2
     download "$url" "$tarball" || die "download failed: $url  (is --ref '$REF' a real branch or tag?)"
     mkdir -p "$work/src"
     tar -xzf "$tarball" -C "$work/src" || die "could not extract the downloaded archive"
