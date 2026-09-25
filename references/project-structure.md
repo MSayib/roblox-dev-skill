@@ -592,6 +592,7 @@ local InputActionService = game:GetService("InputActionService")
 -- Create an action
 local sprintAction = Instance.new("InputAction")
 sprintAction.Name = "Sprint"
+sprintAction.DisplayName = "Sprint" -- engine 0.740+: player-facing label for rebinding UI
 sprintAction.ActionType = Enum.InputActionType.Button
 sprintAction.Parent = InputActionService
 

@@ -29,6 +29,8 @@
 | `RunService.Stepped` | `RunService.PreSimulation` | Same behavior, clearer name | 2024 |
 | `RunService.Heartbeat` | `RunService.PostSimulation` | Same behavior, clearer name | 2024 |
 | `RunService.RenderStepped` | `RunService.PreRender` | Same behavior, clearer name | 2024 |
+| `LocalizationService:GetTranslatorForPlayer()` | `:GetTranslatorForPlayerAsync()` | ⚠️ Mostly | Deprecated in engine **0.740**. The async form **yields** — wrap it or call it off the critical path |
+| `CallingService:CreateCall()` | `:CreateCallAsync()` | ❌ No | Renamed in 0.739 and now yields. Note the Roblox Connect calling APIs were sunset July 15, 2026 |
 
 ---
 
@@ -269,6 +271,27 @@ failure recovery. Data loss is irreversible.
 | `AdService` / `AdGui` signals removed | Mid-June | Migrate to current ad APIs |
 | Input Action System (IAS) full release | June 11 | `Workspace.PlayerScriptsUseInputActionSystem`. See `references/project-structure.md` |
 | Roblox Connect calling APIs **SUNSET** | **July 15** | Remove usage before deadline |
+
+### September 2026 — engine 0.740.19.7400931 (ingested 2026-09-25)
+
+Derived by diffing the **0.739 and 0.740 Full API Dumps locally** (`python3` over
+`~/RobloxDocs/RobloxAPI/dumps/`), 2026-09-25. **924 classes (−1), 635 enums (−1), 258 services,
+48 deprecated.** Luau 0.739 (2026-09-18). Note this is a *shrinking* release — the first in this
+window where the dump got smaller.
+
+| Change | Action Required |
+|--------|-----------------|
+| `LocalizationService:GetTranslatorForPlayer()` **newly Deprecated** | Migrate to **`GetTranslatorForPlayerAsync()`** (the dump names it as the preferred descriptor). The old call still exists but now emits a deprecation lint |
+| **`SnippetService` REMOVED** (whole class) | If anything referenced it, it is gone. Nothing in this skill did |
+| **`Enum.Language` REMOVED** | Remove any `Enum.Language` usage |
+| `TriangleMeshPart.CollisionFidelity` / `.FluidFidelity` and `PartOperation.RenderFidelity` / `.SmoothingAngle`: `Security.Write` **`PluginSecurity` → `None`** | **Newly script-writable at runtime.** Before 0.740 an ordinary Script could not set these. **`MeshPart.RenderFidelity` was NOT relaxed** and stays `PluginSecurity`. Each relaxed member gains `Capabilities.Write: ["PluginOrOpenCloud"]`, which only applies inside an opt-in sandboxed container. See `performance-optimization.md` §3 |
+| `Lighting.LightingStyle` (enum `Realistic`/`Soft`) and `Lighting.PrioritizeLightingQuality` (bool): `Security.Write` **`RobloxScriptSecurity` → `None`** | Both are now developer-settable from a script, having been Roblox-internal. Same `Capabilities.Write: ["PluginOrOpenCloud"]` caveat |
+| `+TeleportOptions.ReservedServerId`, `+TeleportOptions.VipServerId`; `Enum.TeleportMethod` +`TeleportSwitchServer` | New public teleport targeting fields. The matching `TeleportService:TeleportSwitchServer()` is **`RobloxScriptSecurity`** — you cannot call it, so do not build on it |
+| `WorldRoot.PhysicsStepTime` gained the **`ReadOnly`** tag | Any code assigning to it was already wrong and is now explicitly rejected |
+| `+AudioTextToSpeech.AutoLocalize`, `+InputAction.DisplayName` | New public properties; `DisplayName` is useful for IAS rebinding UI (see `project-structure.md`) |
+| `+WrapTextureTransfer:PrepareProjectionMeshDataAsync()` (Yields, no security) | New public LC/UGC mesh-projection helper |
+| `+CaptureService:StartVideoCaptureForMCPAsync()` / `:StopVideoCaptureForMCP()` | **`RobloxScriptSecurity` — not callable by you.** Listed only because the name suggests Studio MCP is growing a video-capture path; it is not an API you can use, and no MCP tool exposes it today |
+| Other additions are `RobloxScriptSecurity`: `MarketplaceService` bulk-purchase refresh signals, `MomentsService:FetchPostAsync`, `PerformanceControlService:SetUserActivity`, `AssetQualityService:…V2Async`, `Plugin:GetPreinitPayload` | Ignore for game code; none are callable from a Script |
 
 ### September 2026 — engine 0.739 (2026-09-17)
 
