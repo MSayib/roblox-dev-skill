@@ -1,153 +1,279 @@
 # Roblox Studio MCP Integration
 
-> **Source:**
-> https://create.roblox.com/docs/ai/build ·
-> https://create.roblox.com/docs/studio
+> **Primary source (re-verified 2026-09-25):**
+> https://create.roblox.com/docs/studio/mcp — raw markdown at
+> `https://raw.githubusercontent.com/Roblox/creator-docs/main/content/en-us/studio/mcp.md`
+>
+> Every tool description below is taken from that page or from the live tool schema of the
+> installed server. Where the two disagree, both readings are given.
 
-> How to use the Roblox_Studio MCP server to interact with Roblox Studio from an AI agent.
+> How to use the `Roblox_Studio` MCP server to drive Roblox Studio from an AI agent.
+
+**This skill is not an MCP server.** It is a knowledge base that is *read by* an agent which
+may also be connected to Roblox's own Studio MCP server. This skill ships no tools, no
+transport, and no `execute` surface of its own. See `references/agent-safety.md` for what that
+distinction means for the trust boundary.
 
 ## Table of Contents
 
 1. [Overview](#overview)
-2. [Tool Reference](#tool-reference)
-3. [Recommended Workflows](#recommended-workflows)
-4. [Best Practices](#best-practices)
+2. [Setup](#setup)
+3. [Tool Reference](#tool-reference)
+4. [Recommended Workflows](#recommended-workflows)
+5. [Best Practices](#best-practices)
+6. [Corrections Log](#corrections-log)
 
 ---
 
 ## Overview
 
-The **Roblox_Studio MCP server** is **built-in natively** to Roblox Studio as of
-mid-2026 and is now the standard integration path. It exposes Studio functionality through the Model Context Protocol,
-letting AI agents read, write, and test game code without the developer manually
-copy-pasting between the agent and Studio.
+The **Roblox Studio MCP server is built into Roblox Studio** and is the supported integration
+path. It implements the Model Context Protocol, letting an AI client explore the DataModel,
+write scripts, run Luau, and playtest inside your open Studio session.
 
-> **Migration note:** The previous external Rust binary (`studio-rust-mcp-server`
-> on GitHub) has been **archived**. You no longer need to install or run a
-> separate process. All MCP functionality is now handled by the native server
-> inside Studio.
+Mechanics that matter when things break:
 
-**Setup:**
+- It **runs as a local process on your machine** and speaks **`stdio` transport**. It is not a
+  network service you point a URL at. On macOS the binary is
+  `/Applications/RobloxStudio.app/Contents/MacOS/StudioMCP`; on Windows it is
+  `%LOCALAPPDATA%\Roblox\mcp.bat`.
+- All actions are **initiated by the client**, which sends a request down that channel into the
+  running Studio session. Studio must be open, with the server enabled, or every call fails.
 
-1. Open the **Assistant** widget in Roblox Studio.
-2. Navigate to **"Manage MCP Servers"**.
-3. Enable the **built-in MCP server**.
+> **Migration note:** the previous standalone Rust server (`Roblox/studio-rust-mcp-server` on
+> GitHub) is **archived** — verified 2026-09-25 via the GitHub API: `archived: true`, last push
+> 2026-04-03. Do not install it, and do not follow guides that tell you to. Nothing needs to run
+> as a separate process any more.
 
-Tool names and functionality are **unchanged** from the external-server era —
-existing agent code and workflows continue to work without modification.
+**Host-specific call convention — check yours before following either line.** In **Antigravity**,
+tools are lazily loaded: read the schema from
+`~/.gemini/antigravity/mcp/Roblox_Studio/<toolName>.json` first, then call via `call_mcp_tool`
+with server name `Roblox_Studio`. In **Claude Code** there is no `call_mcp_tool` wrapper — tools
+appear directly as `mcp__Roblox_Studio__<toolName>`, and some are deferred, in which case load
+the schema with tool-search before calling.
 
-**Key concepts:**
+**Two arguments are on effectively every call:**
 
-- **Host-specific, so check yours before following either line below.** In **Antigravity**, tools are
-  lazily loaded — read the schema from
-  `/Users/sayib/.gemini/antigravity/mcp/Roblox_Studio/<toolName>.json` first, then call via
-  `call_mcp_tool` with server name `Roblox_Studio`. In **Claude Code** there is no `call_mcp_tool`
-  wrapper: the tools appear directly as `mcp__Roblox_Studio__<toolName>` and some are deferred, in
-  which case load the schema with tool-search before calling.
-- Studio must be open and the built-in MCP server enabled for calls to succeed.
-- If multiple Studio windows are open, call `list_roblox_studios` and pass the id you want as
-  `studio_id` on **every** subsequent call. There is no "set active studio" tool — the target is an
-  argument, not a mode, so a forgotten or copy-pasted id silently drives the wrong place.
-- **ScriptDebuggerService — `PluginSecurity`, so NOT reachable from game code.** It does expose
+- **`studio_id` — required, on every tool.** There is no "set active studio" tool and no session
+  state; the target is an argument, not a mode. Call `list_roblox_studios` (it returns name,
+  Studio instance ID, and place ID) and pass the id you want each time. A forgotten or
+  copy-pasted id silently drives the wrong place. Two instances with the same name are told
+  apart by place ID; local places with no place ID are listed by name only.
+- **`datamodel_type` (`Edit` / `Client` / `Server`) — required on the tools that take it.**
+  `Edit` is the saved place. `Client` and `Server` exist **only while a playtest is running**.
+  Call `get_studio_state` to see which are currently available. Note the asymmetry:
+  `execute_luau` accepts all three, but **`multi_edit` accepts `Edit` only** — you cannot edit
+  scripts through MCP while a playtest is running.
+
+**Two things this file will not claim:**
+
+- **`ScriptDebuggerService` is `PluginSecurity`, so game code cannot reach it.** It does expose
   `AddBreakpoint`, `RemoveBreakpoint`, `ClearBreakpoints`, `Pause`, `Evaluate`, `GetStackTrace`,
-  `GetThreads`, `GetVariables`, `GetRootVariables`, `SetExceptionBreakMode`, `OnStopped`, `Resumed`
-  — but **every one of those members is `PluginSecurity`** (verified against the 0.737 API dump,
-  2026-09-06). A Script or LocalScript calling them errors. Only a plugin or the command bar can.
-  An earlier version of this file said to reach it with `game:GetService("ScriptDebuggerService")`
-  as though ordinary code could; it cannot.
-- **Studio Assistant "Planning Mode":** no MCP tool exposes it and this file has never carried a
-  source for it, so nothing here should be built on it. If you need multi-step verification, drive
-  it yourself with `start_stop_play` + `get_console_output`, or hand the steps to the user.
+  `GetThreads`, `GetVariables`, `GetRootVariables`, `SetExceptionBreakMode`, `OnStopped`,
+  `Resumed` — but **every one of those members is `PluginSecurity`** (verified against the API
+  dump). A Script or LocalScript calling them errors; only a plugin, the command bar, or
+  `execute_luau` can. Roblox ships a first-party `rbx-debug` skill for exactly this — reach it
+  through the `skill` tool rather than improvising.
+- **Studio Assistant "Planning Mode" is not exposed by any MCP tool**, and this file has never
+  carried a source for it. Build nothing on it. For multi-step verification, drive
+  `start_stop_play` + `get_console_output` yourself, or hand the steps to the user.
+
+---
+
+## Setup
+
+1. Open **Assistant** in Studio.
+2. Click **…** → **Manage MCP Servers**.
+3. Turn on **Enable Studio as MCP server**.
+
+Then connect the client one of three ways, in this order of preference:
+
+- **Quick connect** (Assistant Settings → MCP Servers → *Quick connect*) — officially supports
+  Antigravity, Codex CLI, Claude Code, Claude Desktop, Cursor, Gemini CLI, and Visual Studio
+  Code. If your client is missing from the list, install it and restart Studio.
+- **JSON config**, for any client that reads `mcp.json`:
+
+  ```json
+  {
+    "mcpServers": {
+      "Roblox_Studio": {
+        "command": "/Applications/RobloxStudio.app/Contents/MacOS/StudioMCP"
+      }
+    }
+  }
+  ```
+
+  On Windows: `"command": "cmd.exe"`, `"args": ["/c", "%LOCALAPPDATA%\\Roblox\\mcp.bat"]`.
+  Merge the `Roblox_Studio` entry into an existing `mcpServers` dictionary rather than replacing
+  the file, and mind the commas — invalid JSON fails silently at load.
+- **CLI command**, for clients that want one: run the binary path above directly.
+
+**Verify:** Assistant → **…** → **Manage MCP Servers** → under *Enable Studio as MCP server*,
+a green indicator shows the number of connected clients.
+
+**If tools do not appear:** restart both Studio and the client, confirm the binary path exists,
+and re-check the JSON syntax. Any client that supports `stdio` works.
+
+> **Roblox's own warning, quoted:** *"MCP clients can read and modify content in your open
+> Roblox places. Make sure to only connect clients you trust."* Read
+> `references/agent-safety.md` before acting on a place you care about.
 
 ---
 
 ## Tool Reference
 
-### Reading & Inspecting
+**Counts, stated precisely.** The official docs page lists **26 tools**. The build observed in
+this session (2026-09-25) exposes **28** — those 26 plus `generate_texture` and `segment_mesh`,
+which are present but undocumented. Tool sets move; when a call fails with an unknown-tool
+error, list what your host actually exposes instead of trusting this table.
 
-| Tool | Purpose | When to Use |
-|---|---|---|
-| `search_game_tree` | Search the Explorer / DataModel hierarchy by name or class | Understanding project structure, finding instances |
-| `script_search` | Find scripts by name | Locating a script before reading it |
-| `script_grep` | Search inside script source code for a pattern | Finding usages of a function, detecting legacy patterns |
-| `script_read` | Read the full source of a script | Understanding existing code before modifying it |
-| `inspect_instance` | Get all properties of an Instance | Debugging property values, checking configuration |
-| `get_studio_state` | Get current Studio state (Editing, Playing, etc.) | Deciding whether to start/stop a playtest |
-| `get_console_output` | Read the Output window | Checking for errors after a change or during playtest |
+### Scripts
 
-### Writing & Editing
-
-| Tool | Purpose | When to Use |
-|---|---|---|
-| `execute_luau` | Run arbitrary Luau in the Studio command bar context | Testing snippets, querying game state, creating/modifying instances |
-| `multi_edit` | Edit multiple scripts in a single call | Refactoring, renaming across files, batch updates |
-
-**`execute_luau` notes:**
-
-- Runs in the **Plugin** security context (server-side, edit mode).
-- During a playtest (`start_stop_play`), code runs in the live DataModel.
-- Use `print()` to return diagnostic values — output appears in `get_console_output`.
-- Avoid infinite loops; there is no automatic timeout.
-
-**`multi_edit` notes:**
-
-- Accepts a list of `{ scriptPath, newSource }` entries.
-- Always `script_read` first to understand current content before overwriting.
-- Targets scripts by their full DataModel path
-  (e.g., `ServerScriptService.GameManager`).
-
-### Asset Management
-
-| Tool | Purpose |
+| Tool | What it does |
 |---|---|
-| `search_asset` | Search the Roblox marketplace / Toolbox for models, decals, audio, etc. |
-| `insert_asset` | Insert a marketplace asset into the DataModel by asset ID |
-| `upload_image` | Upload a local image file to Roblox (returns an asset ID) |
+| `script_read` | Reads a script by dot-notation path. Output is `LINE_NUMBER→LINE_CONTENT`. Reads the whole script by default; for large scripts pass `should_read_entire_file: false` with `start_line_one_indexed` + `end_line_one_indexed_inclusive`. Never creates a script. |
+| `multi_edit` | Applies **several edits to one script** in a single atomic call. Creates the script if the path does not exist. |
+| `script_search` | Finds scripts **by name**, fuzzy-matched. **Returns up to 10 results.** |
+| `script_grep` | Searches a string or Luau pattern across **all** script contents. **Capped at 50 matches.** |
 
-### AI Content Generation
+**`multi_edit` — the shape agents most often get wrong:**
 
-| Tool | Purpose |
+```jsonc
+{
+  "file_path": "game.ServerScriptService.GameManager",   // dot notation, full path
+  "datamodel_type": "Edit",                              // Edit ONLY — no Client/Server
+  "studio_id": "<from list_roblox_studios>",
+  "edits": [
+    { "old_string": "JUMP_COOLDOWN = 0.15", "new_string": "JUMP_COOLDOWN = 0.3" }
+  ],
+  "className": "Script"                                  // only when creating a new script
+}
+```
+
+- It is **one script per call**, keyed by `file_path`. It is *not* a batch across several
+  scripts, and it does **not** take whole-source replacements. Rename something across three
+  scripts and that is three calls.
+- Edits are **string replacements applied in sequence**, each operating on the result of the
+  last. `old_string` must match the current contents **exactly**, whitespace included, and must
+  differ from `new_string`. Use `replace_all: true` to rename a symbol throughout.
+- **Atomic:** if any edit fails to apply, the whole call fails and nothing is written. Plan the
+  sequence so edits do not invalidate each other.
+- **Creating a script:** pass `className` (`Script`, `LocalScript`, `ModuleScript`) and make the
+  first edit `old_string: ""` to set the initial content; later edits then behave normally.
+- `script_read` first. A `multi_edit` written from a guessed `old_string` simply errors.
+
+### Luau execution
+
+| Tool | What it does |
 |---|---|
-| `generate_mesh` | Generate a 3D mesh from a text prompt |
-| `generate_procedural_model` | Generate a procedural model (trees, rocks, etc.) |
-| `generate_material` | Generate a PBR material from a text prompt |
+| `execute_luau` | Runs Luau in Studio and **returns the result of the code, or the error**. Requires `datamodel_type`: `Edit`, `Client`, or `Server`. |
 
-These tools return asynchronous jobs. Use `wait_job_finished` to poll completion.
+- Runs at **plugin / command-bar privilege**, not game privilege — it can reach
+  `PluginSecurity` members that a Script cannot.
+- In `Edit` it operates on the saved place. In `Client` / `Server` it operates on the live
+  playtest DataModel, which only exists while a playtest is running.
+- **It does return values.** Earlier versions of this file claimed MCP tools could not return
+  Luau values and that `print()` was the only way out — that was wrong. `print()` is still
+  useful for *incremental* output during long work, which surfaces via `get_console_output`.
+- There is **no automatic timeout**. An infinite loop hangs Studio.
 
-### Playtesting & Input Simulation
+### Data model exploration
 
-| Tool | Purpose |
+| Tool | What it does |
 |---|---|
-| `start_stop_play` | Start or stop a playtest session |
-| `character_navigation` | Move the player character to a world position during playtest |
-| `user_mouse_input` | Simulate mouse clicks / movement |
-| `user_keyboard_input` | Simulate key presses |
-| `screen_capture` | Capture a screenshot of the current viewport |
-| `store_image` | Persist a captured image for later reference |
+| `search_game_tree` | Explores the instance hierarchy as a flat JSON array; filters by path, instance type, and keywords, with configurable depth. |
+| `inspect_instance` | Full detail on one instance: readable properties, custom attributes, and a summary of children/descendants. |
+| `subagent` | Launches a specialized subagent for autonomous multi-step work. |
 
-### Multi-Instance Management
+**`subagent` types are build-dependent — read the schema, do not hardcode.** The official docs
+name `explore` and `playtest`; the build in this session advertised `explore`, `screen_capture`,
+and `unit_test`. A subagent returns one final text summary and cannot be conversed with or
+nested.
 
-| Tool | Purpose |
+### Playtesting
+
+| Tool | What it does |
 |---|---|
-| `list_roblox_studios` | List all open Roblox Studio windows, each with an `id` |
+| `get_studio_state` | Current play state **and which datamodel types are available**. Call this before anything that takes `datamodel_type`. |
+| `start_stop_play` | Starts or stops playtesting. |
+| `get_console_output` | Reads the Studio output log. |
+| `screen_capture` | Captures the viewport and returns image data; optionally takes a custom camera position and look-at target. |
 
-> **There is no `set_active_studio`.** Earlier versions of this file listed one; the tool does not
-> exist. Targeting is per call: read the `id` from `list_roblox_studios` and pass it as `studio_id`
-> every time. Likewise `datamodel_type` (`Edit` / `Client` / `Server`) is a required argument —
-> `Client` and `Server` only exist while a playtest is running, so check `get_studio_state` first.
+### Player input simulation
 
-### Other tools worth knowing
-
-| Tool | Purpose |
+| Tool | What it does |
 |---|---|
-| `http_get` | Fetch a URL from inside Studio |
-| `run_as_job` / `wait_job_finished` | Run long work as a job and await its completion |
-| `generate_texture` | Generate a texture (alongside `generate_material` / `generate_mesh`) |
-| `segment_mesh` | Segment a mesh into parts |
+| `character_navigation` | Moves the player character to a position **or an instance path**, with a configurable speed multiplier. |
+| `user_keyboard_input` | Sends ordered keyboard actions: key down, key up, key press, text input, or wait. Can target a specific UI instance. |
+| `user_mouse_input` | Sends ordered mouse actions: move, click, button down/up, scroll, or wait. Can target instances or screen coordinates. |
 
-> **`script_grep` reports unreliable line numbers.** Measured 2026-09-06: it placed a match at
-> line 171 that `script_read` showed was 15 lines lower. Use `script_grep` to find *which* script
-> holds a string, then `script_read` to find *where*.
+### Assets and content generation
+
+| Tool | What it does |
+|---|---|
+| `search_asset` | Searches the **Creator Store** (public) and **Creator Inventory** (user / group / universe), filterable by asset type, price, tags, and scope. |
+| `insert_asset` | Inserts an asset by numeric asset ID — models, meshes, images, audio, video, animations, packages. |
+| `generate_mesh` | Generates a textured 3D mesh from a text prompt. |
+| `generate_procedural_model` | Builds an object from primitive parts (blocks, spheres, cylinders, wedges) as a `ProceduralModel` with configurable attributes; accepts reference images and custom part schemas. |
+| `generate_material` | Generates a material variant; returns the base material plus the variant name to apply. |
+| `wait_job_finished` | Waits for a background job to reach a terminal state (Completed / Failed / Cancelled) and returns its status. |
+| `store_image` | **Local file → URI.** Loads a png/jpg/jpeg from an absolute local path (**max 5 MB**) and returns an `IMAGEID_<id>` URI for other tools, e.g. as `attachedImageUri` for `generate_procedural_model`. |
+| `upload_image` | **HTTP URLs → asset IDs.** Uploads a *batch* of images **fetched from HTTP(S) URLs** and returns an imagePath→assetId map, e.g. `{"https://…/image.png": "rbxassetid://12345678"}`. |
+
+> **`store_image` and `upload_image` are not interchangeable, and this file previously described
+> `upload_image` as taking a local file.** It does not: it takes URLs and returns a map. A local
+> file goes through `store_image`, which returns an `IMAGEID_` URI, **not** an asset ID.
+
+> **`wait_job_finished` takes a `jobId`**, which you get back from a tool that was called with
+> its own `async: true` argument. Its `timeout` defaults to 600 s. Async is a per-tool argument,
+> **not** a separate wrapper tool — see the corrections log.
+
+### Documentation and skills
+
+| Tool | What it does |
+|---|---|
+| `http_get` | Fetches Roblox documentation **from an allowlist only**. Supports in-content keyword search via `query`, with `context_lines` (default 3) and `return_full`. |
+| `skill` | Retrieves Roblox's own first-party reference material for a named skill. |
+
+**`http_get` is allowlisted, not a general fetcher.** Permitted prefixes: `create.roblox.com/docs`
+(including `/reference/engine`, `/cloud`, `/performance-optimization`) and
+`github.com/Roblox/libmp`. **The URL must end in `.md` or be `llms.txt`** — anything else is
+rejected, which notably includes `llms-full.txt` and `openapi.json`. For those, and for any
+non-Roblox URL, use the host's own fetch tool or `curl`.
+
+Using `query` is the token-efficient path: it returns only matching sections with context rather
+than the whole page.
+
+**First-party skills exposed by the `skill` tool in this build (2026-09-25):**
+`rbx-create-skill`, `rbx-debug`, `rbx-device-simulator-lua`, `rbx-docs-search`,
+`rbx-perf-profiling`, `rbx-scene-analysis`, `rbx-unit-test`. These are Roblox's, shipped inside
+Studio, and they are **narrower and more current than this skill on their specific topics** —
+prefer `skill("rbx-debug")` for breakpoint work, `skill("rbx-perf-profiling")` for MicroProfiler
+and LibMP analysis, and `skill("rbx-scene-analysis")` for SceneAnalysisService. Use this
+repository's references for architecture, security, and Luau standards, which they do not cover.
+
+### Session management
+
+| Tool | What it does |
+|---|---|
+| `list_roblox_studios` | Lists connected Studio instances with name, Studio instance ID, and place ID. |
+
+### Present in this build but undocumented officially
+
+| Tool | What it does |
+|---|---|
+| `generate_texture` | Generates a texture (companion to `generate_material` / `generate_mesh`). |
+| `segment_mesh` | Segments a mesh into parts. |
+
+> Treat these two as unsupported: they are not on the docs page, so they may change or vanish
+> without a release note.
+
+### Known tool defect
+
+> **`script_grep` line numbers are unreliable.** Measured 2026-09-06: it placed a match at line
+> 171 that `script_read` showed was 15 lines lower. Use `script_grep` to find *which* script
+> holds a string, then `script_read` to find *where*. Do not feed a `script_grep` line number
+> into an edit.
 
 ---
 
@@ -155,56 +281,65 @@ These tools return asynchronous jobs. Use `wait_job_finished` to poll completion
 
 ### 1. Read-Before-Write
 
-Always understand the existing code and structure before making changes.
-
 ```text
-1. search_game_tree  →  find relevant services / folders
-2. script_search     →  locate the target script(s)
-3. script_read       →  read current source
-4. multi_edit        →  apply changes with full context
+1. list_roblox_studios  →  get the studio_id, once, and reuse it deliberately
+2. get_studio_state     →  confirm Edit is available (multi_edit needs it)
+3. search_game_tree     →  find the relevant services / folders
+4. script_search        →  locate the target script (≤10 fuzzy results)
+5. script_read          →  read current source, with real line numbers
+6. multi_edit           →  exact-match edits, one script per call
 ```
 
-**Why:** Blind overwrites break references to other scripts, miss existing
-patterns the project relies on, and create merge conflicts.
+**Why:** `multi_edit` matches `old_string` verbatim. Without a read, the call does not merely
+risk a bad edit — it fails outright. And blind whole-script rewrites break references, discard
+project conventions, and destroy work done outside the agent session.
 
 ### 2. Test-After-Change
 
-Verify every change by running the game.
-
 ```text
-1. multi_edit            →  apply code changes
-2. get_console_output    →  check for immediate syntax/load errors
+1. multi_edit            →  apply changes (Edit datamodel)
+2. get_console_output    →  catch syntax / load errors before playing
 3. start_stop_play       →  begin playtest
-4. get_console_output    →  check runtime errors / print output
-5. screen_capture        →  visually verify (optional)
+4. get_console_output    →  runtime errors and print output
+5. screen_capture        →  visual check (optional)
 6. start_stop_play       →  stop playtest
 ```
 
 ### 3. Debug Loop
 
-When a runtime error is reported or behavior is wrong:
-
 ```text
-1. get_console_output        →  read the error message and stack trace
-2. script_read               →  read the offending script
-3. execute_luau              →  query live state (inspect variables, instances)
-4. multi_edit                →  fix the issue
-5. start_stop_play           →  restart playtest
-6. get_console_output        →  confirm the fix
+1. get_console_output    →  read the error and stack trace
+2. script_read           →  read the offending script
+3. execute_luau          →  query live state (datamodel_type: Server or Client)
+4. start_stop_play       →  STOP the playtest first
+5. multi_edit            →  apply the fix (Edit datamodel only)
+6. start_stop_play       →  restart and confirm via get_console_output
 ```
+
+> **Step 4 is not optional.** `multi_edit` accepts `datamodel_type: "Edit"` and nothing else, so
+> attempting to patch a script mid-playtest fails. Earlier versions of this file showed
+> `multi_edit` inside the playtest loop with no such caveat. Inspecting live state with
+> `execute_luau` in `Server` / `Client` *is* fine — that is the point of step 3.
 
 ### 4. Legacy Pattern Detection
 
-Use `script_grep` to scan for deprecated APIs before migrating:
-
 ```text
-1. script_grep("spawn(")         →  find legacy spawn calls
-2. script_grep("wait(")          →  find legacy wait calls
-3. script_grep("delay(")         →  find legacy delay calls
-4. script_read  (each result)    →  review context
-5. multi_edit                    →  batch-replace with task.* equivalents
-6. start_stop_play               →  verify nothing broke
+1. script_grep("spawn(")     →  find legacy spawn calls (≤50 matches, unreliable line numbers)
+2. script_grep("wait(")      →  …and legacy wait
+3. script_grep("delay(")     →  …and legacy delay
+4. script_read (each hit)    →  confirm the real location and context
+5. multi_edit                →  one call per script, replace_all where the symbol is unambiguous
+6. start_stop_play           →  verify nothing broke
 ```
+
+> `script_grep("wait(")` also matches `task.wait(`. Read before replacing, or you will "migrate"
+> code that was already correct.
+
+### 5. Prefer Roblox's Own Skill First
+
+For debugging, device-form-factor UI testing, MicroProfiler performance analysis, or scene
+analysis, call `skill` with the matching `rbx-*` name before hand-rolling an approach. It is
+first-party, versioned with Studio, and cheaper than rediscovering the same API surface.
 
 ---
 
@@ -212,34 +347,60 @@ Use `script_grep` to scan for deprecated APIs before migrating:
 
 ### General
 
-- **One logical change per `multi_edit` call.** Smaller edits are easier to
-  verify and roll back.
-- **Always read before writing.** Use `script_read` so you can produce a
-  correct, complete replacement — not a guess.
-- **Check `get_studio_state` before playtesting.** If Studio is already playing,
-  stop first or your `start_stop_play` call may toggle incorrectly.
+- **One logical change per `multi_edit` call.** Easier to verify, easier to roll back.
+- **Always read before writing** — with `multi_edit` this is a hard requirement, not etiquette.
+- **Check `get_studio_state` before anything that takes `datamodel_type`.** It tells you both
+  the play state and which datamodels currently exist.
+- **Pin the `studio_id` deliberately.** Resolve it once via `list_roblox_studios`, confirm it is
+  the place you mean, and reuse it. Nothing will warn you that you edited the wrong open place.
 
 ### Performance
 
-- **Batch related edits** into a single `multi_edit` call instead of making
-  many sequential calls — each MCP round-trip has latency.
-- **Avoid large `execute_luau` loops** that create thousands of Instances at
-  once; Studio may freeze. Batch creation with `task.wait()` yields.
+- **Batch edits to the same script** into one `multi_edit` call; each round-trip costs latency.
+  Across different scripts you have no choice but separate calls.
+- **Use `http_get`'s `query`** instead of pulling whole doc pages into context.
+- **Avoid large `execute_luau` loops** that create thousands of Instances at once — Studio may
+  freeze. Batch with `task.wait()` yields.
 
 ### Safety
 
-- **Never delete services** (`Workspace`, `ReplicatedStorage`, etc.) via
-  `execute_luau`. Destroying core services crashes Studio.
-- **Don't overwrite scripts you haven't read.** You may destroy code the
-  developer has been working on outside the agent session.
-- **Treat `execute_luau` as a command bar** — it has full plugin-level access.
-  Avoid destructive operations like `game:ClearAllChildren()`.
+Summary only — the full threat model, including what this skill cannot enforce, is in
+`references/agent-safety.md`.
+
+- **`execute_luau` is the command bar.** Plugin-level privilege, no timeout, no undo guarantee,
+  no dry-run. Treat every call as a write to the user's place.
+- **Never delete services** (`Workspace`, `ReplicatedStorage`, …). Destroying core services
+  crashes Studio. Never `game:ClearAllChildren()`.
+- **Confirm the target place before the first mutation**, especially with several Studio windows
+  open.
+- **Don't overwrite work you have not read.** The developer may have been editing outside your
+  session.
 
 ### Debugging
 
-- **Print liberally** in `execute_luau` — it is the primary way to get values
-  back from Studio since MCP tools do not return Luau values directly.
-- **Check `get_console_output` after every change**, even if there is no
-  visible error — warnings and deprecation notices are easy to miss.
-- **Use `inspect_instance`** to verify property values rather than guessing.
-  Common gotcha: a Part's `Anchored` property defaulting to `false`.
+- **`execute_luau` returns its result** — use the return value first; add `print()` when you
+  want progressive output during long-running work, then read `get_console_output`.
+- **Check `get_console_output` after every change**, even when nothing looks broken — warnings
+  and deprecation notices are easy to miss.
+- **Use `inspect_instance`** rather than guessing property values. Common gotcha: a Part's
+  `Anchored` defaulting to `false`.
+
+---
+
+## Corrections Log
+
+Errors that were in this file and are now fixed. Kept visible so an agent that remembers an old
+version does not reintroduce them.
+
+| Wrong claim | Reality | Verified |
+|---|---|---|
+| `run_as_job` is a tool | **No such tool**, in the docs or in the live build. Async is a per-tool `async: true` argument that returns a `jobId`; `wait_job_finished` consumes that id. v2.7.0 introduced this error while "adding real tools". | Official docs page + live tool list, 2026-09-25 |
+| `multi_edit` edits multiple scripts, taking `{scriptPath, newSource}` | **One script per call.** `file_path` + `edits[{old_string, new_string, replace_all}]`, sequential exact-match replacements, atomic, `className` to create. | Live schema + official docs |
+| `multi_edit` works during a playtest | `datamodel_type` enum is **`Edit` only**. | Live schema |
+| "MCP tools do not return Luau values directly" | `execute_luau` **returns the result or the error**. | Live schema + official docs |
+| `upload_image` uploads a local image file | It uploads a **batch from HTTP(S) URLs** and returns an imagePath→assetId map. Local files go through `store_image` → `IMAGEID_` URI, ≤5 MB, png/jpg/jpeg. | Live schemas |
+| `http_get` fetches any URL from Studio | **Allowlisted** to Roblox docs domains, and the URL must end in `.md` or be `llms.txt`. `llms-full.txt` and `openapi.json` are rejected. | Live schema |
+| `search_asset` searches "the marketplace / Toolbox" | **Creator Store + Creator Inventory**, with type / price / tag / scope filters. | Official docs |
+| 29 tools | **26 documented**, **28 in this build** (+`generate_texture`, +`segment_mesh`, both undocumented). | Official docs + live tool list |
+| `skill` and `subagent` absent from this file | Both are real and officially documented. Roblox ships 7 first-party `rbx-*` skills that partly supersede hand-rolled approaches. | Official docs + live schemas |
+| `set_active_studio` is a tool | Does not exist. Targeting is per call via `studio_id`. (Corrected in v2.7.0, kept here as a guard.) | Official docs |

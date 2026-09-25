@@ -57,7 +57,9 @@ end
 - Unions store complex geometry data and can't benefit from instancing
 - MeshParts with identical `MeshContent` are collapsed into single draw calls
 - MeshParts support `SurfaceAppearance` for PBR materials
-- MeshParts have configurable `CollisionFidelity` and `RenderFidelity`
+- MeshParts have configurable `CollisionFidelity` and `RenderFidelity` — but note the write
+  permissions differ: `CollisionFidelity` is script-writable from engine 0.740, while
+  `MeshPart.RenderFidelity` remains **`PluginSecurity`** (Studio / plugin only). See §3.
 
 **Rule**: Use MeshParts created in external 3D tools (Blender, Maya) instead of building
 complex shapes from CSG unions in Studio.
@@ -84,9 +86,39 @@ Higher fidelity = more memory and computation.
 - Disable all collision channels (`CanCollide`, `CanTouch`, `CanQuery` = false) on
   purely decorative parts to save memory
 
+> ### ⚠️ `CollisionFidelity` only became script-writable in engine 0.740
+>
+> Verified by diffing the 0.739 and 0.740 Full API Dumps locally, 2026-09-25:
+>
+> | Member | 0.739 `Security.Write` | 0.740 `Security.Write` | 0.740 `Capabilities.Write` |
+> |---|---|---|---|
+> | `TriangleMeshPart.CollisionFidelity` | `PluginSecurity` | **`None`** | `["PluginOrOpenCloud"]` |
+> | `TriangleMeshPart.FluidFidelity` | `PluginSecurity` | **`None`** | `["PluginOrOpenCloud"]` |
+> | `PartOperation.RenderFidelity` | `PluginSecurity` | **`None`** | `["PluginOrOpenCloud"]` |
+> | `PartOperation.SmoothingAngle` | `PluginSecurity` | **`None`** | `["PluginOrOpenCloud"]` |
+> | `MeshPart.RenderFidelity` | `PluginSecurity` | **`PluginSecurity`** (unchanged) | — |
+>
+> **What this means in an ordinary experience:** the runtime example below **could not work from a
+> normal Script before 0.740** — writing `CollisionFidelity` threw a lacking-capability error, and
+> only a plugin or the command bar could do it. From 0.740 it works. This file previously shipped
+> that example with no such caveat. **On an older client, set `CollisionFidelity` at author time in
+> Studio instead.**
+>
+> **Do not generalize the change.** `MeshPart.RenderFidelity` was **not** relaxed — MeshPart
+> overrides the property and it is still `PluginSecurity`. So on a MeshPart you can now script
+> `CollisionFidelity` but still **not** `RenderFidelity`.
+>
+> **The gate moved rather than vanished.** 0.740 also attaches `Capabilities.Write:
+> ["PluginOrOpenCloud"]` to each relaxed member. Capabilities only apply inside a **sandboxed
+> container**, which is experimental and opt-in (`Workspace.SandboxedInstanceMode` must be set to
+> `Experimental`, and the container marked `Sandboxed`) — so in a default experience this does not
+> affect you. `PluginOrOpenCloud` is **not listed on the public Script capabilities page**, so if
+> you do use sandboxing, test the write rather than trusting this table.
+
 ```luau
 --!strict
--- Batch-set non-collidable decorative parts to Box fidelity
+-- Batch-set non-collidable decorative parts to Box fidelity.
+-- Requires engine 0.740+ at runtime; on older clients do this in Studio or a plugin.
 local CollectionService = game:GetService("CollectionService")
 
 for _, part in CollectionService:GetTagged("Decorative") do
@@ -231,6 +263,19 @@ end)
   as ordinary bytecode**. Use `@native` on individual functions when you want a narrower blast radius
   than a whole-script `--!native`.
 - **Buffer & Vector Types**: Use the `buffer` library (`buffer.create`) for bulk binary state serialization and `vector.create` for SIMD-accelerated math without table allocations or garbage collection pressure.
+- **Luau 0.739 VM work (2026-09-18) — internals, no API to call.** Three items from the release
+  notes are worth knowing because they change *where* the cost is, not *how you write code*:
+  - **A metamethod lookup cache was added to frozen metatables.** This gives `table.freeze` a
+    second, purely mechanical benefit beyond immutability: metamethod dispatch on a frozen
+    metatable gets cheaper. If you build OOP classes on metatables that never change after
+    construction, freezing the *metatable* is now a small free win.
+  - **The Luau-to-Luau metamethod call path is inlined**, and **table get/set slow paths are
+    faster**. Metatable-heavy code (`__index` chains, proxy tables) benefits without any change.
+  - **An integer overflow after `table.move` that caused an out-of-bounds access was fixed.** If
+    you have been working around odd `table.move` behaviour on large ranges, stop.
+
+  Roblox publishes no multiplier for any of these. Do not quote one — measure with the Script
+  Profiler if it matters.
 
 ### Avoid Expensive Operations on RunService Events
 

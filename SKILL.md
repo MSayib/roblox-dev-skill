@@ -17,10 +17,12 @@ Expert development companion for building Roblox experiences with Luau. Grounded
 official Roblox documentation (https://create.roblox.com/docs), the Luau language spec
 (https://luau.org), and the Roblox Lua Style Guide (https://roblox.github.io/lua-style-guide/).
 
-> **Engine**: Roblox Studio **0.739.0.7390687** (verified 2026-09-17) with **Luau 0.738** (the
-> latest Luau release, 2026-09-11 — 0.739 is an *engine-only* bump, no new Luau release, so no
-> language changes). Roblox ships roughly weekly, so this line is stale by design — never quote it
-> as today's version. Re-derive it instead:
+> **Engine**: Roblox Studio **0.740.19.7400931** with **Luau 0.739** (released 2026-09-18) —
+> dump downloaded, re-split, and diffed against 0.739 on **2026-09-25**. 924 classes / 635 enums /
+> 258 services / 48 deprecated.
+>
+> Roblox ships roughly weekly, so this line is stale by design — never quote it as today's version.
+> Re-derive it instead:
 >
 > ```bash
 > curl -s "https://clientsettings.roblox.com/v2/client-version/MacStudio"   # or WindowsStudio64
@@ -41,47 +43,71 @@ On every invocation, detect available Roblox Studio MCP tools before proceeding:
 
 ### Official Roblox MCP (Roblox_Studio server)
 
-Check for these tools from the `Roblox_Studio` MCP server:
+**This skill is a knowledge base, not an MCP server.** It ships no tools and no execution
+surface. The tools below belong to **Roblox's own MCP server, built into Studio** — this skill
+only tells you how to use them well. Official reference:
+https://create.roblox.com/docs/studio/mcp
+
+The docs page lists **26 tools**; the build observed 2026-09-25 exposed **28** (plus
+`generate_texture` and `segment_mesh`, undocumented). Detect what your host actually exposes
+rather than trusting this table.
 
 | Tool | Purpose |
 |------|---------|
-| `execute_luau` | Run Luau code directly in Studio |
-| `search_game_tree` | Search the Explorer/DataModel hierarchy |
-| `script_search` / `script_grep` | Find scripts by name or content |
-| `script_read` | Read script source code |
-| `multi_edit` | Edit multiple scripts at once |
-| `inspect_instance` | Inspect Instance properties |
-| `insert_asset` / `search_asset` | Insert and search Roblox assets |
+| `execute_luau` | Run Luau in Studio at plugin privilege — **returns the result or the error** |
+| `multi_edit` | Apply several exact-match edits to **ONE** script (creates it if missing); `Edit` datamodel only |
+| `script_read` | Read script source, whole or by line range; output is `LINE→CONTENT` |
+| `script_search` / `script_grep` | Find scripts by name (fuzzy, ≤10) or by content (≤50 matches) |
+| `search_game_tree` | Explore the DataModel as flat JSON, filterable by path/type/keyword |
+| `inspect_instance` | Properties, attributes, and child summary for one instance |
+| `subagent` | Launch a Roblox-side subagent for autonomous multi-step work (types vary by build) |
+| `get_studio_state` | Play state **and which datamodel types are available** |
 | `start_stop_play` | Start/stop playtesting |
 | `get_console_output` | Read Output/console logs |
-| `get_studio_state` | Get current Studio state |
-| `screen_capture` / `store_image` | Capture and store screenshots |
+| `screen_capture` | Capture the viewport, optionally from a custom camera |
+| `character_navigation` | Move the character to a position or instance path |
+| `user_mouse_input` / `user_keyboard_input` | Simulate ordered mouse/keyboard actions |
+| `search_asset` / `insert_asset` | Search Creator Store + Inventory; insert by asset ID |
+| `store_image` | **Local** png/jpg ≤5 MB → `IMAGEID_` URI for other tools |
+| `upload_image` | Batch upload from **HTTP(S) URLs** → imagePath→assetId map |
 | `generate_mesh` / `generate_procedural_model` | Generate 3D content |
 | `generate_material` / `generate_texture` | Generate materials and textures |
 | `segment_mesh` | Segment a mesh into parts |
-| `upload_image` | Upload images to Roblox |
-| `character_navigation` | Navigate character in playtest |
-| `user_mouse_input` / `user_keyboard_input` | Simulate user input |
-| `http_get` | Fetch a URL from inside Studio |
-| `run_as_job` / `wait_job_finished` | Run long work as a job and await it |
-| `list_roblox_studios` | Enumerate connected Studio instances |
+| `wait_job_finished` | Await a background `jobId` (from a tool's own `async: true`) |
+| `http_get` | Fetch Roblox docs **from an allowlist**; URL must end `.md` or be `llms.txt` |
+| `skill` | Roblox's first-party `rbx-*` references (debug, perf, scene analysis, …) |
+| `list_roblox_studios` | Enumerate connected Studio instances (name + place ID) |
 
 > **Every call takes a `studio_id`.** There is no "set active studio" tool — call
 > `list_roblox_studios` first and pass the id you want on each subsequent call. Several Studio
 > instances are commonly open at once, so picking the wrong id silently targets the wrong place.
 >
-> Tools also take a `datamodel_type` (`Edit` / `Client` / `Server`). `Edit` is the saved place;
-> `Client` and `Server` exist only during a playtest. Use `get_studio_state` to see which are live.
+> **`datamodel_type` is asymmetric.** `execute_luau` accepts `Edit` / `Client` / `Server`;
+> **`multi_edit` accepts `Edit` only**, so you cannot edit scripts mid-playtest — stop the
+> playtest first. `Client` and `Server` exist only during a playtest; check `get_studio_state`.
+>
+> **`multi_edit` is one script per call**, taking `file_path` plus
+> `edits[{old_string, new_string, replace_all}]`. Replacements are sequential, exact-match, and
+> atomic within the call. `script_read` first or the call simply fails.
 >
 > **`script_grep`'s line numbers are unreliable** — measured 2026-09-06, it reported a match at
 > line 171 that `script_read` showed was 15 lines further down. Use it to find *which* script
 > contains a string, then `script_read` for the real location.
+>
+> **There is no `run_as_job` tool.** Earlier versions of this file listed one; it does not exist
+> in the docs or in any observed build. Async is a per-tool argument returning a `jobId`.
 
 If MCP tools are available, prefer using them for:
 - Reading existing scripts before writing new ones (`script_read`, `script_search`)
 - Validating changes by running code (`execute_luau`)
 - Inspecting game tree to understand project structure (`search_game_tree`)
 - Testing changes with playtest (`start_stop_play`, `get_console_output`)
+- Roblox's own domain skills (`skill`) for debugging, MicroProfiler, and scene analysis —
+  they are first-party and versioned with Studio
+
+**Before the first mutation of any session**, read `references/agent-safety.md`. Roblox's own
+warning: *"MCP clients can read and modify content in your open Roblox places."* There is no
+dry-run and no reliable undo. Confirm which place you are targeting before you write to it.
 
 If MCP tools are NOT available, provide copy-paste-ready Luau scripts with clear
 placement instructions (which service container to put them in).
@@ -99,6 +125,7 @@ Match user intent to the appropriate reference file. Read the file BEFORE genera
 | Save/load player data, DataStore, ProfileStore | `references/datastore-persistence.md` |
 | Client-server communication, RemoteEvents, input | `references/networking.md` |
 | Security, anti-exploit, server authority, bans | `references/security-hardening.md` |
+| Agent→Studio safety, destructive MCP ops, prompt injection from place content | `references/agent-safety.md` |
 | Performance, memory, optimization, Parallel Luau | `references/performance-optimization.md` |
 | Using Roblox Studio MCP tools effectively | `references/mcp-integration.md` |
 | UI, GUI, ScreenGui, menus, HUD, StyleQuery | `references/ui-systems.md` |
@@ -120,20 +147,21 @@ Documentation Lookup workflow below.
 **Always check local files first** — they are pre-split, far cheaper to read than the full dump, and
 require no network. If `~/RobloxDocs/RobloxAPI/` exists, use it.
 
-**How much cheaper, measured 2026-09-06 on 0.737.0.7371584** (an earlier "845× smaller" figure was
-not reproducible from any measurement, so here are the real numbers and the command that produced
-them): the full dump is **8,234,036 bytes**; the 916 split class files run **101 B min, 2,009 B
-median, 4,790 B mean, 104,594 B max**. So a typical class lookup reads about **0.02%** of the dump,
-and even the largest class reads under **1.3%** of it. Re-measure with:
+**How much cheaper, re-measured 2026-09-25 on 0.740.19.7400931** (an earlier "845× smaller" figure
+was not reproducible from any measurement, so here are the real numbers and the command that
+produced them): the full dump is **8,314,613 bytes**; the 924 split class files run **101 B min,
+2,047 B median, 4,795 B mean, 104,594 B max**. So a typical class lookup reads about **0.02%** of
+the dump, and even the largest class reads under **1.3%** of it. Re-measure with:
 
 ```bash
-stat -f %z ~/RobloxDocs/RobloxAPI/dumps/latest.json
+# NOTE the -L: latest.json is a symlink, and plain `stat -f %z` reports the link (75 B), not the dump
+stat -Lf %z ~/RobloxDocs/RobloxAPI/dumps/latest.json
 find ~/RobloxDocs/RobloxAPI/classes -name '*.json' -exec stat -f %z {} \; | sort -n \
-  | awk '{a[NR]=$1; s+=$1} END {printf "n=%d median=%d mean=%d max=%d\n", NR, a[int(NR/2)], s/NR, a[NR]}'
+  | awk '{a[NR]=$1; s+=$1} END {printf "n=%d min=%d median=%d mean=%d max=%d\n", NR, a[1], a[int(NR/2)], s/NR, a[NR]}'
 ```
 
 ```bash
-# Look up a specific class (instant, ~10KB vs 8MB full dump)
+# Look up a specific class (~2 KB median vs the 8.2 MB full dump — see measurement above)
 cat ~/RobloxDocs/RobloxAPI/classes/<ClassName>.json
 
 # Query a specific property/method
@@ -156,14 +184,29 @@ grep -l '"<PropertyName>"' ~/RobloxDocs/RobloxAPI/classes/*.json
 ```bash
 # Check when local data was last updated
 cat ~/RobloxDocs/RobloxAPI/.current-version
-# → {"version":"0.738.0.7381393","updatedAt":"2026-09-12T...","platform":"MacStudio",...}
+# → {"version":"0.740.19.7400931","platform":"MacStudio","platformVersion":"0.740.19.7400931",
+#    "winHash":"version-c792f79abddd41bd","updatedAt":"2026-09-25T03:21:52Z"}
 ```
-If `checkedAt` is older than 7 days, or if a class/member is not found locally,
-trigger a **background update** and proceed with live web fallback:
+
+> **Read whichever timestamp is present: `updatedAt` OR `checkedAt`.** The monitor script writes
+> **`updatedAt`** when it actually downloads a new dump and **`checkedAt`** when it finds you are
+> already current — so a freshly-downloaded file has **no `checkedAt` field at all**. Earlier
+> versions of this file told the agent to read `checkedAt`, which silently finds nothing right
+> after an update.
+
+If that timestamp is older than 7 days, or a class/member is not found locally, **proceed with the
+live web fallback below and tell the user the local dump looks stale.** Offer to refresh it:
+
 ```bash
-# Background update (non-blocking)
-~/RobloxDocs/scripts/roblox-api-monitor.sh &
+# Only after the user agrees — this downloads and re-splits the API dump
+~/RobloxDocs/scripts/roblox-api-monitor.sh
 ```
+
+> **Do not background this and do not run it unasked.** Earlier versions of this file told the
+> agent to fire `roblox-api-monitor.sh &` automatically, which contradicted both the
+> Knowledge Freshness Check below ("NEVER auto-update without user approval") and the README.
+> There is no scheduler and no background job in this skill; a human triggers the refresh.
+> Staleness never blocks the answer — fall through to the web sources and say so.
 
 ### Priority 2: Live Web Sources (Fallback)
 
@@ -178,6 +221,13 @@ Use these when local data doesn't cover a topic, is obsolete, or you need prose 
 | **Open Cloud API index** | `https://create.roblox.com/docs/cloud/llms.txt` | **Primary discovery** for all Cloud REST API: features, domains, guides, auth |
 | **OpenAPI spec (raw)** | `https://create.roblox.com/docs/cloud/openapi.json` | Machine-readable OpenAPI spec for MCP/code-gen tools |
 | **Deprecated API check** | `https://robloxapi.github.io/ref/class/<Name>.html` | Check individual class/member status (deprecated items marked visually) |
+
+> **If you are fetching these through Studio's `http_get` tool, note its allowlist:** only
+> `create.roblox.com/docs` (incl. `/reference/engine`, `/cloud`, `/performance-optimization`) and
+> `github.com/Roblox/libmp`, and **the URL must end in `.md` or be `llms.txt`**. So
+> `llms-full.txt`, `openapi.json`, and `robloxapi.github.io` are **rejected** by `http_get` — use
+> the host's own fetch tool or `curl` for those. `http_get`'s `query` argument returns only
+> matching sections, which is much cheaper than pulling a whole page into context.
 
 ### Lookup Workflow
 1. Check if a **reference file** covers the topic (Routing Table above)

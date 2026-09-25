@@ -1,6 +1,6 @@
 # Luau Language Fundamentals
 
-> Reference for AI coding skill — verified against official Roblox documentation and Luau language release specs (**v0.738**, released 2026-09-11; engine 0.739 has no Luau language changes).
+> Reference for AI coding skill — verified against official Roblox documentation and Luau language release specs (**v0.739**, released 2026-09-18; engine 0.740.19.7400931).
 > Sources: https://create.roblox.com/docs/luau, https://luau.org, https://roblox.github.io/lua-style-guide/
 
 ## Table of Contents
@@ -35,9 +35,9 @@ typed language **derived from Lua 5.1**. Key additions over Lua 5.1:
 - Native code generation (`--!native`) and fast `pcall`/`xpcall` VM execution (`LOP_FASTPCALL`)
 - No `goto` statement
 
-### What landed in 0.736, 0.737 and 0.738 (source: luau-lang/luau release notes)
+### What landed in 0.736 through 0.739 (source: luau-lang/luau release notes)
 
-All three releases are **fixes and internals, not new syntax you can write today**. Nothing here changes
+All four releases are **fixes and internals, not new syntax you can write today**. Nothing here changes
 how you write Luau for Roblox; it is here so nobody mistakes an internal change for a new feature.
 
 | Release | Change | What it means for your code |
@@ -55,14 +55,25 @@ how you write Luau for Roblox; it is here so nobody mistakes an internal change 
 | 0.738 | Linter reports deprecation inside union/intersection types | `A | DeprecatedThing` now warns where it used to be silent |
 | 0.738 | Bidirectional inference for table literals passed to `setmetatable` (`setmetatable({}, { test = nil })` against `setmetatable<{}, { test: DateTime? }>`) | Fewer annotations needed on metatable-based classes |
 | 0.738 | Zero-trip-count loop unrolling is now free; SCCP pass improved; `luaV_equalval` `__eq` metatable fix | Internals |
+| **0.739** | **Generics are typechecked more strictly *inside* function bodies** | The one item here that can surface **new errors in code that used to pass**. `local function call<T>(fn: (T) -> T) fn(nil) end` was wrongly accepted and now errors. If `--!strict` starts complaining after a Studio update, check calls made *to* a generic parameter inside its own function body. It is a **fix**, not a regression — the old code was unsound |
+| **0.739** | Better error when indexing a value whose type was refined to `table` | Clearer diagnostic, same code |
+| **0.739** | VM: Luau→Luau metamethod calls inlined; table get/set slow paths faster; **metamethod lookup cache on frozen metatables** | Metatable-heavy code gets faster with no edit. `table.freeze` on a metatable now also buys cheaper metamethod dispatch — see `performance-optimization.md` |
+| **0.739** | Fixed an integer overflow after `table.move` that caused an out-of-bounds access | A real memory-safety bug. Drop any workaround you had for odd `table.move` behaviour on large ranges |
 
-**Experimental, and NOT usable in Roblox:** the **Classes** RFC prototype and the **`if local`**
-statement both exist in 0.737 only behind `DebugLuau*` fast-flags in the open-source Luau repo, and
-0.738 adds two more prototypes of the same kind — **`coroutine.finally`** (RFC #187, VM side only)
-and an experiment that would **require top-level functions to be annotated**. None are enabled in
-Roblox Studio. Do not write any of them into game code, and do not tell a user they can. There is
-NO new standard-library function in 0.736–0.738; if a user asks "what new Luau methods can we use",
-the honest answer for this window is *none* — the changes are inference and internals.
+**Experimental, and NOT usable in Roblox:** the **Classes** RFC prototype and **`if local`** exist
+only behind `DebugLuau*` fast-flags in the open-source Luau repo — `if local` **statements** landed
+in 0.737 and **`if local` expressions** were added in **0.739**, where the release notes call them
+"behind an experimental flag", "likely to change", and say to "treat it as unstable". 0.738 adds two
+more prototypes of the same kind — **`coroutine.finally`** (RFC #187, VM side only) and an
+experiment that would **require top-level functions to be annotated**.
+
+**None of these are enabled in Roblox Studio.** Do not write them into game code, and do not tell a
+user they can — an `if local` expression is exactly the kind of thing that looks like a shipped
+feature in a release note and errors in Studio.
+
+There is **NO new standard-library function in 0.736–0.739**; if a user asks "what new Luau methods
+can we use", the honest answer for this window is *none* — the changes are inference, VM internals,
+and flag-gated prototypes.
 
 ---
 
@@ -321,7 +332,11 @@ local elapsed = task.wait(1)  -- Yields ~1 second
 ```
 
 ### Fast `pcall` / `xpcall` (`LOP_FASTPCALL`)
-In Luau 0.735+, the VM introduces `LOP_FASTPCALL`, reducing `pcall` and `xpcall` runtime invocation overhead by **~2x**. Wrap fallible operations safely without worrying about function call penalties:
+In Luau 0.735+, the VM introduces `LOP_FASTPCALL`. The release note's exact claim is that
+`pcall`/`xpcall` overhead is *"around two times lower"* — **halved, not free.** Wrap fallible
+operations without agonizing over the call cost, but do not treat `pcall` in a hot inner loop as
+zero-cost, and do not quote a bigger number: `performance-optimization.md` carries the same
+correction.
 
 ```luau
 --!strict

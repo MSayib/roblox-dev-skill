@@ -409,6 +409,22 @@ security risks, as they can contain malicious scripts called backdoors."*
 **Best practices:**
 - **Sandbox third-party models**: Set `Sandboxed = true` on inserted models and configure
   minimal `Capabilities` (avoid granting `Network`, `DataStore`, `AssetRequire`)
+
+  > ⚠️ **`Sandboxed = true` does nothing on its own.** Script capabilities are **experimental and
+  > available as a client beta** (official docs, read 2026-09-25), and the whole system is **off by
+  > default**. You must first change `Workspace.SandboxedInstanceMode` from `Default` to
+  > `Experimental`; only then does marking a `Model` / `Folder` / `Script` as `Sandboxed` constrain
+  > anything. An earlier version of this file gave the advice without the prerequisite, which reads
+  > as protection you do not actually have.
+  >
+  > When it *is* enabled, a violation raises an error naming the missing capability, e.g.
+  > `The current thread cannot call 'GetSecret' (lacking capability Network)`. Capabilities cover
+  > execution control (`RunClientScript`, `RunServerScript`), instance access
+  > (`AccessOutsideWrite`), Luau functionality, and engine API access. Anything not listed in the
+  > docs is unavailable and errors as an `Unassigned` capability.
+  >
+  > Source: https://create.roblox.com/docs/en-us/scripting/capabilities
+
 - **Inspect all scripts** in third-party assets before use
 - **Watch for obfuscated code** or whitespace that hides malicious code off-screen
 - **Favor highly-rated** community assets, but remember popularity doesn't guarantee safety
