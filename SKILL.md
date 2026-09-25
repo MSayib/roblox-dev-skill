@@ -120,6 +120,7 @@ Match user intent to the appropriate reference file. Read the file BEFORE genera
 
 | User Intent | Reference File |
 |---|---|
+| **How do I actually sequence this?** End-to-end worked patterns: build a server-authoritative feature, debug via MCP, migrate a deprecation, verify an API, refuse an unsafe request | `references/worked-examples.md` |
 | Luau syntax, types, naming conventions, style | `references/luau-fundamentals.md` |
 | Project layout, architecture, patterns | `references/project-structure.md` |
 | Save/load player data, DataStore, ProfileStore | `references/datastore-persistence.md` |
@@ -133,6 +134,11 @@ Match user intent to the appropriate reference file. Read the file BEFORE genera
 | Monetization, game passes, donations, transfers | `references/monetization.md` |
 | File formats, import/export, asset management | `references/file-formats-and-assets.md` |
 | Plugins, `Script.Source` limits, HttpService/engine limits | `references/studio-plugins-and-limits.md` |
+
+**Start with `worked-examples.md` when the task is a *doing* task** (build, debug, migrate, look up)
+rather than a *knowing* task. It gives the call sequence and the verification step, and each example
+carries a **Not this** list so a near-miss request routes to the right place instead of the nearest
+familiar pattern. Where an example and a reference file disagree, the reference file wins.
 
 If the intent spans multiple domains, read all relevant files.
 If a reference file doesn't cover a topic sufficiently, use the Official

@@ -1,6 +1,6 @@
 {
   "skill_name": "roblox-dev",
-  "version": "2.11.0",
+  "version": "2.12.0",
   "evals": [
     {
       "id": 1,
@@ -299,6 +299,54 @@
         "luau-fundamentals.md"
       ],
       "notes": "Luau 0.739 typechecks generics more strictly inside function bodies; the old code was unsound. Correct answer identifies it as a soundness fix rather than a regression to work around, and does not suggest downgrading or loosening to --!nonstrict."
+    },
+    {
+      "id": 37,
+      "prompt": "Set up an Input Action System sprint action bound to Left Shift",
+      "should_trigger": true,
+      "expected_references": [
+        "project-structure.md"
+      ],
+      "notes": "Regression guard for six wrong lines fixed in 2.12.0. Correct answer uses InputContext (NOT InputActionService), InputBinding (NOT InputActionBinding), the `Type` property (NOT ActionType), Enum.InputActionType.Bool (NOT .Button), and Pressed/Released (NOT Activated/Deactivated)."
+    },
+    {
+      "id": 38,
+      "prompt": "Enable the Input Action System for my place from a script",
+      "should_trigger": true,
+      "expected_references": [
+        "project-structure.md"
+      ],
+      "notes": "workspace.PlayerScriptsUseInputActionSystem is an Enum.RolloutState, not a boolean. Correct answer assigns Enum.RolloutState.Enabled; `= true` is a type error."
+    },
+    {
+      "id": 39,
+      "prompt": "Add a coin pickup the client can trigger, and make sure an exploiter cannot farm it",
+      "should_trigger": true,
+      "expected_references": [
+        "worked-examples.md",
+        "networking.md",
+        "security-hardening.md"
+      ],
+      "notes": "Canonical worked example 1. Correct answer sends intent (coinId) not outcome (AddCoins), layers type+NaN+range+ownership+state+rate-limit validation, and verifies by firing junk at the handler rather than only the happy path."
+    },
+    {
+      "id": 40,
+      "prompt": "Is UserInputService deprecated now that the Input Action System shipped?",
+      "should_trigger": true,
+      "expected_references": [
+        "project-structure.md"
+      ],
+      "notes": "No. Verified against the 0.740 dump: neither UserInputService nor ContextActionService carries a class-level Deprecated tag; only a few individual members do. Correct answer says IAS is recommended for new input work, not a replacement. Guards against an overclaim this skill previously made itself."
+    },
+    {
+      "id": 41,
+      "prompt": "Write a plugin that rewrites a script's source and registers an undo waypoint",
+      "should_trigger": true,
+      "expected_references": [
+        "studio-plugins-and-limits.md",
+        "agent-safety.md"
+      ],
+      "notes": "Legitimately needs PluginSecurity APIs (ScriptEditorService:UpdateSourceAsync, ChangeHistoryService:TryBeginRecording/FinishRecording). Correct answer does NOT warn these are unavailable — in a plugin they are. Guards against over-correcting the security-gating lesson into refusing valid plugin work."
     }
   ]
 }
