@@ -410,7 +410,9 @@ function Find-Python {
         if (-not (Get-Command $cand[0] -ErrorAction SilentlyContinue)) { continue }
         $pyArgs = @($cand | Select-Object -Skip 1)
         try {
-            & $cand[0] @pyArgs -c 'import sys; sys.exit(0 if sys.version_info >= (3, 6) else 1)' 2>$null | Out-Null
+            $oldEap = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
+            try { & $cand[0] @pyArgs -c 'import sys; sys.exit(0 if sys.version_info >= (3, 6) else 1)' 2>$null | Out-Null }
+            finally { $ErrorActionPreference = $oldEap }
             if ($LASTEXITCODE -eq 0) { return , $cand }   # `python3` on Windows is often a Store stub that fails here
         } catch { }
     }
@@ -453,11 +455,14 @@ function Install-Docs([string]$src) {
     Step 'Downloading and splitting the Roblox API dump (one-time, ~8 MB)'
     $oldHome = $env:ROBLOX_DOCS_HOME; $oldEnc = $env:PYTHONIOENCODING
     $env:ROBLOX_DOCS_HOME = $DocsHome; $env:PYTHONIOENCODING = 'utf-8'
+    # Windows PowerShell 5.1 turns a native program's stderr into error records when output is
+    # redirected, and under 'Stop' the first Python warning would abort the whole installer.
+    $oldEap = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
     try {
         $pyArgs = @($py | Select-Object -Skip 1)
         & $py[0] @pyArgs (Join-Path $scripts 'roblox-api-monitor.py')
         $code = $LASTEXITCODE
-    } finally { $env:ROBLOX_DOCS_HOME = $oldHome; $env:PYTHONIOENCODING = $oldEnc }
+    } finally { $env:ROBLOX_DOCS_HOME = $oldHome; $env:PYTHONIOENCODING = $oldEnc; $ErrorActionPreference = $oldEap }
     if ($code -eq 0) { Ok 'RobloxDocs ready' }
     else {
         Warn 'the API dump step did not finish -- the skill is installed and works without it.'

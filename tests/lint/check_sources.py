@@ -67,6 +67,16 @@ for p in ("install.sh", "install.ps1"):
     if "roblox-dev-skill" not in open(p, encoding="utf-8").read():
         err(f"{p}: does not reference the skill folder name roblox-dev-skill")
 
+# 8. Windows opens text in its legacy code page unless told otherwise; UTF-8 Markdown then fails to
+#    decode (audit-skill-examples.py crashed on byte 0x8f in CI). Every open() must name an encoding.
+for p in glob.glob("tools/**/*.py", recursive=True):
+    for n, line in enumerate(open(p, encoding="utf-8").read().splitlines(), 1):
+        # judge the rest of the line after "open(": nested calls like os.path.join(...) close early
+        for m in re.finditer(r"(?<![\w.])open\(", line):
+            rest = line[m.end():]
+            if "encoding=" not in rest and not re.search(r"['\"][rwa]?b\+?['\"]", rest):
+                err(f"{p}:{n}: open() without encoding= (Windows would use cp1252)")
+
 if errors:
     print(f"{len(errors)} source problem(s):")
     for e in errors:

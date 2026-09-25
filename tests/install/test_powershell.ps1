@@ -46,9 +46,12 @@ function Run {
     foreach ($k in $vars.Keys) { $saved[$k] = [Environment]::GetEnvironmentVariable($k); [Environment]::SetEnvironmentVariable($k, $vars[$k]) }
     try {
         $all = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $Installer, '-Source', $Repo) + $InstallerArgs
+        # 5.1 turns captured native stderr into error records; 'Stop' would end the test run
+        $ErrorActionPreference = 'Continue'
         $script:Log = (& $Exe @all 2>&1 | Out-String)
         return $LASTEXITCODE
     } finally {
+        $ErrorActionPreference = 'Stop'
         foreach ($k in $saved.Keys) { [Environment]::SetEnvironmentVariable($k, $saved[$k]) }
     }
 }
@@ -193,7 +196,9 @@ Get-Content -Raw '$Installer' | Invoke-Expression *> `$null
 'LEAKED=' + ((Get-Command Install-Link, Invoke-Main -ErrorAction SilentlyContinue | Measure-Object).Count)
 'ALIVE=yes'
 "@
+    $ErrorActionPreference = 'Continue'
     $out = (& $Exe -NoProfile -ExecutionPolicy Bypass -Command $probe 2>&1 | Out-String)
+    $ErrorActionPreference = 'Stop'
     Check 'a failure inside iex does not close the session' { $out -match 'ALIVE=yes' }
     Check "caller's preferences untouched" { $out -match 'EAP=Continue' }
     Check 'no functions leak into the caller' { $out -match 'LEAKED=0' }

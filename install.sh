@@ -563,8 +563,13 @@ install_docs() {
 
     cfg="$DOCS_HOME/config"
     if [ ! -f "$cfg" ]; then
+        # Under Git Bash / Cygwin the Python that reads this file is a native Windows program: it cannot
+        # resolve "/c/Users/…" or "/tmp/…". MSYS converts paths in arguments and environment variables,
+        # never in file contents — so write a native path ourselves.
+        local refs="$PAYLOAD/references"
+        if have cygpath; then refs="$(cygpath -m "$refs")"; fi
         printf '# RobloxDocs configuration — KEY=VALUE, parsed (never sourced)\nSKILL_REFS=%s\nAUDIT_MODE=warn\n' \
-            "$PAYLOAD/references" > "$cfg"
+            "$refs" > "$cfg"
     else
         info "kept your existing $(pretty "$cfg")"
     fi

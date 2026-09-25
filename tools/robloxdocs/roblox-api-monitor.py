@@ -179,7 +179,8 @@ class Lock:
             os.mkdir(self.path)
         except FileExistsError:
             try:
-                owner = int(open(os.path.join(self.path, "pid")).read().strip() or 0)
+                with open(os.path.join(self.path, "pid"), encoding="ascii") as f:
+                    owner = int(f.read().strip() or 0)
             except (OSError, ValueError):
                 owner = 0
             if pid_alive(owner):
@@ -187,7 +188,7 @@ class Lock:
             emit(f"⚠️  clearing a stale lock (owner pid {owner or 'unknown'} is not running)")
             shutil.rmtree(self.path, ignore_errors=True)
             os.mkdir(self.path)
-        with open(os.path.join(self.path, "pid"), "w") as f:
+        with open(os.path.join(self.path, "pid"), "w", encoding="ascii") as f:
             f.write(str(os.getpid()))
         return self
 
