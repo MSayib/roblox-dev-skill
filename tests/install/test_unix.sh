@@ -19,7 +19,12 @@ trap 'rm -rf "$WORK"' EXIT
 PASS=0; FAIL=0; SKIP=0
 
 ok()   { PASS=$((PASS + 1)); printf '  ok    %s\n' "$1"; }
-bad()  { FAIL=$((FAIL + 1)); printf '  FAIL  %s\n' "$1"; [ -n "${2:-}" ] && printf '        %s\n' "$2"; return 0; }
+bad()  {
+    FAIL=$((FAIL + 1)); printf '  FAIL  %s\n' "$1"; [ -n "${2:-}" ] && printf '        %s\n' "$2"
+    # the installer's own output for this scenario, so a CI failure can be diagnosed from the log
+    [ -f "${H:-}.log" ] && sed 's/^/        | /' "$H.log" | tail -25
+    return 0
+}
 skip() { SKIP=$((SKIP + 1)); printf '  skip  %s\n' "$1"; }
 check(){ if eval "$2"; then ok "$1"; else bad "$1" "$2"; fi; }
 section() { printf '\n## %s\n' "$1"; }
@@ -166,7 +171,9 @@ else
     check "config points at installed skill"  "grep -q 'SKILL_REFS=.*$SKILL/references' '$H/RobloxDocs/config'"
     check "dump split into >900 classes"      "[ \$(ls '$H/RobloxDocs/RobloxAPI/classes' | wc -l) -gt 900 ]"
     check "example audit reports 0 defects"   "grep -q 'DEFECTS: 0' '$H.log'"
-    check "documented command works"          "HOME='$H' bash '$H/RobloxDocs/scripts/roblox-api-monitor.sh' 2>&1 | grep -q 'Already up-to-date'"
+    # ROBLOX_DOCS_HOME is explicit because native Windows Python ignores $HOME (it uses USERPROFILE),
+    # so under Git Bash "~/RobloxDocs" would resolve to the runner's real profile, not this test's.
+    check "documented command works"          "HOME='$H' ROBLOX_DOCS_HOME='$H/RobloxDocs' bash '$H/RobloxDocs/scripts/roblox-api-monitor.sh' 2>&1 | grep -q 'Already up-to-date'"
 fi
 
 printf '\n%d passed, %d failed, %d skipped\n' "$PASS" "$FAIL" "$SKIP"

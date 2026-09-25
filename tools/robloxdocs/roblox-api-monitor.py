@@ -25,6 +25,14 @@ Configuration, lowest to highest precedence:
 import datetime, glob, json, os, re, shutil, ssl, subprocess, sys, tempfile
 import urllib.error, urllib.request
 
+# Windows pipes default to a legacy code page (cp1252) that cannot encode emoji; without this a
+# final "✅" print crashed split-api-dump.py AFTER it had written every file (found by CI).
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(errors="replace")
+    except (AttributeError, ValueError):   # Python 3.6, or a stream that cannot be reconfigured
+        pass
+
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 CLIENTSETTINGS = "https://clientsettings.roblox.com/v2/client-version/{}"
 CDN_DUMP = "https://setup.rbxcdn.com/{}-Full-API-Dump.json"

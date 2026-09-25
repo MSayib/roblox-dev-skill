@@ -20,7 +20,11 @@ New-Item -ItemType Directory -Path $Work | Out-Null
 $script:Pass = 0; $script:Fail = 0; $script:Skip = 0
 
 function Ok([string]$m)   { $script:Pass++; Write-Host "  ok    $m" }
-function Bad([string]$m)  { $script:Fail++; Write-Host "  FAIL  $m" -ForegroundColor Red }
+function Bad([string]$m)  {
+    $script:Fail++; Write-Host "  FAIL  $m" -ForegroundColor Red
+    # the installer's own output for this scenario, so a CI failure can be diagnosed from the log
+    if ($script:Log) { ($script:Log -split "`r?`n" | Select-Object -Last 25) | ForEach-Object { Write-Host "        | $_" } }
+}
 function Skip([string]$m) { $script:Skip++; Write-Host "  skip  $m" }
 function Check([string]$m, [scriptblock]$cond) { try { if (& $cond) { Ok $m } else { Bad $m } } catch { Bad "$m ($($_.Exception.Message))" } }
 function Section([string]$m) { Write-Host ''; Write-Host "## $m" }
@@ -207,7 +211,10 @@ Get-Content -Raw '$Installer' | Invoke-Expression *> `$null
 } finally {
     # remove links first so a recursive delete can never walk into a target
     Get-ChildItem -LiteralPath $Work -Recurse -Force -ErrorAction SilentlyContinue | Where-Object { $_.LinkType } |
-        ForEach-Object { if ($OnWindows) { [IO.Directory]::Delete($_.FullName, $false) } else { [IO.File]::Delete($_.FullName) } }
+        ForEach-Object {
+            # directory links are removed as reparse points; file links (e.g. RobloxDocs' latest.json) as files
+            if ($OnWindows -and $_.PSIsContainer) { [IO.Directory]::Delete($_.FullName, $false) } else { [IO.File]::Delete($_.FullName) }
+        }
     Remove-Item -LiteralPath $Work -Recurse -Force -ErrorAction SilentlyContinue
 }
 

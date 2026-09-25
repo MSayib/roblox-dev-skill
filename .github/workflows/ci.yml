@@ -51,14 +51,16 @@ jobs:
           if ($found) { $found | Format-Table ScriptName, Line, RuleName, Message -AutoSize -Wrap; exit 1 }
           'PowerShell sources: 5.1/7.0 compatible, no errors'
 
+      - uses: astral-sh/setup-uv@v6
       - name: Agent Skills spec (official skills-ref validator)
         run: |
-          python3 -m pip install --quiet "git+https://github.com/agentskills/agentskills#subdirectory=skills-ref"
-          skills-ref validate "$GITHUB_WORKSPACE"
+          # uvx, not pip: a pip install from this git subdirectory yields an entry point without its module
+          skills_ref() { uvx -q --from "git+https://github.com/agentskills/agentskills#subdirectory=skills-ref" skills-ref "$@"; }
+          skills_ref validate "$GITHUB_WORKSPACE"
           # and the payload the installer actually produces
           export HOME="$RUNNER_TEMP/payload-home"
           bash install.sh --source "$GITHUB_WORKSPACE" --agents universal --no-docs --yes
-          skills-ref validate "$HOME/.local/share/roblox-dev-skill/roblox-dev-skill"
+          skills_ref validate "$HOME/.local/share/roblox-dev-skill/roblox-dev-skill"
 
   audit:
     name: Examples vs live Roblox API
@@ -68,6 +70,8 @@ jobs:
       - name: Ingest the current engine dump and audit every code example (strict)
         env:
           ROBLOX_DOCS_HOME: ${{ runner.temp }}/RobloxDocs
+          # a Windows-style legacy code page: every tool must survive printing emoji into it
+          PYTHONIOENCODING: cp1252
         run: python3 tools/robloxdocs/roblox-api-monitor.py --refs references --audit strict
 
   unix:
@@ -148,6 +152,8 @@ jobs:
           call "%RUNNER_TEMP%\install.cmd" -Agents nope -Yes
           if %ERRORLEVEL% EQU 0 (echo expected a failure exit code & exit /b 1)
           echo failure correctly reported
+          rem echo does not reset ERRORLEVEL, so without this the step would inherit the expected failure
+          exit /b 0
 
   git-bash:
     name: install.sh — Git Bash on Windows (copy fallback)

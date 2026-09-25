@@ -18,6 +18,14 @@ Usage: split-api-dump.py [DUMP] [--root DIR]
 """
 import json, os, sys, glob
 
+# Windows pipes default to a legacy code page (cp1252) that cannot encode emoji; without this a
+# final "✅" print crashed split-api-dump.py AFTER it had written every file (found by CI).
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(errors="replace")
+    except (AttributeError, ValueError):   # Python 3.6, or a stream that cannot be reconfigured
+        pass
+
 def string_tags(obj):
     return [t for t in (obj.get('Tags') or []) if isinstance(t, str)]
 

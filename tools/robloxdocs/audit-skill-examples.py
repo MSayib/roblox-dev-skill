@@ -21,6 +21,14 @@ Heuristics, and why they are safe:
 """
 import json, re, glob, os, sys, collections
 
+# Windows pipes default to a legacy code page (cp1252) that cannot encode emoji; without this a
+# final "✅" print crashed split-api-dump.py AFTER it had written every file (found by CI).
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(errors="replace")
+    except (AttributeError, ValueError):   # Python 3.6, or a stream that cannot be reconfigured
+        pass
+
 DEFAULT_DUMP = os.path.expanduser('~/RobloxDocs/RobloxAPI/dumps/latest.json')
 
 # Community libraries whose method names may collide with engine member names.
