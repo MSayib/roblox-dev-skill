@@ -156,22 +156,26 @@ require no network. If `~/RobloxDocs/RobloxAPI/` exists, use it.
 **How much cheaper, re-measured 2026-09-25 on 0.740.19.7400931** (an earlier "845× smaller" figure
 was not reproducible from any measurement, so here are the real numbers and the command that
 produced them): the full dump is **8,314,613 bytes**; the 924 split class files run **101 B min,
-2,047 B median, 4,795 B mean, 104,594 B max**. So a typical class lookup reads about **0.02%** of
+2,050 B median, 4,795 B mean, 104,594 B max**. So a typical class lookup reads about **0.02%** of
 the dump, and even the largest class reads under **1.3%** of it. Re-measure with:
 
 ```bash
-# NOTE the -L: latest.json is a symlink, and plain `stat -f %z` reports the link (75 B), not the dump
-stat -Lf %z ~/RobloxDocs/RobloxAPI/dumps/latest.json
-find ~/RobloxDocs/RobloxAPI/classes -name '*.json' -exec stat -f %z {} \; | sort -n \
-  | awk '{a[NR]=$1; s+=$1} END {printf "n=%d min=%d median=%d mean=%d max=%d\n", NR, a[1], a[int(NR/2)], s/NR, a[NR]}'
+# Portable (macOS, Linux, Windows). Do not use `stat -f %z`: on Linux `stat -f` reports the
+# *filesystem*, not the file, and prints a wrong number without any error. It also reads the
+# 75-byte latest.json symlink instead of the dump unless you remember -L.
+python3 -c "import os,glob,statistics as s; d=os.path.expanduser('~/RobloxDocs/RobloxAPI'); \
+z=sorted(os.path.getsize(f) for f in glob.glob(d+'/classes/*.json')); \
+print('dump', os.path.getsize(os.path.realpath(d+'/dumps/latest.json')), 'B | n', len(z), \
+'min', z[0], 'median', int(s.median(z)), 'mean', int(s.mean(z)), 'max', z[-1])"
 ```
 
 ```bash
 # Look up a specific class (~2 KB median vs the 8.2 MB full dump — see measurement above)
 cat ~/RobloxDocs/RobloxAPI/classes/<ClassName>.json
 
-# Query a specific property/method
+# Query a specific property/method (jq if installed; the python3 form works everywhere)
 jq '.Members[] | select(.Name == "<MemberName>")' ~/RobloxDocs/RobloxAPI/classes/<ClassName>.json
+python3 -c "import json,os; print([m for m in json.load(open(os.path.expanduser('~/RobloxDocs/RobloxAPI/classes/<ClassName>.json')))['Members'] if m['Name']=='<MemberName>'])"
 
 # Find all services
 cat ~/RobloxDocs/RobloxAPI/service-index.json
@@ -205,8 +209,12 @@ live web fallback below and tell the user the local dump looks stale.** Offer to
 
 ```bash
 # Only after the user agrees — this downloads and re-splits the API dump
-~/RobloxDocs/scripts/roblox-api-monitor.sh
+~/RobloxDocs/scripts/roblox-api-monitor.sh                      # macOS, Linux, WSL, Git Bash
+python "%USERPROFILE%\RobloxDocs\scripts\roblox-api-monitor.py"    # Windows without bash
 ```
+
+If `~/RobloxDocs` does not exist at all, the user never set it up. Say so and point them at the
+installer's `--docs-only` option (`-DocsOnly` in PowerShell) rather than creating it yourself.
 
 > **Do not background this and do not run it unasked.** Earlier versions of this file told the
 > agent to fire `roblox-api-monitor.sh &` automatically, which contradicted both the
@@ -473,7 +481,8 @@ The user can trigger a full knowledge update at any time by asking for one in pl
 This skill is designed to be export-ready for GitHub publishing. See `README.md`
 in the skill root directory for the complete structure and usage guide.
 
-To export: zip the entire `roblox-dev/` directory. The structure is self-contained
-and platform-agnostic (works with Claude Code, Antigravity IDE, and any
-compatible AI coding assistant).
+Users install it with the one-line installers in the repository (`install.sh`, `install.ps1`,
+`install.cmd`), which link it into each agent's skills folder. When copying it by hand, the folder
+**must be named `roblox-dev-skill`** — the Agent Skills spec requires the folder name to match the
+`name` field above, and stricter agents skip a skill whose folder does not.
 
