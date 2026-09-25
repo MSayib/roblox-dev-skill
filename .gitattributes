@@ -1,0 +1,8 @@
+# Unix scripts must keep LF even for Windows users who clone with core.autocrlf=true,
+# or bash fails with "$'\r': command not found".
+*.sh   text eol=lf
+*.py   text eol=lf
+*.ps1  text eol=lf
+# cmd.exe can mis-parse labels and blocks with bare LF, and raw.githubusercontent.com serves the
+# blob bytes as stored — so the CRLF bytes must live in the blob itself: no normalization.
+install.cmd -text

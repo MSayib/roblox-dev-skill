@@ -11,6 +11,96 @@ reference content was verified against at that time.
 
 ---
 
+## 2.13.0 — Sep 25, 2026
+
+**One-line installers for every OS and every major agent, and RobloxDocs that sets itself up.**
+No engine change — still 0.740.19.7400931 / Luau 0.739.
+
+### Added — installers
+
+| Shell | Command |
+|---|---|
+| macOS, Linux, WSL, Git Bash | `curl -fsSL https://raw.githubusercontent.com/MSayib/roblox-dev-skill/master/install.sh \| bash` |
+| Windows PowerShell | `irm https://raw.githubusercontent.com/MSayib/roblox-dev-skill/master/install.ps1 \| iex` |
+| Windows CMD | `curl -fsSL https://raw.githubusercontent.com/MSayib/roblox-dev-skill/master/install.cmd -o install.cmd && install.cmd` |
+
+Each shows a wizard of 14 agent targets with the detected ones pre-selected, **stores the skill once**
+and **links** it into every chosen agent (symlink → Windows junction → marked copy), so one update
+reaches every agent. Non-interactive runs use the detected defaults; every option has a flag.
+
+**Every agent path was verified against that agent's own documentation**, not recalled. Two
+surprises: Codex documents `$HOME/.agents/skills`, not `~/.codex/skills`; and Antigravity does
+**not** read `~/.agents/skills` at all — its global folder is `~/.gemini/config/skills`.
+
+**Deduplication.** Nine agents document `~/.agents/skills` (the cross-client convention), so one
+universal link covers them. Native links are added only for Claude Code, Antigravity, Antigravity
+CLI and Kiro. Linking Cursor natively as well would make it list the skill twice.
+
+**Safety rules, each covered by a test:**
+- Never deletes anything it did not create. A conflicting folder is moved to a backup **outside**
+  every skills folder — a backup inside one would load as a duplicate skill.
+- A link pointing elsewhere (a maintainer's dev checkout) is left alone unless `--force`.
+- Uninstall removes only manifest entries that still point at the store or carry the install marker.
+- `--dry-run` leaves the file tree byte-identical.
+
+**Shell-specific hazards designed around:**
+- bash: all logic lives in `main()` called on the last line, so a truncated `curl` download runs
+  nothing; prompts read `/dev/tty`, because under `curl | bash` stdin *is* the script; bash 3.2
+  compatible for the macOS default; an `ERR` trap reports the failing line instead of dying silently.
+- PowerShell: runs in a child scope so nothing leaks into the caller's session under `iex`;
+  **throws instead of `exit`**, which would close the user's window; removes links as reparse points
+  because `Remove-Item -Recurse` on a 5.1 junction can **delete the target's contents**; ASCII-only
+  source because 5.1 reads BOM-less UTF-8 as ANSI; TLS 1.2 on; progress bar off.
+- CMD: stored with CRLF bytes (`.gitattributes: install.cmd -text`), because raw.githubusercontent
+  serves blob bytes and `cmd.exe` can mis-parse bare LF.
+
+### Changed — RobloxDocs is now in the repo and cross-platform
+
+The tooling previously existed only on the maintainer's machine, with a hardcoded `~/Desktop` path,
+and needed zsh, jq and bc — none of which a Windows user has. Now `tools/robloxdocs/` ships:
+
+- **`roblox-api-monitor.py`** — one implementation for every OS. `roblox-api-monitor.sh` is a shim
+  so the path `SKILL.md` documents keeps working.
+- **`split-api-dump.py`** — one pass in 0.7 s, replacing ~2,800 `jq` processes. Verified identical to
+  the jq output across all 1,869 generated files.
+- `diff-api-dumps.py`'s grep-back is now pure Python — it shelled out to `grep`, absent on Windows,
+  and would have silently reported nothing there.
+- Settings in `~/RobloxDocs/config` (`SKILL_REFS`, `AUDIT_MODE=warn|strict|off`), **parsed, never
+  executed** — a config line containing `$(…)` was tested and does not run. Community installs
+  default to `warn`; maintainers set `strict`.
+
+Three portability traps handled: `python3` on Windows is often a Microsoft Store **stub** that
+fails, so the tools probe for a *working* interpreter; a python.org install on macOS ships **no CA
+bundle**, so downloads fall back to `curl`; and **`os.kill(pid, 0)` on Windows sends `CTRL_C_EVENT`**
+rather than probing, so the lock checks liveness with `OpenProcess`/`GetExitCodeProcess` there.
+
+### Fixed — misleading instructions
+
+- **README told Claude Code users to clone into `~/.claude/skills/roblox-dev`.** The official
+  `skills-ref` validator rejects that: *"Directory name 'roblox-dev' must match skill name
+  'roblox-dev-skill'"*. The installer finds such a clone and moves it aside.
+- **README told Antigravity users to clone into `~/.gemini/config/plugins/roblox-dev-suite/skills/`.**
+  That is a plugin folder Antigravity loads only with a `plugin.json` manifest the repo never shipped
+  — it worked on the maintainer's machine solely because of a hand-written local manifest.
+- **The intro linked Antigravity to `antigravity.dev`, which serves a default nginx page.** The real
+  site is `antigravity.google`.
+- **`SKILL.md` measured file sizes with `stat -f %z`.** On Linux `stat -f` reports the *filesystem*
+  and prints a wrong number with no error. Replaced by a portable one-liner; the documented median is
+  now 2,050 B, the true median of 924 files (the old awk took the lower-middle element).
+- `SKILL.md`'s export note and `metadata.json`'s `skill_name` still used the old name `roblox-dev`.
+
+### Verification
+
+`skills-ref validate` passes on the repo and on the installed payload. ShellCheck is clean; PSScriptAnalyzer
+confirms syntax compatibility with PowerShell 5.1 and 7.0. Functional suites ran on throwaway `HOME`
+directories under `/bin/bash` 3.2 and PowerShell 7.6.6, including wizards driven prompt-by-prompt
+through a real pseudo-terminal and a from-scratch install with a real API dump download.
+
+**Not verified on real Windows hardware:** junction creation, PowerShell 5.1 at runtime (syntax only),
+and `install.cmd`. Reports welcome.
+
+---
+
 ## 2.12.0 — Sep 25, 2026
 
 **Worked examples, a second latent defect found, and the tooling that makes both checkable.**
