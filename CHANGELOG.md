@@ -11,6 +11,65 @@ reference content was verified against at that time.
 
 ---
 
+## 2.13.1 — Sep 25, 2026
+
+**CI that verifies every installer on every OS — and the six bugs it found on its first runs.**
+No engine or content change.
+
+### Fixed — `install.sh` failed on its GitHub download path
+
+The v2.13.0 one-liner died immediately for anyone who ran it: bash 3.2 in a UTF-8 locale reads a
+non-ASCII byte right after a variable name as part of that name, so an unbraced `REF` followed by an
+ellipsis in a progress message looked up a variable called `REF\xe2…`, and `set -u` killed the run.
+
+**Why no test caught it:** every test used `--source`, which returns *before* that line. The
+download path — the only path real users take — had never executed. CI now runs the README
+one-liners against the commit under test, downloading it from GitHub exactly as a user would, and
+`tests/lint/check_sources.py` rejects the pattern.
+
+### Fixed — five bugs that exist only on Windows, found by the first real-Windows CI runs
+
+| Bug | Effect on a user | Fix |
+|---|---|---|
+| `split-api-dump.py` printed an emoji into a **cp1252** pipe | Crashed *after* writing every file; the monitor reported a failed split and the example audit never ran | Every Python tool sets `errors="replace"`; CI runs the live audit under `PYTHONIOENCODING=cp1252` |
+| `audit-skill-examples.py` / `diff-api-dumps.py` used `open()` without an encoding | Windows decoded UTF-8 Markdown as cp1252 and crashed on byte `0x8f` | Every `open()` names `utf-8`; a lint rule forbids omitting it |
+| Under Git Bash, `install.sh` wrote `SKILL_REFS=/c/Users/…` | Native Windows Python cannot resolve MSYS paths, so the audit was **always** skipped for Git Bash users | MSYS converts arguments and environment variables, never file contents — the config now uses `cygpath -m` |
+| Windows PowerShell 5.1 turns captured native stderr into error records | Under `Stop`, the first Python warning would abort `install.ps1` | Native calls run under `Continue` |
+| `echo` in `cmd.exe` does not reset `ERRORLEVEL` | (test only) the failure-path check inherited the expected failure | explicit `exit /b 0` |
+
+A seventh was mine and caught in minutes: adding the `ROBLOX_SKILL_LINK` hook split a `local`
+declaration across two lines, so `ACTION` was never set. Syntax-valid, ShellCheck-clean, and the new
+functional suite failed 33 checks on its first run.
+
+### Added — CI (`.github/workflows/ci.yml`)
+
+Runs on every push to `master`, every pull request, and **weekly**, because Roblox ships weekly and
+a month-old green build says little about today.
+
+| Job | Verifies |
+|---|---|
+| Lint & spec | source hygiene (ASCII for PS 5.1, CRLF for `install.cmd`, LF for scripts, the bash-3.2 name trap, `open()` encodings, truncation safety), ShellCheck, PSScriptAnalyzer for PowerShell 5.1 + 7.0 syntax, and the official `skills-ref` validator on the repo **and** on the payload the installer produces |
+| Examples vs live Roblox API | ingests the current engine dump and audits every code example in **strict** mode, under a cp1252 code page |
+| `install.sh` — Linux, macOS (`/bin/bash` 3.2) | 47-check functional suite, then the README one-liner downloading this commit from GitHub, including RobloxDocs |
+| `install.ps1` — Windows PowerShell 5.1, PowerShell 7 | 38-check suite including **junction mode** and the check that removing a junction leaves its target intact, then `irm \| iex` downloading this commit |
+| `install.cmd` — `cmd.exe` | the README CMD one-liner, and that a failure returns a non-zero exit code |
+| `install.sh` — Git Bash on Windows | the suite on a platform where `ln -s` silently copies |
+
+The suites are ordinary scripts (`tests/install/test_unix.sh`, `tests/install/test_powershell.ps1`)
+that run against throwaway homes, so contributors can run them locally without touching their real
+agent folders. On failure they print the installer's own output for that scenario.
+
+### Added — installer environment variables
+
+- **`ROBLOX_SKILL_REF`** — the version to install. Under `irm | iex` this is the only way to pin
+  one, since that form cannot take options. `install.cmd` honours it too.
+- **`ROBLOX_SKILL_LINK=symlink|junction|copy`** — pin the link method. CI needs it: GitHub's Windows
+  runners are administrators, so symlinks always succeed and junctions would otherwise never be tested.
+- **`ROBLOX_SKILL_HOME`** — install against a different profile. `$HOME` cannot be redirected in
+  PowerShell 7 on Windows, so tests need this to stay out of the real one.
+
+---
+
 ## 2.13.0 — Sep 25, 2026
 
 **One-line installers for every OS and every major agent, and RobloxDocs that sets itself up.**
@@ -96,8 +155,8 @@ confirms syntax compatibility with PowerShell 5.1 and 7.0. Functional suites ran
 directories under `/bin/bash` 3.2 and PowerShell 7.6.6, including wizards driven prompt-by-prompt
 through a real pseudo-terminal and a from-scratch install with a real API dump download.
 
-**Not verified on real Windows hardware:** junction creation, PowerShell 5.1 at runtime (syntax only),
-and `install.cmd`. Reports welcome.
+**Not verified on real Windows hardware** at the time — junction creation, PowerShell 5.1 at runtime,
+and `install.cmd`. *2.13.1 added CI that verifies all three, and it found five Windows-only bugs.*
 
 ---
 
