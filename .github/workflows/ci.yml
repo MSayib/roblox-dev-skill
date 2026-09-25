@@ -1,0 +1,161 @@
+name: CI
+
+# Verifies the skill, its installers and its RobloxDocs tooling on every push and pull request,
+# and weekly against the live Roblox API — Roblox ships roughly weekly, so a green build from last
+# month says little about today.
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 3 * * 1"   # Mondays 03:17 UTC
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # The commit under test, as a ref the installers can download. Remote-path steps only run when
+  # this commit is reachable from this repository (not for pull requests from forks).
+  TEST_REF: ${{ github.event.pull_request.head.sha || github.sha }}
+  SAME_REPO: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+
+jobs:
+  lint:
+    name: Lint & spec
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Source hygiene (ASCII for Windows, line endings, bash 3.2 name trap, truncation safety)
+        run: python3 tests/lint/check_sources.py
+
+      - name: ShellCheck
+        run: shellcheck --version && shellcheck -s bash -S warning install.sh tools/robloxdocs/*.sh tests/install/*.sh
+
+      - name: PSScriptAnalyzer — Windows PowerShell 5.1 and PowerShell 7 syntax, plus errors
+        shell: pwsh
+        run: |
+          Set-PSRepository PSGallery -InstallationPolicy Trusted
+          Install-Module PSScriptAnalyzer -Scope CurrentUser -Force
+          $settings = @{ Rules = @{ PSUseCompatibleSyntax = @{ Enable = $true; TargetVersions = @('5.1', '7.0') } } }
+          $files = @('install.ps1', 'tests/install/test_powershell.ps1')
+          $found = foreach ($f in $files) {
+            Invoke-ScriptAnalyzer -Path $f -IncludeRule PSUseCompatibleSyntax -Settings $settings
+            Invoke-ScriptAnalyzer -Path $f -Severity Error
+          }
+          if ($found) { $found | Format-Table ScriptName, Line, RuleName, Message -AutoSize -Wrap; exit 1 }
+          'PowerShell sources: 5.1/7.0 compatible, no errors'
+
+      - name: Agent Skills spec (official skills-ref validator)
+        run: |
+          python3 -m pip install --quiet "git+https://github.com/agentskills/agentskills#subdirectory=skills-ref"
+          skills-ref validate "$GITHUB_WORKSPACE"
+          # and the payload the installer actually produces
+          export HOME="$RUNNER_TEMP/payload-home"
+          bash install.sh --source "$GITHUB_WORKSPACE" --agents universal --no-docs --yes
+          skills-ref validate "$HOME/.local/share/roblox-dev-skill/roblox-dev-skill"
+
+  audit:
+    name: Examples vs live Roblox API
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Ingest the current engine dump and audit every code example (strict)
+        env:
+          ROBLOX_DOCS_HOME: ${{ runner.temp }}/RobloxDocs
+        run: python3 tools/robloxdocs/roblox-api-monitor.py --refs references --audit strict
+
+  unix:
+    name: install.sh — ${{ matrix.name }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { name: "Linux (bash 5)",  os: ubuntu-latest, bash: bash }
+          - { name: "macOS (bash 3.2)", os: macos-latest,  bash: /bin/bash }
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Functional suite
+        run: ${{ matrix.bash }} tests/install/test_unix.sh
+      - name: The README one-liner, downloading this commit from GitHub
+        if: env.SAME_REPO == 'true'
+        run: |
+          export HOME="$RUNNER_TEMP/live-home"; mkdir -p "$HOME/.claude"
+          curl -fsSL "https://raw.githubusercontent.com/${{ github.repository }}/$TEST_REF/install.sh" \
+            | ${{ matrix.bash }} -s -- --ref "$TEST_REF" --yes
+          test -f "$HOME/.agents/skills/roblox-dev-skill/SKILL.md"
+          test -f "$HOME/.claude/skills/roblox-dev-skill/SKILL.md"
+          test "$(ls "$HOME/RobloxDocs/RobloxAPI/classes" | wc -l)" -gt 900
+
+  windows:
+    name: install.ps1 — ${{ matrix.name }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { name: "Windows PowerShell 5.1", shell: powershell }
+          - { name: "PowerShell 7",           shell: pwsh }
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: ${{ matrix.shell }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.x" }
+      - name: Functional suite (symlink, junction and copy modes)
+        run: ./tests/install/test_powershell.ps1
+      - name: "irm | iex, downloading this commit from GitHub"
+        if: env.SAME_REPO == 'true'
+        run: |
+          $env:ROBLOX_SKILL_REF  = $env:TEST_REF
+          $env:ROBLOX_SKILL_HOME = Join-Path $env:RUNNER_TEMP 'iex-home'
+          $env:ROBLOX_SKILL_STORE = Join-Path $env:RUNNER_TEMP 'iex-store'
+          $env:ROBLOX_DOCS_HOME  = Join-Path $env:RUNNER_TEMP 'iex-docs'
+          irm "https://raw.githubusercontent.com/${{ github.repository }}/$env:TEST_REF/install.ps1" | iex
+          if (-not (Test-Path (Join-Path $env:ROBLOX_SKILL_HOME '.agents\skills\roblox-dev-skill\SKILL.md'))) { throw 'skill not installed' }
+          if (@(Get-ChildItem (Join-Path $env:ROBLOX_DOCS_HOME 'RobloxAPI\classes')).Count -le 900) { throw 'RobloxDocs not populated' }
+
+  windows-cmd:
+    name: install.cmd — cmd.exe
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: The README CMD one-liner, downloading this commit from GitHub
+        shell: cmd
+        run: |
+          set "ROBLOX_SKILL_REF=%TEST_REF%"
+          set "ROBLOX_SKILL_HOME=%RUNNER_TEMP%\cmd-home"
+          set "ROBLOX_SKILL_STORE=%RUNNER_TEMP%\cmd-store"
+          curl -fsSL "https://raw.githubusercontent.com/${{ github.repository }}/%TEST_REF%/install.cmd" -o "%RUNNER_TEMP%\install.cmd" || exit /b 1
+          call "%RUNNER_TEMP%\install.cmd" -Agents universal,claude -NoDocs -Yes || exit /b 1
+          if not exist "%RUNNER_TEMP%\cmd-home\.agents\skills\roblox-dev-skill\SKILL.md" (echo universal missing & exit /b 1)
+          if not exist "%RUNNER_TEMP%\cmd-home\.claude\skills\roblox-dev-skill\SKILL.md" (echo claude missing & exit /b 1)
+          echo install.cmd OK
+      - name: A failing install.cmd returns a non-zero exit code
+        shell: cmd
+        run: |
+          set "ROBLOX_SKILL_REF=%TEST_REF%"
+          set "ROBLOX_SKILL_HOME=%RUNNER_TEMP%\cmd-home2"
+          curl -fsSL "https://raw.githubusercontent.com/${{ github.repository }}/%TEST_REF%/install.cmd" -o "%RUNNER_TEMP%\install.cmd" || exit /b 1
+          call "%RUNNER_TEMP%\install.cmd" -Agents nope -Yes
+          if %ERRORLEVEL% EQU 0 (echo expected a failure exit code & exit /b 1)
+          echo failure correctly reported
+
+  git-bash:
+    name: install.sh — Git Bash on Windows (copy fallback)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.x" }
+      - name: Functional suite
+        shell: bash
+        run: bash tests/install/test_unix.sh

@@ -24,7 +24,7 @@ param(
     [switch]$Docs,
     [switch]$NoDocs,
     [switch]$DocsOnly,
-    [string]$Ref = 'master',
+    [string]$Ref = $(if ($env:ROBLOX_SKILL_REF) { $env:ROBLOX_SKILL_REF } else { 'master' }),
     [string]$Source,
     [switch]$NoDedupe,
     [switch]$Update,
@@ -46,7 +46,8 @@ $RepoName   = 'roblox-dev-skill'
 $SkillName  = 'roblox-dev-skill'   # must equal SKILL.md `name` and the folder name (agentskills.io)
 $Marker     = '.roblox-dev-skill-install'
 $OnWindows  = ($PSVersionTable.PSVersion.Major -lt 6) -or $IsWindows
-$HomeDir    = $HOME
+# ROBLOX_SKILL_HOME lets tests run against a throwaway profile ($HOME cannot be redirected in pwsh on Windows)
+if ($env:ROBLOX_SKILL_HOME) { $HomeDir = $env:ROBLOX_SKILL_HOME } else { $HomeDir = $HOME }
 $Stamp      = Get-Date -Format 'yyyyMMdd-HHmmss'
 
 if ($env:ROBLOX_SKILL_STORE) { $Store = $env:ROBLOX_SKILL_STORE }
@@ -336,11 +337,16 @@ function Install-Link([string]$dir) {
     if ($DryRun) { Dry "link $dest -> $Payload"; return }
     New-Item -ItemType Directory -Force -Path $dir | Out-Null
 
-    if (-not $Copy) {
-        try {
-            New-Item -ItemType SymbolicLink -Path $dest -Target $Payload | Out-Null
-            Ok "$(P $dest) -> store (symlink)"; Add-Manifest 'link' $dest; return
-        } catch { }
+    # ROBLOX_SKILL_LINK = symlink | junction | copy pins the method (default: try them in that order)
+    $mode = "$env:ROBLOX_SKILL_LINK".ToLowerInvariant()
+    if ($Copy) { $mode = 'copy' }
+    if ($mode -ne 'copy') {
+        if ($mode -ne 'junction') {
+            try {
+                New-Item -ItemType SymbolicLink -Path $dest -Target $Payload | Out-Null
+                Ok "$(P $dest) -> store (symlink)"; Add-Manifest 'link' $dest; return
+            } catch { }
+        }
         if ($OnWindows) {
             # junctions need no admin rights or Developer Mode
             try {
@@ -519,6 +525,10 @@ roblox-dev-skill installer (PowerShell)
   -NoDedupe       also link agents that already read ~/.agents/skills
   -Update         fetch the latest skill; links follow automatically
   -Uninstall      remove what this installer made     -PurgeDocs    also delete RobloxDocs data (asks)
+
+  Environment (useful with `irm | iex`, which cannot take options):
+  ROBLOX_SKILL_REF=TAG        install that branch or tag instead of master
+  ROBLOX_SKILL_LINK=MODE      symlink, junction or copy
 "@ | Write-Host
 }
 

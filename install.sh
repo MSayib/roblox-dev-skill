@@ -27,8 +27,9 @@ set -Eeuo pipefail
 trap 'die "unexpected failure at line $LINENO: $BASH_COMMAND"' ERR
 
 # ─── Options ────────────────────────────────────────────────────────────
-local REF="$DEFAULT_REF" SOURCE_DIR="" AGENTS_ARG="" CUSTOM_PATHS="" YES=false DRY=false
+local REF="${ROBLOX_SKILL_REF:-$DEFAULT_REF}" SOURCE_DIR="" AGENTS_ARG="" CUSTOM_PATHS="" YES=false DRY=false
 local FORCE=false FORCE_COPY=false DOCS_MODE=ask ACTION=install PURGE_DOCS=false NO_DEDUPE=false
+if [ "${ROBLOX_SKILL_LINK:-}" = copy ]; then FORCE_COPY=true; fi
 
 while [ $# -gt 0 ]; do
     case "$1" in
@@ -389,7 +390,8 @@ obtain_source() {
     url="https://codeload.github.com/$REPO_OWNER/$REPO_NAME/tar.gz/$REF"
     tarball="$work/src.tar.gz"
     # ${REF} braced: bash 3.2 in a UTF-8 locale reads a non-ASCII byte right after a name as part
-    # of the name, so "$REF…" looked up a variable called REF\xe2… and died under set -u.
+    # of the name, so an unbraced REF followed by an ellipsis looked up a variable called
+    # REF\xe2... and died under set -u. tests/lint/check_sources.py now rejects that pattern.
     info "Downloading ${REPO_OWNER}/${REPO_NAME}@${REF}…" >&2
     download "$url" "$tarball" || die "download failed: $url  (is --ref '$REF' a real branch or tag?)"
     mkdir -p "$work/src"
@@ -726,7 +728,10 @@ Maintenance
   --uninstall       remove every link/copy this installer made (nothing else)
   --purge-docs      with --uninstall: also delete ~/RobloxDocs data (asks first)
 
-Environment: ROBLOX_SKILL_STORE, ROBLOX_DOCS_HOME, XDG_DATA_HOME, NO_COLOR
+Environment
+  ROBLOX_SKILL_REF     default for --ref (e.g. a tag) — handy when options cannot be passed
+  ROBLOX_SKILL_LINK    copy = same as --copy
+  ROBLOX_SKILL_STORE, ROBLOX_DOCS_HOME, XDG_DATA_HOME, NO_COLOR
 USAGE
 }
 
