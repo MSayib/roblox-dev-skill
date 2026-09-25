@@ -21,6 +21,14 @@ Heuristics, and why they are safe:
 """
 import json, re, glob, os, sys, collections
 
+# Windows pipes default to a legacy code page (cp1252) that cannot encode emoji; without this a
+# final "✅" print crashed split-api-dump.py AFTER it had written every file (found by CI).
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(errors="replace")
+    except (AttributeError, ValueError):   # Python 3.6, or a stream that cannot be reconfigured
+        pass
+
 DEFAULT_DUMP = os.path.expanduser('~/RobloxDocs/RobloxAPI/dumps/latest.json')
 
 # Community libraries whose method names may collide with engine member names.
@@ -48,7 +56,8 @@ def load_dump(path):
     if not os.path.exists(path):
         sys.exit(f"audit: API dump not found at {path}\n"
                  f"       run ~/RobloxDocs/scripts/roblox-api-monitor.sh first")
-    return json.load(open(path))
+    with open(path, encoding='utf-8') as f:
+        return json.load(f)
 
 
 def build_index(dump):
@@ -103,7 +112,9 @@ def audit(refdir, classes, enums, members):
 
     for path in sorted(glob.glob(os.path.join(refdir, '*.md'))):
         fname = os.path.basename(path)
-        for block in CODE.findall(open(path).read()):
+        with open(path, encoding='utf-8') as f:
+            text = f.read()
+        for block in CODE.findall(text):
             plugin_ok = bool(PLUGINCTX.search(block)) or fname == 'studio-plugins-and-limits.md'
             skip = set(THIRD_PARTY) | set(REQUIRED.findall(block))
 

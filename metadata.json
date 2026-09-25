@@ -1,13 +1,21 @@
 {
   "skill_name": "roblox-dev-skill",
-  "version": "2.13.0",
-  "last_updated": "2026-09-25T14:30:00+07:00",
-  "last_updated_by": "claude-code (owner request: curl installer with agent-agnostic wizard, Windows PowerShell/CMD, RobloxDocs auto-setup)",
+  "version": "2.13.1",
+  "last_updated": "2026-09-25T15:30:00+07:00",
+  "last_updated_by": "claude-code (owner request: CI that verifies the installers and must pass)",
   "update_source": "https://agentskills.io/specification, https://agentskills.io/client-implementation/adding-skills-support, agentskills.io client list and each agent's own skills documentation (Claude Code, Codex, Gemini CLI, Antigravity, Cursor, GitHub Copilot, VS Code, OpenCode, Kiro, Roo Code, Goose, Junie, Amp), official skills-ref validator",
   "engine_version_at_update": "0.740.19.7400931",
   "luau_version_at_update": "0.739",
   "update_interval_days": 7,
   "update_history": [
+    {
+      "date": "2026-09-25T15:30:00+07:00",
+      "version": "2.13.1",
+      "changes": "No engine or content change. FIXED install.sh on its GitHub download path, which failed for every user of the 2.13.0 one-liner: bash 3.2 in a UTF-8 locale read the byte after an unbraced REF variable (an ellipsis in a progress message) as part of the variable name, and set -u killed the run. Every earlier test used --source, which returns before that line, so the only path real users take had never executed. ADDED CI (.github/workflows/ci.yml) on push, pull request and weekly: lint (tests/lint/check_sources.py: ASCII-only for PS 5.1, CRLF for install.cmd, LF for scripts, the bash 3.2 variable-name trap, encoding-less open(), truncation safety), ShellCheck, PSScriptAnalyzer PS 5.1/7.0 syntax, skills-ref on repo and installed payload; a strict live-API example audit under PYTHONIOENCODING=cp1252; install.sh on Linux and macOS /bin/bash 3.2 (47-check suite plus the README one-liner downloading the commit under test); install.ps1 on Windows PowerShell 5.1 and PowerShell 7 (38-check suite including junction mode and junction-target survival, plus irm|iex of the commit); install.cmd under real cmd.exe (success and failure exit code); install.sh under Git Bash on Windows (copy fallback). CI FOUND FIVE WINDOWS-ONLY BUGS: split-api-dump.py crashed printing an emoji into a cp1252 pipe AFTER writing every file, so the monitor reported a failed split and the audit never ran (all tools now set errors=\"replace\"); audit/diff tools used open() without encoding and failed decoding UTF-8 Markdown as cp1252 (every open() now names utf-8, enforced by lint); install.sh under Git Bash wrote SKILL_REFS as an MSYS path native Windows Python cannot resolve, so the audit was always skipped for Git Bash users (MSYS converts args and env vars, never file contents; now cygpath -m); Windows PowerShell 5.1 turns captured native stderr into error records so a Python warning could abort install.ps1 under Stop (native calls now under Continue); and a test-only cmd.exe ERRORLEVEL inheritance. A regression of mine (a local declaration split across lines while adding a hook) was caught by the new suite on its first run. ADDED installer env vars: ROBLOX_SKILL_REF (pin a version; the only way under irm|iex; honoured by install.cmd), ROBLOX_SKILL_LINK=symlink|junction|copy (CI needs it because admin runners always get symlinks), ROBLOX_SKILL_HOME (throwaway profile for tests, since $HOME cannot be redirected in pwsh on Windows).",
+      "engine_version": "0.740.19.7400931",
+      "decision_by": "user (sayib) -- request 2026-09-25: CI that verifies the installer and must pass",
+      "verified_by": "GitHub Actions run 36103527667: 9/9 checks green; logs confirmed macOS used bash 3.2, the Windows jobs ran PowerShell 5.1.26100 Desktop and 7.6.5 Core, junction mode and junction-target survival executed on both, the one-liners downloaded the commit under test, install.cmd exercised both success and failure exit codes, and Git Bash took the copy-fallback path with the audit running"
+    },
     {
       "date": "2026-09-25T14:30:00+07:00",
       "version": "2.13.0",

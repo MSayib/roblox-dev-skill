@@ -24,7 +24,7 @@ param(
     [switch]$Docs,
     [switch]$NoDocs,
     [switch]$DocsOnly,
-    [string]$Ref = 'master',
+    [string]$Ref = $(if ($env:ROBLOX_SKILL_REF) { $env:ROBLOX_SKILL_REF } else { 'master' }),
     [string]$Source,
     [switch]$NoDedupe,
     [switch]$Update,
@@ -46,7 +46,8 @@ $RepoName   = 'roblox-dev-skill'
 $SkillName  = 'roblox-dev-skill'   # must equal SKILL.md `name` and the folder name (agentskills.io)
 $Marker     = '.roblox-dev-skill-install'
 $OnWindows  = ($PSVersionTable.PSVersion.Major -lt 6) -or $IsWindows
-$HomeDir    = $HOME
+# ROBLOX_SKILL_HOME lets tests run against a throwaway profile ($HOME cannot be redirected in pwsh on Windows)
+if ($env:ROBLOX_SKILL_HOME) { $HomeDir = $env:ROBLOX_SKILL_HOME } else { $HomeDir = $HOME }
 $Stamp      = Get-Date -Format 'yyyyMMdd-HHmmss'
 
 if ($env:ROBLOX_SKILL_STORE) { $Store = $env:ROBLOX_SKILL_STORE }
@@ -336,11 +337,16 @@ function Install-Link([string]$dir) {
     if ($DryRun) { Dry "link $dest -> $Payload"; return }
     New-Item -ItemType Directory -Force -Path $dir | Out-Null
 
-    if (-not $Copy) {
-        try {
-            New-Item -ItemType SymbolicLink -Path $dest -Target $Payload | Out-Null
-            Ok "$(P $dest) -> store (symlink)"; Add-Manifest 'link' $dest; return
-        } catch { }
+    # ROBLOX_SKILL_LINK = symlink | junction | copy pins the method (default: try them in that order)
+    $mode = "$env:ROBLOX_SKILL_LINK".ToLowerInvariant()
+    if ($Copy) { $mode = 'copy' }
+    if ($mode -ne 'copy') {
+        if ($mode -ne 'junction') {
+            try {
+                New-Item -ItemType SymbolicLink -Path $dest -Target $Payload | Out-Null
+                Ok "$(P $dest) -> store (symlink)"; Add-Manifest 'link' $dest; return
+            } catch { }
+        }
         if ($OnWindows) {
             # junctions need no admin rights or Developer Mode
             try {
@@ -404,7 +410,9 @@ function Find-Python {
         if (-not (Get-Command $cand[0] -ErrorAction SilentlyContinue)) { continue }
         $pyArgs = @($cand | Select-Object -Skip 1)
         try {
-            & $cand[0] @pyArgs -c 'import sys; sys.exit(0 if sys.version_info >= (3, 6) else 1)' 2>$null | Out-Null
+            $oldEap = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
+            try { & $cand[0] @pyArgs -c 'import sys; sys.exit(0 if sys.version_info >= (3, 6) else 1)' 2>$null | Out-Null }
+            finally { $ErrorActionPreference = $oldEap }
             if ($LASTEXITCODE -eq 0) { return , $cand }   # `python3` on Windows is often a Store stub that fails here
         } catch { }
     }
@@ -447,11 +455,14 @@ function Install-Docs([string]$src) {
     Step 'Downloading and splitting the Roblox API dump (one-time, ~8 MB)'
     $oldHome = $env:ROBLOX_DOCS_HOME; $oldEnc = $env:PYTHONIOENCODING
     $env:ROBLOX_DOCS_HOME = $DocsHome; $env:PYTHONIOENCODING = 'utf-8'
+    # Windows PowerShell 5.1 turns a native program's stderr into error records when output is
+    # redirected, and under 'Stop' the first Python warning would abort the whole installer.
+    $oldEap = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
     try {
         $pyArgs = @($py | Select-Object -Skip 1)
         & $py[0] @pyArgs (Join-Path $scripts 'roblox-api-monitor.py')
         $code = $LASTEXITCODE
-    } finally { $env:ROBLOX_DOCS_HOME = $oldHome; $env:PYTHONIOENCODING = $oldEnc }
+    } finally { $env:ROBLOX_DOCS_HOME = $oldHome; $env:PYTHONIOENCODING = $oldEnc; $ErrorActionPreference = $oldEap }
     if ($code -eq 0) { Ok 'RobloxDocs ready' }
     else {
         Warn 'the API dump step did not finish -- the skill is installed and works without it.'
@@ -519,6 +530,10 @@ roblox-dev-skill installer (PowerShell)
   -NoDedupe       also link agents that already read ~/.agents/skills
   -Update         fetch the latest skill; links follow automatically
   -Uninstall      remove what this installer made     -PurgeDocs    also delete RobloxDocs data (asks)
+
+  Environment (useful with `irm | iex`, which cannot take options):
+  ROBLOX_SKILL_REF=TAG        install that branch or tag instead of master
+  ROBLOX_SKILL_LINK=MODE      symlink, junction or copy
 "@ | Write-Host
 }
 

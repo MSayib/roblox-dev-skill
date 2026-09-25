@@ -16,8 +16,16 @@ Usage:
 """
 import json, sys, os, re, collections
 
+# Windows pipes default to a legacy code page (cp1252) that cannot encode emoji; without this a
+# final "✅" print crashed split-api-dump.py AFTER it had written every file (found by CI).
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(errors="replace")
+    except (AttributeError, ValueError):   # Python 3.6, or a stream that cannot be reconfigured
+        pass
+
 def load(p):
-    with open(p) as f:
+    with open(p, encoding='utf-8') as f:
         return json.load(f)
 
 def norm_tags(x):
@@ -198,7 +206,7 @@ def main():
 
     if jsonout:
         os.makedirs(os.path.dirname(jsonout), exist_ok=True)
-        with open(jsonout, 'w') as f:
+        with open(jsonout, 'w', encoding='utf-8') as f:
             json.dump(dict(old=label(oldp), new=label(newp), total=len(events),
                            developer_visible=len(vis), events=events), f, indent=2)
         if not quiet:

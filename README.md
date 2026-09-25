@@ -1,11 +1,13 @@
 # 🎮 Roblox Dev Skill — AI Coding Assistant for Roblox Development
 
+[![CI](https://github.com/MSayib/roblox-dev-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/MSayib/roblox-dev-skill/actions/workflows/ci.yml)
+
 An expert-level AI skill for Roblox game development with Luau. Works with
 [Claude Code](https://code.claude.com), [Antigravity](https://antigravity.google), Codex, Cursor,
 Gemini CLI, GitHub Copilot and every other agent that reads the open
 [Agent Skills](https://agentskills.io) format.
 
-> **Skill version:** 2.13.0 | **Engine:** 0.740.19.7400931 | **Luau:** 0.739 | **Ingested:** 2026-09-25
+> **Skill version:** 2.13.1 | **Engine:** 0.740.19.7400931 | **Luau:** 0.739 | **Ingested:** 2026-09-25
 >
 > Dump downloaded, re-split, and diffed against 0.739 on that date: 924 classes / 635 enums /
 > 258 services / 48 deprecated.
@@ -330,14 +332,12 @@ per-release verification method: [`metadata.json`](metadata.json).
 
 | Version | Date | Highlights |
 |---------|------|-----------|
+| **2.13.1** | Sep 25, 2026 | **CI across Linux, macOS (bash 3.2) and real Windows** (PowerShell 5.1, PowerShell 7, `cmd.exe`, Git Bash), running every README one-liner against the commit under test, plus a weekly run against the live Roblox API. It found six bugs on its first runs: the 2.13.0 `install.sh` failed on its GitHub download path for every user (bash 3.2 read a byte after an unbraced variable as part of its name — every earlier test had used `--source`, which skips that path), and five Windows-only bugs, including a cp1252 crash that stopped the example audit, an encoding-less `open()`, and Git Bash configs Windows Python could not read. |
 | **2.13.0** | Sep 25, 2026 | **One-line installers** — `install.sh` (macOS/Linux/WSL/Git Bash), `install.ps1` and `install.cmd` (Windows) — with a wizard over 14 agents whose skills folders were each verified against that agent's documentation. The skill is stored once and linked everywhere; one `~/.agents/skills` link covers nine agents, so nothing is listed twice. RobloxDocs tooling moved into the repo and became cross-platform (Python monitor and one-pass splitter; no zsh/jq/bc), and the installer sets it up with a real API dump. Fixed: the README's Claude Code folder name (`roblox-dev`) fails the official spec validator; its Antigravity path only worked with a hand-written `plugin.json`; the Antigravity link pointed at an nginx placeholder; `stat -f %z` silently prints filesystem data on Linux. |
-| **2.12.0** | Sep 25, 2026 | **Worked examples, and the tooling that proves the docs are executable.** New `references/worked-examples.md`: five end-to-end sequences (build a server-authoritative feature, debug via MCP, migrate a deprecation, verify an unfamiliar API, refuse an unsafe request), each with a **Not this** list so a near-miss request is not pattern-matched to the wrong sample, and each ending in a verification step rather than "code written". **Found and fixed a second latent defect**: the Input Action System example used `InputActionService` and `InputActionBinding` (neither class exists), `ActionType` (the property is `Type`), `Enum.InputActionType.Button` (not an item — it is `Bool`), `Activated`/`Deactivated` (the events are `Pressed`/`Released`/`StateChanged`), and `PlayerScriptsUseInputActionSystem = true` (it is an `Enum.RolloutState`) — six wrong lines in twelve. Also softened the false claim that IAS deprecates `UserInputService`/`ContextActionService` (neither carries a `Deprecated` tag). New tooling in `~/RobloxDocs/scripts/`: `audit-skill-examples.py` (validates every example against the dump; **exits non-zero so a broken example fails the ingest**) and `diff-api-dumps.py` (member-level diff with grep-back into the docs). `roblox-api-monitor.sh` v2 adds a download integrity gate, a PID-aware self-clearing lock, both `.current-version` timestamps, and opt-in retention. |
 | **2.10.0** | Sep 25, 2026 | **MCP accuracy pass + new threat model.** Added `references/agent-safety.md` (agent→Studio trust boundary) and this changelog split. Fixed MCP claims against the [official docs](https://create.roblox.com/docs/studio/mcp) and live tool schemas: removed the phantom `run_as_job`; corrected `multi_edit` (one script per call, exact-match `old_string`/`new_string`, `Edit` datamodel only — the old documented signature would have failed every call); `execute_luau` **does** return values; `upload_image` takes HTTP URLs, `store_image` takes local files; `http_get` is allowlisted; 29 tools → 26 documented / 28 observed; documented the missing `skill` and `subagent` tools. Also fixed non-MCP misleading items: README described the repo as if it were an MCP server, its tree listed 11 of 12 reference files, class counts and the "~10KB" figure were stale, and `SKILL.md` told the agent to auto-run a background update against its own approval rule. |
 
 ## Roadmap
 
-- **Verify the Windows installers on real hardware** — junction creation, Windows PowerShell 5.1 at
-  runtime, and `install.cmd` were tested only indirectly (see CHANGELOG 2.13.0). Reports welcome.
 - **Widen the worked examples** (shipped in 2.12.0) to DataStore migrations, monetization receipts,
   and UI/IAS flows, each with its own *Not this* list and eval coverage.
 - **Parse Luau properly in the example audit.** It matches simple assignments and method calls with
@@ -356,8 +356,10 @@ per-release verification method: [`metadata.json`](metadata.json).
    report 0 defects; it checks every Luau example against the current API dump
 7. **Validate against the spec** —
    `uvx --from "git+https://github.com/agentskills/agentskills#subdirectory=skills-ref" skills-ref validate "$PWD"`
-8. **Test installer changes locally** — `bash install.sh --source . --dry-run` (or
-   `& ./install.ps1 -Source . -DryRun`) installs from your checkout instead of GitHub
+8. **Run the installer suites** — `bash tests/install/test_unix.sh` and
+   `pwsh -File tests/install/test_powershell.ps1` (both use throwaway homes and never touch your
+   real agent folders), plus `python3 tests/lint/check_sources.py`. CI runs all of them on Linux,
+   macOS and Windows and must pass before merging.
 
 ## License
 
