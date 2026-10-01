@@ -11,6 +11,91 @@ reference content was verified against at that time.
 
 ---
 
+## 2.14.0 — Oct 1, 2026
+
+**Engine 0.741.19.7411056 / Luau 0.740 — and an audit that now reads prose, which found three more
+latent defects.** None of the three was caused by 0.741; all were wrong on the day they were written.
+
+### Engine 0.741 — additions (931 classes +7, 641 enums +6, 260 services, 48 deprecated)
+
+Diffed 0.740 → 0.741 with `diff-api-dumps.py` and a second, independent all-fields diff; both agree.
+No removals, no new deprecations, no `Capabilities` changes.
+
+- **`Player:GetFriendsInServerAsync()`** — `Security: None`, Yields, no parameters, returns an
+  `Array`, capabilities `Players` + `Social`. Not yet on the official `Player` page (checked
+  2026-10-01), so the skill says to inspect a result rather than guess its fields.
+- **`Enum.GradientType.Elliptical`** (Value 3) — present at runtime in Studio 0.741; the official
+  enum page still lists only `Linear` and `Radial`.
+- `TestService.Enabled` (read-only); `BackendReplicatedStorage` / `BackendServerScriptService` /
+  `BackendServerStorage` — services with no members and no docs.
+- Roblox-internal only: `FriendsCalling*` classes and enums, `ProjectService`, `AssetService` text
+  content, `NotificationService` topics; 15 `StarterPlayer.GameSettings*` properties removed (all were
+  `RobloxScriptSecurity`). `LocalizedTextureContent` / `LocalizedImageContent` write security changed;
+  still unreadable by game code.
+
+### Luau 0.740
+
+- A soundness fix in function normalization can surface **new type errors** in code using
+  intersections of function types.
+- `if local` flags were **renamed** from `DebugLuauIfLocal*` to `LuauExperimentalIfLocal*`. The skill
+  had said "only behind `DebugLuau*` flags", which became untrue. Still **off**: neither flag is set
+  in Studio's published client settings (PCStudioApp / MacStudioApp, checked 2026-10-01).
+- Exact-by-default tables (RFC #11) are `DebugLuau*`-gated; an `integer` library exists behind
+  `LuauIntegerLibrary`, also not enabled in Studio. Recorded in a table of prototypes with their gates.
+
+### Fixed — `legacy-migration.md` listed Roblox-internal APIs as usable since 0.737
+
+The 0.737–0.739 rows called `CallingService`, `AnimatedImageService` / `AnimatedImage`,
+`MomentsService`, `PinShortcutService`, `Decal.LocalizedTextureContent`, `ExternalIdentityService`,
+`UGCValidationService` post-deformation sizing and `Terrain` transform-subregion slots "new public
+surface" or "new methods". In the dump each row was derived from, every one of them is
+`RobloxScriptSecurity`. The 0.739 `CreateCall` → `CreateCallAsync` row told readers to "update
+callers" of a method no game script could ever call. Each row is corrected in place, and a
+corrections note heads the 0.741 section. `AvatarEditorService:GetItemDetails()` (deprecated) was
+recommended as an ownership check; its `Async` form's `Owned` field describes only the current user,
+so the row now points at the Open Cloud Inventory API for server-side checks.
+
+### Fixed — the IAS example still could not run after 2.12.0 fixed it
+
+2.12.0 changed `workspace.PlayerScriptsUseInputActionSystem = true` to `= Enum.RolloutState.Enabled`.
+The type was right, but the property is **`NotScriptable`**: no script can read or set it, MCP
+`execute_luau` included. Confirmed in Studio 0.741.19.7411056 — `PlayerScriptsUseInputActionSystem
+is not a valid member of Workspace "Workspace"`. The example is now a Properties-window instruction.
+`EnableSLIMAvatars`, `SandboxedInstanceMode`, `PlayerCharacterDestroyBehavior` and `UseInputSink`
+are the same kind of setting and are now labelled so; `Model.LevelOfDetail` is labelled `PluginSecurity`.
+`mcp-integration.md` now states that `execute_luau`'s plugin privilege does **not** reach
+`NotScriptable` properties, and that the resulting "is not a valid member" error is not a typo.
+
+### Changed — tooling
+
+- **`audit-skill-examples.py` section F** checks `` `Class.Member` `` and `` `Class:Method()` `` in
+  prose and tables against the dump: missing, deprecated, `RobloxScriptSecurity`, or `NotScriptable`,
+  each reported only when its own context does not already say so. A table row must say it on the same
+  row, so a qualifier in another row cannot excuse it. Section A now also flags code that **writes** a
+  `NotScriptable` property, ignoring `--` comments.
+- **`diff-api-dumps.py` grep-back** matched a member's bare name as a substring, so
+  `TestService.Enabled` was reported "mentioned in" six files that never name `TestService`. It now
+  matches whole words, and when a member name is ambiguous it requires the owning class or a relative of
+  it in the same file. Back-tested over all eight dump pairs 0.733 → 0.741: no event lost, and every
+  dropped mention was checked by hand and was false. `part.CollisionFidelity`, the 2.11.0 find, still
+  matches.
+- The diff now also reports **class-level** tag and superclass changes, enum tags, and enum item tag and
+  value changes. Before this, a whole class turning `Deprecated` would have produced no event. The
+  back-test surfaced seven historical events nobody had seen, such as `TriangleMeshPart` becoming
+  `NotBrowsable` (0.736) and three `Enum.AdEventType` items deprecated (0.734).
+- `SKILL.md`: `.current-version` has carried both `updatedAt` and `checkedAt` since 2.12.0, so the
+  note that a fresh download "has no `checkedAt`" now applies only to installs that never updated their tools.
+
+### Evals 41 → 47
+
+- Fixed **#38**, which marked the unrunnable `= Enum.RolloutState.Enabled` as the correct answer.
+- Added guards for `GetFriendsInServerAsync` (do not invent fields), the `CreateCall` non-migration,
+  `AnimatedImageService`, `if local` and exact tables in 0.740.
+- Added an **over-correction** guard: a server Script setting `CollisionFidelity` must not be sent to
+  the Properties window.
+
+---
+
 ## 2.13.1 — Sep 25, 2026
 
 **CI that verifies every installer on every OS — and the six bugs it found on its first runs.**

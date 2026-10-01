@@ -567,15 +567,17 @@ input events everywhere.
 
 ### Enabling IAS
 
-```luau
---!strict
--- Enable IAS for the default PlayerScripts in this place
-workspace.PlayerScriptsUseInputActionSystem = Enum.RolloutState.Enabled
-```
+Select **Workspace** in the Explorer and set **`PlayerScriptsUseInputActionSystem`** to `Enabled` in
+the Properties window. That is the only way to set it.
 
-> ⚠️ **This property is an `Enum.RolloutState`, not a boolean.** Items: `Default`, `Disabled`,
-> `Enabled`. An earlier version of this file wrote `= true`, which is a type error. You can set it in
-> Studio (Workspace → Properties) instead.
+> ⚠️ **No script can set or even read this property — it is `NotScriptable`.** That includes a
+> plugin, the command bar, and MCP `execute_luau`. In Studio 0.741.19.7411056, reading it from
+> `execute_luau` fails with `PlayerScriptsUseInputActionSystem is not a valid member of Workspace
+> "Workspace"`. Its type is `Enum.RolloutState` (`Default` / `Disabled` / `Enabled`), not a boolean.
+> Two earlier versions of this file got it wrong: one wrote `= true` (a type error), and the fix for
+> that wrote `workspace.PlayerScriptsUseInputActionSystem = Enum.RolloutState.Enabled` — which has
+> the right type but still cannot run. If an agent needs it changed, ask the user to flip it in
+> Properties.
 
 ### Key Concepts
 
@@ -659,7 +661,7 @@ IAS is a prerequisite for two major upcoming systems:
   provides the standardized input representation that the server can interpret
   and verify, reducing cheating surface area.
 
-> **Migration:** When `PlayerScriptsUseInputActionSystem` is `true`, the default
+> **Migration:** When `PlayerScriptsUseInputActionSystem` is `Enabled`, the default
 > character scripts automatically use IAS internally. Custom scripts that call
 > `ContextActionService:BindAction()` or `UserInputService.InputBegan` continue
 > to work — IAS does not remove these APIs, but new code should prefer IAS

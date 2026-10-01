@@ -7,8 +7,16 @@ a code example that cannot execute under the security model the docs claim.
 Usage:
     audit-skill-examples.py [REFERENCE_DIR] [--dump PATH] [--quiet]
 
-Exit code 1 if any DEFECT is found (sections A/C/D/E), 0 otherwise.
+Exit code 1 if any DEFECT is found (sections A/C/D/E/F), 0 otherwise.
 Section B is informational and never fails the run.
+
+Section F (added 0.741) reads PROSE and TABLES, not code: a `Class.Member` or `Class:Method()`
+written outside a code fence. Until then nothing checked prose, and legacy-migration.md had been
+listing RobloxScriptSecurity members (MomentsService, CallingService, AnimatedImageService, ...)
+as "New public surface" since 0.737 -- wrong on the day it was written, according to the very
+dump each row was derived from. A mention is reported only when its own context does not already
+say what it is: a table row must state it on the SAME row (a qualifier on another row of the
+table must not excuse it); prose may state it anywhere in the paragraph.
 
 Heuristics, and why they are safe:
   * Luau types are not inferred, so a member name is resolved across ALL classes. A name is only
@@ -75,7 +83,8 @@ def build_index(dump):
                 rcaps = wcaps = tuple(caps)
             members[m['Name']].append(
                 dict(cls=c['Name'], kind=m.get('MemberType'), read=rs, write=ws,
-                     rcaps=rcaps, wcaps=wcaps))
+                     rcaps=rcaps, wcaps=wcaps,
+                     notscriptable='NotScriptable' in (m.get('Tags') or [])))
     return classes, enums, members
 
 
@@ -98,7 +107,87 @@ ENUMREF  = re.compile(r'\bEnum\.(\w+)\.(\w+)')
 # must not bind the variable to Players.
 BIND     = re.compile(r'local\s+(\w+)\s*(?::\s*[\w.]+)?\s*=\s*game:GetService\(\s*["\'](\w+)["\']\s*\)\s*(?![.\w:])')
 REQUIRED = re.compile(r'local\s+(\w+)\s*(?::\s*[\w.]+)?\s*=\s*require\s*\(')
+LINECOMMENT = re.compile(r'--.*$', re.M)
 PLUGINCTX = re.compile(r'\bplugin\b|PluginSecurity|command bar|:GetMouse\(|CoreGui|PluginGui|Toolbar|PluginAction', re.I)
+
+# Section F: `+Class.Member`, `Class:Method()`, `Class:Method(args)` inside one backtick span.
+PROSEREF  = re.compile(r'`\+?([A-Z]\w*)[.:]([A-Za-z_]\w*)(?:\([^`]*\))?`')
+FENCE     = re.compile(r'^\s*(```|~~~)')
+# What a context must say for each finding to be a deliberate, correct mention.
+SAYS_GONE     = re.compile(r'remov|renam|no such|does not exist|doesn.t exist|phantom|not a (?:real|member)|gone', re.I)
+SAYS_DEPR     = re.compile(r'deprecat', re.I)
+SAYS_INTERNAL = re.compile(r'RobloxScriptSecurity|RobloxSecurity|NotAccessibleSecurity|LocalUserSecurity|'
+                           r'Roblox-internal|not callable|cannot call|can.t call|not usable|cannot use|'
+                           r'not reachable|not accessible', re.I)
+SAYS_NOSCRIPT = re.compile(r'NotScriptable|not scriptable|cannot be (?:set|read) from (?:a )?script', re.I)
+REACHABLE = (None, 'None', 'PluginSecurity')   # PluginSecurity: legitimate in plugin docs
+
+
+def prose_contexts(text):
+    """Yield (line_no, line, context) for every line outside a code fence. A table row is its own
+    context; any other line's context is its paragraph."""
+    lines = text.split('\n')
+    in_fence, para, para_start, out = False, [], 0, []
+
+    def flush():
+        ctx = '\n'.join(l for _, l in para)
+        for n, l in para:
+            out.append((n, l, l if l.lstrip().startswith('|') else ctx))
+        para.clear()
+
+    for i, line in enumerate(lines, 1):
+        if FENCE.match(line):
+            flush()
+            in_fence = not in_fence
+            continue
+        if in_fence:
+            continue
+        if not line.strip():
+            flush()
+            continue
+        para.append((i, line))
+    flush()
+    return out
+
+
+def resolve(classes, cn, name):
+    seen = set()
+    while cn in classes and cn not in seen:
+        seen.add(cn)
+        for m in classes[cn].get('Members', []):
+            if m['Name'] == name:
+                return m
+        cn = classes[cn].get('Superclass')
+    return None
+
+
+def audit_prose(refdir, classes):
+    F = []
+    for path in sorted(glob.glob(os.path.join(refdir, '*.md'))):
+        fname = os.path.basename(path)
+        with open(path, encoding='utf-8') as f:
+            text = f.read()
+        for ln, line, ctx in prose_contexts(text):
+            for cn, name in PROSEREF.findall(line):
+                if cn not in classes or name == 'new':   # unknown: a type, a module, a removed class
+                    continue
+                m = resolve(classes, cn, name)
+                ref = f'{cn}.{name}'
+                if m is None:
+                    if name not in classes and not SAYS_GONE.search(ctx):
+                        F.append(dict(file=fname, line=ln, ref=ref, why='not in the dump'))
+                    continue
+                tags = [t for t in (m.get('Tags') or []) if isinstance(t, str)]
+                sec = m.get('Security')
+                read = sec.get('Read') if isinstance(sec, dict) else sec
+                if 'Deprecated' in tags and not SAYS_DEPR.search(ctx):
+                    F.append(dict(file=fname, line=ln, ref=ref, why='Deprecated, context does not say so'))
+                if read not in REACHABLE and not SAYS_INTERNAL.search(ctx):
+                    F.append(dict(file=fname, line=ln, ref=ref,
+                                  why=f'{read}: not callable by game code, context does not say so'))
+                elif 'NotScriptable' in tags and not SAYS_NOSCRIPT.search(ctx):
+                    F.append(dict(file=fname, line=ln, ref=ref, why='NotScriptable, context does not say so'))
+    return F
 
 
 def elevated(s):
@@ -117,6 +206,8 @@ def audit(refdir, classes, enums, members):
         for block in CODE.findall(text):
             plugin_ok = bool(PLUGINCTX.search(block)) or fname == 'studio-plugins-and-limits.md'
             skip = set(THIRD_PARTY) | set(REQUIRED.findall(block))
+            # `-- MODERN: set Workspace.X = Enabled` is advice in a comment, not a statement.
+            code_writes = set(WRITE.findall(LINECOMMENT.sub('', block)))
 
             # ---- A: elevated security -------------------------------------------------
             for kind, rx, field in (('write', WRITE, 'write'), ('call', CALL, 'read')):
@@ -124,7 +215,19 @@ def audit(refdir, classes, enums, members):
                     if recv.split('.')[0].split('[')[0] in skip:
                         continue
                     defs = members.get(name)
-                    if not defs or not all(elevated(d[field]) for d in defs):
+                    if not defs:
+                        continue
+                    # NotScriptable: Security None, yet no script of ANY identity can touch it --
+                    # not a plugin, not the command bar, not MCP execute_luau. Checking Security
+                    # alone let `workspace.PlayerScriptsUseInputActionSystem = ...` ship in 2.12.0.
+                    if (kind == 'write' and (recv, name) in code_writes
+                            and all(d['notscriptable'] for d in defs)):
+                        A.append(dict(file=fname, kind=kind, recv=recv, member=name,
+                                      sec=['NotScriptable'],
+                                      classes=sorted({d['cls'] for d in defs})[:4],
+                                      expected=False))
+                        continue
+                    if not all(elevated(d[field]) for d in defs):
                         continue
                     A.append(dict(file=fname, kind=kind, recv=recv, member=name,
                                   sec=sorted({str(d[field]) for d in defs}),
@@ -180,6 +283,7 @@ def main():
     dump = load_dump(dumppath)
     classes, enums, members = build_index(dump)
     A, B, C, D, E = audit(refdir, classes, enums, members)
+    F = audit_prose(refdir, classes)
 
     ver = os.path.basename(os.path.realpath(dumppath)).replace('-Full-API-Dump.json', '')
     unexpected_A = [f for f in A if not f['expected']]
@@ -219,7 +323,12 @@ def main():
     for f in sorted({(x['file'], x['cls'], x['var'], x['member'], x['why']) for x in E}):
         print(f"  {f[0]:<32} {f[1]}:{f[3]:<24} (as `{f[2]}`) *** DEFECT: {f[4]} ***")
 
-    defects = len(unexpected_A) + len(C) + len(D) + len(E)
+    head("F. API MENTIONED IN PROSE/TABLES: missing, deprecated, or not callable — and not said so")
+    print("  none" if not F else "")
+    for f in sorted({(x['file'], x['line'], x['ref'], x['why']) for x in F}):
+        print(f"  {f[0]}:{f[1]:<6} {f[2]:<44} *** DEFECT: {f[3]} ***")
+
+    defects = len(unexpected_A) + len(C) + len(D) + len(E) + len(F)
     print(f"\n{'-' * 78}")
     print(f"DEFECTS: {defects}   (informational capability notes: {len({(x['file'], x['member']) for x in B})})")
     return 1 if defects else 0

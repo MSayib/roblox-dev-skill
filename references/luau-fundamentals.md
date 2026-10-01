@@ -1,6 +1,6 @@
 # Luau Language Fundamentals
 
-> Reference for AI coding skill — verified against official Roblox documentation and Luau language release specs (**v0.739**, released 2026-09-18; engine 0.740.19.7400931).
+> Reference for AI coding skill — verified against official Roblox documentation and Luau language release specs (**v0.740**, released 2026-09-25; engine 0.741.19.7411056).
 > Sources: https://create.roblox.com/docs/luau, https://luau.org, https://roblox.github.io/lua-style-guide/
 
 ## Table of Contents
@@ -35,9 +35,9 @@ typed language **derived from Lua 5.1**. Key additions over Lua 5.1:
 - Native code generation (`--!native`) and fast `pcall`/`xpcall` VM execution (`LOP_FASTPCALL`)
 - No `goto` statement
 
-### What landed in 0.736 through 0.739 (source: luau-lang/luau release notes)
+### What landed in 0.736 through 0.740 (source: luau-lang/luau release notes)
 
-All four releases are **fixes and internals, not new syntax you can write today**. Nothing here changes
+All five releases are **fixes and internals, not new syntax you can write today**. Nothing here changes
 how you write Luau for Roblox; it is here so nobody mistakes an internal change for a new feature.
 
 | Release | Change | What it means for your code |
@@ -59,19 +59,30 @@ how you write Luau for Roblox; it is here so nobody mistakes an internal change 
 | **0.739** | Better error when indexing a value whose type was refined to `table` | Clearer diagnostic, same code |
 | **0.739** | VM: Luau→Luau metamethod calls inlined; table get/set slow paths faster; **metamethod lookup cache on frozen metatables** | Metatable-heavy code gets faster with no edit. `table.freeze` on a metatable now also buys cheaper metamethod dispatch — see `performance-optimization.md` |
 | **0.739** | Fixed an integer overflow after `table.move` that caused an out-of-bounds access | A real memory-safety bug. Drop any workaround you had for odd `table.move` behaviour on large ranges |
+| **0.740** | Function normalization no longer uses argument types as return types — `local z: () -> () = x` where `x: (() -> string \| number) & (() -> number \| boolean)` used to be accepted and now errors | Like 0.739, a soundness **fix** that can surface new errors in code that used to pass, here around intersections of function types. Fix the annotation; do not loosen to `--!nonstrict` |
+| **0.740** | Fixed an internal error on exceptionally large types ("Internal recursion counter limit exceeded in ReferenceCountInitializer") | If huge generated types used to crash the type checker, this was it |
+| **0.740** | VM: OOM during table re-hash or freeze no longer leaves the table in a bad state; A64 array-iteration fast path in `FORGLOOP`; faster `string.split`; x64 register-allocation spill fix | Internals, no edit. The `FORGLOOP` fast path is in native-code lowering, so it only touches `--!native` code compiled for ARM64 — not ordinary interpreted loops |
 
-**Experimental, and NOT usable in Roblox:** the **Classes** RFC prototype and **`if local`** exist
-only behind `DebugLuau*` fast-flags in the open-source Luau repo — `if local` **statements** landed
-in 0.737 and **`if local` expressions** were added in **0.739**, where the release notes call them
-"behind an experimental flag", "likely to change", and say to "treat it as unstable". 0.738 adds two
-more prototypes of the same kind — **`coroutine.finally`** (RFC #187, VM side only) and an
-experiment that would **require top-level functions to be annotated**.
+**Experimental, and NOT usable in Roblox** — checked 2026-10-01 against the 0.740 source and
+Studio's published client settings (`clientsettingscdn.roblox.com/v2/settings/application/PCStudioApp`
+and `MacStudioApp`, ~25,000 flags each). None of the flags below is set there, and a Luau
+`FASTFLAGVARIABLE` defaults to **off**:
+
+| Prototype | Gate in 0.740 | Notes |
+|---|---|---|
+| **`if local`** statements (0.737) and expressions (0.739) | `LuauExperimentalIfLocalSyntax` / `LuauExperimentalIfLocalAnalysis` | **Renamed in 0.740** from `DebugLuauIfLocal*`. The release note says it is "still experimental but is moving closer to a full release". The drop of the `Debug` prefix is a sign of that progress, **not** of availability |
+| **Exact tables by default** — `{ x: number }` rejects extra fields, `{ x: number, ... }` allows them (RFC luau-lang/rfcs#11), 0.740 | `DebugLuauParseExactTables`, `DebugLuauExactTableTypes` | The release note calls it "an experimental feature". Do not write `...` in a table type for Roblox |
+| **Classes** RFC prototype | `DebugLuauUserDefinedClasses` | |
+| **`coroutine.finally`** (RFC #187), 0.738 | `DebugLuauCoroutineFinally` | VM side only |
+| Require top-level functions to be annotated, 0.738 | `DebugLuauWarnOnUnannotatedTopLevelFunctions` | A lint experiment |
+| An **`integer`** library (`integer.idiv` was fixed in 0.740) | `LuauIntegerLibrary` | Present in the open-source VM since at least 0.737, not enabled in Studio. Not a Roblox API |
 
 **None of these are enabled in Roblox Studio.** Do not write them into game code, and do not tell a
 user they can — an `if local` expression is exactly the kind of thing that looks like a shipped
-feature in a release note and errors in Studio.
+feature in a release note and errors in Studio. A flag losing its `Debug` prefix is the thing to
+watch; a flag appearing **set** in Studio's published settings is the thing that changes this advice.
 
-There is **NO new standard-library function in 0.736–0.739**; if a user asks "what new Luau methods
+There is **NO new standard-library function in 0.736–0.740**; if a user asks "what new Luau methods
 can we use", the honest answer for this window is *none* — the changes are inference, VM internals,
 and flag-gated prototypes.
 
