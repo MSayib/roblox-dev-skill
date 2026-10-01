@@ -32,7 +32,8 @@ computation. More objects = more draw calls = lower frame rate.
 - **Anchor all static parts** — unanchored parts incur physics simulation cost every frame
 - **Merge decorative geometry** — combine small decorative parts into single MeshParts
 - **Reduce mechanism complexity** — minimize constraints/joints in assemblies
-- **Set `Model.LevelOfDetail`** to `Enum.ModelLevelOfDetail.SLIM` for distant models
+- **Set `Model.LevelOfDetail`** to `Enum.ModelLevelOfDetail.SLIM` for distant models (in Studio's
+  Properties window or a plugin — it is `PluginSecurity`)
 - **Cull distant objects** — only spawn NPCs when users are nearby; despawn when out of range
 
 **Draw call instancing**: Roblox collapses identical meshes into a single draw call when
@@ -111,7 +112,8 @@ Higher fidelity = more memory and computation.
 > **The gate moved rather than vanished.** 0.740 also attaches `Capabilities.Write:
 > ["PluginOrOpenCloud"]` to each relaxed member. Capabilities only apply inside a **sandboxed
 > container**, which is experimental and opt-in (`Workspace.SandboxedInstanceMode` must be set to
-> `Experimental`, and the container marked `Sandboxed`) — so in a default experience this does not
+> `Experimental` in the Properties window — it is `NotScriptable` — and the container marked
+> `Sandboxed`) — so in a default experience this does not
 > affect you. `PluginOrOpenCloud` is **not listed on the public Script capabilities page**, so if
 > you do use sandboxing, test the write rather than trusting this table.
 
@@ -148,8 +150,10 @@ Per docs: *"Handling shadows is an expensive process."*
 
 - Set `MeshPart.RenderFidelity` to `Automatic` or `Performance` — allows engine to use
   lower-poly alternatives at distance
-- Set `Model.LevelOfDetail` to `SLIM` for distant model representations
-- Enable `Workspace.EnableSLIMAvatars` for optimized distant avatar rendering
+- Set `Model.LevelOfDetail` to `SLIM` for distant model representations (`PluginSecurity`:
+  set it in Studio's Properties window or from a plugin, not from a game Script)
+- Enable `Workspace.EnableSLIMAvatars` for optimized distant avatar rendering — a Properties-window
+  setting (`Enum.RolloutState`); it is `NotScriptable`, so no script can set it
 
 ### Transparency Overdraw
 
@@ -666,8 +670,9 @@ Players.PlayerRemoving:Connect(function(player)
     end
 end)
 
--- MODERN: set Workspace.PlayerCharacterDestroyBehavior = Enabled
--- The engine automatically destroys player characters on leave
+-- MODERN: in Studio, set Workspace > PlayerCharacterDestroyBehavior to Enabled in the
+-- Properties window. It is NotScriptable: no script (MCP execute_luau included) can set it.
+-- The engine then destroys player characters on leave
 ```
 
 ### RunService.Heartbeat for Game Loops → Selective Use

@@ -30,7 +30,7 @@
 | `RunService.Heartbeat` | `RunService.PostSimulation` | Same behavior, clearer name | 2024 |
 | `RunService.RenderStepped` | `RunService.PreRender` | Same behavior, clearer name | 2024 |
 | `LocalizationService:GetTranslatorForPlayer()` | `:GetTranslatorForPlayerAsync()` | ⚠️ Mostly | Deprecated in engine **0.740**. The async form **yields** — wrap it or call it off the critical path |
-| `CallingService:CreateCall()` | `:CreateCallAsync()` | ❌ No | Renamed in 0.739 and now yields. Note the Roblox Connect calling APIs were sunset July 15, 2026 |
+| `CallingService:CreateCall()` | `:CreateCallAsync()` | — | Renamed in 0.739 and now yields — but **both are `RobloxScriptSecurity`**, as is every `CallingService` member since the class appeared in 0.737, so no game script could ever call either and there is nothing to migrate. The Roblox Connect calling APIs were sunset July 15, 2026 |
 
 ---
 
@@ -269,8 +269,38 @@ failure recovery. Data loss is irreversible.
 |--------|------|-----------------|
 | `Accoutrement` state props/methods removed | Mid-June | Remove usage if any |
 | `AdService` / `AdGui` signals removed | Mid-June | Migrate to current ad APIs |
-| Input Action System (IAS) full release | June 11 | `Workspace.PlayerScriptsUseInputActionSystem`. See `references/project-structure.md` |
+| Input Action System (IAS) full release | June 11 | `Workspace.PlayerScriptsUseInputActionSystem` — a Studio Properties-window setting; it is `NotScriptable`, so no script (MCP `execute_luau` included) can read or set it. See `references/project-structure.md` |
 | Roblox Connect calling APIs **SUNSET** | **July 15** | Remove usage before deadline |
+
+### October 2026 — engine 0.741.19.7411056 (ingested 2026-10-01)
+
+Derived by diffing the **0.740 and 0.741 Full API Dumps locally** with
+`tools/robloxdocs/diff-api-dumps.py`, cross-checked by a second, independent all-fields diff, on
+2026-10-01. **931 classes (+7, 0 removed), 641 enums (+6), 260 services, 48 deprecated.** No
+removals, no new deprecations, no `Capabilities` changes. Luau 0.740 (2026-09-25) — see
+`luau-fundamentals.md`. Runtime facts marked *(Studio)* were read in Studio 0.741.19.7411056.
+
+| Change | Action Required |
+|--------|-----------------|
+| `+Player:GetFriendsInServerAsync()` — `Security: None`, **Yields**, no parameters, returns an `Array`; `Capabilities: Players, Social` | New and usable. **Not yet on the official `Player` page** (checked 2026-10-01), so the shape of each array element is undocumented — print one result in Studio before writing code that indexes its fields, and do not guess them. It yields, so keep it off a hot path |
+| `Enum.GradientType` +`Elliptical` (Value 3) — exists at runtime *(Studio)* | New `UIGradient.Type` option. The official enum page still documents only `Linear` and `Radial`, so how `Offset`/`Rotation` affect it is undocumented — check it visually before relying on it |
+| `+TestService.Enabled` (bool, `ReadOnly`) — reads `false` in an edit session *(Studio)* | Read-only; nothing to migrate |
+| `+BackendReplicatedStorage`, `+BackendServerScriptService`, `+BackendServerStorage` — services with **zero members**, `NotCreatable`, no docs page | Nothing to call and nothing documented. Do not put scripts or assets in them on the strength of their names |
+| `Decal.LocalizedTextureContent`, `ImageLabel.LocalizedImageContent`, `ImageButton.LocalizedImageContent`: `Write` → `NotAccessibleSecurity`, `ReadOnly` tag dropped | No action. `Read` is still `RobloxScriptSecurity`, so game code could not read these before 0.741 and still cannot |
+| Roblox-internal additions — `RobloxScriptSecurity` / `RobloxSecurity`, not callable by you: `FriendsCallingInstance` / `FriendsCallingParticipant` (+5 `FriendsCalling*` enums), `ProjectService`, `AssetService` `CreateTextContentAsync` / `ReadTextContentAsync`, `NotificationService` topic subscription, `ScriptEditorService` `OpenStringValueDocumentAsync`; 15 `StarterPlayer.GameSettings*` properties **removed** (all were `RobloxScriptSecurity`) | Ignore for game code. `TextDocument` is new too: `NotBrowsable`, its one property `PluginSecurity` |
+
+> **Corrections to the older rows below, found by the 0.741 prose audit.** Until 0.741 the audit
+> checked code blocks only, never prose or tables, and several rows here listed members as usable
+> that the very dump each row was derived from marked `RobloxScriptSecurity` (or `NotScriptable`).
+> All were wrong on the day they were written; none is a 0.741 change. Each row is now corrected in
+> place: `CallingService` (every member, so the 0.739 `CreateCall` → `CreateCallAsync` "rename" is not
+> a migration any game has to do), `AnimatedImageService` / `AnimatedImage`, `MomentsService`,
+> `PinShortcutService`, `Decal.LocalizedTextureContent`, `ExternalIdentityService`,
+> `UGCValidationService` post-deformation sizing, `Terrain` transform-subregion slots,
+> `TextChannel.IsDefaultTextChannel`, `StateMachineTransitionDefinition.TransitionId`,
+> `WorldRoot.PhysicsStepTime`, the deprecated `DataModel.IsPioneerBuild` / `PioneerSource`, and the
+> `NotScriptable` `Workspace.UseInputSink`. If an older copy of this file is in your context, the
+> rows here win.
 
 ### September 2026 — engine 0.740.19.7400931 (ingested 2026-09-25)
 
@@ -287,7 +317,7 @@ window where the dump got smaller.
 | `TriangleMeshPart.CollisionFidelity` / `.FluidFidelity` and `PartOperation.RenderFidelity` / `.SmoothingAngle`: `Security.Write` **`PluginSecurity` → `None`** | **Newly script-writable at runtime.** Before 0.740 an ordinary Script could not set these. **`MeshPart.RenderFidelity` was NOT relaxed** and stays `PluginSecurity`. Each relaxed member gains `Capabilities.Write: ["PluginOrOpenCloud"]`, which only applies inside an opt-in sandboxed container. See `performance-optimization.md` §3 |
 | `Lighting.LightingStyle` (enum `Realistic`/`Soft`) and `Lighting.PrioritizeLightingQuality` (bool): `Security.Write` **`RobloxScriptSecurity` → `None`** | Both are now developer-settable from a script, having been Roblox-internal. Same `Capabilities.Write: ["PluginOrOpenCloud"]` caveat |
 | `+TeleportOptions.ReservedServerId`, `+TeleportOptions.VipServerId`; `Enum.TeleportMethod` +`TeleportSwitchServer` | New public teleport targeting fields. The matching `TeleportService:TeleportSwitchServer()` is **`RobloxScriptSecurity`** — you cannot call it, so do not build on it |
-| `WorldRoot.PhysicsStepTime` gained the **`ReadOnly`** tag | Any code assigning to it was already wrong and is now explicitly rejected |
+| `WorldRoot.PhysicsStepTime` gained the **`ReadOnly`** tag | No action. It is `RobloxScriptSecurity` for both read and write, so game code could never touch it in the first place |
 | `+AudioTextToSpeech.AutoLocalize`, `+InputAction.DisplayName` | New public properties; `DisplayName` is useful for IAS rebinding UI (see `project-structure.md`) |
 | `+WrapTextureTransfer:PrepareProjectionMeshDataAsync()` (Yields, no security) | New public LC/UGC mesh-projection helper |
 | `+CaptureService:StartVideoCaptureForMCPAsync()` / `:StopVideoCaptureForMCP()` | **`RobloxScriptSecurity` — not callable by you.** Listed only because the name suggests Studio MCP is growing a video-capture path; it is not an API you can use, and no MCP tool exposes it today |
@@ -300,12 +330,12 @@ Derived by diffing the **0.738 and 0.739 Full API Dumps locally** (`python3` ove
 
 | Change | Action Required |
 |--------|-----------------|
-| `CallingService.CreateCall` **RENAMED** to `CreateCallAsync` (now **Yields**) | Breaking change for any code invoking `CreateCall`. Update callers to `CreateCallAsync` and handle yielding |
-| `+UGCValidationService:GetLayeredClothingPostDeformationSizeAsync()` (Yields) | New LC/UGC validation method for post-deformation bounding checks |
-| `+StateMachineTransitionDefinition` (`From`, `To`, `Priority`, `TransitionId`) | New class for state machine animation graphs |
-| `+Terrain:SetMaterialInTransformSubregionSlot()`, `:ReplaceMaterialInTransformSubregionSlot()` | New voxel terrain transformation methods |
-| `+ChatWindowConfiguration.TextChannelDisplayMode`, `+TextChannel.IsDefaultTextChannel` (Hidden) | New chat window display configuration knobs |
-| New classes: `+AdPlacement`, `+ExternalIdentityService`, `+QueueService`, `+StandardQueue` | Engine additions; check documentation before building on new queue or ad services |
+| `CallingService.CreateCall` **RENAMED** to `CreateCallAsync` (now **Yields**) | No action for game code: both names are **`RobloxScriptSecurity`**, so no Script could ever call either. Recorded for completeness only |
+| `+UGCValidationService:GetLayeredClothingPostDeformationSizeAsync()` (Yields) | **`RobloxScriptSecurity` — not callable by you.** Roblox-internal UGC validation |
+| `+StateMachineTransitionDefinition` (`From`, `To`, `Priority`, `TransitionId`) | New class for state machine animation graphs. `From` / `To` / `Priority` are public; `TransitionId` is `RobloxScriptSecurity` (not readable by game code) |
+| `+Terrain:SetMaterialInTransformSubregionSlot()`, `:ReplaceMaterialInTransformSubregionSlot()` | **`RobloxScriptSecurity` — not callable by you.** Roblox-internal terrain tooling |
+| `+ChatWindowConfiguration.TextChannelDisplayMode`, `+TextChannel.IsDefaultTextChannel` (Hidden) | `TextChannelDisplayMode` is a public chat-window knob. `IsDefaultTextChannel` is `RobloxScriptSecurity` — not readable by game code |
+| New classes: `+AdPlacement`, `+ExternalIdentityService`, `+QueueService`, `+StandardQueue` | `AdPlacement`, `QueueService:GetStandardQueue()` and `StandardQueue` (`PublishAsync`, `SubscribeAsync`, `BatchCommitAsync`) are public — check their documentation before building on them. Every `ExternalIdentityService` member is `RobloxScriptSecurity` — not callable by you |
 | Enums: `+AnimationNodeBlendMode`, `+QueueDecision`, `+TextChannelDisplayMode`; `AnimationNodeType` +`OneShotNode`, +`StateMachineNode`; `PromptCreateOutfitResult` +`UGCValidationFailed` | New enum members and categories |
 
 ### September 2026 — engine 0.738 (2026-09-11)
@@ -317,11 +347,12 @@ Derived by diffing the **0.737 and 0.738 Full API Dumps locally** (`python3` ove
 |--------|-----------------|
 | `GuiObject:TweenPosition()`, `:TweenSize()`, `:TweenSizeAndPosition()` and `GuiObject.Transparency` newly **Deprecated** | Use `TweenService:Create()` on `Position`/`Size`, and `BackgroundTransparency`/`TextTransparency` etc. Grep for `:TweenPosition(` / `:TweenSize(` — Starship had 0 call sites on 2026-09-12 |
 | `DataModelPatchService` **REMOVED** (`GetLuaVersion`, `GetPatch`, `RegisterPatch`, `UpdatePatch`) | Nothing to do unless you called it; it was `NotBrowsable` and lived one release |
-| `+AnimatedImageService` (`GetTrack`, `Prewarm`, `UnloadTracks`, `GetFrameNames`, `GetTracksChanged`), `+AnimatedImage` GuiBase (`Content`, `PlaybackSpeed`, `Pause`, `Resume`), `+AnimatedImageTrack`, enums `AnimatedImagePlaybackState` / `AnimatedImageScaleType` | New: engine-native animated images. `AnimatedImage` is `NotCreatable` in this dump — read the docs before designing on it |
+| `+AnimatedImageService` (`GetTrack`, `Prewarm`, `UnloadTracks`, `GetFrameNames`, `GetTracksChanged`), `+AnimatedImage` GuiBase (`Content`, `PlaybackSpeed`, `Pause`, `Resume`), `+AnimatedImageTrack`, enums `AnimatedImagePlaybackState` / `AnimatedImageScaleType` | **Not usable from game code.** Every listed `AnimatedImageService` and `AnimatedImage` member is `RobloxScriptSecurity` (and `AnimatedImage` is `NotCreatable`), so there is nothing a Script can call yet. An earlier version of this row called it "new" without saying so |
 | `+RunService:BindToAnimation()` | New, no docs page yet — treat as unstable |
 | `+Workspace.StreamingAdaptiveRadius` | New streaming knob; check the property page before touching streaming tuning |
 | `+TextChannel.AddPlayersOnJoin` | New; relevant to any custom `TextChatService` channel setup |
-| `+MomentsService` (`CreatePostAsync`, `GenerateMomentTextAsync`, `CheckMomentTextStatusAsync`), `+PinShortcutService` members, `+Folder.IconTint`, `+Decal.LocalizedTextureContent` (read-only), `+AnimationImportData.VersionedAssetId` / `.ForceNewVersion`, `+ScriptService:ResolveModulePath()` | New public surface, none required for existing code |
+| `+Folder.IconTint`, `+AnimationImportData.VersionedAssetId` / `.ForceNewVersion`, `+ScriptService:ResolveModulePath()` | New public surface, none required for existing code |
+| `+MomentsService` (`CreatePostAsync`, `GenerateMomentTextAsync`, `CheckMomentTextStatusAsync`), `+PinShortcutService` (all six members), `+Decal.LocalizedTextureContent` | **`RobloxScriptSecurity` — not callable or readable by you.** An earlier version of this row listed them as "new public surface" |
 
 ### September 2026 — engine 0.737
 
@@ -332,10 +363,11 @@ each row is checkable with `jq` against `~/RobloxDocs/RobloxAPI/dumps/`.
 |--------|-----------------|
 | `GeometryService:CreateSolidPrimitive()` **REMOVED**, replaced by `GeometryService:CreateBasicMeshPart()` | Rewrite call sites. The enum went with it: `SolidPrimitiveType` was removed and `BasicMeshPartShape` added |
 | `PlayerControlState` **RENAMED** to `ControlState` | Rename references. Verified a pure rename — the member lists are identical, and both are `NotBrowsable` |
-| `DataModel.IsPioneerBuild` / `DataModel.PioneerSource` newly **deprecated** | Stop reading them |
-| `+CallingService` (`CreateCall`, `AnswerIncomingCall`, `EndCall`, `GetCallingState`, `OnCallingStateChange`, `OnCallingRemoved`) | New; note the July 15 Roblox Connect sunset above is a *different*, older API |
+| `DataModel.IsPioneerBuild` / `DataModel.PioneerSource` newly **deprecated** | No action: both are `RobloxScriptSecurity`, so game code could never read them |
+| `+CallingService` (`CreateCall`, `AnswerIncomingCall`, `EndCall`, `GetCallingState`, `OnCallingStateChange`, `OnCallingRemoved`) | **Every member is `RobloxScriptSecurity` — not callable by you.** The July 15 Roblox Connect sunset above is a *different*, older API |
 | `+WrapContentProvider` | Service exists but exposes **no members yet** — nothing to call |
-| `+AssetService:PromptCreatePlatformContentAsync()`, `+WrapTarget:CreateTextureInCageSpaceAsync()` / `:CreateTextureInTargetSpaceAsync()`, `+TextChannelWindow.FontFace` / `.UseDefaultFont`, `+Workspace.UseInputSink` | New public surface |
+| `+AssetService:PromptCreatePlatformContentAsync()`, `+WrapTarget:CreateTextureInCageSpaceAsync()` / `:CreateTextureInTargetSpaceAsync()`, `+TextChannelWindow.FontFace` / `.UseDefaultFont` | New public surface |
+| `+Workspace.UseInputSink` (`Enum.RolloutState`) | A Studio Properties-window setting: it is `NotScriptable`, so no script — MCP `execute_luau` included — can read or set it |
 
 > **`PlayerControlState` is a cautionary tale about writing against brand-new APIs.** It first
 > appeared in 0.735 and was gone by 0.737 — two weeks. An API that is `NotBrowsable` and days old is
@@ -365,7 +397,7 @@ end)
 |-----------|------------------|
 | Game Passes | `MarketplaceService:UserOwnsGamePassAsync(player.UserId, passId)` |
 | Badges | `BadgeService:UserHasBadgeAsync(player.UserId, badgeId)` |
-| Avatar items | `AvatarEditorService:GetItemDetails()` or Open Cloud Inventory API |
+| Avatar items | Open Cloud Inventory API for a server-side check. `AvatarEditorService:GetItemDetailsAsync()` returns an `Owned` field, but per the official page it describes the **current user** only — a client-side answer about the local player, so never trust it to grant anything. (Its non-Async form `GetItemDetails()` is deprecated) |
 | Generic assets | Open Cloud `GET /cloud/v2/users/{userId}/inventory-items` |
 
 **Migration**: Use the new Economy API endpoints for asset ownership checks.

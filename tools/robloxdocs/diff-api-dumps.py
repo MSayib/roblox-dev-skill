@@ -9,6 +9,7 @@ Reports, with developer-visible changes triaged ahead of internal ones:
   * added / removed classes and enums
   * added / removed members
   * changed Security, Capabilities, Tags (Deprecated!, ReadOnly) and signatures
+  * class-level Tags and Superclass; enum Tags; enum item Tags and Values
   * optional grep-back: which skill reference files mention each changed identifier
 
 Usage:
@@ -58,6 +59,8 @@ def developer_visible(entry):
             return True
     if entry.get('kind') in ('class_removed', 'enum_removed', 'enum_item_removed'):
         return True
+    if entry.get('class_level'):   # rare, and a whole class or enum changing is never noise
+        return True
     if 'Deprecated' in str(entry.get('tags_gained', '')):
         return True
     if entry.get('security') in (None, 'None') or entry.get('security') == ('None', 'None'):
@@ -79,6 +82,17 @@ def diff(old, new):
         ev.append(dict(kind='class_removed', target=n, detail='REMOVED'))
 
     for cn in sorted(set(oc) & set(nc)):
+        # Class-level metadata. Until 0.741 only members were compared, so a whole class turning
+        # Deprecated, or being re-parented, would have produced no event at all.
+        if oc[cn].get('Superclass') != nc[cn].get('Superclass'):
+            ev.append(dict(kind='class_superclass_changed', target=cn,
+                           detail=f"super {oc[cn].get('Superclass')} -> {nc[cn].get('Superclass')}",
+                           class_level=True))
+        cta, ctb = norm_tags(oc[cn]), norm_tags(nc[cn])
+        if cta != ctb:
+            ev.append(dict(kind='class_tags_changed', target=cn,
+                           detail=f'class tags +{sorted(ctb - cta)} -{sorted(cta - ctb)}',
+                           tags_gained=sorted(ctb - cta), class_level=True))
         om = {m['Name']: m for m in oc[cn].get('Members', [])}
         nm = {m['Name']: m for m in nc[cn].get('Members', [])}
         for k in sorted(set(nm) - set(om)):
@@ -119,8 +133,25 @@ def diff(old, new):
     for n in sorted(set(oe) - set(ne)):
         ev.append(dict(kind='enum_removed', target=f'Enum.{n}', detail='REMOVED'))
     for n in sorted(set(oe) & set(ne)):
-        a = {i['Name'] for i in oe[n].get('Items', [])}
-        b = {i['Name'] for i in ne[n].get('Items', [])}
+        eta, etb = norm_tags(oe[n]), norm_tags(ne[n])
+        if eta != etb:
+            ev.append(dict(kind='enum_tags_changed', target=f'Enum.{n}',
+                           detail=f'enum tags +{sorted(etb - eta)} -{sorted(eta - etb)}',
+                           tags_gained=sorted(etb - eta), class_level=True))
+        oi = {i['Name']: i for i in oe[n].get('Items', [])}
+        ni = {i['Name']: i for i in ne[n].get('Items', [])}
+        for k in sorted(set(oi) & set(ni)):
+            ia, ib = norm_tags(oi[k]), norm_tags(ni[k])
+            if ia != ib:
+                ev.append(dict(kind='enum_item_tags_changed', target=f'Enum.{n}.{k}',
+                               detail=f'item tags +{sorted(ib - ia)} -{sorted(ia - ib)}',
+                               tags_gained=sorted(ib - ia), class_level=True))
+            if oi[k].get('Value') != ni[k].get('Value'):
+                ev.append(dict(kind='enum_item_value_changed', target=f'Enum.{n}.{k}',
+                               detail=f"value {oi[k].get('Value')} -> {ni[k].get('Value')}",
+                               class_level=True))
+        a = set(oi)
+        b = set(ni)
         if a != b:
             if b - a:
                 ev.append(dict(kind='enum_item_added', target=f'Enum.{n}', detail=f'+{sorted(b - a)}'))
@@ -129,10 +160,66 @@ def diff(old, new):
     return ev
 
 
-def grep_back(events, refdir):
+def word(name, flags=0):
+    return re.compile(r'(?<![A-Za-z0-9_])' + re.escape(name) + r'(?![A-Za-z0-9_])', flags)
+
+
+def class_families(*dumps):
+    """For every class: itself, its ancestors and its descendants, across all given dumps."""
+    parent = {}
+    for d in dumps:
+        for c in d['Classes']:
+            parent[c['Name']] = c.get('Superclass')
+    children = collections.defaultdict(set)
+    for n, p in parent.items():
+        children[p].add(n)
+    fam = {}
+    for n in parent:
+        f, p = {n}, parent.get(n)
+        while p and p in parent and p not in f:
+            f.add(p); p = parent.get(p)
+        stack = [n]
+        while stack:
+            for ch in children.get(stack.pop(), ()):
+                if ch not in f:
+                    f.add(ch); stack.append(ch)
+        fam[n] = f
+    return parent, children, fam
+
+
+def member_reach(dumps, children):
+    """How many classes expose each member name, inherited members included. Instance.Name is
+    defined three times but reaches every class -- that is what makes a bare name ambiguous."""
+    defined = collections.defaultdict(set)
+    for d in dumps:
+        for c in d['Classes']:
+            for m in c.get('Members', []):
+                defined[m['Name']].add(c['Name'])
+    reach = {}
+    for name, owners in defined.items():
+        seen, stack = set(owners), list(owners)
+        while stack:
+            for ch in children.get(stack.pop(), ()):
+                if ch not in seen:
+                    seen.add(ch); stack.append(ch)
+        reach[name] = len(seen)
+    return reach
+
+
+AMBIGUOUS_REACH = 5
+
+
+def grep_back(events, refdir, dumps=()):
     """Which reference files mention each changed identifier? This is the step that closes the
     loop between 'the API changed' and 'our docs talk about it'. Pure Python, so it also works
-    on Windows where there is no grep."""
+    on Windows where there is no grep.
+
+    A bare substring test reported TestService.Enabled (0.741) as mentioned in six files that
+    never name TestService -- 'Enabled' is on 47 classes. So: whole words only, and when the member
+    name is ambiguous (reaches more than AMBIGUOUS_REACH classes, or is a plain single word like
+    'Enabled'/'Volume'), the file must also name the owning class or a relative of it. A
+    distinctive name such as CollisionFidelity still matches on its own, which is how
+    `part.CollisionFidelity` was found in 0.740."""
     if not refdir or not os.path.isdir(refdir):
         return
     texts = {}
@@ -140,11 +227,26 @@ def grep_back(events, refdir):
         if name.endswith('.md'):
             with open(os.path.join(refdir, name), encoding='utf-8', errors='replace') as f:
                 texts[name] = f.read()
+    _, children, fam = class_families(*dumps) if dumps else ({}, {}, {})
+    reach = member_reach(dumps, children) if dumps else {}
     for e in events:
-        leaf = e['target'].split('.')[-1]
+        parts = e['target'].split('.')
+        leaf = parts[-1]
         if len(leaf) < 4:
             continue
-        hits = [name for name, text in texts.items() if leaf in text]
+        pat = word(leaf)
+        hits = [name for name, text in texts.items() if pat.search(text)]
+        is_member = len(parts) == 2 and parts[0] != 'Enum'
+        if hits and is_member and fam:
+            single_word = not re.search(r'[a-z0-9][A-Z]', leaf)
+            if single_word or reach.get(leaf, 0) > AMBIGUOUS_REACH:
+                # Object and Instance are ancestors of everything -- and 'object' is ordinary prose.
+                kin = [word(n, re.IGNORECASE) for n in sorted(fam.get(parts[0], {parts[0]}))
+                       if n not in ('Object', 'Instance')]
+                hits = [name for name in hits if any(k.search(texts[name]) for k in kin)]
+        if hits and len(parts) == 3 and parts[0] == 'Enum':   # an item: 'Failed' alone is prose
+            enum_name = word(parts[1])
+            hits = [name for name in hits if enum_name.search(texts[name])]
         if hits:
             e['mentioned_in'] = hits
 
@@ -167,8 +269,9 @@ def main():
         sys.exit(__doc__)
 
     oldp, newp = rest
-    events = diff(load(oldp), load(newp))
-    grep_back(events, refdir)
+    old, new = load(oldp), load(newp)
+    events = diff(old, new)
+    grep_back(events, refdir, (old, new))
 
     vis = [e for e in events if developer_visible(e)]
     internal = [e for e in events if not developer_visible(e)]

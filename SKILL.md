@@ -17,9 +17,9 @@ Expert development companion for building Roblox experiences with Luau. Grounded
 official Roblox documentation (https://create.roblox.com/docs), the Luau language spec
 (https://luau.org), and the Roblox Lua Style Guide (https://roblox.github.io/lua-style-guide/).
 
-> **Engine**: Roblox Studio **0.740.19.7400931** with **Luau 0.739** (released 2026-09-18) —
-> dump downloaded, re-split, and diffed against 0.739 on **2026-09-25**. 924 classes / 635 enums /
-> 258 services / 48 deprecated.
+> **Engine**: Roblox Studio **0.741.19.7411056** with **Luau 0.740** (released 2026-09-25) —
+> dump downloaded, re-split, and diffed against 0.740 on **2026-10-01**. 931 classes / 641 enums /
+> 260 services / 48 deprecated.
 >
 > Roblox ships roughly weekly, so this line is stale by design — never quote it as today's version.
 > Re-derive it instead:
@@ -153,10 +153,10 @@ Documentation Lookup workflow below.
 **Always check local files first** — they are pre-split, far cheaper to read than the full dump, and
 require no network. If `~/RobloxDocs/RobloxAPI/` exists, use it.
 
-**How much cheaper, re-measured 2026-09-25 on 0.740.19.7400931** (an earlier "845× smaller" figure
+**How much cheaper, re-measured 2026-10-01 on 0.741.19.7411056** (an earlier "845× smaller" figure
 was not reproducible from any measurement, so here are the real numbers and the command that
-produced them): the full dump is **8,314,613 bytes**; the 924 split class files run **101 B min,
-2,050 B median, 4,795 B mean, 104,594 B max**. So a typical class lookup reads about **0.02%** of
+produced them): the full dump is **8,356,896 bytes**; the 931 split class files run **101 B min,
+2,054 B median, 4,782 B mean, 104,956 B max**. So a typical class lookup reads about **0.02%** of
 the dump, and even the largest class reads under **1.3%** of it. Re-measure with:
 
 ```bash
@@ -170,7 +170,7 @@ print('dump', os.path.getsize(os.path.realpath(d+'/dumps/latest.json')), 'B | n'
 ```
 
 ```bash
-# Look up a specific class (~2 KB median vs the 8.2 MB full dump — see measurement above)
+# Look up a specific class (~2 KB median vs the 8.4 MB full dump — see measurement above)
 cat ~/RobloxDocs/RobloxAPI/classes/<ClassName>.json
 
 # Query a specific property/method (jq if installed; the python3 form works everywhere)
@@ -194,15 +194,15 @@ grep -l '"<PropertyName>"' ~/RobloxDocs/RobloxAPI/classes/*.json
 ```bash
 # Check when local data was last updated
 cat ~/RobloxDocs/RobloxAPI/.current-version
-# → {"version":"0.740.19.7400931","platform":"MacStudio","platformVersion":"0.740.19.7400931",
-#    "winHash":"version-c792f79abddd41bd","updatedAt":"2026-09-25T03:21:52Z"}
+# → {"version":"0.741.19.7411056","platform":"MacStudio","platformVersion":"0.741.19.7411056",
+#    "winHash":"version-76e1a02649ad4f35","updatedAt":"2026-10-01T03:41:12Z","checkedAt":"2026-10-01T03:41:12Z"}
 ```
 
-> **Read whichever timestamp is present: `updatedAt` OR `checkedAt`.** The monitor script writes
-> **`updatedAt`** when it actually downloads a new dump and **`checkedAt`** when it finds you are
-> already current — so a freshly-downloaded file has **no `checkedAt` field at all**. Earlier
-> versions of this file told the agent to read `checkedAt`, which silently finds nothing right
-> after an update.
+> **Read whichever timestamp is present: `updatedAt` OR `checkedAt`.** `updatedAt` is when a dump
+> was last downloaded; `checkedAt` is when the version was last checked. The current monitor
+> (skill 2.12.0+) always writes both, but the older zsh script wrote **only `updatedAt`** after a
+> download — so an install that has not refreshed its tools may lack `checkedAt` entirely. Earlier
+> versions of this file told the agent to read `checkedAt`, which silently found nothing there.
 
 If that timestamp is older than 7 days, or a class/member is not found locally, **proceed with the
 live web fallback below and tell the user the local dump looks stale.** Offer to refresh it:

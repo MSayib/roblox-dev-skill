@@ -413,7 +413,8 @@ security risks, as they can contain malicious scripts called backdoors."*
   > ⚠️ **`Sandboxed = true` does nothing on its own.** Script capabilities are **experimental and
   > available as a client beta** (official docs, read 2026-09-25), and the whole system is **off by
   > default**. You must first change `Workspace.SandboxedInstanceMode` from `Default` to
-  > `Experimental`; only then does marking a `Model` / `Folder` / `Script` as `Sandboxed` constrain
+  > `Experimental` in the Properties window — it is `NotScriptable`, so no script can flip it (unlike
+  > `Sandboxed` and `Capabilities`, which a script can set); only then does marking a `Model` / `Folder` / `Script` as `Sandboxed` constrain
   > anything. An earlier version of this file gave the advice without the prerequisite, which reads
   > as protection you do not actually have.
   >

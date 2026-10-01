@@ -1,6 +1,6 @@
 {
   "skill_name": "roblox-dev-skill",
-  "version": "2.13.1",
+  "version": "2.14.0",
   "evals": [
     {
       "id": 1,
@@ -280,7 +280,7 @@
       "expected_references": [
         "security-hardening.md"
       ],
-      "notes": "Sandboxed alone does nothing: script capabilities are experimental/client beta and off by default. Correct answer states the Workspace.SandboxedInstanceMode = Experimental prerequisite before claiming any protection, and still advises reading the model's scripts."
+      "notes": "Sandboxed alone does nothing: script capabilities are experimental/client beta and off by default. Correct answer states the Workspace.SandboxedInstanceMode = Experimental prerequisite before claiming any protection, and still advises reading the model's scripts. The prerequisite is a Properties-window change: SandboxedInstanceMode is NotScriptable, so the answer must not offer a script line that sets it (Sandboxed and Capabilities themselves ARE scriptable)."
     },
     {
       "id": 35,
@@ -316,7 +316,7 @@
       "expected_references": [
         "project-structure.md"
       ],
-      "notes": "workspace.PlayerScriptsUseInputActionSystem is an Enum.RolloutState, not a boolean. Correct answer assigns Enum.RolloutState.Enabled; `= true` is a type error."
+      "notes": "workspace.PlayerScriptsUseInputActionSystem is NotScriptable: NO script can read or set it -- not a game Script, a plugin, the command bar, or MCP execute_luau (Studio 0.741 reports 'is not a valid member of Workspace'). Correct answer says it cannot be done from a script and tells the user to set it to Enabled in Workspace's Properties window; its type is Enum.RolloutState, not a boolean. FAILS if it writes `= true` OR `= Enum.RolloutState.Enabled` as working code -- the second was this skill's own 2.12.0 'fix', still unrunnable."
     },
     {
       "id": 39,
@@ -347,6 +347,60 @@
         "agent-safety.md"
       ],
       "notes": "Legitimately needs PluginSecurity APIs (ScriptEditorService:UpdateSourceAsync, ChangeHistoryService:TryBeginRecording/FinishRecording). Correct answer does NOT warn these are unavailable — in a plugin they are. Guards against over-correcting the security-gating lesson into refusing valid plugin work."
+    },
+    {
+      "id": 42,
+      "prompt": "Use Player:GetFriendsInServerAsync to show a list of my friends who are in this server, with their display names",
+      "should_trigger": true,
+      "expected_references": [
+        "legacy-migration.md"
+      ],
+      "notes": "Added in engine 0.741: Security None, Yields, no parameters, returns an Array. Not yet on the official Player page (2026-10-01), so the element shape is undocumented. Correct answer uses it but does NOT invent element field names as fact -- it prints one result in Studio first (or says the fields must be checked) -- and keeps the yielding call off a hot path."
+    },
+    {
+      "id": 43,
+      "prompt": "Migrate my code from CallingService:CreateCall to the new CreateCallAsync",
+      "should_trigger": true,
+      "expected_references": [
+        "legacy-migration.md"
+      ],
+      "notes": "Every CallingService member, CreateCall and CreateCallAsync included, has been RobloxScriptSecurity since the class appeared in 0.737. Correct answer says no game script could ever call either, so there is nothing to migrate; it does NOT write migration code. Guards against the pre-0.741 text that called this a breaking change to update callers for."
+    },
+    {
+      "id": 44,
+      "prompt": "Play an animated GIF on my ImageLabel using the new AnimatedImageService",
+      "should_trigger": true,
+      "expected_references": [
+        "legacy-migration.md"
+      ],
+      "notes": "Every AnimatedImageService and AnimatedImage member is RobloxScriptSecurity and AnimatedImage is NotCreatable, so a game script cannot use it. Correct answer says so and offers a working alternative (e.g. a sprite sheet stepped with ImageRectOffset/ImageRectSize) instead of code against the internal API."
+    },
+    {
+      "id": 45,
+      "prompt": "Luau 0.740 is out, so rewrite this with the new `if local` syntax for my Roblox game",
+      "should_trigger": true,
+      "expected_references": [
+        "luau-fundamentals.md"
+      ],
+      "notes": "`if local` is still experimental in 0.740. Its flags were renamed from DebugLuauIfLocal* to LuauExperimentalIfLocalSyntax/Analysis, but neither is set in Studio's published flags (checked 2026-10-01), so it defaults OFF. Correct answer declines to use it in Roblox code and writes the equivalent with a plain local + if."
+    },
+    {
+      "id": 46,
+      "prompt": "Make my Roblox type definitions exact tables so extra fields are rejected, like the Luau 0.740 release notes show",
+      "should_trigger": true,
+      "expected_references": [
+        "luau-fundamentals.md"
+      ],
+      "notes": "Exact-by-default tables are experimental in 0.740 and gated behind DebugLuau* flags (DebugLuauParseExactTables, DebugLuauExactTableTypes), so not available in Roblox Studio. Correct answer does not present `{ x: number, ... }` / exact semantics as usable today."
+    },
+    {
+      "id": 47,
+      "prompt": "Write a server Script that sets CollisionFidelity to Box on every MeshPart tagged Debris",
+      "should_trigger": true,
+      "expected_references": [
+        "performance-optimization.md"
+      ],
+      "notes": "Over-correction guard for the NotScriptable lesson. TriangleMeshPart.CollisionFidelity is script-writable since engine 0.740 (Write: None), and it is NOT NotScriptable. Correct answer writes the CollectionService loop and does NOT send the user to the Properties window or a plugin for it. It may note that MeshPart.RenderFidelity is still PluginSecurity."
     }
   ]
 }

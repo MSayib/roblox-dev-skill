@@ -7,10 +7,10 @@ An expert-level AI skill for Roblox game development with Luau. Works with
 Gemini CLI, GitHub Copilot and every other agent that reads the open
 [Agent Skills](https://agentskills.io) format.
 
-> **Skill version:** 2.13.1 | **Engine:** 0.740.19.7400931 | **Luau:** 0.739 | **Ingested:** 2026-09-25
+> **Skill version:** 2.14.0 | **Engine:** 0.741.19.7411056 | **Luau:** 0.740 | **Ingested:** 2026-10-01
 >
-> Dump downloaded, re-split, and diffed against 0.739 on that date: 924 classes / 635 enums /
-> 258 services / 48 deprecated.
+> Dump downloaded, re-split, and diffed against 0.740 on that date: 931 classes / 641 enums /
+> 260 services / 48 deprecated.
 >
 > Roblox ships roughly weekly, so treat that number as *when this was last verified*, never as
 > today's version. `SKILL.md` carries the two commands that re-derive engine and Luau in one line
@@ -225,7 +225,7 @@ The skill integrates with a **local API reference hub** for token-efficient look
 ├── RobloxAPI/
 │   ├── dumps/                         # Full-API-Dump.json per version
 │   │   └── latest.json → (symlink)
-│   ├── classes/                       # 924 class JSONs (~2 KB median — measured below)
+│   ├── classes/                       # 931 class JSONs (~2 KB median — measured below)
 │   ├── enums/                         # 635 enum JSONs
 │   ├── services/                      # 258 service JSONs (subset)
 │   ├── deprecated/                    # 48 deprecated class JSONs
@@ -244,8 +244,8 @@ The skill integrates with a **local API reference hub** for token-efficient look
 └── README.md
 ```
 
-**Why?** Re-measured 2026-09-25 on 0.740.19.7400931: the full dump is **8,314,613 bytes**, while the
-924 split class files are **101 B min / 2,050 B median / 4,795 B mean / 104,594 B max**. A typical
+**Why?** Re-measured 2026-10-01 on 0.741.19.7411056: the full dump is **8,356,896 bytes**, while the
+931 split class files are **101 B min / 2,054 B median / 4,782 B mean / 104,956 B max**. A typical
 class lookup therefore reads about **0.02%** of the dump. (An earlier README claimed "845× smaller"
 from a "~10KB" class file; neither number is reproducible — the median class file is ~2 KB.
 `SKILL.md` carries the command that re-measures both, including the `stat -L` needed to follow the
@@ -310,8 +310,8 @@ Each row says when that file's content was last verified — not that it is curr
 
 | Topic | Status | Reference File |
 |-------|--------|---------------|
-| Luau language (strict mode, types, generics) | ✅ **Luau 0.739** | `luau-fundamentals.md` |
-| Project architecture (services, Rojo, IAS) | ✅ Current | `project-structure.md` |
+| Luau language (strict mode, types, generics) | ✅ **Luau 0.740** | `luau-fundamentals.md` |
+| Project architecture (services, Rojo, IAS) | ✅ **Oct 2026 (0.741)** | `project-structure.md` |
 | DataStore + ProfileStore + **MemoryStoreService** | ✅ Aug 2026 | `datastore-persistence.md` |
 | Client-Server networking + BindableEvent caveats | ✅ Aug 2026 | `networking.md` |
 | Security — player→server (BanAsync, server authority, exploits, script capabilities) | ✅ **Sep 2026** | `security-hardening.md` |
@@ -320,7 +320,7 @@ Each row says when that file's content was last verified — not that it is curr
 | Performance (Parallel Luau, **RunService pipeline**, fidelity write rules) | ✅ **Sep 2026 (0.740)** | `performance-optimization.md` |
 | MCP integration (26 documented tools / 28 observed) | ✅ **re-verified 2026-09-25** against the official docs page + live schemas | `mcp-integration.md` |
 | UI (**UIFlexItem**, **StyleSheet/StyleRule**, StyleQuery) | ✅ Aug 2026 | `ui-systems.md` |
-| Legacy migration (RunService events, **0.740 removals & deprecations**) | ✅ **Sep 2026 (0.740)** | `legacy-migration.md` |
+| Legacy migration (RunService events, **0.741 additions**, per-release API tables) | ✅ **Oct 2026 (0.741)** | `legacy-migration.md` |
 | Studio plugins, `Script.Source` limits, engine limits | ✅ measured Aug 2026 | `studio-plugins-and-limits.md` |
 | Monetization (Transfers, **Subscriptions**) | ✅ Aug 2026 | `monetization.md` |
 | File formats (**ZSTD/LZ4**, **MeshContent**, importing) | ✅ Aug 2026 | `file-formats-and-assets.md` |
@@ -332,9 +332,9 @@ per-release verification method: [`metadata.json`](metadata.json).
 
 | Version | Date | Highlights |
 |---------|------|-----------|
+| **2.14.0** | Oct 1, 2026 | **Engine 0.741 / Luau 0.740, and the audit now reads prose.** New: `Player:GetFriendsInServerAsync()` (usable, not yet documented — do not guess its fields), `Enum.GradientType.Elliptical`. Luau 0.740's `if local` flags lost their `Debug` prefix but are still **off** in Studio; exact tables are `Debug`-gated. A new prose/table audit found that `legacy-migration.md` had listed `RobloxScriptSecurity` members as usable since 0.737 (`CallingService`, `AnimatedImageService`, `MomentsService`, …), and a `NotScriptable` check found that the IAS example (fixed in 2.12.0) **still could not run** — confirmed in Studio 0.741. The diff tool stopped reporting false mentions (`TestService.Enabled` "in six files") and now sees class-level and enum-item changes. |
 | **2.13.1** | Sep 25, 2026 | **CI across Linux, macOS (bash 3.2) and real Windows** (PowerShell 5.1, PowerShell 7, `cmd.exe`, Git Bash), running every README one-liner against the commit under test, plus a weekly run against the live Roblox API. It found six bugs on its first runs: the 2.13.0 `install.sh` failed on its GitHub download path for every user (bash 3.2 read a byte after an unbraced variable as part of its name — every earlier test had used `--source`, which skips that path), and five Windows-only bugs, including a cp1252 crash that stopped the example audit, an encoding-less `open()`, and Git Bash configs Windows Python could not read. |
 | **2.13.0** | Sep 25, 2026 | **One-line installers** — `install.sh` (macOS/Linux/WSL/Git Bash), `install.ps1` and `install.cmd` (Windows) — with a wizard over 14 agents whose skills folders were each verified against that agent's documentation. The skill is stored once and linked everywhere; one `~/.agents/skills` link covers nine agents, so nothing is listed twice. RobloxDocs tooling moved into the repo and became cross-platform (Python monitor and one-pass splitter; no zsh/jq/bc), and the installer sets it up with a real API dump. Fixed: the README's Claude Code folder name (`roblox-dev`) fails the official spec validator; its Antigravity path only worked with a hand-written `plugin.json`; the Antigravity link pointed at an nginx placeholder; `stat -f %z` silently prints filesystem data on Linux. |
-| **2.10.0** | Sep 25, 2026 | **MCP accuracy pass + new threat model.** Added `references/agent-safety.md` (agent→Studio trust boundary) and this changelog split. Fixed MCP claims against the [official docs](https://create.roblox.com/docs/studio/mcp) and live tool schemas: removed the phantom `run_as_job`; corrected `multi_edit` (one script per call, exact-match `old_string`/`new_string`, `Edit` datamodel only — the old documented signature would have failed every call); `execute_luau` **does** return values; `upload_image` takes HTTP URLs, `store_image` takes local files; `http_get` is allowlisted; 29 tools → 26 documented / 28 observed; documented the missing `skill` and `subagent` tools. Also fixed non-MCP misleading items: README described the repo as if it were an MCP server, its tree listed 11 of 12 reference files, class counts and the "~10KB" figure were stale, and `SKILL.md` told the agent to auto-run a background update against its own approval rule. |
 
 ## Roadmap
 
@@ -342,6 +342,9 @@ per-release verification method: [`metadata.json`](metadata.json).
   and UI/IAS flows, each with its own *Not this* list and eval coverage.
 - **Parse Luau properly in the example audit.** It matches simple assignments and method calls with
   regular expressions; dynamic forms such as `obj[name] = value` pass unchecked.
+- **Resolve bare member names in prose.** The prose audit (2.14.0) checks `` `Class.Member` `` and
+  `` `Class:Method()` ``; a row written as `` `+MomentsService` (`CreatePostAsync`, …) `` names its
+  members without the class, so those are still checked by hand at ingest.
 - **Keep the weekly ingest cadence.** Each release is diffed dump-to-dump rather than trusted from
   release-note prose, because that is what produces checkable changelog rows.
 
