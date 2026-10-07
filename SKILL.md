@@ -17,9 +17,9 @@ Expert development companion for building Roblox experiences with Luau. Grounded
 official Roblox documentation (https://create.roblox.com/docs), the Luau language spec
 (https://luau.org), and the Roblox Lua Style Guide (https://roblox.github.io/lua-style-guide/).
 
-> **Engine**: Roblox Studio **0.741.19.7411056** with **Luau 0.740** (released 2026-09-25) —
-> dump downloaded, re-split, and diffed against 0.740 on **2026-10-01**. 931 classes / 641 enums /
-> 260 services / 48 deprecated.
+> **Engine**: Roblox Studio **0.741.19.7411056** with **Luau 0.741** (released 2026-10-02) —
+> dump downloaded, re-split, and diffed against 0.740 on **2026-10-01**; Luau re-checked
+> **2026-10-07**. 931 classes / 641 enums / 260 services / 48 deprecated.
 >
 > Roblox ships roughly weekly, so this line is stale by design — never quote it as today's version.
 > Re-derive it instead:

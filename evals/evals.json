@@ -289,7 +289,7 @@
       "expected_references": [
         "luau-fundamentals.md"
       ],
-      "notes": "False premise from a real release note. `if local` is DebugLuau*-flag-gated in the open-source repo and NOT enabled in Roblox Studio. Correct answer refuses and writes ordinary Luau. Regression guard against offering flag-gated prototypes as shipped features."
+      "notes": "False premise from a real release note. `if local` was flag-gated in the open-source repo when 0.739 shipped; since 2026-10-06 it is a Studio Beta Feature that does NOT run in published experiences (Roblox staff, DevForum topic 4918297 post #41). Correct answer writes ordinary Luau for game code. Regression guard against offering unreleased syntax as shipped."
     },
     {
       "id": 36,
@@ -382,7 +382,7 @@
       "expected_references": [
         "luau-fundamentals.md"
       ],
-      "notes": "`if local` is still experimental in 0.740. Its flags were renamed from DebugLuauIfLocal* to LuauExperimentalIfLocalSyntax/Analysis, but neither is set in Studio's published flags (checked 2026-10-01), so it defaults OFF. Correct answer declines to use it in Roblox code and writes the equivalent with a plain local + if."
+      "notes": "`if local` was still experimental in 0.740 (flags renamed from DebugLuauIfLocal* to LuauExperimentalIfLocalSyntax/Analysis). Since 2026-10-06 it is an opt-in Studio beta, and Studio betas are not enabled in published experiences. Correct answer declines to use it in code for a Roblox game and writes the equivalent with a plain local + if; it may say the beta exists, but must say it cannot be published."
     },
     {
       "id": 46,
@@ -401,6 +401,24 @@
         "performance-optimization.md"
       ],
       "notes": "Over-correction guard for the NotScriptable lesson. TriangleMeshPart.CollisionFidelity is script-writable since engine 0.740 (Write: None), and it is NOT NotScriptable. Correct answer writes the CollectionService loop and does NOT send the user to the Properties window or a plugin for it. It may note that MeshPart.RenderFidelity is still PluginSecurity."
+    },
+    {
+      "id": 48,
+      "prompt": "I turned on the If Local/Const Bindings beta in Studio and it works in playtest. Can I publish my game with if local in it?",
+      "should_trigger": true,
+      "expected_references": [
+        "luau-fundamentals.md"
+      ],
+      "notes": "Studio betas are not enabled in published experiences (Roblox staff, DevForum topic 4918297 post #41, 2026-10-06). Correct answer says no: the scripts will fail to compile for players (and for collaborators without the beta), so every `if local` / `if const` must be rewritten as `local x = ...` + `if x then` before publishing. FAILS if it says playtest success means it is safe to ship."
+    },
+    {
+      "id": 49,
+      "prompt": "I have the if local beta enabled and just want to experiment in Studio. Show me how to flatten this nested Character/Humanoid/RootPart check with it.",
+      "should_trigger": true,
+      "expected_references": [
+        "luau-fundamentals.md"
+      ],
+      "notes": "Over-correction guard for the `if local` lesson. The user has opted into the Studio beta for experimentation, so refusing is wrong. Correct answer shows nested `if local` statements (one name, one value each -- no `if local ok, err = pcall(...)`, no compound conditions) and notes the code must be rewritten before publishing."
     }
   ]
 }

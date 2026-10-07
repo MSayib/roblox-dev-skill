@@ -11,6 +11,48 @@ reference content was verified against at that time.
 
 ---
 
+## Unreleased — Luau 0.741 (checked Oct 7, 2026; ships with the engine 0.742 ingest)
+
+**Luau 0.741, and `if local` is now a Studio beta that still cannot ship.** The engine is unchanged at
+0.741.19.7411056. `DeployHistory.txt` shows 0.742.0.7421053 deployed as `version-hidden` on Oct 5,
+but neither `WindowsStudio64` nor `MacStudio` serves it yet, so there is no new dump to ingest.
+
+### Changed — `if local` / `if const` became a Studio beta on 2026-10-06
+
+Roblox staff announced "If Local/Const Bindings" as a **Studio Beta Feature** (DevForum topic
+4918297). The skill said the syntax was "not enabled in Roblox Studio", which stopped being true
+the day after 2.14.0. Studio's published flags now set `FFlagLuauIfLocalBetaFeature = True` with a
+rollout of 0%, so it is opt-in.
+
+It is still **not usable in a game**: "Studio Betas are not enabled in published experiences … you
+won't be able to use this in a published game until it's fully released" (Roblox staff, post #41).
+`luau-fundamentals.md` gives it a section of its own: what the syntax does, why it fails for players
+and for collaborators without the beta, the beta's limits (one name and one value, no multi-return
+`pcall`, no compound conditions, no `while local` yet), and the rule. Game code keeps the plain
+`local` + `if` form. `if local` is shown only to a user who is experimenting in Studio, with a note
+that it must be rewritten before publishing.
+
+### Luau 0.741
+
+- Analysis: jump-to-definition works on function return annotations. A crash on a type assertion
+  inside `typeof(...)` inside a type alias is fixed.
+- Compiler register reuse after a local's last use, a GC allocation-rate underflow fix, and an NCG
+  buffer range-check fix (only `--!native` code that uses `buffer`).
+- `lua_setbuffercage` was renamed to `lua_setmemorycage`. This is C API only and no Roblox script can
+  reach it, so the skill does not mention it.
+- The feature gates are the same as in 0.740 (checked in the 0.741 source tarball). Exact tables,
+  classes, `coroutine.finally` and the `integer` library are still off in Studio.
+
+### Evals 47 → 49
+
+- **#48**: "it works in playtest, can I publish?" The correct answer is no: rewrite every `if local`
+  before publishing.
+- **#49**: an over-correction guard. A user who has opted into the beta and wants to experiment in
+  Studio gets `if local` code with the publish caveat, not a refusal.
+- The notes for #35 and #45 now describe the beta status instead of "flag-gated, off".
+
+---
+
 ## 2.14.0 — Oct 1, 2026
 
 **Engine 0.741.19.7411056 / Luau 0.740 — and an audit that now reads prose, which found three more

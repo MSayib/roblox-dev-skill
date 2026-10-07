@@ -1,13 +1,21 @@
 {
   "skill_name": "roblox-dev-skill",
   "version": "2.14.0",
-  "last_updated": "2026-10-01T11:30:00+07:00",
-  "last_updated_by": "claude-code (owner request: ingest the latest engine/Luau, no false positives or regressions)",
+  "last_updated": "2026-10-07T12:00:00+07:00",
+  "last_updated_by": "claude-code (owner request: update the skill)",
   "update_source": "https://agentskills.io/specification, https://agentskills.io/client-implementation/adding-skills-support, agentskills.io client list and each agent's own skills documentation (Claude Code, Codex, Gemini CLI, Antigravity, Cursor, GitHub Copilot, VS Code, OpenCode, Kiro, Roo Code, Goose, Junie, Amp), official skills-ref validator",
   "engine_version_at_update": "0.741.19.7411056",
-  "luau_version_at_update": "0.740",
+  "luau_version_at_update": "0.741",
   "update_interval_days": 7,
   "update_history": [
+    {
+      "date": "2026-10-07T12:00:00+07:00",
+      "version": "unreleased (to ship with the engine 0.742 ingest)",
+      "changes": "Luau 0.741 (released 2026-10-02); engine unchanged at 0.741.19.7411056 (WindowsStudio64 and MacStudio both report it; DeployHistory shows 0.742.0.7421053 deployed as version-hidden on 2026-10-05, not live, so not ingested). Luau 0.741 is analysis fixes (jump-to-definition on return annotations, crash on a type assertion inside typeof in a type alias), compiler register reuse, a GC allocation-rate underflow fix, an NCG buffer range-check fix, and a C API rename (lua_setbuffercage -> lua_setmemorycage) that no Roblox script can reach. Content change: if local / if const became a Studio Beta Feature on 2026-10-06 (DevForum topic 4918297, Roblox staff). The skill said it was not enabled in Studio, which became untrue; it now says the beta works only in an opted-in Studio and does NOT run in published experiences (staff reply, post #41). Evals 47 -> 49: a can-I-publish guard and an over-correction guard for users experimenting with the beta.",
+      "engine_version": "0.741.19.7411056",
+      "decision_by": "user (sayib) -- request 2026-10-07: update this skill",
+      "verified_by": "Luau 0.741 release notes via the GitHub releases API; 0.741 source tarball grepped for feature gates (LuauExperimentalIfLocalSyntax/Analysis, DebugLuauExactTableTypes, DebugLuauParseExactTables, DebugLuauUserDefinedClasses, DebugLuauCoroutineFinally, DebugLuauWarnOnUnannotatedTopLevelFunctions, LuauIntegerLibrary: all unchanged from 0.740); PCStudioApp and MacStudioApp published client settings (FFlagLuauIfLocalBetaFeature=True, FIntLuauIfLocalBetaFeatureRolloutPercent=0, none of the other gates set); DevForum topic 4918297 JSON, author and reply flair checked as Roblox_Staff; clientsettings client-version for WindowsStudio64 and MacStudio; setup.rbxcdn.com DeployHistory.txt."
+    },
     {
       "date": "2026-10-01T11:30:00+07:00",
       "version": "2.14.0",
