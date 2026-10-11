@@ -17,9 +17,10 @@ Expert development companion for building Roblox experiences with Luau. Grounded
 official Roblox documentation (https://create.roblox.com/docs), the Luau language spec
 (https://luau.org), and the Roblox Lua Style Guide (https://roblox.github.io/lua-style-guide/).
 
-> **Engine**: Roblox Studio **0.741.19.7411056** with **Luau 0.740** (released 2026-09-25) —
-> dump downloaded, re-split, and diffed against 0.740 on **2026-10-01**. 931 classes / 641 enums /
-> 260 services / 48 deprecated.
+> **Engine**: Roblox Studio **0.742.0.7421053** with **Luau 0.742** (released 2026-10-10) —
+> dump downloaded, re-split, and diffed against 0.741 on **2026-10-11**, with every
+> developer-visible change run in Studio 0.742. 940 classes / 648 enums / 263 services /
+> 48 deprecated.
 >
 > Roblox ships roughly weekly, so this line is stale by design — never quote it as today's version.
 > Re-derive it instead:
@@ -194,8 +195,8 @@ grep -l '"<PropertyName>"' ~/RobloxDocs/RobloxAPI/classes/*.json
 ```bash
 # Check when local data was last updated
 cat ~/RobloxDocs/RobloxAPI/.current-version
-# → {"version":"0.741.19.7411056","platform":"MacStudio","platformVersion":"0.741.19.7411056",
-#    "winHash":"version-76e1a02649ad4f35","updatedAt":"2026-10-01T03:41:12Z","checkedAt":"2026-10-01T03:41:12Z"}
+# → {"version":"0.742.0.7421053","platform":"MacStudio","platformVersion":"0.742.0.7421053",
+#    "winHash":"version-9b554450a0fc4e65","updatedAt":"2026-10-11T07:35:36Z","checkedAt":"2026-10-11T07:35:36Z"}
 ```
 
 > **Read whichever timestamp is present: `updatedAt` OR `checkedAt`.** `updatedAt` is when a dump

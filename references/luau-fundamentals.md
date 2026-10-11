@@ -1,6 +1,6 @@
 # Luau Language Fundamentals
 
-> Reference for AI coding skill — verified against official Roblox documentation and Luau language release specs (**v0.740**, released 2026-09-25; engine 0.741.19.7411056).
+> Reference for AI coding skill — verified against official Roblox documentation and Luau language release specs (**v0.742**, released 2026-10-10; engine 0.742.0.7421053).
 > Sources: https://create.roblox.com/docs/luau, https://luau.org, https://roblox.github.io/lua-style-guide/
 
 ## Table of Contents
@@ -35,9 +35,9 @@ typed language **derived from Lua 5.1**. Key additions over Lua 5.1:
 - Native code generation (`--!native`) and fast `pcall`/`xpcall` VM execution (`LOP_FASTPCALL`)
 - No `goto` statement
 
-### What landed in 0.736 through 0.740 (source: luau-lang/luau release notes)
+### What landed in 0.736 through 0.742 (source: luau-lang/luau release notes)
 
-All five releases are **fixes and internals, not new syntax you can write today**. Nothing here changes
+All seven releases are **fixes and internals, not new syntax you can ship today**. Nothing here changes
 how you write Luau for Roblox; it is here so nobody mistakes an internal change for a new feature.
 
 | Release | Change | What it means for your code |
@@ -62,29 +62,66 @@ how you write Luau for Roblox; it is here so nobody mistakes an internal change 
 | **0.740** | Function normalization no longer uses argument types as return types — `local z: () -> () = x` where `x: (() -> string \| number) & (() -> number \| boolean)` used to be accepted and now errors | Like 0.739, a soundness **fix** that can surface new errors in code that used to pass, here around intersections of function types. Fix the annotation; do not loosen to `--!nonstrict` |
 | **0.740** | Fixed an internal error on exceptionally large types ("Internal recursion counter limit exceeded in ReferenceCountInitializer") | If huge generated types used to crash the type checker, this was it |
 | **0.740** | VM: OOM during table re-hash or freeze no longer leaves the table in a bad state; A64 array-iteration fast path in `FORGLOOP`; faster `string.split`; x64 register-allocation spill fix | Internals, no edit. The `FORGLOOP` fast path is in native-code lowering, so it only touches `--!native` code compiled for ARM64 — not ordinary interpreted loops |
+| **0.741** | Analysis: jump-to-definition now works on function **return** annotations; fixed a crash on a type assertion inside `typeof(...)` inside a type alias (`type T = typeof(x :: Foo)`) | If the type checker used to crash on that pattern, this was it |
+| **0.741** | Compiler reuses a local's register after its last use; GC allocation-rate underflow fixed when the heap shrinks between cycles; NCG buffer range-check bug fixed | Internals, no edit. The buffer fix only touches `--!native` code that uses `buffer` |
+| **0.742** | Analysis: better scope handling in the strict-mode checker, MLStruct-style unifier rewrite rules, a `~nil` refinement of blocked types that never simplified, grouped `error` calls in control-flow analysis, autocomplete for function statements | Inference fixes, no edit expected. The release notes do not call any of them a soundness change; if `--!strict` reports something new after a Studio update, these are where to look |
+| **0.742** | `string.gsub` is faster when the pattern has no special characters; compiler and NCG (`--!native`) correctness fixes, including constant propagation on tables with metamethods | No edit. Plain-text `gsub` calls get faster on their own |
+| **0.742** | `coroutine.finally` is no longer behind a `Debug` flag in the open-source VM | **Still not in Roblox.** See the table below: the gate was renamed, not removed, and `coroutine.finally` is `nil` in Studio 0.742 |
 
-**Experimental, and NOT usable in Roblox** — checked 2026-10-01 against the 0.740 source and
-Studio's published client settings (`clientsettingscdn.roblox.com/v2/settings/application/PCStudioApp`
-and `MacStudioApp`, ~25,000 flags each). None of the flags below is set there, and a Luau
-`FASTFLAGVARIABLE` defaults to **off**:
+### `if local` / `if const` — a Studio beta, NOT usable in published games
 
-| Prototype | Gate in 0.740 | Notes |
+Since **2026-10-06** this is a **Studio Beta Feature** ("If Local/Const Bindings", announced in
+DevForum topic 4918297 by Roblox staff). It declares a variable inside an `if` / `elseif` condition,
+scoped to that branch, with the type narrowed to non-nil:
+
+```lua
+if local character = player.Character then
+	-- character: Model (non-nil) here
+end
+local name = if const p = Players:GetPlayerFromCharacter(model) then p.Name else "Unknown"
+```
+
+What makes this *not* shippable yet:
+
+- **Studio betas are not enabled in published experiences** — stated by Roblox staff in the
+  announcement thread (post #41): "you won't be able to use this in a published game until it's
+  fully released". Code using it runs in the opted-in developer's Studio and **fails to compile
+  for players**. Team members without the beta enabled cannot compile it either.
+- Beta limits: one name, one value. `if local ok, err = pcall(f) then` and compound conditions
+  (`if local x = a(); local y = b() then`) are **not** supported. `while local` is "in progress",
+  not in the beta.
+- Studio's published flags (checked 2026-10-07) set `FFlagLuauIfLocalBetaFeature = True` with
+  `FIntLuauIfLocalBetaFeatureRolloutPercent = 0` — it is opt-in, not on by default. The open-source
+  gates in 0.742 are still `LuauExperimentalIfLocalSyntax` / `LuauExperimentalIfLocalAnalysis` (re-checked
+  2026-10-11, with the Studio beta flags unchanged).
+
+**Default: write the plain `local x = ...` / `if x then` form in game code.** Show `if local` only
+when the user explicitly wants to try the beta in Studio, and then say it must be rewritten
+before publishing. What changes this advice is a full release announcement, or the beta flags
+disappearing because the syntax is on for everyone — not a release note that mentions the syntax.
+
+### Other experimental features — NOT usable in Roblox
+
+Checked 2026-10-11 against the 0.742 source and Studio's published client settings
+(`clientsettingscdn.roblox.com/v2/settings/application/PCStudioApp` and `MacStudioApp`, ~18,900
+flags each). None of the flags below is set there, and a Luau `FASTFLAGVARIABLE` defaults to **off**:
+
+| Prototype | Gate in 0.742 | Notes |
 |---|---|---|
-| **`if local`** statements (0.737) and expressions (0.739) | `LuauExperimentalIfLocalSyntax` / `LuauExperimentalIfLocalAnalysis` | **Renamed in 0.740** from `DebugLuauIfLocal*`. The release note says it is "still experimental but is moving closer to a full release". The drop of the `Debug` prefix is a sign of that progress, **not** of availability |
 | **Exact tables by default** — `{ x: number }` rejects extra fields, `{ x: number, ... }` allows them (RFC luau-lang/rfcs#11), 0.740 | `DebugLuauParseExactTables`, `DebugLuauExactTableTypes` | The release note calls it "an experimental feature". Do not write `...` in a table type for Roblox |
-| **Classes** RFC prototype | `DebugLuauUserDefinedClasses` | |
-| **`coroutine.finally`** (RFC #187), 0.738 | `DebugLuauCoroutineFinally` | VM side only |
+| **Classes** RFC prototype | `DebugLuauUserDefinedClasses`, `DebugLuauUserDefinedClassesRuntime` (new in 0.742) | |
+| **`coroutine.finally`** (RFC #187), 0.738 | `LuauCoroutineFinally`, `LuauCoroutineFinallyAnalysis` (renamed from `DebugLuauCoroutineFinally` in 0.742) | The 0.742 release note says "stop gating behind a debug flag"; the flag lost its `Debug` prefix but still defaults to off. **Tested in Studio 0.742: `coroutine.finally` is `nil`** from a game Script and from the command bar |
 | Require top-level functions to be annotated, 0.738 | `DebugLuauWarnOnUnannotatedTopLevelFunctions` | A lint experiment |
 | An **`integer`** library (`integer.idiv` was fixed in 0.740) | `LuauIntegerLibrary` | Present in the open-source VM since at least 0.737, not enabled in Studio. Not a Roblox API |
 
 **None of these are enabled in Roblox Studio.** Do not write them into game code, and do not tell a
-user they can — an `if local` expression is exactly the kind of thing that looks like a shipped
-feature in a release note and errors in Studio. A flag losing its `Debug` prefix is the thing to
-watch; a flag appearing **set** in Studio's published settings is the thing that changes this advice.
+user they can — they look like shipped features in a release note and error in Studio. `if local`
+shows the path: a flag lost its `Debug` prefix (0.740), then became a Studio beta (2026-10-06),
+and only a full release makes it publishable. `coroutine.finally` took the first step in 0.742.
 
-There is **NO new standard-library function in 0.736–0.740**; if a user asks "what new Luau methods
+There is **NO new standard-library function usable in Roblox in 0.736–0.742**; if a user asks "what new Luau methods
 can we use", the honest answer for this window is *none* — the changes are inference, VM internals,
-and flag-gated prototypes.
+flag-gated prototypes, and one Studio-only beta syntax.
 
 ---
 
@@ -121,7 +158,8 @@ The **New Type Solver** is the standard type engine for Luau (GA since November 
 - Supports **user-defined type functions** (`type function`) with `pcall`/`xpcall` error handling and runtime heap limits
 - Relabels inferred generics cleanly (`T`, `U`, `V`, `W` instead of `a`, `b`, `c`)
 - Deep bidirectional control-flow narrowing and refined table indexer resolution
-- Config: Studio → Workspace Properties → Scripting → `LuauTypeCheckMode`
+- Config: Studio → Workspace Properties → Scripting → `LuauTypeCheckMode` (Properties window only:
+  a game Script cannot write it — "lacking capability PluginOrOpenCloud", tested in Studio 0.742)
 
 ```luau
 --!strict

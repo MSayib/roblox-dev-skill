@@ -109,6 +109,10 @@ BIND     = re.compile(r'local\s+(\w+)\s*(?::\s*[\w.]+)?\s*=\s*game:GetService\(\
 REQUIRED = re.compile(r'local\s+(\w+)\s*(?::\s*[\w.]+)?\s*=\s*require\s*\(')
 LINECOMMENT = re.compile(r'--.*$', re.M)
 PLUGINCTX = re.compile(r'\bplugin\b|PluginSecurity|command bar|:GetMouse\(|CoreGui|PluginGui|Toolbar|PluginAction', re.I)
+# A comment counts as plugin context only when it DECLARES the block plugin-only. Matching the
+# word "plugin" anywhere in a comment let the 2.14.0 fidelity loop pass, because its comment said
+# "on older clients do this in Studio or a plugin" about a loop presented as a game Script.
+PLUGINDECL = re.compile(r'--[^\n]*\b(?:plugin|command bar)\b[^\n]*\bonly\b', re.I)
 
 # Section F: `+Class.Member`, `Class:Method()`, `Class:Method(args)` inside one backtick span.
 PROSEREF  = re.compile(r'`\+?([A-Z]\w*)[.:]([A-Za-z_]\w*)(?:\([^`]*\))?`')
@@ -194,6 +198,26 @@ def elevated(s):
     return s not in (None, 'None')
 
 
+# A capability that an ordinary, unsandboxed Script does NOT hold. Measured in Studio 0.742: a plain
+# Script (Sandboxed = false) writes Humanoid.Health (AvatarBehavior) fine, but every write gated on
+# PluginOrOpenCloud fails with "lacking capability PluginOrOpenCloud". So a member with
+# Security None + this capability is plugin-only in practice. Until 2.15.0 this tool reported it in
+# section B as "only bites inside a sandboxed container", and the 0.740 fidelity example shipped.
+PLUGIN_ONLY_CAPS = {'PluginOrOpenCloud'}
+
+
+def plugin_only(d, field):
+    caps = d['wcaps'] if field == 'write' else d['rcaps']
+    return elevated(d[field]) or bool(PLUGIN_ONLY_CAPS & set(caps))
+
+
+def access_label(d, field):
+    caps = d['wcaps'] if field == 'write' else d['rcaps']
+    if elevated(d[field]):
+        return str(d[field])
+    return 'cap:' + '+'.join(sorted(PLUGIN_ONLY_CAPS & set(caps)))
+
+
 def audit(refdir, classes, enums, members):
     A, B, C, D, E = [], [], [], [], []
     memcache = {}
@@ -204,7 +228,9 @@ def audit(refdir, classes, enums, members):
         with open(path, encoding='utf-8') as f:
             text = f.read()
         for block in CODE.findall(text):
-            plugin_ok = bool(PLUGINCTX.search(block)) or fname == 'studio-plugins-and-limits.md'
+            plugin_ok = (bool(PLUGINCTX.search(LINECOMMENT.sub('', block)))
+                         or bool(PLUGINDECL.search(block))
+                         or fname == 'studio-plugins-and-limits.md')
             skip = set(THIRD_PARTY) | set(REQUIRED.findall(block))
             # `-- MODERN: set Workspace.X = Enabled` is advice in a comment, not a statement.
             code_writes = set(WRITE.findall(LINECOMMENT.sub('', block)))
@@ -227,10 +253,10 @@ def audit(refdir, classes, enums, members):
                                       classes=sorted({d['cls'] for d in defs})[:4],
                                       expected=False))
                         continue
-                    if not all(elevated(d[field]) for d in defs):
+                    if not all(plugin_only(d, field) for d in defs):
                         continue
                     A.append(dict(file=fname, kind=kind, recv=recv, member=name,
-                                  sec=sorted({str(d[field]) for d in defs}),
+                                  sec=sorted({access_label(d, field) for d in defs}),
                                   classes=sorted({d['cls'] for d in defs})[:4],
                                   expected=plugin_ok))
 
@@ -241,8 +267,10 @@ def audit(refdir, classes, enums, members):
                 defs = members.get(name)
                 if not defs:
                     continue
-                gated = [d for d in defs if not elevated(d['write']) and d['wcaps']]
-                plain = [d for d in defs if not elevated(d['write']) and not d['wcaps']]
+                if all(plugin_only(d, 'write') for d in defs):
+                    continue   # already a section-A finding
+                gated = [d for d in defs if not plugin_only(d, 'write') and d['wcaps']]
+                plain = [d for d in defs if not plugin_only(d, 'write') and not d['wcaps']]
                 if gated and not plain:
                     B.append(dict(file=fname, recv=recv, member=name,
                                   caps=sorted({c for d in gated for c in d['wcaps']}),
@@ -293,7 +321,7 @@ def main():
 
     print(f"Auditing {refdir}/*.md against API dump {ver}")
 
-    head("A. ELEVATED-SECURITY MEMBERS IN EXAMPLES (not reachable from a plain Script)")
+    head("A. ELEVATED-SECURITY OR PLUGIN-ONLY-CAPABILITY MEMBERS IN EXAMPLES (not reachable from a plain Script)")
     if not A:
         print("  none")
     for f in sorted({(x['file'], x['kind'], x['recv'], x['member'],
@@ -302,7 +330,7 @@ def main():
         tag = "[plugin context — expected]" if exp else "*** DEFECT ***"
         print(f"  {fl:<32} {kind:<5} {recv}.{mem:<26} {sec:<22} {list(cls)} {tag}")
 
-    head("B. CAPABILITY-GATED WRITES — informational, only bites inside a sandboxed container")
+    head("B. CAPABILITY-GATED WRITES — informational; capabilities a plain Script holds (e.g. AvatarBehavior)")
     if not B:
         print("  none")
     for f in sorted({(x['file'], x['recv'], x['member'], tuple(x['caps'])) for x in B}):

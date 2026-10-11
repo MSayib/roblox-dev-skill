@@ -427,7 +427,9 @@ security risks, as they can contain malicious scripts called backdoors."*
   > Source: https://create.roblox.com/docs/en-us/scripting/capabilities
   >
   > **"Configure minimal Capabilities" is only actionable if you know what ordinary code needs.**
-  > Derived by auditing this skill's own examples against the 0.740 dump — each of these is a
+  > Derived by auditing this skill's own examples against the 0.740 dump. In Studio 0.742 a plain
+  > server Script assigned `humanoid.Health`, `ProcessReceipt` and `OnServerInvoke` without error
+  > (`OnClientInvoke` was not run). Each of these is a
   > `Security: None` member that nonetheless carries a `Capabilities.Write` requirement, so it works
   > normally today and **breaks inside a sandboxed container** unless you grant the capability:
   >
@@ -436,7 +438,12 @@ security risks, as they can contain malicious scripts called backdoors."*
   > | `humanoid.Health = n` — any damage or healing | `AvatarBehavior` |
   > | `MarketplaceService.ProcessReceipt = f` — developer products | `Monetization` |
   > | `remoteFunction.OnServerInvoke = f` / `.OnClientInvoke` | `RemoteEvent` |
-  > | `part.CollisionFidelity = …` (engine 0.740+) | `PluginOrOpenCloud` |
+  >
+  > `PluginOrOpenCloud` is different and does **not** belong in this table: an ordinary, unsandboxed
+  > game Script does not hold it either. In Studio 0.742 a plain server Script writing
+  > `part.CollisionFidelity`, `Workspace.StreamingEnabled` or `Lighting.LightingStyle` fails with
+  > `lacking capability PluginOrOpenCloud`, so those members are plugin-only (an earlier version
+  > listed `CollisionFidelity` here as working normally outside a sandbox).
   >
   > So a sandboxed third-party model that is *supposed* to deal damage still needs
   > `AvatarBehavior`, and one that legitimately talks to your systems needs `RemoteEvent`. Grant the

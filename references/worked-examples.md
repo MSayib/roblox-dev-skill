@@ -230,8 +230,10 @@ jq '.Members[] | select(.Name=="<Member>")' ~/RobloxDocs/RobloxAPI/classes/<Clas
 - `Security` — `{"Read": "None", "Write": "PluginSecurity"}` means a Script can read it and
   **cannot write it**. This is the check that would have caught a broken `CollisionFidelity`
   example that shipped in this skill for three months.
-- `Capabilities` — a `Write` capability applies inside a sandboxed container even when `Security`
-  is `None`.
+- `Capabilities` — an ordinary, unsandboxed Script holds capabilities such as `AvatarBehavior` and
+  `RemoteEvent` (in Studio 0.742 it wrote `Humanoid.Health` and assigned `OnServerInvoke`), but
+  **not `PluginOrOpenCloud`**: those writes fail with "lacking capability PluginOrOpenCloud" even
+  when `Security` is `None`. Treat `Security: None` + `PluginOrOpenCloud` as plugin-only.
 - `Tags` — `Deprecated`, `Yields`, `ReadOnly`, `NotScriptable`.
 
 Then fall through: local dump → `create.roblox.com/docs/en-us/{path}.md` → Context7

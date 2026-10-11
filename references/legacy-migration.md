@@ -272,6 +272,37 @@ failure recovery. Data loss is irreversible.
 | Input Action System (IAS) full release | June 11 | `Workspace.PlayerScriptsUseInputActionSystem` — a Studio Properties-window setting; it is `NotScriptable`, so no script (MCP `execute_luau` included) can read or set it. See `references/project-structure.md` |
 | Roblox Connect calling APIs **SUNSET** | **July 15** | Remove usage before deadline |
 
+### October 2026 — engine 0.742.0.7421053 (ingested 2026-10-11)
+
+Derived by diffing the **0.741 and 0.742 Full API Dumps locally** with
+`tools/robloxdocs/diff-api-dumps.py`, 2026-10-11. **940 classes (+10, −1), 648 enums (+8, −1),
+263 services, 48 deprecated.** Luau 0.742 (2026-10-10) — see `luau-fundamentals.md`.
+Every developer-visible row was **run in Studio 0.742.0.7421053** on an empty baseplate, from an
+ordinary server `Script` (`Sandboxed = false`) or a `LocalScript` during a playtest, unless it says
+*dump only*. None of the new members below has a page on create.roblox.com yet (checked 2026-10-11
+in Roblox/creator-docs), and the 742 release notes were still marked Pending.
+
+**The headline is a security model fact, not a new API.** Seven members went from `PluginSecurity`
+or `RobloxScriptSecurity` to `Security: None` and gained the `PluginOrOpenCloud` capability. That
+does **not** make them scriptable: an unsandboxed game Script does not hold `PluginOrOpenCloud`, and
+every one of these writes failed with `lacking capability PluginOrOpenCloud`. The same is true of
+the 0.740 fidelity and `Lighting` relaxations, which this file and `performance-optimization.md`
+had called script-writable since 2.11.0; both are corrected.
+
+| Change | Action Required |
+|--------|-----------------|
+| `Workspace.StreamingEnabled`, `.FallenPartsDestroyHeight`, `.FallHeightEnabled`, `.LuauTypeCheckMode`, `Model.LevelOfDetail`, `MeshPart.RenderFidelity`, `HumanoidRigDescription.OriginOffset`: Security → `None` + `PluginOrOpenCloud` | **Still plugin-only.** A game Script writing any of them fails *(Studio)*; `Model.LevelOfDetail` and `Workspace.ReplicationFrequency` cannot even be **read** from a Script. Reading `StreamingEnabled` works. The command bar / a plugin (MCP `execute_luau` too) can write them *(Studio)*. Set them in the Properties window |
+| `+Camera.ProjectionType` (`Enum.ProjectionType` `Perspective`/`Orthographic`), `+OrthographicSize`, `+OrthographicMode`, `+ViewStretch` | **Present but not enabled.** From a `LocalScript`, setting `ProjectionType = Orthographic` raises no error, yet reading it back still gives `Perspective`, and `OrthographicSize = 50` reads back `300` *(Studio)*. Do not build an orthographic camera on it yet |
+| `+UIBlur` (`UIComponent`: `Color`, `Enabled`, `Strength` (`Enum.UIBlurStrength` `Light`/`Medium`/`Heavy`), `Transparency`) | Creatable, and can be parented under a `Frame` in `PlayerGui` from a `LocalScript` without error *(Studio)*. **Whether it renders a blur was not verified**, and there is no docs page. Check visually before relying on it |
+| `+MarketplaceService:CanUsersTransferRobuxAsync(sender: Player, receiverUser)` → `Enum.RobuxTransferEligibility`, Yields; `+MarketplaceService:PromptVIPServerPurchase(player)` | `CanUsersTransferRobuxAsync` errors **"CanUsersTransferRobuxAsync is not enabled"** from a Script *(Studio)*. `PromptVIPServerPurchase` was not called (it opens a purchase prompt), *dump only*. Keep using `PromptRobuxTransferAsync` from `monetization.md` |
+| `+MeshPart:GetSurfaceSlotsAsync()`, `+TestService` test registry (`RegisterTest`, `RegisterSuite`, `ListTests`, `RunTestsAsync`, `TestRegistryChanged`, plus `TestSuite` / `TestResult` / `TestRunResult` / `TestFailure`), `+ModerationService:BindViolationProcessor()` | **Not enabled:** they error with "MeshPart:GetSurfaceSlotsAsync is not yet enabled", "TestService test registration is not available. Feature flag is disabled." and "Safety callback API is not enabled" *(Studio)*. `TestService.RegisterTestLegacy` is now **deprecated** in favour of `RegisterTest` (*dump only*); nothing to migrate while the new one is off |
+| `+Workspace.ReplicationFrequency` / `+ReplicationThroughput` (`Enum.ReplicationMode`) | `PluginOrOpenCloud` for read **and** write: a Script cannot read them *(Studio)*. Properties-window settings |
+| `+Decal.ResampleMode` (`Enum.ResamplerMode`), `+SurfaceAppearance.SurfaceSlot` (int) | Usable: a Script reads and writes `ResampleMode` and reads `SurfaceSlot` (`-1` on a new instance) *(Studio)* |
+| `Stats:GetMemoryUsageMbFiltered()` / `GetMemoryUsageMbAllCategoriesFiltered()` | Need the `InternalTest` capability; a Script gets "lacking capability InternalTest" *(Studio)*. Not for game code |
+| **`AnimatedImage` class and `Enum.AnimatedImagePlaybackState` REMOVED** | Nothing to migrate: every `AnimatedImage` member was `RobloxScriptSecurity` (see the 0.738 row) and `Instance.new("AnimatedImage")` now fails *(Studio)* |
+| `+AnimationPlayer` | `NotCreatable` (`Instance.new` fails *(Studio)*); every member `RobloxScriptSecurity`. Not usable |
+| Roblox-internal, not callable by you (*dump only*): `FriendsCallingService`, `InstanceRegistryService` (`RobloxScriptSecurity`), `HiddenPlayerService` (`RobloxSecurity`), new `AnimatedImageService` / `PackageService` / `PopLatencyService` / `Sound` / `Audio*` members, `TeleportService:TeleportSwitchServer` signature change, `Enum.PioneerSource` +`RobloxPioneerTest`, `TestCase` superclass `Instance` → `Object` | Ignore for game code |
+
 ### October 2026 — engine 0.741.19.7411056 (ingested 2026-10-01)
 
 Derived by diffing the **0.740 and 0.741 Full API Dumps locally** with
@@ -314,8 +345,8 @@ window where the dump got smaller.
 | `LocalizationService:GetTranslatorForPlayer()` **newly Deprecated** | Migrate to **`GetTranslatorForPlayerAsync()`** (the dump names it as the preferred descriptor). The old call still exists but now emits a deprecation lint |
 | **`SnippetService` REMOVED** (whole class) | If anything referenced it, it is gone. Nothing in this skill did |
 | **`Enum.Language` REMOVED** | Remove any `Enum.Language` usage |
-| `TriangleMeshPart.CollisionFidelity` / `.FluidFidelity` and `PartOperation.RenderFidelity` / `.SmoothingAngle`: `Security.Write` **`PluginSecurity` → `None`** | **Newly script-writable at runtime.** Before 0.740 an ordinary Script could not set these. **`MeshPart.RenderFidelity` was NOT relaxed** and stays `PluginSecurity`. Each relaxed member gains `Capabilities.Write: ["PluginOrOpenCloud"]`, which only applies inside an opt-in sandboxed container. See `performance-optimization.md` §3 |
-| `Lighting.LightingStyle` (enum `Realistic`/`Soft`) and `Lighting.PrioritizeLightingQuality` (bool): `Security.Write` **`RobloxScriptSecurity` → `None`** | Both are now developer-settable from a script, having been Roblox-internal. Same `Capabilities.Write: ["PluginOrOpenCloud"]` caveat |
+| `TriangleMeshPart.CollisionFidelity` / `.FluidFidelity` and `PartOperation.RenderFidelity` / `.SmoothingAngle`: `Security.Write` **`PluginSecurity` → `None`** | **Still not writable from a game Script** (corrected in 2.15.0, measured in Studio 0.742). Each member gained `Capabilities.Write: ["PluginOrOpenCloud"]`, and an ordinary unsandboxed Script does not hold that capability: the write fails with "lacking capability PluginOrOpenCloud". This row used to say "newly script-writable at runtime". Set them at author time. `MeshPart.RenderFidelity` followed in 0.742, the same way. See `performance-optimization.md` §3 |
+| `Lighting.LightingStyle` (enum `Realistic`/`Soft`) and `Lighting.PrioritizeLightingQuality` (bool): `Security.Write` **`RobloxScriptSecurity` → `None`** | **Plugin-only, not settable from a game Script** (corrected in 2.15.0): the `Capabilities.Write: ["PluginOrOpenCloud"]` they gained blocks an ordinary Script (measured in Studio 0.742 for both). Set them in the Properties window. This row used to call them "developer-settable from a script" |
 | `+TeleportOptions.ReservedServerId`, `+TeleportOptions.VipServerId`; `Enum.TeleportMethod` +`TeleportSwitchServer` | New public teleport targeting fields. The matching `TeleportService:TeleportSwitchServer()` is **`RobloxScriptSecurity`** — you cannot call it, so do not build on it |
 | `WorldRoot.PhysicsStepTime` gained the **`ReadOnly`** tag | No action. It is `RobloxScriptSecurity` for both read and write, so game code could never touch it in the first place |
 | `+AudioTextToSpeech.AutoLocalize`, `+InputAction.DisplayName` | New public properties; `DisplayName` is useful for IAS rebinding UI (see `project-structure.md`) |

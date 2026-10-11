@@ -7,10 +7,10 @@ An expert-level AI skill for Roblox game development with Luau. Works with
 Gemini CLI, GitHub Copilot and every other agent that reads the open
 [Agent Skills](https://agentskills.io) format.
 
-> **Skill version:** 2.14.0 | **Engine:** 0.741.19.7411056 | **Luau:** 0.740 | **Ingested:** 2026-10-01
+> **Skill version:** 2.15.0 | **Engine:** 0.742.0.7421053 | **Luau:** 0.742 | **Ingested:** 2026-10-11
 >
-> Dump downloaded, re-split, and diffed against 0.740 on that date: 931 classes / 641 enums /
-> 260 services / 48 deprecated.
+> Dump downloaded, re-split, and diffed against 0.741 on that date: 940 classes / 648 enums /
+> 263 services / 48 deprecated. Every developer-visible change was run in Studio 0.742.
 >
 > Roblox ships roughly weekly, so treat that number as *when this was last verified*, never as
 > today's version. `SKILL.md` carries the two commands that re-derive engine and Luau in one line
@@ -310,17 +310,17 @@ Each row says when that file's content was last verified — not that it is curr
 
 | Topic | Status | Reference File |
 |-------|--------|---------------|
-| Luau language (strict mode, types, generics) | ✅ **Luau 0.740** | `luau-fundamentals.md` |
+| Luau language (strict mode, types, generics, `if local` beta) | ✅ **Luau 0.742** | `luau-fundamentals.md` |
 | Project architecture (services, Rojo, IAS) | ✅ **Oct 2026 (0.741)** | `project-structure.md` |
 | DataStore + ProfileStore + **MemoryStoreService** | ✅ Aug 2026 | `datastore-persistence.md` |
 | Client-Server networking + BindableEvent caveats | ✅ Aug 2026 | `networking.md` |
-| Security — player→server (BanAsync, server authority, exploits, script capabilities) | ✅ **Sep 2026** | `security-hardening.md` |
+| Security — player→server (BanAsync, server authority, exploits, script capabilities) | ✅ **Oct 2026** | `security-hardening.md` |
 | Safety — agent→Studio (destructive MCP ops, injection from place content) | ✅ Sep 2026 | `agent-safety.md` |
 | Worked examples (build / debug / migrate / verify / refuse) | ✅ **new in 2.12.0** | `worked-examples.md` |
-| Performance (Parallel Luau, **RunService pipeline**, fidelity write rules) | ✅ **Sep 2026 (0.740)** | `performance-optimization.md` |
+| Performance (Parallel Luau, **RunService pipeline**, plugin-only fidelity/LOD/streaming settings) | ✅ **Oct 2026 (0.742, tested in Studio)** | `performance-optimization.md` |
 | MCP integration (26 documented tools / 28 observed) | ✅ **re-verified 2026-09-25** against the official docs page + live schemas | `mcp-integration.md` |
 | UI (**UIFlexItem**, **StyleSheet/StyleRule**, StyleQuery) | ✅ Aug 2026 | `ui-systems.md` |
-| Legacy migration (RunService events, **0.741 additions**, per-release API tables) | ✅ **Oct 2026 (0.741)** | `legacy-migration.md` |
+| Legacy migration (RunService events, **0.742 additions**, per-release API tables) | ✅ **Oct 2026 (0.742)** | `legacy-migration.md` |
 | Studio plugins, `Script.Source` limits, engine limits | ✅ measured Aug 2026 | `studio-plugins-and-limits.md` |
 | Monetization (Transfers, **Subscriptions**) | ✅ Aug 2026 | `monetization.md` |
 | File formats (**ZSTD/LZ4**, **MeshContent**, importing) | ✅ Aug 2026 | `file-formats-and-assets.md` |
@@ -332,9 +332,9 @@ per-release verification method: [`metadata.json`](metadata.json).
 
 | Version | Date | Highlights |
 |---------|------|-----------|
+| **2.15.0** | Oct 11, 2026 | **Engine 0.742 / Luau 0.742, tested in Studio, and a correction.** Run from a plain server Script in Studio 0.742, every member that is `Security: None` with the `PluginOrOpenCloud` capability fails with "lacking capability PluginOrOpenCloud". That includes the 0.740 fidelity and `Lighting` relaxations this skill had called script-writable since 2.11.0, plus 0.742's `StreamingEnabled`, `Model.LevelOfDetail` and `MeshPart.RenderFidelity`. All are corrected to plugin-only, and the example audit now treats that capability as plugin-only. The new 0.742 APIs (orthographic `Camera`, the `TestService` test registry, `CanUsersTransferRobuxAsync`, `GetSurfaceSlotsAsync`) exist but are **not enabled** yet. `UIBlur` can be created. `coroutine.finally` lost its `Debug` flag in Luau 0.742 but is `nil` in Studio. `if local` is a Studio beta that does not run in published games. Evals 47 → 52. |
 | **2.14.0** | Oct 1, 2026 | **Engine 0.741 / Luau 0.740, and the audit now reads prose.** New: `Player:GetFriendsInServerAsync()` (usable, not yet documented — do not guess its fields), `Enum.GradientType.Elliptical`. Luau 0.740's `if local` flags lost their `Debug` prefix but are still **off** in Studio; exact tables are `Debug`-gated. A new prose/table audit found that `legacy-migration.md` had listed `RobloxScriptSecurity` members as usable since 0.737 (`CallingService`, `AnimatedImageService`, `MomentsService`, …), and a `NotScriptable` check found that the IAS example (fixed in 2.12.0) **still could not run** — confirmed in Studio 0.741. The diff tool stopped reporting false mentions (`TestService.Enabled` "in six files") and now sees class-level and enum-item changes. |
 | **2.13.1** | Sep 25, 2026 | **CI across Linux, macOS (bash 3.2) and real Windows** (PowerShell 5.1, PowerShell 7, `cmd.exe`, Git Bash), running every README one-liner against the commit under test, plus a weekly run against the live Roblox API. It found six bugs on its first runs: the 2.13.0 `install.sh` failed on its GitHub download path for every user (bash 3.2 read a byte after an unbraced variable as part of its name — every earlier test had used `--source`, which skips that path), and five Windows-only bugs, including a cp1252 crash that stopped the example audit, an encoding-less `open()`, and Git Bash configs Windows Python could not read. |
-| **2.13.0** | Sep 25, 2026 | **One-line installers** — `install.sh` (macOS/Linux/WSL/Git Bash), `install.ps1` and `install.cmd` (Windows) — with a wizard over 14 agents whose skills folders were each verified against that agent's documentation. The skill is stored once and linked everywhere; one `~/.agents/skills` link covers nine agents, so nothing is listed twice. RobloxDocs tooling moved into the repo and became cross-platform (Python monitor and one-pass splitter; no zsh/jq/bc), and the installer sets it up with a real API dump. Fixed: the README's Claude Code folder name (`roblox-dev`) fails the official spec validator; its Antigravity path only worked with a hand-written `plugin.json`; the Antigravity link pointed at an nginx placeholder; `stat -f %z` silently prints filesystem data on Linux. |
 
 ## Roadmap
 
