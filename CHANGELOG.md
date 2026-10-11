@@ -86,6 +86,22 @@ table re-run from playtest Scripts, and every dated platform change traced to a 
   `StarterPlayer.GameSettings*` properties; "2024" for the RunService renames had no source;
   `LuauTypeCheckMode` and `HumanoidRigDescription.OriginOffset` cannot even be read by a Script.
 
+### Fixed — found by verifying `performance-optimization.md` claim by claim
+
+- **`RunService.PreAnimation` is not client-only.** A server Script counted 104 firings in 2 s
+  (Studio 0.742), the same as `PreSimulation`. `PreRender` connects on the server but never fires,
+  and `RenderStepped` errors there; the table now says so.
+- **`RocketPropulsion`'s replacement is `LineForce`** (the dump's `PreferredDescriptorName`), not
+  `LinearVelocity` + `AlignOrientation`.
+- **`Workspace.PhysicsSteppingMethod = Adaptive` looked like code**; it is `NotScriptable` (a Script
+  reading it gets "not a valid member"). Now: set it in the Properties window; up to 2.5× per the
+  official page.
+- Two statements had no source and were replaced by what the official *Improve performance* page
+  says: "unions can't benefit from instancing" (the page documents instancing for MeshParts only)
+  and "the engine auto-scales textures based on device memory and distance".
+- The `Local Safe` thread-safety row now matches the official table (other Actors may read);
+  "a `--!native` client script gains nothing" now says only what the docs say (server-side).
+
 ### Added — claims register
 
 - `tools/skill-test/claims.json` + `check_claims.py` + generated `docs/claims.md`: every

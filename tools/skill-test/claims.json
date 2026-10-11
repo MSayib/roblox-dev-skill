@@ -3202,27 +3202,17 @@
    "id": "performance-optimization-002",
    "file": "references/performance-optimization.md",
    "quote": "Properties window or a plugin — it needs the `PluginOrOpenCloud` capability, so a game Script can",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Studio 0.742 playtest probe Scripts (SkillTestClaimProbe, SkillTestFrameProbe), 2026-10-11",
+   "evidence": "Fidelity writes from a game Script failed with PluginOrOpenCloud; plugin-level loop succeeded (run_plugin_cases).",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "performance-optimization-003",
    "file": "references/performance-optimization.md",
    "quote": "**Cull distant objects** — only spawn NPCs when users are nearby; despawn when out of range",
-   "status": "unverified",
-   "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "performance-optimization-004",
-   "file": "references/performance-optimization.md",
-   "quote": "Unions store complex geometry data and can't benefit from instancing",
-   "status": "unverified",
+   "status": "advice",
    "kind": "negative",
    "source": "",
    "evidence": "",
@@ -3232,491 +3222,441 @@
    "id": "performance-optimization-005",
    "file": "references/performance-optimization.md",
    "quote": "need the `PluginOrOpenCloud` capability, which an ordinary Script does not hold. See §3.",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Studio 0.742 playtest probe Scripts (SkillTestClaimProbe, SkillTestFrameProbe), 2026-10-11",
+   "evidence": "Writes failed with \"lacking capability PluginOrOpenCloud\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "performance-optimization-006",
    "file": "references/performance-optimization.md",
    "quote": "`Precise` | Highest | Only when pixel-perfect collision is required",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Roblox/creator-docs performance-optimization/improve.md",
+   "evidence": "Precise collision has the highest cost; docs advise reducing precise fidelity. \"Only when pixel-perfect\" is the skill's guidance on top.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "performance-optimization-007",
    "file": "references/performance-optimization.md",
    "quote": "### ⚠️ Fidelity properties are plugin-only — a game Script cannot write them",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Studio 0.742 playtest probe Scripts (SkillTestClaimProbe, SkillTestFrameProbe), 2026-10-11",
+   "evidence": "Every fidelity write from a game Script failed.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "performance-optimization-008",
    "file": "references/performance-optimization.md",
    "quote": "**Measured in Studio 0.742.0.7421053 on 2026-10-11**, from an ordinary server `Script`",
-   "status": "unverified",
+   "status": "studio",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Studio 0.742 playtest probe Scripts (SkillTestClaimProbe, SkillTestFrameProbe), 2026-10-11",
+   "evidence": "Re-measured 2026-10-11 on 0.742.0.7421053.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "performance-optimization-009",
    "file": "references/performance-optimization.md",
    "quote": "`The current thread cannot write '<Property>' (lacking capability PluginOrOpenCloud)`, while the",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Studio 0.742 playtest probe Scripts (SkillTestClaimProbe, SkillTestFrameProbe), 2026-10-11",
+   "evidence": "Exact message \"The current thread cannot write 'CollisionFidelity' (lacking capability PluginOrOpenCloud)\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "performance-optimization-010",
    "file": "references/performance-optimization.md",
    "quote": "same Script wrote `Part.Color`, `Part.CanCollide` and `Humanoid.Health` without error:",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Studio 0.742 playtest probe Scripts (SkillTestClaimProbe, SkillTestFrameProbe), 2026-10-11; 2.15.0 probes",
+   "evidence": "Part.Color write OK (2026-10-11); CanCollide and Humanoid.Health OK in the 2.15.0 probe.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "performance-optimization-011",
    "file": "references/performance-optimization.md",
    "quote": "`TriangleMeshPart.CollisionFidelity` | `None` since 0.740 (was `PluginSecurity`) | `PluginOrOpenCloud` | ❌ fails",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Studio 0.742 playtest probe Scripts (SkillTestClaimProbe, SkillTestFrameProbe), 2026-10-11; local dumps 0.739-0.742",
+   "evidence": "Dump: Write None since 0.740 (was PluginSecurity), cap PluginOrOpenCloud. Write failed.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "performance-optimization-012",
    "file": "references/performance-optimization.md",
    "quote": "`TriangleMeshPart.FluidFidelity` | `None` since 0.740 | `PluginOrOpenCloud` | ❌ fails",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Studio 0.742 playtest probe Scripts (SkillTestClaimProbe, SkillTestFrameProbe), 2026-10-11; local dumps 0.739-0.742",
+   "evidence": "Dump: Write None since 0.740, cap PluginOrOpenCloud. Write failed.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "performance-optimization-013",
    "file": "references/performance-optimization.md",
    "quote": "`PartOperation.RenderFidelity` / `.SmoothingAngle` | `None` since 0.740 | `PluginOrOpenCloud` | ❌ fails",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Studio 0.742 playtest probe Scripts (SkillTestClaimProbe, SkillTestFrameProbe), 2026-10-11; local dumps 0.739-0.742",
+   "evidence": "Dump: Write None since 0.740. Union RenderFidelity and SmoothingAngle writes failed.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "performance-optimization-014",
    "file": "references/performance-optimization.md",
    "quote": "`MeshPart.RenderFidelity` | `None` since **0.742** (was `PluginSecurity`) | `PluginOrOpenCloud` | ❌ fails",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Studio 0.742 playtest probe Scripts (SkillTestClaimProbe, SkillTestFrameProbe), 2026-10-11; local dumps 0.739-0.742",
+   "evidence": "Dump 0.742: Write None + PluginOrOpenCloud. Write failed.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "performance-optimization-015",
    "file": "references/performance-optimization.md",
    "quote": "`Model.LevelOfDetail` | `None` since **0.742** (was `PluginSecurity`) | `PluginOrOpenCloud` (read **and** write) | ❌ even reading fails",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Studio 0.742 playtest probe Scripts (SkillTestClaimProbe, SkillTestFrameProbe), 2026-10-11; local dumps 0.739-0.742",
+   "evidence": "Dump 0.742: PluginOrOpenCloud on read and write. Reading LevelOfDetail failed.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "performance-optimization-016",
    "file": "references/performance-optimization.md",
    "quote": "runtime\" in 0.740 and that the `PluginOrOpenCloud` capability \"only applies inside a sandboxed",
-   "status": "unverified",
+   "status": "source",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "CHANGELOG 2.15.0",
+   "evidence": "History of the 2.11.0-2.14.0 wording.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "performance-optimization-017",
    "file": "references/performance-optimization.md",
    "quote": "container\". Both claims were read from the dump and never run. A Security change from",
-   "status": "unverified",
+   "status": "source",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "CHANGELOG 2.15.0",
+   "evidence": "History.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "performance-optimization-018",
    "file": "references/performance-optimization.md",
    "quote": "`PluginSecurity` to `None` plus a new `PluginOrOpenCloud` capability **moves the gate; it does not",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Studio 0.742 playtest probe Scripts (SkillTestClaimProbe, SkillTestFrameProbe), 2026-10-11",
+   "evidence": "Security None + PluginOrOpenCloud members fail from an unsandboxed Script.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "performance-optimization-019",
    "file": "references/performance-optimization.md",
    "quote": "open it**: an unsandboxed game Script does not hold `PluginOrOpenCloud`. The capability metadata on",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Studio 0.742 playtest probe Scripts (SkillTestClaimProbe, SkillTestFrameProbe), 2026-10-11",
+   "evidence": "As 018.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "performance-optimization-020",
    "file": "references/performance-optimization.md",
    "quote": "these members did not change between 0.740 and 0.742, so the old text was most likely wrong from",
-   "status": "unverified",
+   "status": "dump",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "local dumps 0.739-0.742",
+   "evidence": "Capabilities on these members identical in 0.740, 0.741 and 0.742 dumps.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "performance-optimization-021",
    "file": "references/performance-optimization.md",
    "quote": "the start (0.740 and 0.741 can no longer be run to prove it).",
-   "status": "unverified",
+   "status": "source",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "CHANGELOG 2.15.0",
+   "evidence": "Inference stated as \"most likely\"; 0.740/0.741 Studio no longer runnable.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "performance-optimization-022",
    "file": "references/performance-optimization.md",
    "quote": "(both `Security: None`). Tested from a plain server Script in Studio 0.742: the direct write was",
-   "status": "unverified",
+   "status": "studio",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "metadata.json 2.16.0 verified_by",
+   "evidence": "CreateMeshPartAsync with fidelity options + ApplyMesh run from a game Script in Studio 0.742 (2.16.0).",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "performance-optimization-023",
    "file": "references/performance-optimization.md",
    "quote": "it rejects large meshes (\"Mesh extents size too large. Maximum is (2048, 2048, 2048)\").",
-   "status": "unverified",
+   "status": "studio",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "metadata.json 2.16.0 verified_by",
+   "evidence": "Large mesh rejected with \"Mesh extents size too large. Maximum is (2048, 2048, 2048)\" (2.16.0).",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "performance-optimization-024",
    "file": "references/performance-optimization.md",
    "quote": "error). `CollisionFidelity` can still be **read** from a game Script. One caveat from the same",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Studio 0.742 playtest probe Scripts (SkillTestClaimProbe, SkillTestFrameProbe), 2026-10-11",
+   "evidence": "A playtest Script read MeshPart.CollisionFidelity (Enum.CollisionFidelity.Box).",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "performance-optimization-025",
    "file": "references/performance-optimization.md",
    "quote": "Set `Model.LevelOfDetail` to `SLIM` for distant model representations (plugin-only through the",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "creator-docs performance-optimization/design.md; dump",
+   "evidence": "Docs: set LevelOfDetail to SLIM with EnableSLIMAvatars; dump: ModelLevelOfDetail has SLIM.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "performance-optimization-026",
    "file": "references/performance-optimization.md",
    "quote": "`PluginOrOpenCloud` capability: set it in Studio's Properties window or from a plugin, not from a",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Studio 0.742 playtest probe Scripts (SkillTestClaimProbe, SkillTestFrameProbe), 2026-10-11",
+   "evidence": "Reading/writing Model.LevelOfDetail from a Script fails (PluginOrOpenCloud).",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "performance-optimization-027",
    "file": "references/performance-optimization.md",
    "quote": "setting (`Enum.RolloutState`); it is `NotScriptable`, so no script can set it",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Studio 0.742 playtest probe Scripts (SkillTestClaimProbe, SkillTestFrameProbe), 2026-10-11; API dump 0.742",
+   "evidence": "EnableSLIMAvatars: RolloutState, NotScriptable; a Script reading it got \"not a valid member\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "performance-optimization-028",
    "file": "references/performance-optimization.md",
    "quote": "Texture memory is based on pixel count, not file size. A 1024×1024 texture uses 4× the",
-   "status": "unverified",
+   "status": "docs",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "performance-optimization-029",
-   "file": "references/performance-optimization.md",
-   "quote": "graphics memory of 512×512. The engine auto-scales textures based on device memory and",
-   "status": "unverified",
-   "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Roblox/creator-docs performance-optimization/improve.md",
+   "evidence": "\"a 1024x1024 pixel texture consumes four times the graphics memory of a 512x512 texture\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "performance-optimization-030",
    "file": "references/performance-optimization.md",
    "quote": "**`LOP_FASTPCALL` VM Opcode (Luau 0.735+)**: the release notes say *\"pcall/xpcall overhead should be",
-   "status": "unverified",
+   "status": "source",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "luau-lang/luau release 0.735",
+   "evidence": "\"Added new LOP_FASTPCALL instruction: pcall/xpcall overhead should be around two times lower.\"",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "performance-optimization-031",
    "file": "references/performance-optimization.md",
    "quote": "**Native CodeGen (`--!native`)**: **server-side only.** Per the official docs, \"server-side scripts",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "creator-docs luau/native-code-gen.md",
+   "evidence": "\"server-side scripts in your game can be compiled directly into the machine code instructions\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "performance-optimization-032",
    "file": "references/performance-optimization.md",
    "quote": "version of this file invented \"2-5x\"; the docs instead say to *\"measure the time a script or a",
-   "status": "unverified",
+   "status": "docs",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "creator-docs luau/native-code-gen.md",
+   "evidence": "\"measure the time a script or a function takes with and without native compilation\"; no multiplier given.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "performance-optimization-033",
    "file": "references/performance-optimization.md",
    "quote": "**Luau 0.739 VM work (2026-09-18) — internals, no API to call.** Three items from the release",
-   "status": "unverified",
+   "status": "source",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "luau-lang/luau release 0.739 (2026-09-18)",
+   "evidence": "Items: inline Luau-to-Luau metamethod call path; faster table get/set slow paths; table.move OOB fix; metamethod lookup cache for frozen metatables.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "performance-optimization-034",
    "file": "references/performance-optimization.md",
    "quote": "metatable gets cheaper. If you build OOP classes on metatables that never change after",
-   "status": "unverified",
+   "status": "source",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "performance-optimization-035",
-   "file": "references/performance-optimization.md",
-   "quote": "1 | `PreRender` | `RenderStepped` | Client only | Camera, UI updates",
-   "status": "unverified",
-   "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "performance-optimization-036",
-   "file": "references/performance-optimization.md",
-   "quote": "2 | `PreAnimation` | — (new) | Client only | Animation prep",
-   "status": "unverified",
-   "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "luau-lang/luau release 0.739",
+   "evidence": "\"Add a metamethod lookup cache to frozen metatables.\"",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "performance-optimization-037",
    "file": "references/performance-optimization.md",
    "quote": "Per docs: *\"The engine never garbage collects events connected to an instance and any",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Roblox/creator-docs performance-optimization/improve.md",
+   "evidence": "Quote verbatim.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "performance-optimization-038",
    "file": "references/performance-optimization.md",
    "quote": "`ConnectParallel` fail (\"Scripts that connect in parallel must be rooted under an Actor\", seen in",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "metadata.json 2.16.0 verified_by",
+   "evidence": "ConnectParallel outside an Actor failed with that message (2.16.0).",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "performance-optimization-039",
    "file": "references/performance-optimization.md",
    "quote": "Studio 0.742).",
-   "status": "unverified",
+   "status": "studio",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "metadata.json 2.16.0 verified_by",
+   "evidence": "As 038.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "performance-optimization-040",
    "file": "references/performance-optimization.md",
    "quote": "**Warning**: You cannot use `require()` in a desynchronized parallel phase.",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "creator-docs scripting/multithreading.md",
+   "evidence": "\"You can't use require() in a desynchronized parallel phase.\"",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "performance-optimization-041",
    "file": "references/performance-optimization.md",
    "quote": "**Unsafe** | Cannot read or write in parallel | Cannot call in parallel",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "creator-docs scripting/multithreading.md",
+   "evidence": "Unsafe: cannot be read or written / called in parallel.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "performance-optimization-042",
    "file": "references/performance-optimization.md",
    "quote": "**Read Parallel** | Read only in parallel | N/A",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "performance-optimization-043",
-   "file": "references/performance-optimization.md",
-   "quote": "**Local Safe** | Read/write within same Actor | Call within same Actor only",
-   "status": "unverified",
-   "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "creator-docs scripting/multithreading.md",
+   "evidence": "Read Parallel: can be read but not written in parallel; N/A for functions.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "performance-optimization-044",
    "file": "references/performance-optimization.md",
    "quote": "Studio 0.742 a game Script writing it fails with \"lacking capability PluginOrOpenCloud\" (the dump's",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Studio 0.742 playtest probe Scripts (SkillTestClaimProbe, SkillTestFrameProbe), 2026-10-11; creator-docs workspace/streaming/index.md",
+   "evidence": "Docs: \"non-scriptable and must be set on the Workspace object in Studio\". Script write of StreamingEnabled failed (PluginOrOpenCloud); dump 0.742 Write None + cap.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "performance-optimization-045",
    "file": "references/performance-optimization.md",
    "quote": "write security changed from `PluginSecurity` to `None` in 0.742, but the capability keeps it",
-   "status": "unverified",
+   "status": "dump",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "local dumps 0.741-0.742",
+   "evidence": "StreamingEnabled write security PluginSecurity -> None at 0.742 with PluginOrOpenCloud.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "performance-optimization-046",
    "file": "references/performance-optimization.md",
    "quote": "plugin-only). A Script may read it.",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Studio 0.742 playtest probe Scripts (SkillTestClaimProbe, SkillTestFrameProbe), 2026-10-11",
+   "evidence": "A Script read StreamingEnabled without error.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "performance-optimization-047",
    "file": "references/performance-optimization.md",
    "quote": "**Key properties** (Properties window only: all three are `NotScriptable`, and a Script indexing",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Studio 0.742 playtest probe Scripts (SkillTestClaimProbe, SkillTestFrameProbe), 2026-10-11; API dump 0.742",
+   "evidence": "StreamingMinRadius/TargetRadius/IntegrityMode NotScriptable; a Script reading them got \"not a valid member\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "performance-optimization-048",
    "file": "references/performance-optimization.md",
    "quote": "`StreamingIntegrityMode` gets \"is not a valid member of Workspace\" in Studio 0.742):",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Studio 0.742 playtest probe Scripts (SkillTestClaimProbe, SkillTestFrameProbe), 2026-10-11",
+   "evidence": "\"StreamingIntegrityMode is not a valid member of Workspace\" from a playtest Script.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "performance-optimization-049",
    "file": "references/performance-optimization.md",
    "quote": "`StreamingIntegrityMode` — behavior when required content isn't loaded yet",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "creator-docs workspace/streaming/index.md",
+   "evidence": "Streaming properties section.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "performance-optimization-050",
    "file": "references/performance-optimization.md",
    "quote": "**Roblox targets 60 FPS** (one frame every 16.67ms) — monitor frame budget",
-   "status": "unverified",
+   "status": "docs",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "creator-docs performance-optimization/index.md",
+   "evidence": "\"By default, Roblox games target 60 FPS, which is one frame every 16.67 milliseconds\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "performance-optimization-051",
    "file": "references/performance-optimization.md",
    "quote": "Legacy `BodyMover` classes are deprecated. Use modern constraint-based equivalents:",
-   "status": "unverified",
+   "status": "dump",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "API dump 0.742",
+   "evidence": "BodyMover and every subclass tagged Deprecated; PreferredDescriptorName gives the replacements (RocketPropulsion -> LineForce).",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "performance-optimization-052",
    "file": "references/performance-optimization.md",
    "quote": "Legacy: Fixed physics stepping at 240 Hz for all assemblies.",
-   "status": "unverified",
+   "status": "docs",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "performance-optimization-053",
-   "file": "references/performance-optimization.md",
-   "quote": "Modern: `Workspace.PhysicsSteppingMethod = Adaptive` — physics steps at 60/120/240 Hz",
-   "status": "unverified",
-   "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "creator-docs physics/adaptive-timestepping.md",
+   "evidence": "\"By default, Roblox simulates physics at 240 Hz\"; Fixed mode 240 Hz.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "project-structure-001",
@@ -5866,6 +5806,136 @@
    "kind": "negative",
    "source": "API dump 0.742",
    "evidence": "Workspace.UseNewLuauTypeSolver: RolloutState, tags NotScriptable.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "performance-optimization-053",
+   "file": "references/performance-optimization.md",
+   "quote": "material); the official page does not describe it for unions",
+   "status": "docs",
+   "kind": "negative",
+   "source": "Roblox/creator-docs performance-optimization/improve.md",
+   "evidence": "Instancing documented for MeshParts with the same MeshContent and matching SurfaceAppearance/TextureContent and material; unions not mentioned.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "performance-optimization-054",
+   "file": "references/performance-optimization.md",
+   "quote": "graphics memory of 512×512 (official *Improve performance* page). Uploaded images are transcoded",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs performance-optimization/improve.md",
+   "evidence": "As 028; transcoded to a fixed format, compression/alpha removal does not reduce memory.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "performance-optimization-055",
+   "file": "references/performance-optimization.md",
+   "quote": "page describes it for server-side scripts only, so do not expect a gain from `--!native` in a",
+   "status": "docs",
+   "kind": "negative",
+   "source": "creator-docs luau/native-code-gen.md",
+   "evidence": "Page describes server-side scripts only.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "performance-optimization-056",
+   "file": "references/performance-optimization.md",
+   "quote": "1 | `PreRender` | `RenderStepped` | Client only (a server Script can connect it, but it never fires; `RenderStepped` errors there) | Camera, UI updates",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.742 playtest probe Scripts (SkillTestClaimProbe, SkillTestFrameProbe), 2026-10-11",
+   "evidence": "Server Script: PreRender connected, fired 0 times in 2 s; RenderStepped connect errored \"can only be used from local scripts\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "performance-optimization-057",
+   "file": "references/performance-optimization.md",
+   "quote": "2 | `PreAnimation` | — (new) | Client + Server (fired 104 times in 2 s from a server Script, Studio 0.742) | Animation prep",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.742 playtest probe Scripts (SkillTestClaimProbe, SkillTestFrameProbe), 2026-10-11",
+   "evidence": "Server Script: PreAnimation fired 104 times in 2 s (same as PreSimulation/PostSimulation).",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "performance-optimization-058",
+   "file": "references/performance-optimization.md",
+   "quote": "**Local Safe** | Read/write within the same Actor; other Actors may read but not write in parallel | Call within the same Actor; other Actors cannot call in parallel",
+   "status": "docs",
+   "kind": "negative",
+   "source": "creator-docs scripting/multithreading.md",
+   "evidence": "Local Safe: used within the same Actor; other Actors may read but not write / cannot call in parallel.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "performance-optimization-059",
+   "file": "references/performance-optimization.md",
+   "quote": "`NotScriptable`; a Script reading it gets \"not a valid member\") — physics steps at 60/120/240 Hz",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.742 playtest probe Scripts (SkillTestClaimProbe, SkillTestFrameProbe), 2026-10-11; creator-docs physics/adaptive-timestepping.md",
+   "evidence": "Docs: set in the Properties window; islands 240/120/60 Hz; up to 2.5x. Script read of PhysicsSteppingMethod got \"not a valid member\"; dump NotScriptable.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "false-preanimation-client-only",
+   "file": "references/performance-optimization.md",
+   "quote": "| 2 | `PreAnimation` | — (new) | Client only |",
+   "kind": "regression",
+   "status": "false",
+   "source": "",
+   "evidence": "PreAnimation fired 104 times in 2 s from a server Script (Studio 0.742).",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "false-unions-instancing",
+   "file": "references/performance-optimization.md",
+   "quote": "Unions store complex geometry data and can't benefit from instancing",
+   "kind": "regression",
+   "status": "false",
+   "source": "",
+   "evidence": "Not in the official page; reworded to what the page documents.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "false-texture-autoscale",
+   "file": "references/performance-optimization.md",
+   "quote": "The engine auto-scales textures based on device memory and",
+   "kind": "regression",
+   "status": "false",
+   "source": "",
+   "evidence": "No source found in the official performance pages.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "false-rocketpropulsion",
+   "file": "references/performance-optimization.md",
+   "quote": "| `RocketPropulsion`  | `LinearVelocity` + `AlignOrientation` |",
+   "kind": "regression",
+   "status": "false",
+   "source": "",
+   "evidence": "Dump PreferredDescriptorName: LineForce.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "false-physicsstepping-code",
+   "file": "references/performance-optimization.md",
+   "quote": "Modern: `Workspace.PhysicsSteppingMethod = Adaptive`",
+   "kind": "regression",
+   "status": "false",
+   "source": "",
+   "evidence": "NotScriptable: a Script cannot set it.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "false-native-client-nothing",
+   "file": "references/performance-optimization.md",
+   "quote": "`--!native` client script gains nothing",
+   "kind": "regression",
+   "status": "false",
+   "source": "",
+   "evidence": "Docs only describe server-side scripts; reworded to the source.",
    "checked": "2026-10-11, engine 0.742.0.7421053"
   }
  ]
