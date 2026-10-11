@@ -54,6 +54,38 @@ port 34871, with all layers re-run after the last edit.
   tests on 0.742; the text now says so and still says to confirm with `script_read`.
 - Dump size figures re-measured on 0.742 (8,438,918 B; 940 class files).
 
+### Fixed — found by verifying `legacy-migration.md` claim by claim
+
+Every dump claim was re-derived from the local dumps 0.733–0.742 (81 assertions; older releases
+from the Roblox-Client-Tracker mirror of the official dump), every *(Studio)* row of the 0.742
+table re-run from playtest Scripts, and every dated platform change traced to a Roblox staff post.
+
+- **Scoped User IDs are not rolling out in October 2026.** A staff update on 2026-09-01 delayed
+  the rollout and promised a new timeline in October; none had been posted by 2026-10-11. Fixed in
+  `legacy-migration.md` and `security-hardening.md` (both said October 2026), and the "August
+  2026" Account Linking date. The non-collision of scoped and global IDs, marked unverified, is now
+  quoted from the official *Users* page.
+- **`player.User.Id` is not `player.UserId`.** Measured in a playtest: the same returning player
+  had 8935399566 and 1237928291809. The advice to adopt `player.User` now warns not to re-key
+  existing saves.
+- **The New Type Solver is not on for `--!strict` by default.** The general-release post
+  (2025-11-20) turned it on for nonstrict/nocheck only; Studio 0.742 still publishes
+  `DFFlagStudioLuauNewSolverOptOutPlacesWithStrictScripts = True`. The opt-in is
+  `Workspace.UseNewLuauTypeSolver` (Properties window). `luau-fundamentals.md` says so too. The
+  section's example claimed an error the code does not produce (and that the old solver reports
+  as well); replaced by one that only the new solver reports, checked with both.
+- **The April 2026 migration actions were swapped.** The removed `economy.roblox.com` endpoint is a
+  purchase flow (migrate to in-experience `MarketplaceService`), and the April 23 deprecation is of
+  game pass / developer product *management* endpoints (migrate to Open Cloud). The publishing fee
+  row now says it is refundable and an alternative to Plus/Premium for all-ages publishing.
+- **Mid-June removals had nothing to migrate**: the `Accoutrement` and `AdService`/`AdGui` members
+  removed in 0.725–0.726 were all `RobloxSecurity`/`Hidden` or `NotScriptable`.
+- `DataModelPatchService` was not `NotBrowsable` and lived from at least 0.733 to 0.737, not one
+  release; `TestService.RegisterTest` predates 0.742 (the new members are `RegisterSuite`,
+  `ListTests`, `RunTestsAsync`, `ResetTestRegistry`, `TestRegistryChanged`); 0.741 did remove 15
+  `StarterPlayer.GameSettings*` properties; "2024" for the RunService renames had no source;
+  `LuauTypeCheckMode` and `HumanoidRigDescription.OriginOffset` cannot even be read by a Script.
+
 ### Added — claims register
 
 - `tools/skill-test/claims.json` + `check_claims.py` + generated `docs/claims.md`: every

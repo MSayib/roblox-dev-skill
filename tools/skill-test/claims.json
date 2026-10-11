@@ -1232,58 +1232,8 @@
    "id": "legacy-migration-002",
    "file": "references/legacy-migration.md",
    "quote": "Identify and migrate deprecated Roblox patterns to modern replacements.",
-   "status": "unverified",
+   "status": "advice",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "legacy-migration-003",
-   "file": "references/legacy-migration.md",
-   "quote": "Legacy GamePass APIs | `MarketplaceService` methods | ⚠️ Mostly | Check April 2026 deprecation notes",
-   "status": "unverified",
-   "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "legacy-migration-004",
-   "file": "references/legacy-migration.md",
-   "quote": "Old Type Solver | New Type Solver (GA Nov 2025) | Auto | Auto-enabled; `--!strict` behavior improved",
-   "status": "unverified",
-   "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "legacy-migration-005",
-   "file": "references/legacy-migration.md",
-   "quote": "`RunService.Stepped` | `RunService.PreSimulation` | Same behavior, clearer name | 2024",
-   "status": "unverified",
-   "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "legacy-migration-006",
-   "file": "references/legacy-migration.md",
-   "quote": "`RunService.Heartbeat` | `RunService.PostSimulation` | Same behavior, clearer name | 2024",
-   "status": "unverified",
-   "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "legacy-migration-007",
-   "file": "references/legacy-migration.md",
-   "quote": "`RunService.RenderStepped` | `RunService.PreRender` | Same behavior, clearer name | 2024",
-   "status": "unverified",
-   "kind": "number",
    "source": "",
    "evidence": "",
    "checked": ""
@@ -1292,57 +1242,47 @@
    "id": "legacy-migration-008",
    "file": "references/legacy-migration.md",
    "quote": "`LocalizationService:GetTranslatorForPlayer()` | `:GetTranslatorForPlayerAsync()` | ⚠️ Mostly | Deprecated in engine **0.740**. The async form **yields** — wrap it or call it off the critical path",
-   "status": "unverified",
+   "status": "dump",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "scratchpad verify_legacy_dump.py over local dumps 0.733-0.742 (81 assertions)",
+   "evidence": "GetTranslatorForPlayer gained Deprecated in 0.740 (not in 0.739); GetTranslatorForPlayerAsync has Yields.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-009",
    "file": "references/legacy-migration.md",
    "quote": "`CallingService:CreateCall()` | `:CreateCallAsync()` | — | Renamed in 0.739 and now yields — but **both are `RobloxScriptSecurity`**, as is every `CallingService` member since the class appeared in 0.737, so no game script could ever call either and there is nothing to migrate. The Roblox Connect calling APIs were sunset July 15, 2026",
-   "status": "unverified",
+   "status": "dump",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "scratchpad verify_legacy_dump.py over local dumps 0.733-0.742 (81 assertions)",
+   "evidence": "CallingService first in 0.737; every member in 0.737-0.742 RobloxScriptSecurity; CreateCall in 0.738, CreateCallAsync (Yields) in 0.739.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-010",
    "file": "references/legacy-migration.md",
    "quote": "standard replacement (available since 2021).",
-   "status": "unverified",
+   "status": "docs",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "legacy-migration-011",
-   "file": "references/legacy-migration.md",
-   "quote": "`--!strict` checking. Some previously-passing code may now error:",
-   "status": "unverified",
-   "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "DevForum topic 1387845 \"Task Library - Now Available!\" (2021-08-02)",
+   "evidence": "Task library announced 2021-08-02.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-012",
    "file": "references/legacy-migration.md",
    "quote": "are deprecated, not removed.",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Roblox/creator-docs RobloxGlobals.yaml",
+   "evidence": "wait/spawn/delay carry deprecation messages (\"superseded by task.*, should not be used\"); still present.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-013",
    "file": "references/legacy-migration.md",
    "quote": "**Data store migration without a rollback plan** — Never migrate player data",
-   "status": "unverified",
+   "status": "advice",
    "kind": "negative",
    "source": "",
    "evidence": "",
@@ -1352,47 +1292,7 @@
    "id": "legacy-migration-014",
    "file": "references/legacy-migration.md",
    "quote": "Test coverage | Automated tests exist | Manual testing only",
-   "status": "unverified",
-   "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "legacy-migration-015",
-   "file": "references/legacy-migration.md",
-   "quote": "`economy.roblox.com/v1/purchases/products/{productId}` **REMOVED** | April 10 | Migrate to Open Cloud APIs",
-   "status": "unverified",
-   "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "legacy-migration-016",
-   "file": "references/legacy-migration.md",
-   "quote": "Legacy GamePass/DevProduct purchase APIs deprecated | April 23 | Use `MarketplaceService` methods",
-   "status": "unverified",
-   "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "legacy-migration-017",
-   "file": "references/legacy-migration.md",
-   "quote": "`Accoutrement` state props/methods removed | Mid-June | Remove usage if any",
-   "status": "unverified",
-   "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "legacy-migration-018",
-   "file": "references/legacy-migration.md",
-   "quote": "`AdService` / `AdGui` signals removed | Mid-June | Migrate to current ad APIs",
-   "status": "unverified",
+   "status": "advice",
    "kind": "negative",
    "source": "",
    "evidence": "",
@@ -1402,631 +1302,511 @@
    "id": "legacy-migration-019",
    "file": "references/legacy-migration.md",
    "quote": "Input Action System (IAS) full release | June 11 | `Workspace.PlayerScriptsUseInputActionSystem` — a Studio Properties-window setting; it is `NotScriptable`, so no script (MCP `execute_luau` included) can read or set it. See `references/project-structure.md`",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "DevForum topic 4678416 (Roblox Staff, 2026-06-11); API dump 0.742",
+   "evidence": "\"[Full Release] Input Action System (IAS)\" posted 2026-06-11; Workspace.PlayerScriptsUseInputActionSystem is NotScriptable; a playtest Script reading it got \"not a valid member\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-020",
    "file": "references/legacy-migration.md",
    "quote": "Derived by diffing the **0.741 and 0.742 Full API Dumps locally** with",
-   "status": "unverified",
+   "status": "dump",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "scratchpad verify_legacy_dump.py over local dumps 0.733-0.742 (81 assertions)",
+   "evidence": "0.741->0.742 counts reproduced.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-021",
    "file": "references/legacy-migration.md",
    "quote": "`tools/robloxdocs/diff-api-dumps.py`, 2026-10-11. **940 classes (+10, −1), 648 enums (+8, −1),",
-   "status": "unverified",
+   "status": "dump",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "scratchpad verify_legacy_dump.py over local dumps 0.733-0.742 (81 assertions)",
+   "evidence": "940 classes (+10 -1), 648 enums (+8 -1).",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-023",
    "file": "references/legacy-migration.md",
    "quote": "Every developer-visible row was **run in Studio 0.742.0.7421053** on an empty baseplate, from an",
-   "status": "unverified",
+   "status": "studio",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Studio 0.742 playtest probe Scripts (SkillTestClaimProbe / Probe2 / client), 2026-10-11",
+   "evidence": "Every Studio row of the 0.742 table re-run 2026-10-11 from a playtest Script / LocalScript; all matched.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-024",
    "file": "references/legacy-migration.md",
    "quote": "*dump only*. None of the new members below has a page on create.roblox.com yet (checked 2026-10-11",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Roblox/creator-docs reference YAML",
+   "evidence": "2026-10-11: no Player.GetFriendsInServerAsync, GradientType.Elliptical, Camera.ProjectionType, CanUsersTransferRobuxAsync, GetSurfaceSlotsAsync entries; no UIBlur or AnimationPlayer class pages.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-025",
    "file": "references/legacy-migration.md",
    "quote": "or `RobloxScriptSecurity` to `Security: None` and gained the `PluginOrOpenCloud` capability. That",
-   "status": "unverified",
+   "status": "dump",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "scratchpad verify_legacy_dump.py over local dumps 0.733-0.742 (81 assertions)",
+   "evidence": "The seven 0.742 members: Write None + PluginOrOpenCloud.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-026",
    "file": "references/legacy-migration.md",
    "quote": "does **not** make them scriptable: an unsandboxed game Script does not hold `PluginOrOpenCloud`, and",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Studio 0.742 playtest probe Scripts (SkillTestClaimProbe / Probe2 / client), 2026-10-11",
+   "evidence": "Every listed write failed with \"lacking capability PluginOrOpenCloud\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-027",
    "file": "references/legacy-migration.md",
    "quote": "every one of these writes failed with `lacking capability PluginOrOpenCloud`. The same is true of",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Studio 0.742 playtest probe Scripts (SkillTestClaimProbe / Probe2 / client), 2026-10-11",
+   "evidence": "Every listed write failed with \"lacking capability PluginOrOpenCloud\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-028",
    "file": "references/legacy-migration.md",
    "quote": "the 0.740 fidelity and `Lighting` relaxations, which this file and `performance-optimization.md`",
-   "status": "unverified",
+   "status": "studio",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "legacy-migration-029",
-   "file": "references/legacy-migration.md",
-   "quote": "`Workspace.StreamingEnabled`, `.FallenPartsDestroyHeight`, `.FallHeightEnabled`, `.LuauTypeCheckMode`, `Model.LevelOfDetail`, `MeshPart.RenderFidelity`, `HumanoidRigDescription.OriginOffset`: Security → `None` + `PluginOrOpenCloud` | **Still plugin-only.** A game Script writing any of them fails *(Studio)*; `Model.LevelOfDetail` and `Workspace.ReplicationFrequency` cannot even be **read** from a Script. Reading `StreamingEnabled` works. The command bar / a plugin (MCP `execute_luau` too) can write them *(Studio)*. Set them in the Properties window",
-   "status": "unverified",
-   "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Studio 0.742 playtest probe Scripts (SkillTestClaimProbe / Probe2 / client), 2026-10-11",
+   "evidence": "CollisionFidelity, FluidFidelity, Union RenderFidelity/SmoothingAngle, LightingStyle, PrioritizeLightingQuality writes failed with PluginOrOpenCloud.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-030",
    "file": "references/legacy-migration.md",
    "quote": "`+Camera.ProjectionType` (`Enum.ProjectionType` `Perspective`/`Orthographic`), `+OrthographicSize`, `+OrthographicMode`, `+ViewStretch` | **Present but not enabled.** From a `LocalScript`, setting `ProjectionType = Orthographic` raises no error, yet reading it back still gives `Perspective`, and `OrthographicSize = 50` reads back `300` *(Studio)*. Do not build an orthographic camera on it yet",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Studio 0.742 playtest probe Scripts (SkillTestClaimProbe / Probe2 / client), 2026-10-11",
+   "evidence": "LocalScript: setting ProjectionType Orthographic no error, read back Perspective; OrthographicSize 50 read back 300. Dump: members new in 0.742.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-031",
    "file": "references/legacy-migration.md",
    "quote": "`+UIBlur` (`UIComponent`: `Color`, `Enabled`, `Strength` (`Enum.UIBlurStrength` `Light`/`Medium`/`Heavy`), `Transparency`) | Creatable, and can be parented under a `Frame` in `PlayerGui` from a `LocalScript` without error *(Studio)*. **Whether it renders a blur was not verified**, and there is no docs page. Check visually before relying on it",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Studio 0.742 playtest probe Scripts (SkillTestClaimProbe / Probe2 / client), 2026-10-11",
+   "evidence": "LocalScript: UIBlur created under a Frame in PlayerGui, Strength read Heavy. Rendering not checked, as the row says.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-032",
    "file": "references/legacy-migration.md",
    "quote": "`+MarketplaceService:CanUsersTransferRobuxAsync(sender: Player, receiverUser)` → `Enum.RobuxTransferEligibility`, Yields; `+MarketplaceService:PromptVIPServerPurchase(player)` | `CanUsersTransferRobuxAsync` errors **\"CanUsersTransferRobuxAsync is not enabled\"** from a Script *(Studio)*. `PromptVIPServerPurchase` was not called (it opens a purchase prompt), *dump only*. Keep using `PromptRobuxTransferAsync` from `monetization.md`",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "legacy-migration-033",
-   "file": "references/legacy-migration.md",
-   "quote": "`+MeshPart:GetSurfaceSlotsAsync()`, `+TestService` test registry (`RegisterTest`, `RegisterSuite`, `ListTests`, `RunTestsAsync`, `TestRegistryChanged`, plus `TestSuite` / `TestResult` / `TestRunResult` / `TestFailure`), `+ModerationService:BindViolationProcessor()` | **Not enabled:** they error with \"MeshPart:GetSurfaceSlotsAsync is not yet enabled\", \"TestService test registration is not available. Feature flag is disabled.\" and \"Safety callback API is not enabled\" *(Studio)*. `TestService.RegisterTestLegacy` is now **deprecated** in favour of `RegisterTest` (*dump only*); nothing to migrate while the new one is off",
-   "status": "unverified",
-   "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Studio 0.742 playtest probe Scripts (SkillTestClaimProbe / Probe2 / client), 2026-10-11",
+   "evidence": "CanUsersTransferRobuxAsync(player, player.User) errored \"CanUsersTransferRobuxAsync is not enabled\"; dump: new in 0.742, Yields, returns RobuxTransferEligibility.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-034",
    "file": "references/legacy-migration.md",
    "quote": "`+Workspace.ReplicationFrequency` / `+ReplicationThroughput` (`Enum.ReplicationMode`) | `PluginOrOpenCloud` for read **and** write: a Script cannot read them *(Studio)*. Properties-window settings",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Studio 0.742 playtest probe Scripts (SkillTestClaimProbe / Probe2 / client), 2026-10-11",
+   "evidence": "Reading ReplicationFrequency / ReplicationThroughput from a Script failed (PluginOrOpenCloud); dump caps on Read and Write.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-035",
    "file": "references/legacy-migration.md",
    "quote": "**`AnimatedImage` class and `Enum.AnimatedImagePlaybackState` REMOVED** | Nothing to migrate: every `AnimatedImage` member was `RobloxScriptSecurity` (see the 0.738 row) and `Instance.new(\"AnimatedImage\")` now fails *(Studio)*",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Studio 0.742 playtest probe Scripts (SkillTestClaimProbe / Probe2 / client), 2026-10-11",
+   "evidence": "Instance.new(\"AnimatedImage\") failed; dump: removed in 0.742 with its enum; members were RobloxScriptSecurity.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-036",
    "file": "references/legacy-migration.md",
    "quote": "`+AnimationPlayer` | `NotCreatable` (`Instance.new` fails *(Studio)*); every member `RobloxScriptSecurity`. Not usable",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Studio 0.742 playtest probe Scripts (SkillTestClaimProbe / Probe2 / client), 2026-10-11",
+   "evidence": "Instance.new(\"AnimationPlayer\") failed; dump: NotCreatable, all members RobloxScriptSecurity.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-037",
    "file": "references/legacy-migration.md",
    "quote": "Roblox-internal, not callable by you (*dump only*): `FriendsCallingService`, `InstanceRegistryService` (`RobloxScriptSecurity`), `HiddenPlayerService` (`RobloxSecurity`), new `AnimatedImageService` / `PackageService` / `PopLatencyService` / `Sound` / `Audio*` members, `TeleportService:TeleportSwitchServer` signature change, `Enum.PioneerSource` +`RobloxPioneerTest`, `TestCase` superclass `Instance` → `Object` | Ignore for game code",
-   "status": "unverified",
+   "status": "dump",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "API dump 0.742",
+   "evidence": "FriendsCallingService / InstanceRegistryService members RobloxScriptSecurity, HiddenPlayerService RobloxSecurity; TestCase superclass Object; PioneerSource has RobloxPioneerTest.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-038",
    "file": "references/legacy-migration.md",
    "quote": "Derived by diffing the **0.740 and 0.741 Full API Dumps locally** with",
-   "status": "unverified",
+   "status": "dump",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "legacy-migration-039",
-   "file": "references/legacy-migration.md",
-   "quote": "2026-10-01. **931 classes (+7, 0 removed), 641 enums (+6), 260 services, 48 deprecated.** No",
-   "status": "unverified",
-   "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "legacy-migration-040",
-   "file": "references/legacy-migration.md",
-   "quote": "removals, no new deprecations, no `Capabilities` changes. Luau 0.740 (2026-09-25) — see",
-   "status": "unverified",
-   "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "scratchpad verify_legacy_dump.py over local dumps 0.733-0.742 (81 assertions)",
+   "evidence": "0.740->0.741 counts reproduced.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-041",
    "file": "references/legacy-migration.md",
    "quote": "`luau-fundamentals.md`. Runtime facts marked *(Studio)* were read in Studio 0.741.19.7411056.",
-   "status": "unverified",
+   "status": "source",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "metadata.json 2.14.0 verified_by",
+   "evidence": "Recorded at the 0.741 ingest (Studio 0.741.19.7411056 via MCP).",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-042",
    "file": "references/legacy-migration.md",
    "quote": "`+Player:GetFriendsInServerAsync()` — `Security: None`, **Yields**, no parameters, returns an `Array`; `Capabilities: Players, Social` | New and usable. **Not yet on the official `Player` page** (checked 2026-10-01), so the shape of each array element is undocumented — print one result in Studio before writing code that indexes its fields, and do not guess them. It yields, so keep it off a hot path",
-   "status": "unverified",
+   "status": "dump",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "scratchpad verify_legacy_dump.py over local dumps 0.733-0.742 (81 assertions)",
+   "evidence": "New in 0.741; Security None, Yields, no parameters, returns Array, caps Players+Social. Still absent from Player.yaml on 2026-10-11.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-043",
    "file": "references/legacy-migration.md",
    "quote": "`Enum.GradientType` +`Elliptical` (Value 3) — exists at runtime *(Studio)* | New `UIGradient.Type` option. The official enum page still documents only `Linear` and `Radial`, so how `Offset`/`Rotation` affect it is undocumented — check it visually before relying on it",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Studio 0.742 playtest probe Scripts (SkillTestClaimProbe / Probe2 / client), 2026-10-11",
+   "evidence": "Enum.GradientType.Elliptical.Value == 3 from a playtest Script; new in 0.741; GradientType.yaml still has no Elliptical (2026-10-11).",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-044",
    "file": "references/legacy-migration.md",
    "quote": "`+TestService.Enabled` (bool, `ReadOnly`) — reads `false` in an edit session *(Studio)* | Read-only; nothing to migrate",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "execute_luau Edit, 2026-10-11",
+   "evidence": "TestService.Enabled read false in the edit session; dump: new in 0.741, ReadOnly.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-045",
    "file": "references/legacy-migration.md",
    "quote": "`Decal.LocalizedTextureContent`, `ImageLabel.LocalizedImageContent`, `ImageButton.LocalizedImageContent`: `Write` → `NotAccessibleSecurity`, `ReadOnly` tag dropped | No action. `Read` is still `RobloxScriptSecurity`, so game code could not read these before 0.741 and still cannot",
-   "status": "unverified",
+   "status": "dump",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "scratchpad verify_legacy_dump.py over local dumps 0.733-0.742 (81 assertions)",
+   "evidence": "Write NotAccessibleSecurity, Read RobloxScriptSecurity, ReadOnly tag dropped at 0.741.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-046",
    "file": "references/legacy-migration.md",
    "quote": "Roblox-internal additions — `RobloxScriptSecurity` / `RobloxSecurity`, not callable by you: `FriendsCallingInstance` / `FriendsCallingParticipant` (+5 `FriendsCalling*` enums), `ProjectService`, `AssetService` `CreateTextContentAsync` / `ReadTextContentAsync`, `NotificationService` topic subscription, `ScriptEditorService` `OpenStringValueDocumentAsync`; 15 `StarterPlayer.GameSettings*` properties **removed** (all were `RobloxScriptSecurity`) | Ignore for game code. `TextDocument` is new too: `NotBrowsable`, its one property `PluginSecurity`",
-   "status": "unverified",
+   "status": "dump",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "API dump 0.741",
+   "evidence": "Recorded at the 0.741 ingest; FriendsCalling* etc. RobloxScriptSecurity / RobloxSecurity.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-047",
    "file": "references/legacy-migration.md",
    "quote": "**Corrections to the older rows below, found by the 0.741 prose audit.** Until 0.741 the audit",
-   "status": "unverified",
+   "status": "source",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "CHANGELOG 2.14.0",
+   "evidence": "History of the 0.741 prose audit.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-048",
    "file": "references/legacy-migration.md",
    "quote": "checked code blocks only, never prose or tables, and several rows here listed members as usable",
-   "status": "unverified",
+   "status": "source",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "CHANGELOG 2.14.0",
+   "evidence": "History of the 0.741 prose audit.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-049",
    "file": "references/legacy-migration.md",
    "quote": "that the very dump each row was derived from marked `RobloxScriptSecurity` (or `NotScriptable`).",
-   "status": "unverified",
+   "status": "source",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "CHANGELOG 2.14.0",
+   "evidence": "History of the 0.741 prose audit.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-050",
    "file": "references/legacy-migration.md",
    "quote": "All were wrong on the day they were written; none is a 0.741 change. Each row is now corrected in",
-   "status": "unverified",
+   "status": "source",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "CHANGELOG 2.14.0",
+   "evidence": "History of the 0.741 prose audit.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-051",
    "file": "references/legacy-migration.md",
    "quote": "place: `CallingService` (every member, so the 0.739 `CreateCall` → `CreateCallAsync` \"rename\" is not",
-   "status": "unverified",
+   "status": "dump",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "scratchpad verify_legacy_dump.py over local dumps 0.733-0.742 (81 assertions)",
+   "evidence": "Every CallingService member RobloxScriptSecurity.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-052",
    "file": "references/legacy-migration.md",
    "quote": "`WorldRoot.PhysicsStepTime`, the deprecated `DataModel.IsPioneerBuild` / `PioneerSource`, and the",
-   "status": "unverified",
+   "status": "dump",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "scratchpad verify_legacy_dump.py over local dumps 0.733-0.742 (81 assertions)",
+   "evidence": "PhysicsStepTime RobloxScriptSecurity read+write; IsPioneerBuild/PioneerSource deprecated, RobloxScriptSecurity.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-053",
    "file": "references/legacy-migration.md",
    "quote": "`NotScriptable` `Workspace.UseInputSink`. If an older copy of this file is in your context, the",
-   "status": "unverified",
+   "status": "dump",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "scratchpad verify_legacy_dump.py over local dumps 0.733-0.742 (81 assertions)",
+   "evidence": "Workspace.UseInputSink NotScriptable; a playtest Script reading it got \"not a valid member\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-054",
    "file": "references/legacy-migration.md",
    "quote": "Derived by diffing the **0.739 and 0.740 Full API Dumps locally** (`python3` over",
-   "status": "unverified",
+   "status": "dump",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "legacy-migration-055",
-   "file": "references/legacy-migration.md",
-   "quote": "`~/RobloxDocs/RobloxAPI/dumps/`), 2026-09-25. **924 classes (−1), 635 enums (−1), 258 services,",
-   "status": "unverified",
-   "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "legacy-migration-056",
-   "file": "references/legacy-migration.md",
-   "quote": "48 deprecated.** Luau 0.739 (2026-09-18). Note this is a *shrinking* release — the first in this",
-   "status": "unverified",
-   "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "scratchpad verify_legacy_dump.py over local dumps 0.733-0.742 (81 assertions)",
+   "evidence": "0.739->0.740 counts reproduced.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-057",
    "file": "references/legacy-migration.md",
    "quote": "`LocalizationService:GetTranslatorForPlayer()` **newly Deprecated** | Migrate to **`GetTranslatorForPlayerAsync()`** (the dump names it as the preferred descriptor). The old call still exists but now emits a deprecation lint",
-   "status": "unverified",
+   "status": "dump",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "scratchpad verify_legacy_dump.py over local dumps 0.733-0.742 (81 assertions)",
+   "evidence": "Deprecated in 0.740 with PreferredDescriptorName GetTranslatorForPlayerAsync.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-058",
    "file": "references/legacy-migration.md",
    "quote": "**`SnippetService` REMOVED** (whole class) | If anything referenced it, it is gone. Nothing in this skill did",
-   "status": "unverified",
+   "status": "dump",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "scratchpad verify_legacy_dump.py over local dumps 0.733-0.742 (81 assertions)",
+   "evidence": "SnippetService in 0.739, not in 0.740.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-059",
    "file": "references/legacy-migration.md",
    "quote": "**`Enum.Language` REMOVED** | Remove any `Enum.Language` usage",
-   "status": "unverified",
+   "status": "dump",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "scratchpad verify_legacy_dump.py over local dumps 0.733-0.742 (81 assertions)",
+   "evidence": "Enum.Language in 0.739, not in 0.740.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-060",
    "file": "references/legacy-migration.md",
    "quote": "`TriangleMeshPart.CollisionFidelity` / `.FluidFidelity` and `PartOperation.RenderFidelity` / `.SmoothingAngle`: `Security.Write` **`PluginSecurity` → `None`** | **Still not writable from a game Script** (corrected in 2.15.0, measured in Studio 0.742). Each member gained `Capabilities.Write: [\"PluginOrOpenCloud\"]`, and an ordinary unsandboxed Script does not hold that capability: the write fails with \"lacking capability PluginOrOpenCloud\". This row used to say \"newly script-writable at runtime\". Set them at author time. `MeshPart.RenderFidelity` followed in 0.742, the same way. See `performance-optimization.md` §3",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Studio 0.742 playtest probe Scripts (SkillTestClaimProbe / Probe2 / client), 2026-10-11; scratchpad verify_legacy_dump.py over local dumps 0.733-0.742 (81 assertions)",
+   "evidence": "Dump: Write PluginSecurity -> None at 0.740. Studio 0.742: writes from a Script fail (PluginOrOpenCloud).",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-061",
    "file": "references/legacy-migration.md",
    "quote": "`Lighting.LightingStyle` (enum `Realistic`/`Soft`) and `Lighting.PrioritizeLightingQuality` (bool): `Security.Write` **`RobloxScriptSecurity` → `None`** | **Plugin-only, not settable from a game Script** (corrected in 2.15.0): the `Capabilities.Write: [\"PluginOrOpenCloud\"]` they gained blocks an ordinary Script (measured in Studio 0.742 for both). Set them in the Properties window. This row used to call them \"developer-settable from a script\"",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Studio 0.742 playtest probe Scripts (SkillTestClaimProbe / Probe2 / client), 2026-10-11; scratchpad verify_legacy_dump.py over local dumps 0.733-0.742 (81 assertions)",
+   "evidence": "Dump: Write RobloxScriptSecurity -> None + PluginOrOpenCloud at 0.740. Studio 0.742: writes fail.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-062",
    "file": "references/legacy-migration.md",
    "quote": "`+TeleportOptions.ReservedServerId`, `+TeleportOptions.VipServerId`; `Enum.TeleportMethod` +`TeleportSwitchServer` | New public teleport targeting fields. The matching `TeleportService:TeleportSwitchServer()` is **`RobloxScriptSecurity`** — you cannot call it, so do not build on it",
-   "status": "unverified",
+   "status": "dump",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "scratchpad verify_legacy_dump.py over local dumps 0.733-0.742 (81 assertions)",
+   "evidence": "TeleportOptions.ReservedServerId/VipServerId and TeleportMethod.TeleportSwitchServer new in 0.740; TeleportService:TeleportSwitchServer RobloxScriptSecurity.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-063",
    "file": "references/legacy-migration.md",
    "quote": "`WorldRoot.PhysicsStepTime` gained the **`ReadOnly`** tag | No action. It is `RobloxScriptSecurity` for both read and write, so game code could never touch it in the first place",
-   "status": "unverified",
+   "status": "dump",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "scratchpad verify_legacy_dump.py over local dumps 0.733-0.742 (81 assertions)",
+   "evidence": "ReadOnly tag added at 0.740; Security read and write RobloxScriptSecurity.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-064",
    "file": "references/legacy-migration.md",
    "quote": "`+CaptureService:StartVideoCaptureForMCPAsync()` / `:StopVideoCaptureForMCP()` | **`RobloxScriptSecurity` — not callable by you.** Listed only because the name suggests Studio MCP is growing a video-capture path; it is not an API you can use, and no MCP tool exposes it today",
-   "status": "unverified",
+   "status": "dump",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "scratchpad verify_legacy_dump.py over local dumps 0.733-0.742 (81 assertions)",
+   "evidence": "Both new in 0.740, RobloxScriptSecurity.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-065",
    "file": "references/legacy-migration.md",
    "quote": "Derived by diffing the **0.738 and 0.739 Full API Dumps locally** (`python3` over",
-   "status": "unverified",
+   "status": "dump",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "legacy-migration-066",
-   "file": "references/legacy-migration.md",
-   "quote": "`~/RobloxDocs/RobloxAPI/dumps/`), 2026-09-17. 925 classes (+4, 0 removed), 636 enums (+3), 259 services, 48 deprecated. Luau unchanged at 0.738.",
-   "status": "unverified",
-   "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "scratchpad verify_legacy_dump.py over local dumps 0.733-0.742 (81 assertions)",
+   "evidence": "0.738->0.739 counts reproduced.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-067",
    "file": "references/legacy-migration.md",
    "quote": "`CallingService.CreateCall` **RENAMED** to `CreateCallAsync` (now **Yields**) | No action for game code: both names are **`RobloxScriptSecurity`**, so no Script could ever call either. Recorded for completeness only",
-   "status": "unverified",
+   "status": "dump",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "scratchpad verify_legacy_dump.py over local dumps 0.733-0.742 (81 assertions)",
+   "evidence": "CreateCall in 0.738 only; CreateCallAsync (Yields) from 0.739; both RobloxScriptSecurity.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-068",
    "file": "references/legacy-migration.md",
    "quote": "Derived by diffing the **0.737 and 0.738 Full API Dumps locally** (`python3` over",
-   "status": "unverified",
+   "status": "dump",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "scratchpad verify_legacy_dump.py over local dumps 0.733-0.742 (81 assertions)",
+   "evidence": "0.737->0.738 counts reproduced.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-069",
    "file": "references/legacy-migration.md",
    "quote": "`~/RobloxDocs/RobloxAPI/dumps/`), 2026-09-12. 921 classes (+6 −1), 633 enums (+4).",
-   "status": "unverified",
+   "status": "dump",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "scratchpad verify_legacy_dump.py over local dumps 0.733-0.742 (81 assertions)",
+   "evidence": "921 classes (+6 -1), 633 enums (+4).",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-070",
    "file": "references/legacy-migration.md",
    "quote": "`GuiObject:TweenPosition()`, `:TweenSize()`, `:TweenSizeAndPosition()` and `GuiObject.Transparency` newly **Deprecated** | Use `TweenService:Create()` on `Position`/`Size`, and `BackgroundTransparency`/`TextTransparency` etc. Grep for `:TweenPosition(` / `:TweenSize(` — Starship had 0 call sites on 2026-09-12",
-   "status": "unverified",
+   "status": "dump",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "legacy-migration-071",
-   "file": "references/legacy-migration.md",
-   "quote": "`DataModelPatchService` **REMOVED** (`GetLuaVersion`, `GetPatch`, `RegisterPatch`, `UpdatePatch`) | Nothing to do unless you called it; it was `NotBrowsable` and lived one release",
-   "status": "unverified",
-   "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "scratchpad verify_legacy_dump.py over local dumps 0.733-0.742 (81 assertions)",
+   "evidence": "TweenPosition, TweenSize, TweenSizeAndPosition, Transparency gained Deprecated at 0.738.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-072",
    "file": "references/legacy-migration.md",
    "quote": "Derived by diffing the **0.736 and 0.737 Full API Dumps locally**, not from release-note prose, so",
-   "status": "unverified",
+   "status": "dump",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "scratchpad verify_legacy_dump.py over local dumps 0.733-0.742 (81 assertions)",
+   "evidence": "Rows derived from the 0.736/0.737 dumps, re-checked.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-073",
    "file": "references/legacy-migration.md",
    "quote": "`GeometryService:CreateSolidPrimitive()` **REMOVED**, replaced by `GeometryService:CreateBasicMeshPart()` | Rewrite call sites. The enum went with it: `SolidPrimitiveType` was removed and `BasicMeshPartShape` added",
-   "status": "unverified",
+   "status": "dump",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "scratchpad verify_legacy_dump.py over local dumps 0.733-0.742 (81 assertions)",
+   "evidence": "CreateSolidPrimitive and SolidPrimitiveType gone at 0.737; CreateBasicMeshPart and BasicMeshPartShape present.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-074",
    "file": "references/legacy-migration.md",
    "quote": "`DataModel.IsPioneerBuild` / `DataModel.PioneerSource` newly **deprecated** | No action: both are `RobloxScriptSecurity`, so game code could never read them",
-   "status": "unverified",
+   "status": "dump",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "scratchpad verify_legacy_dump.py over local dumps 0.733-0.742 (81 assertions)",
+   "evidence": "Deprecated at 0.737, RobloxScriptSecurity.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-075",
    "file": "references/legacy-migration.md",
    "quote": "`+Workspace.UseInputSink` (`Enum.RolloutState`) | A Studio Properties-window setting: it is `NotScriptable`, so no script — MCP `execute_luau` included — can read or set it",
-   "status": "unverified",
+   "status": "dump",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "scratchpad verify_legacy_dump.py over local dumps 0.733-0.742 (81 assertions)",
+   "evidence": "New at 0.737, NotScriptable, RolloutState.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-076",
    "file": "references/legacy-migration.md",
    "quote": "appeared in 0.735 and was gone by 0.737 — two weeks. An API that is `NotBrowsable` and days old is",
-   "status": "unverified",
+   "status": "dump",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "local dumps 0.733-0.742",
+   "evidence": "PlayerControlState class present in 0.735 and 0.736 (NotBrowsable), absent in 0.737.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-077",
    "file": "references/legacy-migration.md",
    "quote": "Avatar items | Open Cloud Inventory API for a server-side check. `AvatarEditorService:GetItemDetailsAsync()` returns an `Owned` field, but per the official page it describes the **current user** only — a client-side answer about the local player, so never trust it to grant anything. (Its non-Async form `GetItemDetails()` is deprecated)",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "legacy-migration-078",
-   "file": "references/legacy-migration.md",
-   "quote": "**Rollout: October 2026** — Players will receive domain-scoped user IDs per",
-   "status": "unverified",
-   "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Roblox/creator-docs AvatarEditorService.yaml",
+   "evidence": "GetItemDetailsAsync fields: \"Owned: Whether the item is owned by the current user.\"",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-079",
    "file": "references/legacy-migration.md",
    "quote": "**Cross-game gifting** — Offline player lookup by UserId across universes fails",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "legacy-migration-080",
-   "file": "references/legacy-migration.md",
-   "quote": "**User Account Linking API** | August 2026 | Consent-based cross-game identity linking",
-   "status": "unverified",
-   "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "legacy-migration-081",
-   "file": "references/legacy-migration.md",
-   "quote": "**Ban API improvements** | Before October 2026 | Cross-experience ban lists",
-   "status": "unverified",
-   "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "legacy-migration-082",
-   "file": "references/legacy-migration.md",
-   "quote": "**Monitor** for Account Linking API (August 2026)",
-   "status": "unverified",
-   "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "DevForum topic 4677155 (Roblox Staff)",
+   "evidence": "June 10 update: cross-game journeys such as gift sharing will be impacted.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-001",
@@ -4179,16 +3959,6 @@
    "checked": ""
   },
   {
-   "id": "security-hardening-005",
-   "file": "references/security-hardening.md",
-   "quote": "[Scoped User Identifiers Warning (October 2026)](#11-scoped-user-identifiers-warning-october-2026)",
-   "status": "unverified",
-   "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
    "id": "security-hardening-006",
    "file": "references/security-hardening.md",
    "quote": "[Changelog (through August 2026)](#12-changelog-through-august-2026)",
@@ -4549,26 +4319,6 @@
    "checked": ""
   },
   {
-   "id": "security-hardening-042",
-   "file": "references/security-hardening.md",
-   "quote": "**Upcoming**: October 2026 rollout — domain-scoped user IDs",
-   "status": "unverified",
-   "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "security-hardening-043",
-   "file": "references/security-hardening.md",
-   "quote": "Starting October 2026, Roblox will begin rolling out **scoped user identifiers**.",
-   "status": "unverified",
-   "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
    "id": "security-hardening-044",
    "file": "references/security-hardening.md",
    "quote": "using raw `UserId` values, those IDs will no longer match across games",
@@ -4592,16 +4342,6 @@
    "id": "security-hardening-046",
    "file": "references/security-hardening.md",
    "quote": "April 2026 | Server Authority promoted to \"Client Beta\"; live server testing enabled, APIs locked | [§5](#5-anti-cheat-design-philosophy)",
-   "status": "unverified",
-   "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "security-hardening-047",
-   "file": "references/security-hardening.md",
-   "quote": "October 2026 (upcoming) | Scoped user identifiers rollout — domain-scoped IDs per game | [§11](#11-scoped-user-identifiers-warning-october-2026)",
    "status": "unverified",
    "kind": "number",
    "source": "",
@@ -5462,11 +5202,11 @@
    "id": "legacy-migration-083",
    "file": "references/legacy-migration.md",
    "quote": "263 classes named `*Service` (343 tagged `Service`), 48 deprecated classes (477 members).** Luau 0.742 (2026-10-10) — see `luau-fundamentals.md`.",
-   "status": "unverified",
+   "status": "dump",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "API dump 0.742",
+   "evidence": "263 *Service names, 343 Service-tagged, 48 deprecated classes, 477 deprecated members.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "mcp-integration-053",
@@ -5596,6 +5336,536 @@
    "status": "false",
    "source": "",
    "evidence": "263 is the count of classes named *Service; 343 classes carry the Service tag (dump 0.742).",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "legacy-migration-066",
+   "file": "references/legacy-migration.md",
+   "quote": "Legacy game pass / developer product web endpoints | Open Cloud (management), `MarketplaceService` (in-game purchases) | ⚠️ Mostly | See *2026 API Deprecations* below",
+   "status": "docs",
+   "kind": "number",
+   "source": "DevForum topic 62889 posts #118 and #119 (Roblox Staff)",
+   "evidence": "Purchase endpoint removed -> MarketplaceService in-experience; management endpoints -> Open Cloud.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "legacy-migration-071",
+   "file": "references/legacy-migration.md",
+   "quote": "Old Type Solver | New Type Solver (GA 2025-11-20) | Auto for nonstrict / nocheck; **opt-in for strict** | A place with `--!strict` scripts stays on the old solver until **`Workspace.UseNewLuauTypeSolver`** is set in the Properties window (`NotScriptable`); see `luau-fundamentals.md`",
+   "status": "docs",
+   "kind": "negative",
+   "source": "DevForum topic 4084991 (Roblox Staff, 2025-11-20); clientsettingscdn PCStudioApp",
+   "evidence": "GA post: default for nocheck/nonstrict, strict opt-in. Studio flags 2026-10-11: DFFlagStudioLuauNewSolverOptOutPlacesWithStrictScripts=True. Dump: Workspace.UseNewLuauTypeSolver NotScriptable.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "legacy-migration-078",
+   "file": "references/legacy-migration.md",
+   "quote": "`RunService.Stepped` | `RunService.PreSimulation` | Same behavior, clearer name | `Stepped` is not deprecated (official reference); either works",
+   "status": "docs",
+   "kind": "negative",
+   "source": "Roblox/creator-docs RunService.yaml",
+   "evidence": "Stepped and PreSimulation share the summary \"Fires every frame, prior to the physics simulation\"; no deprecation message.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "legacy-migration-080",
+   "file": "references/legacy-migration.md",
+   "quote": "`RunService.Heartbeat` | `RunService.PostSimulation` | Same behavior, clearer name | `Heartbeat` is not deprecated (official reference); either works",
+   "status": "docs",
+   "kind": "negative",
+   "source": "Roblox/creator-docs RunService.yaml",
+   "evidence": "Heartbeat and PostSimulation share the summary; no deprecation message.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "legacy-migration-081",
+   "file": "references/legacy-migration.md",
+   "quote": "`RunService.RenderStepped` | `RunService.PreRender` | Same behavior, clearer name | `RenderStepped` is not deprecated (official reference); either works",
+   "status": "docs",
+   "kind": "negative",
+   "source": "Roblox/creator-docs RunService.yaml",
+   "evidence": "RenderStepped and PreRender share the summary; no deprecation message.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "legacy-migration-082",
+   "file": "references/legacy-migration.md",
+   "quote": "On by default for nonstrict and nocheck scripts since general release (2025-11-20); a place with",
+   "status": "docs",
+   "kind": "number",
+   "source": "DevForum topic 4084991; clientsettingscdn PCStudioApp",
+   "evidence": "As 071.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "legacy-migration-084",
+   "file": "references/legacy-migration.md",
+   "quote": "`--!strict` harder, so some previously-passing code may now error:",
+   "status": "studio",
+   "kind": "negative",
+   "source": "luau-lsp 1.69 with LuauSolverV2 true/false",
+   "evidence": "The sealed-table iteration errors only under the new solver (\"Cannot iterate over a table without indexer\").",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "legacy-migration-085",
+   "file": "references/legacy-migration.md",
+   "quote": "`economy.roblox.com/v1/purchases/products/{productId}` **REMOVED** (legacy purchase flow) | April 10 | Sell in-experience with `MarketplaceService` purchase prompts (staff post, *Official List of Deprecated Web Endpoints* #118)",
+   "status": "docs",
+   "kind": "negative",
+   "source": "DevForum topic 62889 #118 (Roblox Staff, 2026-03-27)",
+   "evidence": "\"We will be removing ... economy.roblox.com/v1/purchases/products/{productId} on April 10, 2026 ... migrate to the in-experience purchasing APIs (MarketplaceService)\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "legacy-migration-086",
+   "file": "references/legacy-migration.md",
+   "quote": "Legacy game pass / developer product **management** web endpoints (`apis.roblox.com/game-passes/v1/...` and the developer-product equivalents) deprecated | April 23 | Use the Open Cloud game pass and developer product APIs (same list, #119)",
+   "status": "docs",
+   "kind": "negative",
+   "source": "DevForum topic 62889 #119 (Roblox Staff, 2026-04-10)",
+   "evidence": "\"deprecating a set of legacy game pass and developer product APIs on April 23, 2026 ... superseded by newer Open Cloud APIs\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "legacy-migration-087",
+   "file": "references/legacy-migration.md",
+   "quote": "`Accoutrement` members removed: `ServerEquipAccoutrement` (0.725), `ServerUnequipAccoutrement` and `BackendAccoutrementState` (0.726; the property is back in 0.729) | Mid-June (0.725–0.726) | Nothing to migrate: they were `RobloxSecurity` + `Hidden` or `NotScriptable`, never usable from game code",
+   "status": "dump",
+   "kind": "negative",
+   "source": "Roblox-Client-Tracker Full-API-Dump.json at 0.723-0.729 (MaximumADHD mirror of the official dump)",
+   "evidence": "ServerEquipAccoutrement gone at 0.725; ServerUnequipAccoutrement and BackendAccoutrementState at 0.726; BackendAccoutrementState back at 0.729. Security RobloxSecurity+Hidden / NotScriptable.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "legacy-migration-088",
+   "file": "references/legacy-migration.md",
+   "quote": "`AdService` / `AdGui` internal signals removed (`ServeAdSignal`, `ReportImpressionSignal`, `rewardedVideoAd*`, `AdGui.AdEvent`, …) | Mid-June (0.726) | Nothing to migrate: every one was `RobloxSecurity` + `Hidden`",
+   "status": "dump",
+   "kind": "negative",
+   "source": "Roblox-Client-Tracker Full-API-Dump.json at 0.723-0.729 (MaximumADHD mirror of the official dump)",
+   "evidence": "AdService and AdGui events listed gone at 0.726; each was RobloxSecurity + Hidden.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "legacy-migration-089",
+   "file": "references/legacy-migration.md",
+   "quote": "`Workspace.StreamingEnabled`, `.FallenPartsDestroyHeight`, `.FallHeightEnabled`, `.LuauTypeCheckMode`, `Model.LevelOfDetail`, `MeshPart.RenderFidelity`, `HumanoidRigDescription.OriginOffset`: Security → `None` + `PluginOrOpenCloud` | **Still plugin-only.** A game Script writing any of them fails *(Studio)*; `Model.LevelOfDetail`, `Workspace.LuauTypeCheckMode`, `HumanoidRigDescription.OriginOffset` and `Workspace.ReplicationFrequency` cannot even be **read** from a Script (re-run 2026-10-11). Reading `StreamingEnabled` works. The command bar / a plugin (MCP `execute_luau` too) can write them *(Studio)*. Set them in the Properties window",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.742 playtest probe Scripts (SkillTestClaimProbe / Probe2 / client), 2026-10-11",
+   "evidence": "Writes failed (PluginOrOpenCloud); reads of LevelOfDetail, LuauTypeCheckMode, OriginOffset, ReplicationFrequency failed; StreamingEnabled read OK.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "legacy-migration-090",
+   "file": "references/legacy-migration.md",
+   "quote": "`+MeshPart:GetSurfaceSlotsAsync()`, `+TestService` test registry (`RegisterSuite`, `ListTests`, `RunTestsAsync`, `ResetTestRegistry`, `TestRegistryChanged`, next to the older `RegisterTest`, plus `TestSuite` / `TestResult` / `TestRunResult` / `TestFailure`), `+ModerationService:BindViolationProcessor()` | **Not enabled:** they error with \"MeshPart:GetSurfaceSlotsAsync is not yet enabled\", \"TestService test registration is not available. Feature flag is disabled.\" and \"Safety callback API is not enabled\" *(Studio)*. `TestService.RegisterTestLegacy` is now **deprecated** in favour of `RegisterTest` (*dump only*); nothing to migrate while the new one is off",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.742 playtest probe Scripts (SkillTestClaimProbe / Probe2 / client), 2026-10-11",
+   "evidence": "GetSurfaceSlotsAsync \"is not yet enabled\"; RegisterTest(\"x\", {}, fn) \"TestService test registration is not available. Feature flag is disabled.\"; BindViolationProcessor(1, fn) \"Safety callback API is not enabled\". Dump: RegisterTest predates 0.733; RegisterTestLegacy Deprecated -> RegisterTest.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "legacy-migration-091",
+   "file": "references/legacy-migration.md",
+   "quote": "2026-10-01. **931 classes (+7, 0 removed), 641 enums (+6), 260 classes named `*Service`, 48",
+   "status": "dump",
+   "kind": "negative",
+   "source": "scratchpad verify_legacy_dump.py over local dumps 0.733-0.742 (81 assertions)",
+   "evidence": "931 classes (+7, 0 removed), 641 enums (+6), 260 *Service names, 48 deprecated classes.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "legacy-migration-092",
+   "file": "references/legacy-migration.md",
+   "quote": "deprecated classes.** No class or enum removals (15 `RobloxScriptSecurity`",
+   "status": "dump",
+   "kind": "negative",
+   "source": "scratchpad verify_legacy_dump.py over local dumps 0.733-0.742 (81 assertions)",
+   "evidence": "0.740->0.741 removed 15 StarterPlayer members, all RobloxScriptSecurity; no class/enum removals.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "legacy-migration-093",
+   "file": "references/legacy-migration.md",
+   "quote": "`StarterPlayer.GameSettings*` properties went), no new deprecations, no `Capabilities` changes. Luau 0.740 (2026-09-25) — see",
+   "status": "dump",
+   "kind": "number",
+   "source": "scratchpad verify_legacy_dump.py over local dumps 0.733-0.742 (81 assertions)",
+   "evidence": "No new member deprecations and no Capabilities changes at 0.741. Luau 0.740 released 2026-09-25 (GitHub releases).",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "legacy-migration-094",
+   "file": "references/legacy-migration.md",
+   "quote": "`~/RobloxDocs/RobloxAPI/dumps/`), 2026-09-25. **924 classes (−1), 635 enums (−1), 258 classes named",
+   "status": "dump",
+   "kind": "number",
+   "source": "scratchpad verify_legacy_dump.py over local dumps 0.733-0.742 (81 assertions)",
+   "evidence": "924 classes (-1), 635 enums (-1), 258 *Service names.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "legacy-migration-095",
+   "file": "references/legacy-migration.md",
+   "quote": "`*Service`, 48 deprecated classes.** Luau 0.739 (2026-09-18). Note this is a *shrinking* release — the first in this",
+   "status": "source",
+   "kind": "negative",
+   "source": "luau-lang/luau GitHub releases",
+   "evidence": "Luau 0.739 published 2026-09-18.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "legacy-migration-096",
+   "file": "references/legacy-migration.md",
+   "quote": "`~/RobloxDocs/RobloxAPI/dumps/`), 2026-09-17. 925 classes (+4, 0 removed), 636 enums (+3), 259 classes named `*Service`, 48 deprecated classes. Luau unchanged at 0.738.",
+   "status": "dump",
+   "kind": "negative",
+   "source": "scratchpad verify_legacy_dump.py over local dumps 0.733-0.742 (81 assertions)",
+   "evidence": "925 (+4, 0 removed), 636 enums (+3), 259 *Service names, 48 deprecated classes.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "legacy-migration-097",
+   "file": "references/legacy-migration.md",
+   "quote": "`DataModelPatchService` **REMOVED** (`GetLuaVersion`, `GetPatch`, `RegisterPatch`, `UpdatePatch`) | Nothing to do: every member was `RobloxScriptSecurity`, so no game script could call it (it was in every dump from 0.733 to 0.737)",
+   "status": "dump",
+   "kind": "negative",
+   "source": "local dumps 0.733-0.738",
+   "evidence": "DataModelPatchService present 0.733-0.737, absent 0.738; members GetLuaVersion/GetPatch/RegisterPatch/UpdatePatch, all RobloxScriptSecurity.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "legacy-migration-098",
+   "file": "references/legacy-migration.md",
+   "quote": "**Status (checked 2026-10-11): opt-in early testing; the broad rollout is delayed, with no new",
+   "status": "docs",
+   "kind": "number",
+   "source": "DevForum topic 4677155 (Roblox Staff), read 2026-10-11",
+   "evidence": "Original post 2026-06-10 with October roadmap; staff update 2026-09-01: later than said, timeline in October; no staff post after it as of 2026-10-11.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "legacy-migration-099",
+   "file": "references/legacy-migration.md",
+   "quote": "date.** Roblox announced Scoped User IDs on 2026-06-10 with a roadmap ending in a rollout to all",
+   "status": "docs",
+   "kind": "number",
+   "source": "DevForum topic 4677155",
+   "evidence": "As 098.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "legacy-migration-100",
+   "file": "references/legacy-migration.md",
+   "quote": "games in October 2026. A staff update on 2026-09-01 says the change \"is coming later than we said",
+   "status": "docs",
+   "kind": "number",
+   "source": "DevForum topic 4677155",
+   "evidence": "As 098.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "legacy-migration-101",
+   "file": "references/legacy-migration.md",
+   "quote": "posted by 2026-10-11 (DevForum topic 4677155). Players would receive a user ID per experience",
+   "status": "docs",
+   "kind": "number",
+   "source": "DevForum topic 4677155",
+   "evidence": "As 098.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "legacy-migration-102",
+   "file": "references/legacy-migration.md",
+   "quote": "instead of the global UserId, but only for players whose first visit to a game comes after the",
+   "status": "docs",
+   "kind": "negative",
+   "source": "DevForum topic 4677155; creator-docs players/users.md",
+   "evidence": "Only for new users of a game; returning users keep the global ID.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "legacy-migration-103",
+   "file": "references/legacy-migration.md",
+   "quote": "Scoped and global IDs do not collide: \"A domain-scoped user ID does not collide with any existing",
+   "status": "docs",
+   "kind": "negative",
+   "source": "Roblox/creator-docs players/users.md",
+   "evidence": "\"A domain-scoped user ID does not collide with any existing global user ID.\"",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "legacy-migration-104",
+   "file": "references/legacy-migration.md",
+   "quote": "global user ID\" (official *Users and domain-scoped user IDs* page, checked 2026-10-11)",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs players/users.md",
+   "evidence": "As 103.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "legacy-migration-105",
+   "file": "references/legacy-migration.md",
+   "quote": "**User Account Linking API** | Promised before the broad rollout (the June roadmap said August 2026; timeline under revision since 2026-09-01) | Consent-based cross-game identity linking",
+   "status": "docs",
+   "kind": "number",
+   "source": "DevForum topic 4677155",
+   "evidence": "June roadmap: User Account Linking API August 2026; Sept 1 update: timeline revised.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "legacy-migration-106",
+   "file": "references/legacy-migration.md",
+   "quote": "*Users* page recommends it), but **do not re-key existing saves**: in a Studio 0.742 playtest",
+   "status": "studio",
+   "kind": "number",
+   "source": "execute_luau Server during a playtest, 2026-10-11",
+   "evidence": "player.UserId 8935399566, player.User.Id 1237928291809, DomainType EXPERIENCE, DomainId = GameId 8943230999.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "legacy-migration-107",
+   "file": "references/legacy-migration.md",
+   "quote": "(2026-10-11) the same returning player had `player.UserId` 8935399566 and `player.User.Id`",
+   "status": "studio",
+   "kind": "number",
+   "source": "execute_luau Server during a playtest, 2026-10-11",
+   "evidence": "As 106.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "legacy-migration-108",
+   "file": "references/legacy-migration.md",
+   "quote": "Data saved under `Player_{UserId}` is not found under `User.Id`. Keep the key",
+   "status": "studio",
+   "kind": "negative",
+   "source": "execute_luau Server during a playtest, 2026-10-11",
+   "evidence": "As 106: the two numbers differ, so keys built from them differ.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "luau-fundamentals-059",
+   "file": "references/luau-fundamentals.md",
+   "quote": "**Is it on in your place?** At general release (2025-11-20, DevForum topic 4084991) Roblox turned",
+   "status": "unverified",
+   "kind": "number",
+   "source": "",
+   "evidence": "",
+   "checked": ""
+  },
+  {
+   "id": "luau-fundamentals-060",
+   "file": "references/luau-fundamentals.md",
+   "quote": "it on by default for **nonstrict and nocheck** scripts only; strict-mode users opt in. Studio",
+   "status": "unverified",
+   "kind": "negative",
+   "source": "",
+   "evidence": "",
+   "checked": ""
+  },
+  {
+   "id": "luau-fundamentals-061",
+   "file": "references/luau-fundamentals.md",
+   "quote": "0.742 still publishes `DFFlagStudioLuauNewSolverOptOutPlacesWithStrictScripts = True`, so a place",
+   "status": "unverified",
+   "kind": "number",
+   "source": "",
+   "evidence": "",
+   "checked": ""
+  },
+  {
+   "id": "luau-fundamentals-062",
+   "file": "references/luau-fundamentals.md",
+   "quote": "(Properties window, Scripting; `NotScriptable`). The features above need it, and this skill's",
+   "status": "unverified",
+   "kind": "negative",
+   "source": "",
+   "evidence": "",
+   "checked": ""
+  },
+  {
+   "id": "security-hardening-047",
+   "file": "references/security-hardening.md",
+   "quote": "game, but only in games they first visit after the rollout. The June 2026 roadmap put the",
+   "status": "unverified",
+   "kind": "negative",
+   "source": "",
+   "evidence": "",
+   "checked": ""
+  },
+  {
+   "id": "security-hardening-048",
+   "file": "references/security-hardening.md",
+   "quote": "rollout in October 2026; a staff update on 2026-09-01 delayed it, promising a new timeline in",
+   "status": "unverified",
+   "kind": "number",
+   "source": "",
+   "evidence": "",
+   "checked": ""
+  },
+  {
+   "id": "security-hardening-049",
+   "file": "references/security-hardening.md",
+   "quote": "October, and none had been posted by 2026-10-11 (DevForum topic 4677155). Opt-in testing is",
+   "status": "unverified",
+   "kind": "number",
+   "source": "",
+   "evidence": "",
+   "checked": ""
+  },
+  {
+   "id": "security-hardening-050",
+   "file": "references/security-hardening.md",
+   "quote": "Delayed (was October 2026) | Scoped user identifiers rollout — domain-scoped IDs per game; new timeline promised for October | [§11](#11-scoped-user-identifiers-warning)",
+   "status": "unverified",
+   "kind": "number",
+   "source": "",
+   "evidence": "",
+   "checked": ""
+  },
+  {
+   "id": "false-solver-auto-all",
+   "file": "references/legacy-migration.md",
+   "quote": "Auto-enabled for all experiences.",
+   "kind": "regression",
+   "status": "false",
+   "source": "",
+   "evidence": "GA post (topic 4084991): default only for nocheck/nonstrict; strict opt-in; Studio flag DFFlagStudioLuauNewSolverOptOutPlacesWithStrictScripts=True.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "false-solver-example",
+   "file": "references/legacy-migration.md",
+   "quote": "-- Error: Type 'Instance?' could not be converted to 'Part'",
+   "kind": "regression",
+   "status": "false",
+   "source": "",
+   "evidence": "luau-lsp: the unannotated line does not error; the annotated one errors under both solvers.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "false-runservice-2024",
+   "file": "references/legacy-migration.md",
+   "quote": "Same behavior, clearer name | 2024 |",
+   "kind": "regression",
+   "status": "false",
+   "source": "",
+   "evidence": "No source for 2024 found; the year was replaced by the verified non-deprecation.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "false-dmps-notbrowsable",
+   "file": "references/legacy-migration.md",
+   "quote": "it was `NotBrowsable` and lived one release",
+   "kind": "regression",
+   "status": "false",
+   "source": "",
+   "evidence": "Dumps 0.733-0.737: present every release, no NotBrowsable tag.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "false-registertest-new",
+   "file": "references/legacy-migration.md",
+   "quote": "`+TestService` test registry (`RegisterTest`, `RegisterSuite`",
+   "kind": "regression",
+   "status": "false",
+   "source": "",
+   "evidence": "RegisterTest exists since <=0.733.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "false-0741-no-removals",
+   "file": "references/legacy-migration.md",
+   "quote": "No removals, no new deprecations",
+   "kind": "regression",
+   "status": "false",
+   "source": "",
+   "evidence": "0.741 removed 15 StarterPlayer.GameSettings* properties.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "false-scoped-october-legacy",
+   "file": "references/legacy-migration.md",
+   "quote": "**Rollout: October 2026**",
+   "kind": "regression",
+   "status": "false",
+   "source": "",
+   "evidence": "DevForum 4677155: 2026-09-01 staff update delayed the October rollout.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "false-scoped-october-security",
+   "file": "references/security-hardening.md",
+   "quote": "Starting October 2026, Roblox will begin rolling out",
+   "kind": "regression",
+   "status": "false",
+   "source": "",
+   "evidence": "DevForum 4677155: delayed on 2026-09-01.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "false-linking-august",
+   "file": "references/legacy-migration.md",
+   "quote": "Account Linking API (August 2026)",
+   "kind": "regression",
+   "status": "false",
+   "source": "",
+   "evidence": "DevForum 4677155: timeline under revision since 2026-09-01.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "false-economy-open-cloud",
+   "file": "references/legacy-migration.md",
+   "quote": "**REMOVED** | April 10 | Migrate to Open Cloud APIs",
+   "kind": "regression",
+   "status": "false",
+   "source": "",
+   "evidence": "Staff post 62889 #118: migrate to in-experience MarketplaceService purchases.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "false-purchase-apis-swapped",
+   "file": "references/legacy-migration.md",
+   "quote": "Legacy GamePass/DevProduct purchase APIs deprecated",
+   "kind": "regression",
+   "status": "false",
+   "source": "",
+   "evidence": "Staff post 62889 #119: management endpoints, superseded by Open Cloud.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "false-accoutrement-remove-usage",
+   "file": "references/legacy-migration.md",
+   "quote": "state props/methods removed | Mid-June | Remove usage if any",
+   "kind": "regression",
+   "status": "false",
+   "source": "",
+   "evidence": "Removed members were RobloxSecurity/Hidden or NotScriptable: nothing to migrate.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "false-adservice-migrate",
+   "file": "references/legacy-migration.md",
+   "quote": "signals removed | Mid-June | Migrate to current ad APIs",
+   "kind": "regression",
+   "status": "false",
+   "source": "",
+   "evidence": "Removed signals were RobloxSecurity/Hidden: nothing to migrate.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "legacy-migration-109",
+   "file": "references/legacy-migration.md",
+   "quote": "Properties window (`NotScriptable`; details in `luau-fundamentals.md`). Once on, it infers more and checks",
+   "status": "dump",
+   "kind": "negative",
+   "source": "API dump 0.742",
+   "evidence": "Workspace.UseNewLuauTypeSolver: RolloutState, tags NotScriptable.",
    "checked": "2026-10-11, engine 0.742.0.7421053"
   }
  ]

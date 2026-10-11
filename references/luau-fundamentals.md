@@ -169,6 +169,13 @@ The **New Type Solver** is the standard type engine for Luau (GA since November 
 - Config: Studio → Workspace Properties → Scripting → `LuauTypeCheckMode` (Properties window only:
   a game Script cannot write it — "lacking capability PluginOrOpenCloud", tested in Studio 0.742)
 
+> **Is it on in your place?** At general release (2025-11-20, DevForum topic 4084991) Roblox turned
+> it on by default for **nonstrict and nocheck** scripts only; strict-mode users opt in. Studio
+> 0.742 still publishes `DFFlagStudioLuauNewSolverOptOutPlacesWithStrictScripts = True`, so a place
+> with `--!strict` scripts keeps the old solver until you set **`Workspace.UseNewLuauTypeSolver`**
+> (Properties window, Scripting; `NotScriptable`). The features above need it, and this skill's
+> examples are type-checked with it on.
+
 ```luau
 --!strict
 -- Standardized generic definitions

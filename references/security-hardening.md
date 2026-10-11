@@ -20,7 +20,7 @@
 8. [Script Security](#8-script-security)
 9. [Complete Example: Secure RemoteEvent Handler](#9-complete-example-secure-remoteevent-handler)
 10. [BanAsync API + Device Blocking](#10-banasync-api--device-blocking)
-11. [Scoped User Identifiers Warning (October 2026)](#11-scoped-user-identifiers-warning-october-2026)
+11. [Scoped User Identifiers Warning](#11-scoped-user-identifiers-warning)
 12. [Changelog (through August 2026)](#12-changelog-through-august-2026)
 
 ---
@@ -612,14 +612,14 @@ Combine device blocking with the heuristic detection patterns from
 
 ---
 
-## 11. Scoped User Identifiers Warning (October 2026)
-
-> **Upcoming**: October 2026 rollout — domain-scoped user IDs
+## 11. Scoped User Identifiers Warning
 
 > [!WARNING]
-> Starting October 2026, Roblox will begin rolling out **scoped user identifiers**.
-> Players will receive **domain-scoped user IDs** that differ per game/experience.
-> This is a significant change that affects cross-game systems.
+> Roblox is introducing **domain-scoped user IDs**: a player gets a different user ID in each
+> game, but only in games they first visit after the rollout. The June 2026 roadmap put the
+> rollout in October 2026; a staff update on 2026-09-01 delayed it, promising a new timeline in
+> October, and none had been posted by 2026-10-11 (DevForum topic 4677155). Opt-in testing is
+> available now. This affects cross-game systems; check the announcement for the current date.
 
 ### What Changes
 
@@ -667,4 +667,4 @@ end
 |------|--------|---------|
 | June 2026 | `BanAsync` gains `ApplyDeviceBlock` param (24hr, desktop only) | [§10](#10-banasync-api--device-blocking-june-2026) |
 | April 2026 | Server Authority promoted to "Client Beta"; live server testing enabled, APIs locked | [§5](#5-anti-cheat-design-philosophy) |
-| October 2026 (upcoming) | Scoped user identifiers rollout — domain-scoped IDs per game | [§11](#11-scoped-user-identifiers-warning-october-2026) |
+| Delayed (was October 2026) | Scoped user identifiers rollout — domain-scoped IDs per game; new timeline promised for October | [§11](#11-scoped-user-identifiers-warning) |
