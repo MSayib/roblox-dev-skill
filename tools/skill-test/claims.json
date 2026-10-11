@@ -3772,7 +3772,7 @@
    "id": "security-hardening-004",
    "file": "references/security-hardening.md",
    "quote": "[Core Principle: Never Trust the Client](#1-core-principle-never-trust-the-client)",
-   "status": "unverified",
+   "status": "advice",
    "kind": "negative",
    "source": "",
    "evidence": "",
@@ -3782,7 +3782,7 @@
    "id": "security-hardening-006",
    "file": "references/security-hardening.md",
    "quote": "[Changelog (through August 2026)](#12-changelog-through-august-2026)",
-   "status": "unverified",
+   "status": "advice",
    "kind": "number",
    "source": "",
    "evidence": "",
@@ -3792,147 +3792,117 @@
    "id": "security-hardening-007",
    "file": "references/security-hardening.md",
    "quote": "**Decompile** any replicated `LocalScript` or `ModuleScript`, even if never run on client",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Roblox/creator-docs scripting/security/security-tactics.md",
+   "evidence": "\"Decompile any replicated LocalScript or any ModuleScript, even if they never run on the client\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "security-hardening-008",
    "file": "references/security-hardening.md",
    "quote": "**Warning**: NaN passes `typeof() == \"number\"` and silently fails **all** comparison",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Studio 0.742 playtest, execute_luau Server, 2026-10-11",
+   "evidence": "0/0: typeof number; <0, >0, ==self, <=100 all false; not (nan > 100) true.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "security-hardening-009",
    "file": "references/security-hardening.md",
    "quote": "NaN is uniquely dangerous: it is of type `\"number\"` but fails all standard comparisons.",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "security-hardening-010",
-   "file": "references/security-hardening.md",
-   "quote": "DataStores only accept valid UTF-8. Validate strings before storing:",
-   "status": "unverified",
-   "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Studio 0.742 playtest, execute_luau Server, 2026-10-11",
+   "evidence": "As above.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "security-hardening-011",
    "file": "references/security-hardening.md",
    "quote": "`ServerScriptService` | ✅ | ❌ | Never replicated. Store all server logic here",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "creator-docs security-tactics; client-server",
+   "evidence": "Server-only containers; \"Keep logic and data in ServerScriptService\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "security-hardening-012",
    "file": "references/security-hardening.md",
    "quote": "`ServerStorage` | ✅ | ❌ | Never replicated. Store sensitive assets here",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "creator-docs client-server",
+   "evidence": "ServerStorage is not replicated to clients.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "security-hardening-013",
    "file": "references/security-hardening.md",
    "quote": "Never place server logic in replicated containers (`ReplicatedStorage`, `Workspace`)",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Roblox/creator-docs scripting/security/security-tactics.md",
+   "evidence": "\"Never place them in replicated containers like ReplicatedStorage or Workspace.\"",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "security-hardening-014",
    "file": "references/security-hardening.md",
    "quote": "All `DataStoreService` operations must be server-side only",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "creator-docs cloud-services/data-stores/index.md",
+   "evidence": "\"The server can only access data stores through Scripts. Attempting client-side access in a LocalScript causes an error.\"",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "security-hardening-015",
    "file": "references/security-hardening.md",
    "quote": "`ModuleScripts` in `ReplicatedStorage` can be decompiled even if never `require()`d",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Roblox/creator-docs scripting/security/security-tactics.md",
+   "evidence": "\"Decompile ... any ModuleScript, even if they never run on the client\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "security-hardening-016",
    "file": "references/security-hardening.md",
    "quote": "**can be decompiled** — even if disabled or never required. Never put secrets, passwords,",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "security-hardening-017",
-   "file": "references/security-hardening.md",
-   "quote": "**June 2026 Update**: Server Authority has graduated from \"Beta\" to **\"Client Beta\"** as",
-   "status": "unverified",
-   "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "security-hardening-018",
-   "file": "references/security-hardening.md",
-   "quote": "of late April 2026. Key changes:",
-   "status": "unverified",
-   "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Roblox/creator-docs scripting/security/security-tactics.md",
+   "evidence": "As above.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "security-hardening-019",
    "file": "references/security-hardening.md",
    "quote": "advanced 0.44 s, so the sample's bucket refilled less than a quarter as fast as players were",
-   "status": "unverified",
+   "status": "studio",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "expect/token-bucket.luau",
+   "evidence": "time() 0.36-0.44 s vs os.clock() 3.0-3.2 s, twice.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "security-hardening-020",
    "file": "references/security-hardening.md",
    "quote": "Use `GlobalDataStore:UpdateAsync()` for atomic read-modify-write operations. Never use",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "creator-docs data stores",
+   "evidence": "UpdateAsync is the read-modify-write call; skill guidance on top.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "security-hardening-021",
    "file": "references/security-hardening.md",
    "quote": "immediately leaves the game. If the trade completes but their DataStore save fails, they",
-   "status": "unverified",
+   "status": "advice",
    "kind": "negative",
    "source": "",
    "evidence": "",
@@ -3942,7 +3912,7 @@
    "id": "security-hardening-022",
    "file": "references/security-hardening.md",
    "quote": "Implement error handling that **reverts all changes** if any part fails",
-   "status": "unverified",
+   "status": "advice",
    "kind": "negative",
    "source": "",
    "evidence": "",
@@ -3952,18 +3922,8 @@
    "id": "security-hardening-023",
    "file": "references/security-hardening.md",
    "quote": "Session locking ensures only one server can write to a player's data at a time.",
-   "status": "unverified",
+   "status": "advice",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "security-hardening-024",
-   "file": "references/security-hardening.md",
-   "quote": "available as a client beta** (official docs, read 2026-09-25), and the whole system is **off by",
-   "status": "unverified",
-   "kind": "number",
    "source": "",
    "evidence": "",
    "checked": ""
@@ -3972,57 +3932,57 @@
    "id": "security-hardening-025",
    "file": "references/security-hardening.md",
    "quote": "`Experimental` in the Properties window — it is `NotScriptable`, so no script can flip it (unlike",
-   "status": "unverified",
+   "status": "dump",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "API dump 0.742; Roblox/creator-docs scripting/capabilities.md (read 2026-10-11)",
+   "evidence": "Workspace.SandboxedInstanceMode NotScriptable; docs: set Default -> Experimental in Properties.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "security-hardening-026",
    "file": "references/security-hardening.md",
    "quote": "`Sandboxed` and `Capabilities`, which a script can set); only then does marking a `Model` / `Folder` / `Script` as `Sandboxed` constrain",
-   "status": "unverified",
+   "status": "dump",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "API dump 0.742",
+   "evidence": "Instance.Sandboxed and Instance.Capabilities: Security None read/write, not NotScriptable.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "security-hardening-027",
    "file": "references/security-hardening.md",
    "quote": "When it *is* enabled, a violation raises an error naming the missing capability, e.g.",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Roblox/creator-docs scripting/capabilities.md (read 2026-10-11)",
+   "evidence": "\"an error is reported describing the missing capability\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "security-hardening-028",
    "file": "references/security-hardening.md",
    "quote": "`The current thread cannot call 'GetSecret' (lacking capability Network)`. Capabilities cover",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Roblox/creator-docs scripting/capabilities.md (read 2026-10-11)",
+   "evidence": "Example error quoted in the docs.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "security-hardening-029",
    "file": "references/security-hardening.md",
    "quote": "docs is unavailable and errors as an `Unassigned` capability.",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Roblox/creator-docs scripting/capabilities.md (read 2026-10-11)",
+   "evidence": "Instances not listed \"throw an error saying that an Unassigned capability is not available\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "security-hardening-030",
    "file": "references/security-hardening.md",
    "quote": "**\"Configure minimal Capabilities\" is only actionable if you know what ordinary code needs.**",
-   "status": "unverified",
+   "status": "advice",
    "kind": "negative",
    "source": "",
    "evidence": "",
@@ -4032,67 +3992,67 @@
    "id": "security-hardening-031",
    "file": "references/security-hardening.md",
    "quote": "Derived by auditing this skill's own examples against the 0.740 dump. In Studio 0.742 a plain",
-   "status": "unverified",
+   "status": "studio",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "2.15.0 probes; metadata.json",
+   "evidence": "Studio 0.742: Health, ProcessReceipt, OnServerInvoke assigned without error from a plain Script.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "security-hardening-032",
    "file": "references/security-hardening.md",
    "quote": "server Script assigned `humanoid.Health`, `ProcessReceipt` and `OnServerInvoke` without error",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "2.15.0 probes",
+   "evidence": "As above.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "security-hardening-033",
    "file": "references/security-hardening.md",
    "quote": "`PluginOrOpenCloud` is different and does **not** belong in this table: an ordinary, unsandboxed",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Studio 0.742 playtest probe Script (SkillTestClaimProbe), 2026-10-11",
+   "evidence": "Unsandboxed Script lacks PluginOrOpenCloud.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "security-hardening-034",
    "file": "references/security-hardening.md",
    "quote": "game Script does not hold it either. In Studio 0.742 a plain server Script writing",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "SkillTestClaimProbe",
+   "evidence": "As above.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "security-hardening-035",
    "file": "references/security-hardening.md",
    "quote": "`part.CollisionFidelity`, `Workspace.StreamingEnabled` or `Lighting.LightingStyle` fails with",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "SkillTestClaimProbe",
+   "evidence": "All three writes failed (PluginOrOpenCloud).",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "security-hardening-036",
    "file": "references/security-hardening.md",
    "quote": "`lacking capability PluginOrOpenCloud`, so those members are plugin-only (an earlier version",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "SkillTestClaimProbe",
+   "evidence": "As above.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "security-hardening-037",
    "file": "references/security-hardening.md",
    "quote": "**Favor highly-rated** community assets, but remember popularity doesn't guarantee safety",
-   "status": "unverified",
+   "status": "advice",
    "kind": "negative",
    "source": "",
    "evidence": "",
@@ -4102,71 +4062,61 @@
    "id": "security-hardening-038",
    "file": "references/security-hardening.md",
    "quote": "**Added**: June 2026 — `ApplyDeviceBlock` parameter for `Players:BanAsync()`",
-   "status": "unverified",
+   "status": "docs",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Roblox/creator-docs Players.yaml BanAsync; DevForum topic 4668265 (Roblox Staff, 2026-06-04)",
+   "evidence": "Device blocking announced 2026-06-04; ApplyDeviceBlock documented on BanAsync.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "security-hardening-039",
    "file": "references/security-hardening.md",
    "quote": "Device blocking is **desktop only** (Windows and macOS) since June 2026",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Roblox/creator-docs Players.yaml BanAsync; DevForum topic 4668265 (Roblox Staff, 2026-06-04)",
+   "evidence": "\"only blocks players using desktop (Windows and MacOS) devices. It does not apply to mobile or console\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "security-hardening-040",
    "file": "references/security-hardening.md",
    "quote": "Mobile and console device blocking is not yet supported",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Roblox/creator-docs Players.yaml BanAsync; DevForum topic 4668265 (Roblox Staff, 2026-06-04)",
+   "evidence": "As above.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "security-hardening-041",
    "file": "references/security-hardening.md",
    "quote": "**Note**: Always wrap `BanAsync` in `pcall()` — it is a yielding function that can fail",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "creator-docs Players.yaml",
+   "evidence": "BanAsync tagged Yields; pcall is the skill guidance.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "security-hardening-044",
    "file": "references/security-hardening.md",
    "quote": "using raw `UserId` values, those IDs will no longer match across games",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "DevForum topic 4677155",
+   "evidence": "Cross-game shared moderation will be impacted.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "security-hardening-045",
    "file": "references/security-hardening.md",
    "quote": "June 2026 | `BanAsync` gains `ApplyDeviceBlock` param (24hr, desktop only) | [§10](#10-banasync-api--device-blocking-june-2026)",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "security-hardening-046",
-   "file": "references/security-hardening.md",
-   "quote": "April 2026 | Server Authority promoted to \"Client Beta\"; live server testing enabled, APIs locked | [§5](#5-anti-cheat-design-philosophy)",
-   "status": "unverified",
-   "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Roblox/creator-docs Players.yaml BanAsync; DevForum topic 4668265 (Roblox Staff, 2026-06-04)",
+   "evidence": "24-hour device block, desktop only.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "studio-plugins-and-limits-002",
@@ -5512,41 +5462,41 @@
    "id": "security-hardening-047",
    "file": "references/security-hardening.md",
    "quote": "game, but only in games they first visit after the rollout. The June 2026 roadmap put the",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "DevForum topic 4677155; creator-docs players/users.md",
+   "evidence": "New users only.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "security-hardening-048",
    "file": "references/security-hardening.md",
    "quote": "rollout in October 2026; a staff update on 2026-09-01 delayed it, promising a new timeline in",
-   "status": "unverified",
+   "status": "docs",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "DevForum topic 4677155",
+   "evidence": "As above.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "security-hardening-049",
    "file": "references/security-hardening.md",
    "quote": "October, and none had been posted by 2026-10-11 (DevForum topic 4677155). Opt-in testing is",
-   "status": "unverified",
+   "status": "docs",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "DevForum topic 4677155",
+   "evidence": "No staff post after 2026-09-01 as of 2026-10-11.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "security-hardening-050",
    "file": "references/security-hardening.md",
    "quote": "Delayed (was October 2026) | Scoped user identifiers rollout — domain-scoped IDs per game; new timeline promised for October | [§11](#11-scoped-user-identifiers-warning)",
-   "status": "unverified",
+   "status": "docs",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "DevForum topic 4677155",
+   "evidence": "As above.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "false-solver-auto-all",
@@ -6036,6 +5986,86 @@
    "status": "false",
    "source": "",
    "evidence": "Never tested; claim removed.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "security-hardening-046",
+   "file": "references/security-hardening.md",
+   "quote": "DataStores only accept valid UTF-8 in **values**: in Studio 0.742 `SetAsync` with `\"abc\\255def\"`",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.742 playtest, execute_luau Server, 2026-10-11",
+   "evidence": "SetAsync(\"bad\", \"abc\\255def\") -> 104 ... only accept valid UTF-8; valid value accepted; invalid key accepted.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "security-hardening-051",
+   "file": "references/security-hardening.md",
+   "quote": "failed with `104: Cannot store string in data store. Data stores can only accept valid UTF-8",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.742 playtest, execute_luau Server, 2026-10-11",
+   "evidence": "Exact message.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "security-hardening-052",
+   "file": "references/security-hardening.md",
+   "quote": "(2025-12-09) to client beta (2026-04-30) to **full release on 2026-07-09** (\"[Full Release] Ship",
+   "status": "docs",
+   "kind": "number",
+   "source": "DevForum topics 4139157 (2025-12-09), 4606949 (2026-04-30), 4727993 (2026-07-09, Roblox Staff); creator-docs projects/server-authority",
+   "evidence": "Topic dates and titles.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "security-hardening-053",
+   "file": "references/security-hardening.md",
+   "quote": "others are `NotScriptable` or plugin-only (dump 0.742), so a script cannot switch a place over.",
+   "status": "dump",
+   "kind": "negative",
+   "source": "API dump 0.742",
+   "evidence": "AuthorityMode RobloxScriptSecurity; NextGenerationReplication, SignalBehavior, UseFixedSimulation NotScriptable; StreamingEnabled PluginOrOpenCloud; PlayerScriptsUseInputActionSystem NotScriptable.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "security-hardening-054",
+   "file": "references/security-hardening.md",
+   "quote": "July 2026 | Server Authority full release (2026-07-09); client beta had started 2026-04-30 | [§5](#5-anti-cheat-design-philosophy)",
+   "status": "docs",
+   "kind": "number",
+   "source": "DevForum topics 4139157 (2025-12-09), 4606949 (2026-04-30), 4727993 (2026-07-09, Roblox Staff); creator-docs projects/server-authority",
+   "evidence": "Full release 2026-07-09.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "security-hardening-055",
+   "file": "references/security-hardening.md",
+   "quote": "available as a client beta** (official docs, re-read 2026-10-11), and the whole system is **off by",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs scripting/capabilities.md (read 2026-10-11)",
+   "evidence": "\"Script capabilities are experimental and available as a client beta.\"",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "false-server-authority-client-beta",
+   "file": "references/security-hardening.md",
+   "quote": "### Server Authority (Client Beta — Updated April 2026)",
+   "kind": "regression",
+   "status": "false",
+   "source": "",
+   "evidence": "Full release 2026-07-09 (DevForum 4727993).",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "false-server-authority-quote",
+   "file": "references/security-hardening.md",
+   "quote": "The most reliable solution for preventing physics and movement exploits",
+   "kind": "regression",
+   "status": "false",
+   "source": "",
+   "evidence": "Quote not found in the current official pages.",
    "checked": "2026-10-11, engine 0.742.0.7421053"
   }
  ]

@@ -164,7 +164,9 @@ end
 
 ### Sanitize Strings for DataStore
 
-DataStores only accept valid UTF-8. Validate strings before storing:
+DataStores only accept valid UTF-8 in **values**: in Studio 0.742 `SetAsync` with `"abc\255def"`
+failed with `104: Cannot store string in data store. Data stores can only accept valid UTF-8
+characters.` (A key with an invalid byte was accepted.) Validate strings before storing:
 
 ```luau
 --!strict
@@ -231,24 +233,22 @@ For movement validation, the server can employ heuristics to detect impossible b
 - Account for network latency by averaging position updates over time
 - Build exemption systems for legitimate teleport mechanics
 
-### Server Authority (Client Beta — Updated April 2026)
+### Server Authority (full release 2026-07-09)
 
-Per Roblox docs: *"The most reliable solution for preventing physics and movement exploits
-is server authority, which moves physics simulation and movement validation entirely to
-the server."* See: https://create.roblox.com/docs/en-us/projects/server-authority
+Server Authority makes the server the single source of truth for movement and physics, with
+client-side prediction and rollback so input still feels instant. It moved from Studio beta
+(2025-12-09) to client beta (2026-04-30) to **full release on 2026-07-09** ("[Full Release] Ship
+Fair And Competitive Games with Server Authority", Roblox staff): "available for all creators".
+Official guide: https://create.roblox.com/docs/projects/server-authority
 
-> **June 2026 Update**: Server Authority has graduated from "Beta" to **"Client Beta"** as
-> of late April 2026. Key changes:
->
-> - **Live server testing**: You can now **publish** and test Server Authority on live
->   production servers, not just Studio playtests.
-> - **APIs are locked**: The API surface is considered **stable** — safe to build upon
->   without expecting breaking changes.
-> - **Includes**: Server-side validation, client-side prediction, and rollback netcode.
->
-> Server Authority is the recommended long-term solution for movement/physics exploit
-> prevention. While heuristic-based anti-cheat (rubber-banding, speed checks) remains
-> valid, Server Authority eliminates entire classes of exploits at the engine level.
+Enable it in Studio, not from code: set `Workspace.AuthorityMode` to `Server` in the Properties
+window, which also sets the other requirements the official page lists
+(`NextGenerationReplication`, `PlayerScriptsUseInputActionSystem`, `SignalBehavior = Deferred`,
+`UseFixedSimulation`, `StreamingEnabled`). `AuthorityMode` is `RobloxScriptSecurity` and the
+others are `NotScriptable` or plugin-only (dump 0.742), so a script cannot switch a place over.
+
+Heuristic checks (rubber-banding, speed checks, below) still work without it; Server Authority
+removes the class of exploits they guess at, such as speed hacks, at the engine level.
 
 ### Rubber-Banding for Invalid Positions
 
@@ -421,7 +421,7 @@ security risks, as they can contain malicious scripts called backdoors."*
   minimal `Capabilities` (avoid granting `Network`, `DataStore`, `AssetRequire`)
 
   > ⚠️ **`Sandboxed = true` does nothing on its own.** Script capabilities are **experimental and
-  > available as a client beta** (official docs, read 2026-09-25), and the whole system is **off by
+  > available as a client beta** (official docs, re-read 2026-10-11), and the whole system is **off by
   > default**. You must first change `Workspace.SandboxedInstanceMode` from `Default` to
   > `Experimental` in the Properties window — it is `NotScriptable`, so no script can flip it (unlike
   > `Sandboxed` and `Capabilities`, which a script can set); only then does marking a `Model` / `Folder` / `Script` as `Sandboxed` constrain
@@ -666,5 +666,5 @@ end
 | Date | Change | Section |
 |------|--------|---------|
 | June 2026 | `BanAsync` gains `ApplyDeviceBlock` param (24hr, desktop only) | [§10](#10-banasync-api--device-blocking-june-2026) |
-| April 2026 | Server Authority promoted to "Client Beta"; live server testing enabled, APIs locked | [§5](#5-anti-cheat-design-philosophy) |
+| July 2026 | Server Authority full release (2026-07-09); client beta had started 2026-04-30 | [§5](#5-anti-cheat-design-philosophy) |
 | Delayed (was October 2026) | Scoped user identifiers rollout — domain-scoped IDs per game; new timeline promised for October | [§11](#11-scoped-user-identifiers-warning) |

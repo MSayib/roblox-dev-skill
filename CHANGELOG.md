@@ -129,6 +129,18 @@ against the 0.737–0.742 source tarballs, and the beta claims against the staff
   (`openapi.json` rejected too), `NotScriptable` reads failing even through `execute_luau` on 0.742,
   `ScriptDebuggerService` all `PluginSecurity`, the `subagent` types, the seven `rbx-*` skills.
 
+### Fixed — found by verifying `security-hardening.md` claim by claim
+
+- **Server Authority is fully released** (2026-07-09, Roblox staff); the section still called it a
+  client beta and quoted a sentence the official pages no longer contain. Rewritten from the
+  release posts and the official setup list, with which settings a script cannot change
+  (`AuthorityMode` is `RobloxScriptSecurity`, the rest `NotScriptable` or plugin-only).
+- The UTF-8 rule is now measured: an invalid value fails `SetAsync` with error 104; an invalid
+  key was accepted.
+- Re-verified: NaN behaviour (playtest), device blocking (desktop only, 24 h; staff post
+  2026-06-04 and the `BanAsync` reference), Script Capabilities (client beta, `Unassigned`,
+  the quoted error), decompilation of replicated modules, server-only data stores.
+
 ### Added — claims register
 
 - `tools/skill-test/claims.json` + `check_claims.py` + generated `docs/claims.md`: every
