@@ -21,8 +21,8 @@ official Roblox documentation (https://create.roblox.com/docs), the Luau languag
 
 > **Engine**: Roblox Studio **0.742.0.7421053** with **Luau 0.742** (released 2026-10-10) —
 > dump downloaded, re-split, and diffed against 0.741 on **2026-10-11**, with every
-> developer-visible change run in Studio 0.742. 940 classes / 648 enums / 263 services /
-> 48 deprecated.
+> developer-visible change run in Studio 0.742. 940 classes / 648 enums; locally, 263 class files
+> named `*Service` (343 classes carry the `Service` tag) and 48 deprecated classes (477 members).
 >
 > Roblox ships roughly weekly, so this line is stale by design — never quote it as today's version.
 > Re-derive it instead:
@@ -51,9 +51,9 @@ surface. The tools below belong to **Roblox's own MCP server, built into Studio*
 only tells you how to use them well. Official reference:
 https://create.roblox.com/docs/studio/mcp
 
-The docs page lists **26 tools**; the build observed 2026-09-25 exposed **28** (plus
-`generate_texture` and `segment_mesh`, undocumented). Detect what your host actually exposes
-rather than trusting this table.
+The docs page lists **26 tools**; the build observed 2026-10-11 (Studio 0.742) exposed **30**:
+those plus `generate_texture`, `segment_mesh`, `list_plugin_guis` and `capture_plugin_gui`,
+undocumented. Detect what your host actually exposes rather than trusting this table.
 
 | Tool | Purpose |
 |------|---------|
@@ -80,6 +80,7 @@ rather than trusting this table.
 | `http_get` | Fetch Roblox docs **from an allowlist**; URL must end `.md` or be `llms.txt` |
 | `skill` | Roblox's first-party `rbx-*` references (debug, perf, scene analysis, …) |
 | `list_roblox_studios` | Enumerate connected Studio instances (name + place ID) |
+| `list_plugin_guis` / `capture_plugin_gui` | List plugin widgets (hidden ones too); screenshot a **visible** one |
 
 > **Every call takes a `studio_id`.** There is no "set active studio" tool — call
 > `list_roblox_studios` first and pass the id you want on each subsequent call. Several Studio
@@ -91,10 +92,13 @@ rather than trusting this table.
 >
 > **`multi_edit` is one script per call**, taking `file_path` plus
 > `edits[{old_string, new_string, replace_all}]`. Replacements are sequential, exact-match, and
-> atomic within the call. `script_read` first or the call simply fails.
+> atomic within the call: one `old_string` that does not match fails the call and leaves the
+> script unchanged (tested 2026-10-11). It does not require a prior `script_read`, but read
+> first anyway, since `old_string` must match the source exactly, whitespace included.
 >
-> **`script_grep`'s line numbers are unreliable** — measured 2026-09-06, it reported a match at
-> line 171 that `script_read` showed was 15 lines further down. Use it to find *which* script
+> **Confirm `script_grep`'s line numbers with `script_read`.** On 2026-09-06 it reported a match
+> at line 171 that `script_read` showed was 15 lines further down; on 2026-10-11 (Studio 0.742)
+> two tests returned the exact line, so the cause is unknown. Use it to find *which* script
 > contains a string, then `script_read` for the real location.
 >
 > **There is no `run_as_job` tool.** Earlier versions of this file listed one; it does not exist
@@ -156,10 +160,10 @@ Documentation Lookup workflow below.
 **Always check local files first** — they are pre-split, far cheaper to read than the full dump, and
 require no network. If `~/RobloxDocs/RobloxAPI/` exists, use it.
 
-**How much cheaper, re-measured 2026-10-01 on 0.741.19.7411056** (an earlier "845× smaller" figure
+**How much cheaper, re-measured 2026-10-11 on 0.742.0.7421053** (an earlier "845× smaller" figure
 was not reproducible from any measurement, so here are the real numbers and the command that
-produced them): the full dump is **8,356,896 bytes**; the 931 split class files run **101 B min,
-2,054 B median, 4,782 B mean, 104,956 B max**. So a typical class lookup reads about **0.02%** of
+produced them): the full dump is **8,438,918 bytes**; the 940 split class files run **101 B min,
+2,050 B median, 4,784 B mean, 104,956 B max**. So a typical class lookup reads about **0.02%** of
 the dump, and even the largest class reads under **1.3%** of it. Re-measure with:
 
 ```bash
@@ -256,8 +260,9 @@ Use these when local data doesn't cover a topic, is obsolete, or you need prose 
 5. For **Open Cloud / REST API** topics, read `https://create.roblox.com/docs/cloud/llms.txt`
    - Search Features section first, then Domains
    - Prefer Open Cloud endpoints (API key / OAuth) over legacy cookie-auth endpoints
-6. **Fallback**: Context7. Its MCP tools are `resolve-library-id` then `get-library-docs` (there is
-   no `query-docs` tool — an earlier version of this file named one that does not exist). Where the
+6. **Fallback**: Context7. Its MCP tools are `resolve-library-id` then `query-docs` (the
+   upstash/context7 README, checked 2026-10-11; an earlier version of this file called the second
+   one `get-library-docs` and said `query-docs` did not exist). Where the
    MCP server is not connected, the CLI does the same job:
    `npx ctx7@latest library "Roblox"` then `npx ctx7@latest docs <libraryId> "<question>"`
 7. If still unclear, ask the user before proceeding
@@ -308,6 +313,7 @@ These rules apply to ALL generated Roblox/Luau code. They are non-negotiable.
   - UI → `StarterGui`
 
 ### 5. Error Handling
+<!-- skilltest: prelude datastore; expect call-succeeded -->
 ```lua
 local success, result = pcall(function()
     return DataStoreService:GetDataStore("PlayerData"):GetAsync(key)

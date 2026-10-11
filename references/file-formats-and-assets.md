@@ -54,7 +54,7 @@ algorithms are supported:
 
 | Algorithm | Magic Bytes | Status |
 |-----------|------------|--------|
-| ZSTD | `28 B5 2F FD` | **Current default** — Studio writes ZSTD since ~2025 |
+| ZSTD | `28 B5 2F FD` | **Current default**: every compressed chunk of a place Studio saved in August 2026 used it (when Studio switched is not documented) |
 | LZ4 | (no magic) | **Legacy** — older files and some tools still use LZ4 |
 
 **Why this matters for tooling:**
@@ -65,7 +65,8 @@ algorithms are supported:
 - `rbx-dom` (Rust): ✅ supports both ZSTD and LZ4
 - `rbxfile` (Go): ⚠️ LZ4 only — will fail on ZSTD chunks
 
-> Measured 2026-08-11 on `Starship.rbxl`: all 2,984 chunks used ZSTD.
+> Measured on `Starship.rbxl` (saved 2026-08-09; recounted 2026-10-11): 2,983 chunks ZSTD, plus the
+uncompressed `END` chunk.
 > Rewriting with LZ4 default: 2.9 MB → 5.0 MB (+72%).
 
 ---
@@ -132,7 +133,7 @@ The **Universal Importer** handles all third-party 3D asset imports.
 |--------|-------|
 | `.png` | Recommended. Supports transparency. |
 | `.jpg` | Smaller file size, no transparency. |
-| `.gif` | Static only (animated GIFs not supported as animated). |
+| `.gif` | Accepted by the Importer (official page). Whether an animated GIF plays is not documented and was not tested here. |
 | `.tga` | Common from 3D tools. Supports alpha. |
 | `.bmp` | Legacy format. Largest file size. |
 
@@ -231,9 +232,11 @@ new names:
 | `AnimationId` | `AnimationContent` | `Animation` |
 | `TextureID` / `Texture` | `TextureContent` | `Decal` / `MeshPart` |
 
-**Important for asset scanning:** Real place files contain a **mix** of both
-generations. Code that only checks legacy names will miss assets saved by
-modern Studio. Always check both names.
+**Important for asset scanning:** which name a file stores is not documented, so check both.
+Measured on `Starship.rbxl` (saved by Studio 2026-08-09): its PROP chunks use the **legacy** names
+(`MeshId`, `TextureID`, `SoundId`, `AnimationId`, `Image`) and one `*Content` name,
+`EmissiveMaskContent`, which has no legacy twin. A scanner that only knew the `*Content` names
+would have found almost nothing in it.
 
 **Three URI forms** found in real files:
 ```

@@ -110,7 +110,7 @@ flags each). None of the flags below is set there, and a Luau `FASTFLAGVARIABLE`
 | Prototype | Gate in 0.742 | Notes |
 |---|---|---|
 | **Exact tables by default** — `{ x: number }` rejects extra fields, `{ x: number, ... }` allows them (RFC luau-lang/rfcs#11), 0.740 | `DebugLuauParseExactTables`, `DebugLuauExactTableTypes` | The release note calls it "an experimental feature". Do not write `...` in a table type for Roblox |
-| **Classes** RFC prototype | `DebugLuauUserDefinedClasses`, `DebugLuauUserDefinedClassesRuntime` (new in 0.742) | |
+| **Classes** RFC prototype | `DebugLuauUserDefinedClasses`, `DebugLuauUserDefinedClassesRuntime` (both in the source since at least 0.737) | |
 | **`coroutine.finally`** (RFC #187), 0.738 | `LuauCoroutineFinally`, `LuauCoroutineFinallyAnalysis` (renamed from `DebugLuauCoroutineFinally` in 0.742) | The 0.742 release note says "stop gating behind a debug flag"; the flag lost its `Debug` prefix but still defaults to off. **Tested in Studio 0.742: `coroutine.finally` is `nil`** from a game Script and from the command bar |
 | Require top-level functions to be annotated, 0.738 | `DebugLuauWarnOnUnannotatedTopLevelFunctions` | A lint experiment |
 | An **`integer`** library (`integer.idiv` was fixed in 0.740) | `LuauIntegerLibrary` | Present in the open-source VM since at least 0.737, not enabled in Studio. Not a Roblox API |
@@ -144,6 +144,7 @@ with luau-analyze 0.742: a type error in such a file goes unreported). Write the
 line.
 
 ### Core Types
+<!-- skilltest: prelude some-function -->
 ```luau
 --!strict
 local name: string = "Player1"                -- Primitives: string, number, boolean, nil
@@ -162,11 +163,21 @@ local str: string = (value :: any) :: string  -- Type cast with ::
 
 The **New Type Solver** is the standard type engine for Luau (GA since November 2025):
 - Unlocks **built-in type functions** (`keyof`, `rawkeyof`, `setmetatable<T, M>`)
-- Supports **user-defined type functions** (`type function`) with `pcall`/`xpcall` error handling and runtime heap limits
+- Supports **user-defined type functions** (`type function`). In Luau 0.742 their runtime has the
+  base library, `pcall`/`xpcall` included; only `gcinfo`, `getfenv`, `newproxy` and `setfenv` are
+  removed (`TypeFunctionRuntime.cpp`). Older analyzers reject `pcall` there (luau-lsp 1.69: "this
+  function is not supported in type functions")
 - Relabels inferred generics cleanly (`T`, `U`, `V`, `W` instead of `a`, `b`, `c`)
 - Deep bidirectional control-flow narrowing and refined table indexer resolution
 - Config: Studio → Workspace Properties → Scripting → `LuauTypeCheckMode` (Properties window only:
   a game Script cannot write it — "lacking capability PluginOrOpenCloud", tested in Studio 0.742)
+
+> **Is it on in your place?** At general release (2025-11-20, DevForum topic 4084991) Roblox turned
+> it on by default for **nonstrict and nocheck** scripts only; strict-mode users opt in. Studio
+> 0.742 still publishes `DFFlagStudioLuauNewSolverOptOutPlacesWithStrictScripts = True`, so a place
+> with `--!strict` scripts keeps the old solver until you set **`Workspace.UseNewLuauTypeSolver`**
+> (Properties window, Scripting; `NotScriptable`). The features above need it, and this skill's
+> examples are type-checked with it on.
 
 ```luau
 --!strict
@@ -302,8 +313,8 @@ local magnitude = vector.magnitude(v1)
 
 For compute-intensive algorithms (pathfinding, procedural generation, ray marching, heavy math), enable Luau Native Code Generation.
 
-> **Server-side only.** The official docs scope this to "server-side scripts in your game" — a
-> `--!native` LocalScript gains nothing from the comment. Only the script's *functions* are compiled;
+> **Server-side only.** The official docs scope this to "server-side scripts in your game" and
+> describe nothing for the client, so do not expect a gain from `--!native` in a LocalScript. Only the script's *functions* are compiled;
 > top-level code usually runs once and does not benefit.
 
 ```luau
@@ -349,6 +360,7 @@ Official Roblox Lua Style Guide (https://roblox.github.io/lua-style-guide/):
 | **UPPER_SNAKE_CASE** | Constants | `MAX_HEALTH`, `DEFAULT_SPEED` |
 
 **Acronym rule:** Do NOT capitalize full acronyms — treat them as words:
+<!-- skilltest: prelude json-response; expect json-decode -->
 ```luau
 --!strict
 -- CORRECT: JsonTable, HttpResponse, XmlParser
@@ -394,6 +406,7 @@ operations without agonizing over the call cost, but do not treat `pcall` in a h
 zero-cost, and do not quote a bigger number: `performance-optimization.md` carries the same
 correction.
 
+<!-- skilltest: prelude datastore; expect call-succeeded -->
 ```luau
 --!strict
 local success, result = pcall(function()
@@ -459,6 +472,7 @@ end
 
 ## Table Methods & Immutability
 
+<!-- skilltest: prelude original-table; expect table-library -->
 ```luau
 --!strict
 -- table.find: returns index or nil

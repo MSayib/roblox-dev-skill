@@ -9,8 +9,9 @@ DataStores, UI, performance, monetization, migration, and driving Roblox Studio 
 server. Works with Claude Code, Codex, Cursor, Gemini CLI, Antigravity, GitHub Copilot, and any
 agent that reads the Agent Skills format.
 
-> **Skill 2.16.0** · verified against Roblox Studio **0.742.0.7421053** and **Luau 0.742** on
-> 2026-10-11. Every code example was type-checked under `--!strict` and run in a real Studio place.
+> **Skill 2.17.0** · verified against Roblox Studio **0.742.0.7421053** and **Luau 0.742** on
+> 2026-10-11. Every code example was type-checked under `--!strict` and run in a real Studio place,
+> and every factual statement checked against an official source or a test.
 > Roblox ships weekly, so this is *when it was last verified*, not today's version.
 
 It is Markdown an agent reads. It is **not** an MCP server and ships no tools: for Studio access,
@@ -75,7 +76,13 @@ How routing, lookup and the coverage dates work: **[docs/how-it-works.md](docs/h
   run in a real Studio place through Rojo, as a game Script (so security gates apply), a
   LocalScript, or inside an Actor. The 2.16.0 pass found and fixed a script that could not compile,
   a pool that leaked objects, player data shared between players, and a purchase handler that
-  charged for items it did not give. **[docs/testing.md](docs/testing.md)**
+  charged for items it did not give. Since 2.17.0 the fragments run too, with the names a reader's
+  project would supply, and the important examples assert what they do (a pool returns to 10, a
+  receipt is granted once). **[docs/testing.md](docs/testing.md)**
+- **Every claim is checked.** Each high-risk statement (limits, versions, "cannot", "not enabled")
+  is in a register with its source or test; the 2.17.0 pass corrected 58, among them a
+  delayed rollout the text dated, limits off by up to 1000×, and an event that does not exist.
+  **[docs/claims.md](docs/claims.md)**
 - **Every engine release is diffed** member by member against the previous API dump, and the
   developer-visible changes are run in Studio before the skill describes them.
 - **It says what it does not know.** Features that exist but are not enabled, betas you cannot

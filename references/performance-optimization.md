@@ -56,8 +56,9 @@ end
 ## 2. MeshParts Over UnionOperations
 
 `UnionOperation` (CSG unions via Negate/Union) have higher runtime cost than `MeshPart`:
-- Unions store complex geometry data and can't benefit from instancing
-- MeshParts with identical `MeshContent` are collapsed into single draw calls
+- The engine's instancing, which collapses identical meshes into a single draw call, is documented
+  for MeshParts with the same `MeshContent` (and identical SurfaceAppearance or TextureContent and
+  material); the official page does not describe it for unions
 - MeshParts support `SurfaceAppearance` for PBR materials
 - MeshParts have configurable `CollisionFidelity` and `RenderFidelity` — set both at author time
   (Properties window, plugin or command bar). Neither can be written from a game Script: both
@@ -127,6 +128,7 @@ Higher fidelity = more memory and computation.
 > `CollisionFidelity` and `MeshPart.RenderFidelity` kept the new value. Check the value on a real
 > part after setting it.
 
+<!-- skilltest: prelude decorative-meshpart; expect fidelity-set -->
 ```luau
 --!strict
 --@skilltest: plugin
@@ -176,8 +178,9 @@ layered transparent parts.
 ### Texture Memory
 
 Texture memory is based on pixel count, not file size. A 1024×1024 texture uses 4× the
-graphics memory of 512×512. The engine auto-scales textures based on device memory and
-distance, but strategically sizing textures improves baseline memory usage.
+graphics memory of 512×512 (official *Improve performance* page). Uploaded images are transcoded
+to a fixed format, so a smaller color model, pre-compression or a dropped alpha channel shrinks
+the file but not the memory. Size textures for how large they appear.
 
 ---
 
@@ -271,8 +274,9 @@ end)
   `pcall` around a DataStore call or an HTTP request is still dominated by the call, and wrapping a
   hot inner loop in `pcall` still costs something. Measure before treating it as free.
 - **Native CodeGen (`--!native`)**: **server-side only.** Per the official docs, "server-side scripts
-  in your game can be compiled directly into the machine code instructions that CPUs execute" — a
-  `--!native` client script gains nothing. Roblox publishes **no speedup multiplier**, and an earlier
+  in your game can be compiled directly into the machine code instructions that CPUs execute"; the
+  page describes it for server-side scripts only, so do not expect a gain from `--!native` in a
+  `LocalScript`. Roblox publishes **no speedup multiplier**, and an earlier
   version of this file invented "2-5x"; the docs instead say to *"measure the time a script or a
   function takes with and without native compilation"* using the Script Profiler. It has real costs
   the docs name: compilation increases server startup time, native code occupies extra memory, and
@@ -304,8 +308,8 @@ can run on other events or less frequently with `task.wait()`.
 
 | Order | Modern Event | Legacy Alias | Runs On | Use For |
 |-------|-------------|-------------|---------|--------|
-| 1 | `PreRender` | `RenderStepped` | Client only | Camera, UI updates |
-| 2 | `PreAnimation` | — (new) | Client only | Animation prep |
+| 1 | `PreRender` | `RenderStepped` | Client only (a server Script can connect it, but it never fires; `RenderStepped` errors there) | Camera, UI updates |
+| 2 | `PreAnimation` | — (new) | Client + Server (fired 104 times in 2 s from a server Script, Studio 0.742) | Animation prep |
 | 3 | `PreSimulation` | `Stepped` | Client + Server | Input processing, pre-physics |
 | 4 | `PostSimulation` | `Heartbeat` | Client + Server | Post-physics, game logic |
 
@@ -411,7 +415,7 @@ end)
 |-----------------|-----------------------------------|-----------------------------------|
 | **Unsafe**      | Cannot read or write in parallel  | Cannot call in parallel           |
 | **Read Parallel** | Read only in parallel          | N/A                               |
-| **Local Safe**  | Read/write within same Actor      | Call within same Actor only       |
+| **Local Safe**  | Read/write within the same Actor; other Actors may read but not write in parallel | Call within the same Actor; other Actors cannot call in parallel |
 | **Safe**        | Read and write freely             | Call freely                       |
 
 Check thread safety tags on the API reference for each member.
@@ -530,6 +534,7 @@ return ObjectPool
 
 Usage for NPC pooling:
 
+<!-- skilltest: expect pool-returns-to-ten -->
 ```luau
 --!strict
 --@skilltest: requires ObjectPool NPCTemplate
@@ -679,7 +684,7 @@ Legacy `BodyMover` classes are deprecated. Use modern constraint-based equivalen
 | `BodyForce`         | `VectorForce`             |
 | `BodyAngularVelocity` | `AngularVelocity`       |
 | `BodyThrust`        | `VectorForce`             |
-| `RocketPropulsion`  | `LinearVelocity` + `AlignOrientation` |
+| `RocketPropulsion`  | `LineForce` (the dump's preferred replacement) |
 
 ### Manually Destroying Player Characters → Automatic
 
@@ -706,5 +711,6 @@ use appropriate events for each task and break heavy work across frames with `ta
 ### Old Physics Stepping → Adaptive
 
 Legacy: Fixed physics stepping at 240 Hz for all assemblies.
-Modern: `Workspace.PhysicsSteppingMethod = Adaptive` — physics steps at 60/120/240 Hz
-based on mechanism complexity, saving computation.
+Modern: set `Workspace.PhysicsSteppingMethod` to `Adaptive` in the Properties window (it is
+`NotScriptable`; a Script reading it gets "not a valid member") — physics steps at 60/120/240 Hz
+based on mechanism complexity, up to 2.5× faster per the official page.

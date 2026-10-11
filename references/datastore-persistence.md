@@ -40,6 +40,7 @@ local playerStore = DataStoreService:GetDataStore("PlayerData")
 ## Core CRUD Operations
 
 ### GetAsync — Read
+<!-- skilltest: prelude datastore; expect call-succeeded -->
 ```luau
 --!strict
 local success, value = pcall(function()
@@ -51,6 +52,7 @@ end
 ```
 
 ### SetAsync — Write (simple)
+<!-- skilltest: prelude datastore; expect call-succeeded -->
 ```luau
 --!strict
 local success, err = pcall(function()
@@ -62,6 +64,7 @@ end
 ```
 
 ### UpdateAsync — Atomic Read-Modify-Write
+<!-- skilltest: prelude datastore; expect update-async-increments -->
 ```luau
 --!strict
 type PlayerData = { coins: number, level: number }
@@ -77,6 +80,7 @@ end)
 ```
 
 ### RemoveAsync — Delete
+<!-- skilltest: prelude datastore; expect call-succeeded -->
 ```luau
 --!strict
 local success, oldValue = pcall(function()
@@ -85,6 +89,7 @@ end)
 ```
 
 ### IncrementAsync — Atomic Integer Increment
+<!-- skilltest: prelude datastore; expect call-succeeded -->
 ```luau
 --!strict
 local success, newValue = pcall(function()
@@ -222,19 +227,21 @@ across server restarts — all entries have a TTL (Time-To-Live).
 
 | Structure | Key Limit | Value Limit | Use Case |
 |-----------|-----------|-------------|----------|
-| `SortedMap` | 128 chars | 1 KB | Leaderboards, matchmaking queues |
-| `Queue` | — | 1 KB per item | Job queues, event pipelines |
+| `SortedMap` | 128 chars (sort key 128 chars) | 32 KB | Leaderboards, matchmaking queues |
+| `Queue` | — | 32 KB per item (measured: not stated on the official page) | Job queues, event pipelines |
 | `HashMap` | 128 chars | 32 KB | Session state, cross-server cache |
 
-### Rate Limits
+A single sorted map or queue holds at most 1,000,000 items and 100 MB. Measured in Studio 0.742:
+a 32 KB value or queue item was accepted, 33 KB failed with `ItemValueSizeTooLarge`.
 
-| Operation | Budget Formula |
-|-----------|---------------|
-| Read | `1000 + 100 × numPlayers` requests/min |
-| Write | `1000 + 100 × numPlayers` requests/min |
-| Total data | 64 MB per partition (per universe) |
-| Max TTL | 45 days |
-| Min TTL | 10 seconds |
+### Quotas (official *Memory stores* page)
+
+| Quota | Value |
+|-------|-------|
+| Requests | `1000 + 120 × [concurrent users]` **request units** per minute, shared by all calls in the game (most calls cost 1 unit) |
+| Memory | `64 KB + 1.2 KB × [number of users]` for the whole game; a playtest reported a quota of 65,536 bytes |
+| Expiration | 0 to 3,888,000 seconds (45 days, also the default); outside that range: `InvalidExpirationTime` |
+| Hash map key | about 5,000 write and 15,000 read units per minute per item key, on top of the per-partition limits |
 
 ### Usage Example
 ```lua
@@ -429,6 +436,7 @@ Players.PlayerRemoving:Connect(onPlayerRemoving)
 6. **Use `UpdateAsync` for player data** — atomic, prevents overwrites
 7. **Bind to close** — always save on `game:BindToClose` with a timeout
 
+<!-- skilltest: prelude save-on-leave -->
 ```luau
 --!strict
 game:BindToClose(function()
@@ -446,7 +454,7 @@ end)
 
 ## LEGACY
 
-### DataStore2 (Berezaa)
+### DataStore2 (Kampfkarren; its default saving method is the "berezaa method")
 **Status:** Outdated. Not recommended for new projects.
 
 DataStore2 was an early community wrapper that introduced:
@@ -454,10 +462,11 @@ DataStore2 was an early community wrapper that introduced:
 - Automatic retry logic
 - Caching layer
 
-**Why it's deprecated:**
-- Uses a backup strategy that creates many DataStore keys (wasteful)
-- No session locking — vulnerable to data duplication
-- Not maintained; incompatible with newer DataStore features (versioning, metadata)
+**Why to move off it** (it is a community module; "deprecated" here is this skill's advice, not a
+Roblox status):
+- Its `OrderedBackups` saving method writes a new key on every save (many DataStore keys)
+- No session locking in its source — vulnerable to data duplication across servers
+- Last commit to its repository: June 2023; it does not use DataStore versioning or metadata
 - Roblox's native versioning now covers the backup use case
 
 ### Migration: DataStore2 → ProfileStore
@@ -467,6 +476,7 @@ DataStore2 was an early community wrapper that introduced:
 3. On subsequent loads, check if ProfileStore data exists; if not, fall back to DataStore2
 4. Once all active players have been migrated, remove DataStore2 code
 
+<!-- skilltest: requires DataStore2; expect datastore2-migrates -->
 ```luau
 --!strict
 -- Simplified migration check (server-side)

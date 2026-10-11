@@ -201,8 +201,8 @@ notice introduced by your fix is a future break.
 
    A `Deprecated` tag often carries a `PreferredDescriptorName` naming the replacement — that is
    the authoritative answer, not a guess.
-2. `script_grep("<oldName>")` to find which scripts are affected. Capped at 50 matches, and its
-   line numbers are unreliable.
+2. `script_grep("<oldName>")` to find which scripts are affected. Capped at 50 matches; confirm
+   its line numbers with `script_read` (once seen 15 lines off).
 3. `script_read` each hit. **Check whether the replacement yields**: `GetTranslatorForPlayer` →
    `GetTranslatorForPlayerAsync` and `CreateCall` → `CreateCallAsync` are both now yielding calls,
    so a drop-in text substitution changes control flow.
@@ -244,7 +244,7 @@ jq '.Members[] | select(.Name=="<Member>")' ~/RobloxDocs/RobloxAPI/classes/<Clas
 - `Tags` — `Deprecated`, `Yields`, `ReadOnly`, `NotScriptable`.
 
 Then fall through: local dump → `create.roblox.com/docs/en-us/{path}.md` → Context7
-(`resolve-library-id` → `get-library-docs`). If it is still unclear, **ask the user** rather than
+(`resolve-library-id` → `query-docs`). If it is still unclear, **ask the user** rather than
 inventing a plausible member name.
 
 **Verification:** `execute_luau` the one-liner before building on it.
@@ -298,6 +298,10 @@ nothing", "players got the item twice".
   `monetization.md`
 - Player-to-player Robux → the Transfers API in `monetization.md`
 - An in-game currency purchase that costs no Robux → example 1 (a server-validated remote)
+
+This example uses `ProcessReceipt`. The official reference now presents
+`MarketplaceService:BindReceiptHandler` as the alternative (see `monetization.md`); the
+`PurchaseId` rule below applies to both.
 
 **Routing:** `monetization.md` + `datastore-persistence.md`.
 
@@ -358,6 +362,7 @@ end
 return ReceiptHandler
 ```
 
+<!-- skilltest: expect receipt-idempotent -->
 ```luau
 --!strict
 --@skilltest: requires ReceiptHandler
@@ -424,6 +429,7 @@ stored", "old players lost their data after my update".
 5. **A failed read is not an empty save.** Never fall back to defaults when `GetAsync` errors, or
    the next save overwrites the player's real data (see `project-structure.md`, PlayerDataService).
 
+<!-- skilltest: expect schema-migrates -->
 ```luau
 --!strict
 --@skilltest: provides PlayerDataSchema
@@ -477,6 +483,7 @@ end
 return PlayerDataSchema
 ```
 
+<!-- skilltest: expect load-new-player -->
 ```luau
 --!strict
 --@skilltest: requires PlayerDataSchema

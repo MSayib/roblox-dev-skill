@@ -161,8 +161,11 @@ trades reliability for lower latency and reduced network overhead.
 ### Key Characteristics
 - Delivery is **not guaranteed** (packets may be lost)
 - Ordering is **not guaranteed** (events may arrive out of order)
-- **Payload limit: 1000 bytes** — events exceeding this are silently dropped
-- Same ~500 requests/sec client-to-server throttle as regular RemoteEvents
+- **Payload limit: 1000 bytes** — larger events are dropped (in Studio, the Output says by how
+  many bytes; official reference)
+- A ~500 requests/sec per-client throttle on `FireServer`, like `RemoteEvent` but counted
+  separately; excess unreliable events are **dropped**, where excess `RemoteEvent`s are processed
+  later, in order (official *Remote events and callbacks* page)
 - Events are not resent if lost
 
 ### Good Use Cases
@@ -350,8 +353,8 @@ end)
 
 ### Throttling Guidelines
 
-- RemoteEvent/UnreliableRemoteEvent share a **~500 requests/sec per client**
-  limit (shared among all remote events of the same type)
+- `RemoteEvent` and `UnreliableRemoteEvent` each have a **~500 requests/sec per client** limit,
+  shared among all remotes of the same type (official reference)
 - This limit is client-to-server (`FireServer`) only
 - Server-to-client (`FireClient`, `FireAllClients`) has no documented per-client cap
   but excessive use causes network saturation
@@ -426,6 +429,7 @@ if event then event:FireServer(...) end
 ```
 
 **✅ Modern: `WaitForChild` with type assertion:**
+<!-- skilltest: client; prelude replicated-storage -->
 ```luau
 --!strict
 local event = ReplicatedStorage:WaitForChild("SomeEvent") :: RemoteEvent
@@ -433,6 +437,7 @@ event:FireServer(...)
 ```
 
 **❌ Using `OnClientInvoke` for server→client security checks:**
+<!-- skilltest: prelude remote-function-client -->
 ```luau
 -- DANGEROUS: Client controls the return value, can lie or hang
 remoteFunc.OnClientInvoke = function()

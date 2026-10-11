@@ -23,12 +23,12 @@
 | `DataStore2` (community) | `ProfileStore` (community) | ❌ No | Requires data migration strategy |
 | `DataStoreService` (raw) | `ProfileStore` wrapper | ❌ No | Adds session locking, auto-save |
 | camelCase API aliases | PascalCase methods | ✅ Yes | `.findFirstChild()` → `.FindFirstChild()` |
-| Legacy GamePass APIs | `MarketplaceService` methods | ⚠️ Mostly | Check April 2026 deprecation notes |
-| Old Type Solver | New Type Solver (GA Nov 2025) | Auto | Auto-enabled; `--!strict` behavior improved |
+| Legacy game pass / developer product web endpoints | Open Cloud (management), `MarketplaceService` (in-game purchases) | ⚠️ Mostly | See *2026 API Deprecations* below |
+| Old Type Solver | New Type Solver (GA 2025-11-20) | Auto for nonstrict / nocheck; **opt-in for strict** | A place with `--!strict` scripts stays on the old solver until **`Workspace.UseNewLuauTypeSolver`** is set in the Properties window (`NotScriptable`); see `luau-fundamentals.md` |
 | `Instance.new` + parent first | Set `Parent` **last** | ✅ Yes | Avoids redundant replication/events |
-| `RunService.Stepped` | `RunService.PreSimulation` | Same behavior, clearer name | 2024 |
-| `RunService.Heartbeat` | `RunService.PostSimulation` | Same behavior, clearer name | 2024 |
-| `RunService.RenderStepped` | `RunService.PreRender` | Same behavior, clearer name | 2024 |
+| `RunService.Stepped` | `RunService.PreSimulation` | Same behavior, clearer name | `Stepped` is not deprecated (official reference); either works |
+| `RunService.Heartbeat` | `RunService.PostSimulation` | Same behavior, clearer name | `Heartbeat` is not deprecated (official reference); either works |
+| `RunService.RenderStepped` | `RunService.PreRender` | Same behavior, clearer name | `RenderStepped` is not deprecated (official reference); either works |
 | `LocalizationService:GetTranslatorForPlayer()` | `:GetTranslatorForPlayerAsync()` | ⚠️ Mostly | Deprecated in engine **0.740**. The async form **yields** — wrap it or call it off the critical path |
 | `CallingService:CreateCall()` | `:CreateCallAsync()` | — | Renamed in 0.739 and now yields — but **both are `RobloxScriptSecurity`**, as is every `CallingService` member since the class appeared in 0.737, so no game script could ever call either and there is nothing to migrate. The Roblox Connect calling APIs were sunset July 15, 2026 |
 
@@ -182,18 +182,22 @@ MarketplaceService.PromptGamePassPurchaseFinished:Connect(
 
 ### 6. New Type Solver (GA November 2025)
 
-Auto-enabled for all experiences. Provides better type inference and stricter
-`--!strict` checking. Some previously-passing code may now error:
+On by default for nonstrict and nocheck scripts since general release (2025-11-20); a place with
+`--!strict` scripts stays on the old solver until you set `Workspace.UseNewLuauTypeSolver` in the
+Properties window (`NotScriptable`; details in `luau-fundamentals.md`). Once on, it infers more and checks
+`--!strict` harder, so some previously-passing code may now error:
 
 ```luau
--- Error: Type 'Instance?' could not be converted to 'Part'
-local part = workspace:FindFirstChild("MyPart") -- returns Instance?
+--!strict
+-- Passes the old solver; the new one reports "Cannot iterate over a table without indexer"
+-- (both checked with luau-lsp 1.69):
+--   local prices = { Sword = 100, Shield = 50 }
+--   for name, price in prices do ... end
 
--- ✅ Fix: guard with IsA
-local maybePart = workspace:FindFirstChild("MyPart")
-if maybePart and maybePart:IsA("Part") then
-    local part: Part = maybePart
-    part.Anchored = true
+-- ✅ Fix: give the table an indexer type
+local prices: { [string]: number } = { Sword = 100, Shield = 50 }
+for name, price in prices do
+    print(name, price)
 end
 ```
 
@@ -284,22 +288,22 @@ failure recovery. Data loss is irreversible.
 | Change | Date | Action Required |
 |--------|------|-----------------|
 | DataStore limits changed to experience-level | April 9 | Monitor via Creator Hub dashboard |
-| `economy.roblox.com/v1/purchases/products/{productId}` **REMOVED** | April 10 | Migrate to Open Cloud APIs |
-| Legacy GamePass/DevProduct purchase APIs deprecated | April 23 | Use `MarketplaceService` methods |
+| `economy.roblox.com/v1/purchases/products/{productId}` **REMOVED** (legacy purchase flow) | April 10 | Sell in-experience with `MarketplaceService` purchase prompts (staff post, *Official List of Deprecated Web Endpoints* #118) |
+| Legacy game pass / developer product **management** web endpoints (`apis.roblox.com/game-passes/v1/...` and the developer-product equivalents) deprecated | April 23 | Use the Open Cloud game pass and developer product APIs (same list, #119) |
 
 ### May 2026
 
 | Change | Date | Action Required |
 |--------|------|-----------------|
-| Publishing fee: 1,000 Robux per game (or Roblox Plus) | May 19 | Budget for new game launches |
+| Publishing requirement: a one-time, **refundable** 1,000 Robux fee per game, as an alternative to a Plus/Premium subscription, to publish to all ages (rollout began May 19) | May 19 | Budget for new game launches |
 | **Cross-game sales DISABLED** | May 29 | Use Transfers API for donations. See `references/monetization.md` |
 
 ### June 2026
 
 | Change | Date | Action Required |
 |--------|------|-----------------|
-| `Accoutrement` state props/methods removed | Mid-June | Remove usage if any |
-| `AdService` / `AdGui` signals removed | Mid-June | Migrate to current ad APIs |
+| `Accoutrement` members removed: `ServerEquipAccoutrement` (0.725), `ServerUnequipAccoutrement` and `BackendAccoutrementState` (0.726; the property is back in 0.729) | Mid-June (0.725–0.726) | Nothing to migrate: they were `RobloxSecurity` + `Hidden` or `NotScriptable`, never usable from game code |
+| `AdService` / `AdGui` internal signals removed (`ServeAdSignal`, `ReportImpressionSignal`, `rewardedVideoAd*`, `AdGui.AdEvent`, …) | Mid-June (0.726) | Nothing to migrate: every one was `RobloxSecurity` + `Hidden` |
 | Input Action System (IAS) full release | June 11 | `Workspace.PlayerScriptsUseInputActionSystem` — a Studio Properties-window setting; it is `NotScriptable`, so no script (MCP `execute_luau` included) can read or set it. See `references/project-structure.md` |
 | Roblox Connect calling APIs **SUNSET** | **July 15** | Remove usage before deadline |
 
@@ -307,7 +311,7 @@ failure recovery. Data loss is irreversible.
 
 Derived by diffing the **0.741 and 0.742 Full API Dumps locally** with
 `tools/robloxdocs/diff-api-dumps.py`, 2026-10-11. **940 classes (+10, −1), 648 enums (+8, −1),
-263 services, 48 deprecated.** Luau 0.742 (2026-10-10) — see `luau-fundamentals.md`.
+263 classes named `*Service` (343 tagged `Service`), 48 deprecated classes (477 members).** Luau 0.742 (2026-10-10) — see `luau-fundamentals.md`.
 Every developer-visible row was **run in Studio 0.742.0.7421053** on an empty baseplate, from an
 ordinary server `Script` (`Sandboxed = false`) or a `LocalScript` during a playtest, unless it says
 *dump only*. None of the new members below has a page on create.roblox.com yet (checked 2026-10-11
@@ -322,11 +326,11 @@ had called script-writable since 2.11.0; both are corrected.
 
 | Change | Action Required |
 |--------|-----------------|
-| `Workspace.StreamingEnabled`, `.FallenPartsDestroyHeight`, `.FallHeightEnabled`, `.LuauTypeCheckMode`, `Model.LevelOfDetail`, `MeshPart.RenderFidelity`, `HumanoidRigDescription.OriginOffset`: Security → `None` + `PluginOrOpenCloud` | **Still plugin-only.** A game Script writing any of them fails *(Studio)*; `Model.LevelOfDetail` and `Workspace.ReplicationFrequency` cannot even be **read** from a Script. Reading `StreamingEnabled` works. The command bar / a plugin (MCP `execute_luau` too) can write them *(Studio)*. Set them in the Properties window |
+| `Workspace.StreamingEnabled`, `.FallenPartsDestroyHeight`, `.FallHeightEnabled`, `.LuauTypeCheckMode`, `Model.LevelOfDetail`, `MeshPart.RenderFidelity`, `HumanoidRigDescription.OriginOffset`: Security → `None` + `PluginOrOpenCloud` | **Still plugin-only.** A game Script writing any of them fails *(Studio)*; `Model.LevelOfDetail`, `Workspace.LuauTypeCheckMode`, `HumanoidRigDescription.OriginOffset` and `Workspace.ReplicationFrequency` cannot even be **read** from a Script (re-run 2026-10-11). Reading `StreamingEnabled` works. The command bar / a plugin (MCP `execute_luau` too) can write them *(Studio)*. Set them in the Properties window |
 | `+Camera.ProjectionType` (`Enum.ProjectionType` `Perspective`/`Orthographic`), `+OrthographicSize`, `+OrthographicMode`, `+ViewStretch` | **Present but not enabled.** From a `LocalScript`, setting `ProjectionType = Orthographic` raises no error, yet reading it back still gives `Perspective`, and `OrthographicSize = 50` reads back `300` *(Studio)*. Do not build an orthographic camera on it yet |
 | `+UIBlur` (`UIComponent`: `Color`, `Enabled`, `Strength` (`Enum.UIBlurStrength` `Light`/`Medium`/`Heavy`), `Transparency`) | Creatable, and can be parented under a `Frame` in `PlayerGui` from a `LocalScript` without error *(Studio)*. **Whether it renders a blur was not verified**, and there is no docs page. Check visually before relying on it |
 | `+MarketplaceService:CanUsersTransferRobuxAsync(sender: Player, receiverUser)` → `Enum.RobuxTransferEligibility`, Yields; `+MarketplaceService:PromptVIPServerPurchase(player)` | `CanUsersTransferRobuxAsync` errors **"CanUsersTransferRobuxAsync is not enabled"** from a Script *(Studio)*. `PromptVIPServerPurchase` was not called (it opens a purchase prompt), *dump only*. Keep using `PromptRobuxTransferAsync` from `monetization.md` |
-| `+MeshPart:GetSurfaceSlotsAsync()`, `+TestService` test registry (`RegisterTest`, `RegisterSuite`, `ListTests`, `RunTestsAsync`, `TestRegistryChanged`, plus `TestSuite` / `TestResult` / `TestRunResult` / `TestFailure`), `+ModerationService:BindViolationProcessor()` | **Not enabled:** they error with "MeshPart:GetSurfaceSlotsAsync is not yet enabled", "TestService test registration is not available. Feature flag is disabled." and "Safety callback API is not enabled" *(Studio)*. `TestService.RegisterTestLegacy` is now **deprecated** in favour of `RegisterTest` (*dump only*); nothing to migrate while the new one is off |
+| `+MeshPart:GetSurfaceSlotsAsync()`, `+TestService` test registry (`RegisterSuite`, `ListTests`, `RunTestsAsync`, `ResetTestRegistry`, `TestRegistryChanged`, next to the older `RegisterTest`, plus `TestSuite` / `TestResult` / `TestRunResult` / `TestFailure`), `+ModerationService:BindViolationProcessor()` | **Not enabled:** they error with "MeshPart:GetSurfaceSlotsAsync is not yet enabled", "TestService test registration is not available. Feature flag is disabled." and "Safety callback API is not enabled" *(Studio)*. `TestService.RegisterTestLegacy` is now **deprecated** in favour of `RegisterTest` (*dump only*); nothing to migrate while the new one is off |
 | `+Workspace.ReplicationFrequency` / `+ReplicationThroughput` (`Enum.ReplicationMode`) | `PluginOrOpenCloud` for read **and** write: a Script cannot read them *(Studio)*. Properties-window settings |
 | `+Decal.ResampleMode` (`Enum.ResamplerMode`), `+SurfaceAppearance.SurfaceSlot` (int) | Usable: a Script reads and writes `ResampleMode` and reads `SurfaceSlot` (`-1` on a new instance) *(Studio)* |
 | `Stats:GetMemoryUsageMbFiltered()` / `GetMemoryUsageMbAllCategoriesFiltered()` | Need the `InternalTest` capability; a Script gets "lacking capability InternalTest" *(Studio)*. Not for game code |
@@ -338,8 +342,9 @@ had called script-writable since 2.11.0; both are corrected.
 
 Derived by diffing the **0.740 and 0.741 Full API Dumps locally** with
 `tools/robloxdocs/diff-api-dumps.py`, cross-checked by a second, independent all-fields diff, on
-2026-10-01. **931 classes (+7, 0 removed), 641 enums (+6), 260 services, 48 deprecated.** No
-removals, no new deprecations, no `Capabilities` changes. Luau 0.740 (2026-09-25) — see
+2026-10-01. **931 classes (+7, 0 removed), 641 enums (+6), 260 classes named `*Service`, 48
+deprecated classes.** No class or enum removals (15 `RobloxScriptSecurity`
+`StarterPlayer.GameSettings*` properties went), no new deprecations, no `Capabilities` changes. Luau 0.740 (2026-09-25) — see
 `luau-fundamentals.md`. Runtime facts marked *(Studio)* were read in Studio 0.741.19.7411056.
 
 | Change | Action Required |
@@ -367,8 +372,8 @@ removals, no new deprecations, no `Capabilities` changes. Luau 0.740 (2026-09-25
 ### September 2026 — engine 0.740.19.7400931 (ingested 2026-09-25)
 
 Derived by diffing the **0.739 and 0.740 Full API Dumps locally** (`python3` over
-`~/RobloxDocs/RobloxAPI/dumps/`), 2026-09-25. **924 classes (−1), 635 enums (−1), 258 services,
-48 deprecated.** Luau 0.739 (2026-09-18). Note this is a *shrinking* release — the first in this
+`~/RobloxDocs/RobloxAPI/dumps/`), 2026-09-25. **924 classes (−1), 635 enums (−1), 258 classes named
+`*Service`, 48 deprecated classes.** Luau 0.739 (2026-09-18). Note this is a *shrinking* release — the first in this
 window where the dump got smaller.
 
 | Change | Action Required |
@@ -388,7 +393,7 @@ window where the dump got smaller.
 ### September 2026 — engine 0.739 (2026-09-17)
 
 Derived by diffing the **0.738 and 0.739 Full API Dumps locally** (`python3` over
-`~/RobloxDocs/RobloxAPI/dumps/`), 2026-09-17. 925 classes (+4, 0 removed), 636 enums (+3), 259 services, 48 deprecated. Luau unchanged at 0.738.
+`~/RobloxDocs/RobloxAPI/dumps/`), 2026-09-17. 925 classes (+4, 0 removed), 636 enums (+3), 259 classes named `*Service`, 48 deprecated classes. Luau unchanged at 0.738.
 
 | Change | Action Required |
 |--------|-----------------|
@@ -408,7 +413,7 @@ Derived by diffing the **0.737 and 0.738 Full API Dumps locally** (`python3` ove
 | Change | Action Required |
 |--------|-----------------|
 | `GuiObject:TweenPosition()`, `:TweenSize()`, `:TweenSizeAndPosition()` and `GuiObject.Transparency` newly **Deprecated** | Use `TweenService:Create()` on `Position`/`Size`, and `BackgroundTransparency`/`TextTransparency` etc. Grep for `:TweenPosition(` / `:TweenSize(` — Starship had 0 call sites on 2026-09-12 |
-| `DataModelPatchService` **REMOVED** (`GetLuaVersion`, `GetPatch`, `RegisterPatch`, `UpdatePatch`) | Nothing to do unless you called it; it was `NotBrowsable` and lived one release |
+| `DataModelPatchService` **REMOVED** (`GetLuaVersion`, `GetPatch`, `RegisterPatch`, `UpdatePatch`) | Nothing to do: every member was `RobloxScriptSecurity`, so no game script could call it (it was in every dump from 0.733 to 0.737) |
 | `+AnimatedImageService` (`GetTrack`, `Prewarm`, `UnloadTracks`, `GetFrameNames`, `GetTracksChanged`), `+AnimatedImage` GuiBase (`Content`, `PlaybackSpeed`, `Pause`, `Resume`), `+AnimatedImageTrack`, enums `AnimatedImagePlaybackState` / `AnimatedImageScaleType` | **Not usable from game code.** Every listed `AnimatedImageService` and `AnimatedImage` member is `RobloxScriptSecurity` (and `AnimatedImage` is `NotCreatable`), so there is nothing a Script can call yet. An earlier version of this row called it "new" without saying so |
 | `+RunService:BindToAnimation()` | New, no docs page yet — treat as unstable |
 | `+Workspace.StreamingAdaptiveRadius` | New streaming knob; check the property page before touching streaming tuning |
@@ -440,11 +445,12 @@ each row is checkable with `jq` against `~/RobloxDocs/RobloxAPI/dumps/`.
 Inventory privacy enforcement changed the behavior of `PlayerOwnsAsset` and
 inventory web APIs. Player inventory is now private by default.
 
+<!-- skilltest: prelude ownership-ids -->
 ```lua
 -- ⚠️ This may now return false even if the player owns the asset
--- due to privacy settings
+-- due to privacy settings. (PlayerOwnsAsset, without Async, is deprecated.)
 local success, owns = pcall(function()
-    return MarketplaceService:PlayerOwnsAsset(player, assetId)
+    return MarketplaceService:PlayerOwnsAssetAsync(player, assetId)
 end)
 
 -- ✅ For GamePass checks, use this instead (unaffected):
@@ -471,18 +477,22 @@ Modified return behavior. Check current documentation for updated return values.
 
 ---
 
-## Scoped User Identifiers (October 2026)
+## Scoped User Identifiers (opt-in testing; rollout delayed)
 
 > [!WARNING]
-> **Rollout: October 2026** — Players will receive domain-scoped user IDs per
-> experience instead of global UserIds. This is a major platform change.
+> **Status (checked 2026-10-11): opt-in early testing; the broad rollout is delayed, with no new
+> date.** Roblox announced Scoped User IDs on 2026-06-10 with a roadmap ending in a rollout to all
+> games in October 2026. A staff update on 2026-09-01 says the change "is coming later than we said
+> it would" and that the updated solution and timeline will be shared in October; none had been
+> posted by 2026-10-11 (DevForum topic 4677155). Players would receive a user ID per experience
+> instead of the global UserId, but only for players whose first visit to a game comes after the
+> rollout. Re-check the announcement before planning around a date.
 
 ### What Does NOT Change
 - **Single-game DataStores**: `Player_{UserId}` pattern **still works**. No migration needed.
 - `player.UserId` continues to return a numeric value (Global for existing players, Scoped for new)
-- Scoped and Global IDs are described as non-colliding — but this line is **not verified against a
-  current primary source**; confirm on the Scoped User IDs doc before designing a key scheme that
-  depends on it
+- Scoped and global IDs do not collide: "A domain-scoped user ID does not collide with any existing
+  global user ID" (official *Users and domain-scoped user IDs* page, checked 2026-10-11)
 - Friends, chat, avatar services continue working
 
 ### What BREAKS
@@ -492,6 +502,7 @@ Modified return behavior. Check current documentation for updated return values.
 - **Hub → Sub-game architectures** — Teleported players may have different IDs
 
 ### New Engine Primitives
+<!-- skilltest: prelude user-ids -->
 ```lua
 --!strict
 -- NEW: User data type (available now for early testing)
@@ -512,15 +523,20 @@ local user = User.fromId(numericId)
 
 | Solution | Expected | Purpose |
 |----------|----------|---------|
-| **User Account Linking API** | August 2026 | Consent-based cross-game identity linking |
-| **Ban API improvements** | Before October 2026 | Cross-experience ban lists |
+| **User Account Linking API** | Promised before the broad rollout (the June roadmap said August 2026; timeline under revision since 2026-09-01) | Consent-based cross-game identity linking |
+| **Ban API improvements** | Promised before the broad rollout (timeline under revision) | Cross-experience ban lists |
 
 ### What to Do NOW
 1. **Audit** cross-game systems (bans, progression, gifting)
 2. **Single-game DataStores**: Do nothing — pattern still works
-3. **Start using `player.User` object** in new code instead of raw `player.UserId`
-4. **Monitor** for Account Linking API (August 2026)
-5. **Do NOT bypass** scoped IDs — may violate platform policies
+3. **Start using `player.User` object** in new code instead of raw `player.UserId` (the official
+   *Users* page recommends it), but **do not re-key existing saves**: in a Studio 0.742 playtest
+   (2026-10-11) the same returning player had `player.UserId` 8935399566 and `player.User.Id`
+   1237928291809. Data saved under `Player_{UserId}` is not found under `User.Id`. Keep the key
+   scheme your saves use, or migrate them explicitly
+4. **Monitor** the announcement for the Account Linking API and the revised timeline
+5. **Do NOT bypass** scoped IDs: the announcement's FAQ says tracking players across games without
+   their consent, by fingerprinting, device signals or any other method, is a violation
 
 > [!IMPORTANT]
 > For full migration details and the latest guidance, consult:

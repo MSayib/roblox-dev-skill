@@ -103,8 +103,9 @@ ReplicatedStorage/
 
 ### StarterPlayerScripts
 
-Client-side scripts copied to `Player.PlayerScripts` when a player joins.
-The server **cannot** access this container. Scripts here persist across respawns.
+Client-side scripts copied to `Player.PlayerScripts` when a player joins. The server can read
+`StarterPlayerScripts` itself, but **not** the per-player `PlayerScripts` copy (nil on the server
+in a Studio 0.742 playtest; official `PlayerScripts` reference). Scripts here persist across respawns.
 
 ```
 StarterPlayer/
@@ -139,7 +140,8 @@ across respawns — they are destroyed and re-copied each time.
 ### ReplicatedFirst
 
 Replicated to clients **first, before anything else**. Used for loading screens
-and essential initialization. Content replicates only once (server → client).
+and essential initialization. Content replicates only once (server → client): a value the server added after the player joined
+never reached the client (Studio 0.742 playtest).
 
 ```
 ReplicatedFirst/
@@ -201,6 +203,7 @@ A common pattern for organizing game logic:
 
 ### Server Service Example
 
+<!-- skilltest: expect inventory-not-shared -->
 ```luau
 --!strict
 -- ServerScriptService/Services/PlayerDataService.luau
@@ -515,7 +518,7 @@ MyGame/
 
 ## Studio Script Sync
 
-> Released: June 2026 (GA).
+> Full release: 2026-06-17 ("[Full Release] Studio Script Sync", Roblox staff).
 > Source: https://create.roblox.com/docs/studio/script-sync
 
 **Studio Script Sync** enables collaborative scripting between Roblox Studio and
@@ -652,6 +655,7 @@ end)
 If you must build IAS instances from a script, the same classes apply — but note the property
 names, because every one of these was wrong in an earlier version of this file:
 
+<!-- skilltest: prelude play-context; expect input-action-built -->
 ```luau
 --!strict
 local action = Instance.new("InputAction")
@@ -667,14 +671,14 @@ binding.Parent = action
 
 ### Foundation for Future Features
 
-IAS is a prerequisite for two major upcoming systems:
+IAS underpins two newer systems:
 
 - **Character Controller Library:** A modular, customizable character movement
-  system that replaces the monolithic default scripts. Built on top of IAS
-  action definitions for input handling.
-- **Server Authority:** Moves character state validation to the server. IAS
-  provides the standardized input representation that the server can interpret
-  and verify, reducing cheating surface area.
+  system built on IAS action definitions. Still a Studio beta (latest update:
+  "[Studio Beta] Expanding the Character Controller Library", 2026-09-10).
+- **Server Authority:** Moves character state validation to the server; fully released
+  2026-07-09, and its official setup requires `PlayerScriptsUseInputActionSystem` to be enabled
+  (see `security-hardening.md`).
 
 > **Migration:** When `PlayerScriptsUseInputActionSystem` is `Enabled`, the default
 > character scripts automatically use IAS internally. Custom scripts that call
@@ -715,6 +719,7 @@ Legacy pattern used IntValue, StringValue, BoolValue objects for state.
 Modern code should use ModuleScripts with tables or RemoteEvents for
 client-server communication.
 
+<!-- skilltest: prelude replicated-storage; requires GameConfig; project-tree; expect game-config -->
 ```luau
 --!strict
 -- LEGACY: Value objects for configuration
@@ -731,6 +736,7 @@ local maxHealth = GameConfig.MAX_HEALTH  -- 100
 Legacy code sometimes used `require(assetId)` to load ModuleScripts by their
 asset ID. This is fragile and hard to maintain.
 
+<!-- skilltest: prelude replicated-storage; requires MyModule; project-tree; expect module-required -->
 ```luau
 --!strict
 -- LEGACY (avoid)

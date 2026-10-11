@@ -1,13 +1,21 @@
 {
   "skill_name": "roblox-dev-skill",
-  "version": "2.16.0",
-  "last_updated": "2026-10-11T20:00:00+07:00",
-  "last_updated_by": "claude-code (owner request: test the whole skill live in Studio with no false positives, refresh the local skill and test prompts, E2E, compact README, close the roadmap)",
+  "version": "2.17.0",
+  "last_updated": "2026-10-11T23:30:00+07:00",
+  "last_updated_by": "claude-code (owner plan \"tanpa gap\", Stage 1: run the fragments, assert behaviour, register and verify every claim)",
   "update_source": "luau-lang/luau GitHub releases API (0.742) and 0.742 source tarball; clientsettings client-version (WindowsStudio64, MacStudio, WindowsPlayer, MacPlayer); clientsettingscdn PCStudioApp/MacStudioApp/PCDesktopClient flags; roblox-api-monitor 0.741->0.742 dump diff; Roblox/creator-docs engine reference YAML; live Roblox Studio 0.742.0.7421053 via MCP (playtest Scripts + execute_luau)",
   "engine_version_at_update": "0.742.0.7421053",
   "luau_version_at_update": "0.742",
   "update_interval_days": 7,
   "update_history": [
+    {
+      "date": "2026-10-11T23:30:00+07:00",
+      "version": "2.17.0",
+      "changes": "No engine change (0.742.0.7421053 / Luau 0.742). TEST LAYERS: preludes (26) supply the reader's names so 47 of 48 fragments run (the if-local beta block cannot), declared with HTML comments above the fence; expectations (22 files on 27 blocks) assert behaviour (pool back to 10, no shared Inventory, receipt granted once, v1/v2->v3 migration, token bucket, table library, UI properties, plugin-level writes); client harness, late-vs-stuck infinite-yield detection, plugin-level runner; claims register tools/skill-test/claims.json + check_claims.py + docs/claims.md (652 claims, 0 unverified, 58 regression guards), in CI. CONTENT DEFECTS FIXED (58): MarketplaceService.SubscriptionStatusChanged does not exist (Players.UserSubscriptionStatusChanged); rate limiting on time() lags real time under load (measured 0.36-0.44 s vs 2.98-3.20 s, os.clock now); Scoped User IDs rollout delayed (staff 2026-09-01), player.User.Id differs from player.UserId (measured); New Type Solver is opt-in for --!strict (GA post + Studio flag); April 2026 economy/game-pass migrations were swapped; MemoryStore limits wrong in five places (32 KB values, 1000+120xCCU units, 64 KB+1.2 KBxusers, 0-3,888,000 s TTL); Server Authority fully released 2026-07-09; per-corner UICorner and UIShadow fully released 2026-06-23 (no beta flag); Context7 second tool is query-docs; multi_edit does not need a prior script_read; PreAnimation fires on the server; RocketPropulsion -> LineForce; Robux transfer 2SV limits unsourced (staff FAQ 500/day, 1,000/month); publishing fee refund terms; Roblox Plus does not replace Premium; MCP undo behaviour measured; StarterPlayerScripts vs PlayerScripts; and others listed in CHANGELOG 2.17.0. ADDED: BindReceiptHandler for developer products (official reference calls ProcessReceipt legacy; registration tested).",
+      "engine_version": "0.742.0.7421053",
+      "decision_by": "user (sayib) -- 2026-10-11 plan 'tanpa gap' Stage 1 (prelude, expect, claims register); claims scope chosen: 'bertahap per risiko'",
+      "verified_by": "Studio 0.742.0.7421053 (place MieGede NewWorld 118652544255235) via Rojo 34871 harness (server/client/actor) and MCP execute_luau (plugin cases, probes); local API dumps 0.733-0.742 plus Roblox-Client-Tracker dumps 0.723-0.729; luau-lang/luau releases and source tarballs 0.737-0.742; Roblox/creator-docs (reference YAML and guides); DevForum topics read via JSON (staff posts named in CHANGELOG); clientsettingscdn PCStudioApp flags; GitHub API (repos, commits); luau-lsp 1.69 static analysis; API audit; tests/lint; tests/install/test_unix.sh. Not run locally: PowerShell suite (CI)."
+    },
     {
       "date": "2026-10-11T20:00:00+07:00",
       "version": "2.16.0",

@@ -40,13 +40,14 @@ cloned into each player's `PlayerGui` on join (and respawn, unless
 | `IgnoreGuiInset` | `boolean` | `true` = covers the top bar area. Use for full-screen overlays |
 | `Enabled` | `boolean` | Toggle visibility of the entire GUI tree |
 
+<!-- skilltest: prelude local-player; expect hud-gui -->
 ```luau
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "HUDGui"
 screenGui.ResetOnSpawn = false
 screenGui.IgnoreGuiInset = true
 screenGui.DisplayOrder = 10
-screenGui.Parent = player.PlayerGui
+screenGui.Parent = player:WaitForChild("PlayerGui") -- a child, not a property: `.PlayerGui` fails --!strict
 ```
 
 ---
@@ -63,6 +64,7 @@ UDim2.fromOffset(200, 100)   -- offset only (scale = 0)
 
 **`AnchorPoint`** shifts the origin (0–1 per axis). Center an element:
 
+<!-- skilltest: prelude ui-frames -->
 ```luau
 frame.AnchorPoint = Vector2.new(0.5, 0.5)
 frame.Position = UDim2.fromScale(0.5, 0.5)
@@ -79,6 +81,7 @@ Layout objects are children of a container and automatically arrange siblings.
 
 ### UIListLayout / UIGridLayout
 
+<!-- skilltest: prelude ui-frames -->
 ```luau
 local list = Instance.new("UIListLayout")
 list.FillDirection = Enum.FillDirection.Vertical
@@ -122,6 +125,7 @@ shrink, and align within a flex container.
 | `ItemLineAlignment` | `Enum.ItemLineAlignment` | `Automatic` | Cross-axis alignment override for this item |
 
 **Usage:**
+<!-- skilltest: prelude ui-frames -->
 ```lua
 -- Make a frame fill remaining space in a horizontal list
 local flex = Instance.new("UIFlexItem")
@@ -138,6 +142,7 @@ flex.Parent = myFrame -- myFrame is a child of a UIListLayout parent
 
 ### TextLabel / TextButton / TextBox
 
+<!-- skilltest: prelude screen-gui -->
 ```luau
 local label = Instance.new("TextLabel")
 label.Text = "Score: 0"
@@ -154,6 +159,7 @@ label.Parent = screenGui
 
 ### ImageLabel / ImageButton
 
+<!-- skilltest: prelude screen-gui -->
 ```luau
 local icon = Instance.new("ImageLabel")
 icon.Image = "rbxassetid://123456789"
@@ -168,6 +174,7 @@ icon.Parent = screenGui
 `Frame` — generic container. `ScrollingFrame` — scrollable container. Set
 `AutomaticCanvasSize = Enum.AutomaticSize.Y` so the canvas grows with content.
 
+<!-- skilltest: prelude screen-gui -->
 ```luau
 local scroll = Instance.new("ScrollingFrame")
 scroll.Size = UDim2.fromScale(0.4, 0.6)
@@ -183,6 +190,7 @@ Instance.new("UIListLayout").Parent = scroll
 
 ### BillboardGui (always faces camera)
 
+<!-- skilltest: prelude workspace-props -->
 ```luau
 --@skilltest: project-tree
 local billboard = Instance.new("BillboardGui")
@@ -201,6 +209,7 @@ nameLabel.Parent = billboard
 
 ### SurfaceGui (renders on a Part face)
 
+<!-- skilltest: prelude workspace-props -->
 ```luau
 --@skilltest: project-tree
 local surfaceGui = Instance.new("SurfaceGui")
@@ -219,6 +228,7 @@ label.Parent = surfaceGui
 
 ## UI Animations with TweenService
 
+<!-- skilltest: prelude hud-frame; expect tween-finished -->
 ```luau
 local TweenService = game:GetService("TweenService")
 
@@ -250,6 +260,7 @@ tween.Completed:Wait()
 Use `UDim2.fromScale()` for responsive sizing. Use `UIAspectRatioConstraint`
 to lock ratio. Detect device and adapt:
 
+<!-- skilltest: prelude ui-frames -->
 ```luau
 local UIS = game:GetService("UserInputService")
 local isMobile = UIS.TouchEnabled and not UIS.KeyboardEnabled
@@ -306,6 +317,7 @@ end
 
 Interaction UI when a player is near a Part — Roblox renders it automatically.
 
+<!-- skilltest: prelude workspace-props -->
 ```luau
 --@skilltest: project-tree
 local prompt = Instance.new("ProximityPrompt")
@@ -342,6 +354,7 @@ listen to `ProximityPromptService.PromptShown` / `PromptHidden`.
 
 **Cleanup:**
 
+<!-- skilltest: prelude button-handlers; expect connections-cleaned -->
 ```luau
 local connections: { RBXScriptConnection } = {}
 table.insert(connections, button.Activated:Connect(onActivated))
@@ -385,6 +398,7 @@ replacing image-based shadow workarounds. Add as a child of any `GuiObject`.
 - Cannot apply `UIGradient` to a `UIShadow`.
 - Does **not** work with `Path2D`.
 
+<!-- skilltest: prelude screen-gui; expect ui-shadow -->
 ```luau
 --!strict
 -- Add a soft drop shadow to a card Frame
@@ -413,6 +427,7 @@ card.Parent = screenGui
 
 **Legacy comparison — before `UIShadow`:**
 
+<!-- skilltest: prelude ui-frames -->
 ```luau
 -- OLD approach: 9-slice ImageLabel behind the frame
 local shadowImage = Instance.new("ImageLabel")
@@ -430,6 +445,9 @@ shadowImage.Parent = card  -- layered behind content
 ---
 
 ## StyleQuery — Responsive Style Queries (May 2026)
+
+Fully released 2026-05-11 (staff update to "[Full Release] StyleQuery + More Styling Features!");
+it had been a Studio beta since 2026-04-09.
 
 `StyleQuery` enables CSS-like conditional styling for Roblox UI. It works with
 the `StyleRule` system to dynamically activate styles based on device,
@@ -464,6 +482,7 @@ active.
 
 ### Scripted Example: Responsive Container Query
 
+<!-- skilltest: prelude style-sheet -->
 ```luau
 --!strict
 -- Create a StyleQuery that activates for narrow containers (< 400px wide)
@@ -478,6 +497,7 @@ narrowQuery.Parent = styleSheet  -- parent to your StyleSheet/StyleRule tree
 
 ### Scripted Example: Multi-Condition Query (Mobile + Touch)
 
+<!-- skilltest: prelude style-sheet -->
 ```luau
 --!strict
 -- Activate styles for small-screen touch devices
@@ -546,10 +566,14 @@ ScreenGui
 | `BottomRightRadius` | `UDim` | Bottom-right corner radius |
 | `BottomLeftRadius` | `UDim` | Bottom-left corner radius |
 
-> **Note:** Per-corner properties require the **New UI Capabilities** beta
-> feature enabled in Studio since June 2026. Writing to `CornerRadius`
+> **Note:** Per-corner rounding and `UIShadow` are **fully released and publishable** since
+> 2026-06-23 ("[Full Release] New UI Capabilities: Shadows & Individual Corners!", Roblox staff
+> update), and the "New UI Capabilities" Studio beta flag was removed. The official `UICorner`
+> reference still says "currently in beta" (checked 2026-10-11); the staff post is newer. In
+> Studio 0.742 a LocalScript set and read back all four properties. Writing to `CornerRadius`
 > overwrites all four individual values.
 
+<!-- skilltest: prelude screen-gui; expect per-corner-radius -->
 ```luau
 --!strict
 -- Chat bubble: rounded on top, flat on bottom-left
@@ -569,6 +593,7 @@ corner.Parent = bubble
 
 **Legacy comparison — uniform rounding only:**
 
+<!-- skilltest: prelude ui-frames -->
 ```luau
 -- OLD: all corners identical
 local corner = Instance.new("UICorner")

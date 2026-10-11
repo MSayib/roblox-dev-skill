@@ -1,6 +1,6 @@
 # Agent Safety Reference — the Agent → Studio Trust Boundary
 
-> **Primary source (verified 2026-09-25):** https://create.roblox.com/docs/studio/mcp
+> **Primary source (re-verified 2026-10-11):** https://create.roblox.com/docs/studio/mcp
 >
 > Roblox's own warning on that page, quoted in full: *"MCP clients can read and modify content in
 > your open Roblox places. Make sure to only connect clients you trust."*
@@ -52,11 +52,13 @@ an asymmetry, and this file closes it.
 3. **There is no dry-run, no diff preview, and no transaction.** `multi_edit` is atomic *within
    one call* — all edits apply or none do. That is the only atomicity you get; nothing spans two
    calls.
-4. **Do not rely on Ctrl+Z.** Whether an MCP mutation enters Studio's undo stack is not
-   documented, and command-bar-level changes historically do not unless something explicitly
-   records a waypoint. `ChangeHistoryService` (`TryBeginRecording` / `FinishRecording` /
-   `SetWaypoint`, all `PluginSecurity`, so callable from `execute_luau`) is what makes an
-   operation undoable — but if you did not record it, assume the user cannot undo it.
+4. **Do not rely on Ctrl+Z.** Undo behaviour is not documented. Measured in Studio 0.742
+   (2026-10-11): each `execute_luau` call runs inside its own recording and leaves an undo
+   waypoint named `Assistant N` (`ChangeHistoryService:Undo()` removed a Part the previous call
+   had created); that is also why `TryBeginRecording` returns nil inside it. A `multi_edit` did
+   **not** leave its own waypoint: one Undo after it removed the script that an earlier
+   `execute_luau` call had created, edit and all. So undo is coarse and tool-dependent. Treat
+   every write as one the user may not be able to take back.
 5. **Targeting is per call and silent.** No tool reports "you are about to modify *Baseplate*
    instead of *MyGame*." A copy-pasted `studio_id` produces a clean success on the wrong place.
 6. **`Server` datamodel is production-adjacent.** A playtest with Studio API access enabled talks
@@ -74,7 +76,8 @@ an asymmetry, and this file closes it.
 - **Check `get_studio_state` before any call that takes `datamodel_type`.** Guessing gets you a
   failed call at best and the wrong datamodel at worst.
 - **Never destroy services.** `Workspace`, `ReplicatedStorage`, `ServerScriptService`, and
-  friends. Never `game:ClearAllChildren()`. Studio crashes; the place may be left mangled.
+  friends. Never `game:ClearAllChildren()`. What Studio does then has not been tested here; do not
+  find out on a real place.
 - **Never leave an unbounded loop in `execute_luau`.** Bound every loop, and yield with
   `task.wait()` in anything that creates many instances.
 - **Prefer the narrowest tool.** `multi_edit` over `execute_luau` for script changes —

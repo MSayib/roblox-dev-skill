@@ -11,6 +11,270 @@ reference content was verified against at that time.
 
 ---
 
+## 2.17.0 — Oct 11, 2026
+
+**Every claim checked, the fragments run, and the important examples assert what they do.** No
+engine change (0.742.0.7421053 / Luau 0.742). Three new test layers: preludes that let the 48
+fragment blocks run, behavioural expectations on 27 blocks, and a claims register covering every
+high-risk prose line (652 claims: 187 run in Studio, 165 official docs, 64 API dump, 74 source,
+104 advice, **0 unverified**). Verifying them found **58 wrong statements**, each fixed and kept as
+a regression guard. Every result below is from Studio 0.742 in the owner's test place through Rojo
+on port 34871 (place 118652544255235), with all layers re-run after the last edit: server 97/97
+cases and 20/20 expectations, client 27/27 and 5/5, plugin 3/3 and 2/2, static 0 unexplained
+findings, API audit 0 defects.
+
+### Fixed — found by running the 48 fragments for the first time
+
+- **`monetization.md` subscription handler used an event that does not exist.**
+  `MarketplaceService.SubscriptionStatusChanged` is not a member (API dump 0.742; the
+  `MarketplaceService.UserSubscriptionStatusChanged` that does exist is RobloxScriptSecurity). The
+  event a game Script receives is `Players.UserSubscriptionStatusChanged(user, subscriptionId)`,
+  which carries no status, so the example now re-reads it with `GetUserSubscriptionStatusAsync`
+  and changes nothing when that check fails. Added when it fires (official `Players` reference).
+  The API audit did not flag this; the strict type check of the fragment with its prelude did.
+- **`security-hardening.md` rate limiting measured time with `time()`.** `time()` is game time,
+  which falls behind real time while the server is busy: twice, a `task.wait(0.7)` early in a busy
+  server took 3.0–3.2 s by `os.clock()` while `time()` advanced 0.36–0.44 s, so the token bucket
+  (the official *Client-server boundary* sample uses `time()` too) refused a player sending at the
+  allowed rate. The token bucket and the cooldown example now use `os.clock()` (official reference:
+  real elapsed time, unaffected by system clock changes). The note says where this departs from
+  the official sample.
+- **`legacy-migration.md` used the deprecated `PlayerOwnsAsset`.** Now `PlayerOwnsAssetAsync`.
+- **`ui-systems.md` ScreenGui example failed `--!strict`.** `player.PlayerGui` is a child, not a
+  property; now `player:WaitForChild("PlayerGui")`.
+
+### Fixed — found by verifying SKILL.md claim by claim
+
+- **Context7's tools were named backwards.** SKILL.md said the second tool is `get-library-docs`
+  and that `query-docs` does not exist; the upstash/context7 README (2026-10-11) lists
+  `resolve-library-id` and `query-docs`. Same fix in `worked-examples.md`.
+- **"`script_read` first or `multi_edit` simply fails" was false.** A `multi_edit` on a script
+  never read succeeded (Studio 0.742). Atomicity was confirmed: a call with one non-matching edit
+  failed and left the script unchanged.
+- **"263 services" counted names, not services.** It is the number of classes named `*Service`
+  (the local `services/` folder); 343 classes carry the `Service` tag. "48 deprecated" is
+  classes; 477 members are deprecated. Reworded in SKILL.md and `legacy-migration.md`.
+- **MCP tool count**: the docs page still lists 26 tools; the connected build now exposes 30
+  (`list_plugin_guis` and `capture_plugin_gui` added to the table).
+- **`script_grep` line numbers**: the 15-line offset seen on 2026-09-06 did not reproduce in two
+  tests on 0.742; the text now says so and still says to confirm with `script_read`.
+- Dump size figures re-measured on 0.742 (8,438,918 B; 940 class files).
+
+### Fixed — found by verifying `legacy-migration.md` claim by claim
+
+Every dump claim was re-derived from the local dumps 0.733–0.742 (81 assertions; older releases
+from the Roblox-Client-Tracker mirror of the official dump), every *(Studio)* row of the 0.742
+table re-run from playtest Scripts, and every dated platform change traced to a Roblox staff post.
+
+- **Scoped User IDs are not rolling out in October 2026.** A staff update on 2026-09-01 delayed
+  the rollout and promised a new timeline in October; none had been posted by 2026-10-11. Fixed in
+  `legacy-migration.md` and `security-hardening.md` (both said October 2026), and the "August
+  2026" Account Linking date. The non-collision of scoped and global IDs, marked unverified, is now
+  quoted from the official *Users* page.
+- **`player.User.Id` is not `player.UserId`.** Measured in a playtest: the same returning player
+  had 8935399566 and 1237928291809. The advice to adopt `player.User` now warns not to re-key
+  existing saves.
+- **The New Type Solver is not on for `--!strict` by default.** The general-release post
+  (2025-11-20) turned it on for nonstrict/nocheck only; Studio 0.742 still publishes
+  `DFFlagStudioLuauNewSolverOptOutPlacesWithStrictScripts = True`. The opt-in is
+  `Workspace.UseNewLuauTypeSolver` (Properties window). `luau-fundamentals.md` says so too. The
+  section's example claimed an error the code does not produce (and that the old solver reports
+  as well); replaced by one that only the new solver reports, checked with both.
+- **The April 2026 migration actions were swapped.** The removed `economy.roblox.com` endpoint is a
+  purchase flow (migrate to in-experience `MarketplaceService`), and the April 23 deprecation is of
+  game pass / developer product *management* endpoints (migrate to Open Cloud). The publishing fee
+  row now says it is refundable and an alternative to Plus/Premium for all-ages publishing.
+- **Mid-June removals had nothing to migrate**: the `Accoutrement` and `AdService`/`AdGui` members
+  removed in 0.725–0.726 were all `RobloxSecurity`/`Hidden` or `NotScriptable`.
+- `DataModelPatchService` was not `NotBrowsable` and lived from at least 0.733 to 0.737, not one
+  release; `TestService.RegisterTest` predates 0.742 (the new members are `RegisterSuite`,
+  `ListTests`, `RunTestsAsync`, `ResetTestRegistry`, `TestRegistryChanged`); 0.741 did remove 15
+  `StarterPlayer.GameSettings*` properties; "2024" for the RunService renames had no source;
+  `LuauTypeCheckMode` and `HumanoidRigDescription.OriginOffset` cannot even be read by a Script.
+
+### Fixed — found by verifying `performance-optimization.md` claim by claim
+
+- **`RunService.PreAnimation` is not client-only.** A server Script counted 104 firings in 2 s
+  (Studio 0.742), the same as `PreSimulation`. `PreRender` connects on the server but never fires,
+  and `RenderStepped` errors there; the table now says so.
+- **`RocketPropulsion`'s replacement is `LineForce`** (the dump's `PreferredDescriptorName`), not
+  `LinearVelocity` + `AlignOrientation`.
+- **`Workspace.PhysicsSteppingMethod = Adaptive` looked like code**; it is `NotScriptable` (a Script
+  reading it gets "not a valid member"). Now: set it in the Properties window; up to 2.5× per the
+  official page.
+- Two statements had no source and were replaced by what the official *Improve performance* page
+  says: "unions can't benefit from instancing" (the page documents instancing for MeshParts only)
+  and "the engine auto-scales textures based on device memory and distance".
+- The `Local Safe` thread-safety row now matches the official table (other Actors may read);
+  "a `--!native` client script gains nothing" now says only what the docs say (server-side).
+
+### Fixed — found by verifying `luau-fundamentals.md` claim by claim
+
+Every release-note row (0.736–0.742) was matched against the GitHub release text, every gate
+against the 0.737–0.742 source tarballs, and the beta claims against the staff posts.
+
+- **"Runtime heap limits" for type functions do not apply in Roblox.** The limit is
+  `DebugLuauTypeFunctionRuntimeHeapLimit`, default 0 and unset in Studio's flags. The
+  `pcall`/`xpcall` part is right for Luau 0.742 (`TypeFunctionRuntime.cpp` registers the base
+  library and removes only `gcinfo`, `getfenv`, `newproxy`, `setfenv`), but luau-lsp 1.69 still
+  rejects it; the text now says both.
+- **`DebugLuauUserDefinedClassesRuntime` is not new in 0.742**; it is in the 0.737 source and the
+  0.737 release notes.
+- "Team members without the beta cannot compile `if local`" is now tested: in a Studio 0.742
+  without the beta, a game Script and a plugin `loadstring` both fail to parse it.
+
+### Fixed — found by verifying `mcp-integration.md` claim by claim
+
+- **"Without a read, `multi_edit` fails outright" was false** (same defect as in SKILL.md, a second
+  copy): a matching edit on a never-read script succeeds. A guessed `old_string` does fail.
+- **Tool count 28 → 30**: `list_plugin_guis` and `capture_plugin_gui` added to the table.
+- **"Destroying core services crashes Studio"** was never tested; removed (the advice stays).
+  **"Invalid JSON fails silently"** became the official wording ("prevent the configuration from
+  loading").
+- Re-verified 2026-10-11: the archived Rust server repo, the `http_get` allowlist
+  (`openapi.json` rejected too), `NotScriptable` reads failing even through `execute_luau` on 0.742,
+  `ScriptDebuggerService` all `PluginSecurity`, the `subagent` types, the seven `rbx-*` skills.
+
+### Fixed — found by verifying `security-hardening.md` claim by claim
+
+- **Server Authority is fully released** (2026-07-09, Roblox staff); the section still called it a
+  client beta and quoted a sentence the official pages no longer contain. Rewritten from the
+  release posts and the official setup list, with which settings a script cannot change
+  (`AuthorityMode` is `RobloxScriptSecurity`, the rest `NotScriptable` or plugin-only).
+- The UTF-8 rule is now measured: an invalid value fails `SetAsync` with error 104; an invalid
+  key was accepted.
+- Re-verified: NaN behaviour (playtest), device blocking (desktop only, 24 h; staff post
+  2026-06-04 and the `BanAsync` reference), Script Capabilities (client beta, `Unassigned`,
+  the quoted error), decompilation of replicated modules, server-only data stores.
+
+### Added — found by verifying `worked-examples.md`
+
+- **`MarketplaceService:BindReceiptHandler` for developer products.** The official reference now
+  calls `ProcessReceipt` "legacy" and documents per-product (or catch-all) handlers returning
+  `Enum.ReceiptDecision`; bound handlers take precedence and unmatched receipts fall through. It
+  has been in the dump since at least 0.733, and a game Script registered both forms in Studio
+  0.742. `monetization.md` and `worked-examples.md` §6 now say so (the tested `ProcessReceipt`
+  example stays; a full purchase through `BindReceiptHandler` was not run).
+- Every other claim in the file held: its verification sections were run in 2.16.0 and the
+  receipt and migration ones again today as harness expectations.
+
+### Fixed — found by verifying `datastore-persistence.md` claim by claim
+
+- **The MemoryStore limits table was wrong in five places.** Sorted map values and queue items are
+  32 KB, not 1 KB (measured: 32 KB accepted, 33 KB `ItemValueSizeTooLarge`); the request quota is
+  `1000 + 120 × concurrent users` request units shared by all calls, not `1000 + 100 × players`
+  each for read and write; memory is `64 KB + 1.2 KB × users` per game, not "64 MB per
+  partition" (a playtest reported a 65,536-byte quota); expiration is 0–3,888,000 s, there is no
+  10-second minimum (`InvalidExpirationTime` quotes the range). Rewritten from the official pages
+  and the measurements.
+- **DataStore2 is Kampfkarren's module**, not berezaa's (berezaa conceived its default saving
+  method). Its "deprecated" reasons now say what its source shows and that the label is this
+  skill's advice, not a Roblox status.
+- Measured: an `OrderedDataStore` rejects `1.5` and `"7"` with error 103 and accepts negative
+  integers. ProfileStore's 300 s auto-save is settable with `ProfileStore.SetConstant`.
+
+### Fixed — found by verifying `agent-safety.md`
+
+- **Undo was described from history, not measured.** In Studio 0.742 every `execute_luau` call
+  leaves an undo waypoint (`Assistant N`; `ChangeHistoryService:Undo()` removed a Part the previous
+  call created), while a `multi_edit` did not leave its own: one Undo after it removed the script an
+  earlier call had created. The advice ("do not rely on Ctrl+Z") stays, now on that evidence.
+- "Destroying services crashes Studio" was untested here too; removed (the rule stays).
+
+### Fixed — found by verifying `project-structure.md`
+
+- **The server can read `StarterPlayerScripts`**; it is the per-player `PlayerScripts` copy it
+  cannot see (nil on the server in a playtest, as the official reference says).
+- **Server Authority is no longer "upcoming"** (full release 2026-07-09); the Character Controller
+  Library is still a Studio beta. Studio Script Sync's full release is dated (2026-06-17).
+- Measured: an object the server adds to `ReplicatedFirst` after a player joins never reaches that
+  client, which backs "replicates only once".
+
+### Fixed — found by verifying `networking.md`
+
+- `UnreliableRemoteEvent` payloads over 1000 bytes are dropped but **not silently** (Studio logs the
+  overflow), and its ~500/s throttle is counted separately from `RemoteEvent`'s; excess unreliable
+  events are dropped while excess `RemoteEvent`s are processed later, in order.
+- Measured: `BindableEvent:Fire` with a cyclic table errors ("tables cannot be cyclic") and strips
+  metatables. The MessagingService limits table matches the official reference.
+
+### Fixed — found by verifying `monetization.md` claim by claim
+
+Every dated statement traced to its Roblox staff post or official page.
+
+- **Robux transfer limits for 2-step verification (5,000/day, 10,000/month) and an "under 16" rule
+  had no source.** Roblox's FAQ gives 500 per day and 1,000 per month and says it is "intentionally
+  starting with this limit"; the unsourced rows are gone. The age rule is now the official one:
+  18+ must be age checked; under 18 needs a linked parent and approval for every transfer, sender
+  and recipient alike.
+- **Roblox Plus does not replace Premium** (the announcement says Premium still grants marketplace
+  access); the rollout date is 2026-04-30.
+- **The publishing fee is refunded 90 days after the game becomes eligible** (or 90 days after
+  payment), not "after 60+ days of maintained engagement"; it is forfeited only on permanent
+  removal for severe violations; Plus or Premium waives it.
+- The quoted reason for ending cross-game sales now quotes Roblox exactly ("were never designed
+  for"; the old text added "originally" inside the quote). Managed Pricing is dated (2026-06-15)
+  and its 60,000-transaction and 90-day figures match the official pages.
+
+### Fixed — found by verifying `ui-systems.md`
+
+- **Per-corner `UICorner` rounding does not need a beta.** It and `UIShadow` were fully released and
+  made publishable on 2026-06-23, and the "New UI Capabilities" flag was removed. The official
+  `UICorner` reference still says "currently in beta"; the text now says which source is newer.
+- StyleQuery's full release is dated (2026-05-11). UIShadow's `ZIndex`, text and gradient limits
+  match the official reference.
+
+### Fixed — found by verifying `file-formats-and-assets.md`
+
+- **"Code that only checks legacy property names will miss assets saved by modern Studio" was not
+  borne out**: a place Studio saved in August 2026 stores `MeshId`, `TextureID`, `SoundId`,
+  `AnimationId` and `Image` (legacy names) and only `EmissiveMaskContent` among `*Content` names.
+  The advice to check both names stays, with the measurement.
+- "Studio writes ZSTD since ~2025" had no source for the year; "all 2,984 chunks used ZSTD" was
+  2,983 plus the uncompressed `END` chunk; "animated GIFs are static" is undocumented and untested,
+  now said as such. Place size, audio limits, Importer defaults and auto-recovery match the
+  official pages; `rbxfile` depends on an LZ4 codec only.
+
+### Added — claims register
+
+- `tools/skill-test/claims.json` + `check_claims.py` + generated `docs/claims.md`: every
+  high-risk prose line (numbers, versions, "cannot / only / not enabled / deprecated") is
+  registered; stale quotes fail; text verified wrong is guarded against coming back; prose API
+  mentions are checked against the dump. First pass: SKILL.md fully classified (20 studio,
+  3 docs, 2 dump, 11 source, 17 advice, 0 unverified); 8 regression guards across the files; the reference files
+  are seeded as unverified (490) and are verified next, highest risk first.
+
+### Added — tests
+
+- **Preludes** (`tools/skill-test/preludes/`, 26) supply the reader's names, declared with an HTML
+  comment above the fence that the rendered page does not show. Fragments with unresolved names:
+  48 → 1 (the `if local` beta-syntax block, which cannot run in a game). Skipped cases 54 → 9
+  (beta syntax, legacy, anti-pattern, placeholder, and four that ban, teleport or prompt a purchase).
+- **Expectations** (`tools/skill-test/expect/`, 22 files on 27 blocks) assert behaviour, not just "no error": the pool
+  is back to 10 and a double release is ignored; two new players do not share an Inventory; a
+  receipt is granted once and stays retryable when not ready; v1 and v2 saves migrate to v3 and a
+  v4 save is refused; the token bucket allows 10, refuses the 11th and refills; table library
+  results; the DataStore2 migration merges once; UI properties (UIShadow, per-corner UICorner,
+  tween end state, disconnected connections); plugin-level `UpdateSourceAsync` and the
+  CollisionFidelity loop.
+- **Harness**: a client reporter next to the server one, expectation results, `Infinite yield`
+  detection that tells a child that never arrived from one that arrived late, and a plugin-level
+  runner (`run_plugin_cases.luau`) for blocks a game Script cannot run.
+- Results, Studio 0.742: server 97/97 cases, 20/20 expectations; client 27/27, 5/5; plugin 3/3,
+  2/2; 0 runtime errors, 0 infinite yields. Static: 136 blocks, 0 unexplained findings. API audit:
+  0 defects.
+
+### Fixed — test tooling
+
+- The directive parser let `\s+` cross a line end, so a value-less directive (`client`) swallowed
+  the next line. A prelude's dependency was lost this way; in-block `plugin`/`client` directives
+  had carried the following comment as their value.
+- Expectation results no longer live in attributes on the case script: in a playtest they were
+  written, then found cleared on the original scripts after the run (a clone of the same script
+  kept them; cause not established). They go to `shared.SkillTestResults`.
+
+---
+
 ## 2.16.0 — Oct 11, 2026
 
 **Every code example tested: type-checked under `--!strict`, then run in a real Studio place.** No

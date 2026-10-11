@@ -20,7 +20,7 @@
 8. [Script Security](#8-script-security)
 9. [Complete Example: Secure RemoteEvent Handler](#9-complete-example-secure-remoteevent-handler)
 10. [BanAsync API + Device Blocking](#10-banasync-api--device-blocking)
-11. [Scoped User Identifiers Warning (October 2026)](#11-scoped-user-identifiers-warning-october-2026)
+11. [Scoped User Identifiers Warning](#11-scoped-user-identifiers-warning)
 12. [Changelog (through August 2026)](#12-changelog-through-august-2026)
 
 ---
@@ -48,6 +48,7 @@ Every piece of data from a client must pass multiple validation layers.
 
 ### Type Checking with typeof()
 
+<!-- skilltest: prelude remote-event -->
 ```luau
 --!strict
 local function validateType(value: unknown, expectedType: string): boolean
@@ -102,6 +103,7 @@ end
 
 ### Cooldown Enforcement
 
+<!-- skilltest: expect cooldown -->
 ```luau
 --!strict
 local COOLDOWN_SECONDS = 1.5
@@ -109,10 +111,10 @@ local lastActionTime: { [Player]: number } = {}
 
 local function isOnCooldown(player: Player): boolean
     local last = lastActionTime[player]
-    if last and (time() - last) < COOLDOWN_SECONDS then
+    if last and (os.clock() - last) < COOLDOWN_SECONDS then
         return true
     end
-    lastActionTime[player] = time()
+    lastActionTime[player] = os.clock() -- real elapsed time; see the token bucket note below
     return false
 end
 ```
@@ -162,7 +164,9 @@ end
 
 ### Sanitize Strings for DataStore
 
-DataStores only accept valid UTF-8. Validate strings before storing:
+DataStores only accept valid UTF-8 in **values**: in Studio 0.742 `SetAsync` with `"abc\255def"`
+failed with `104: Cannot store string in data store. Data stores can only accept valid UTF-8
+characters.` (A key with an invalid byte was accepted.) Validate strings before storing:
 
 ```luau
 --!strict
@@ -229,24 +233,22 @@ For movement validation, the server can employ heuristics to detect impossible b
 - Account for network latency by averaging position updates over time
 - Build exemption systems for legitimate teleport mechanics
 
-### Server Authority (Client Beta — Updated April 2026)
+### Server Authority (full release 2026-07-09)
 
-Per Roblox docs: *"The most reliable solution for preventing physics and movement exploits
-is server authority, which moves physics simulation and movement validation entirely to
-the server."* See: https://create.roblox.com/docs/en-us/projects/server-authority
+Server Authority makes the server the single source of truth for movement and physics, with
+client-side prediction and rollback so input still feels instant. It moved from Studio beta
+(2025-12-09) to client beta (2026-04-30) to **full release on 2026-07-09** ("[Full Release] Ship
+Fair And Competitive Games with Server Authority", Roblox staff): "available for all creators".
+Official guide: https://create.roblox.com/docs/projects/server-authority
 
-> **June 2026 Update**: Server Authority has graduated from "Beta" to **"Client Beta"** as
-> of late April 2026. Key changes:
->
-> - **Live server testing**: You can now **publish** and test Server Authority on live
->   production servers, not just Studio playtests.
-> - **APIs are locked**: The API surface is considered **stable** — safe to build upon
->   without expecting breaking changes.
-> - **Includes**: Server-side validation, client-side prediction, and rollback netcode.
->
-> Server Authority is the recommended long-term solution for movement/physics exploit
-> prevention. While heuristic-based anti-cheat (rubber-banding, speed checks) remains
-> valid, Server Authority eliminates entire classes of exploits at the engine level.
+Enable it in Studio, not from code: set `Workspace.AuthorityMode` to `Server` in the Properties
+window, which also sets the other requirements the official page lists
+(`NextGenerationReplication`, `PlayerScriptsUseInputActionSystem`, `SignalBehavior = Deferred`,
+`UseFixedSimulation`, `StreamingEnabled`). `AuthorityMode` is `RobloxScriptSecurity` and the
+others are `NotScriptable` or plugin-only (dump 0.742), so a script cannot switch a place over.
+
+Heuristic checks (rubber-banding, speed checks, below) still work without it; Server Authority
+removes the class of exploits they guess at, such as speed hacks, at the engine level.
 
 ### Rubber-Banding for Invalid Positions
 
@@ -295,8 +297,15 @@ end)
 
 ### Token Bucket Pattern
 
-From the official docs — a token bucket allows short bursts but prevents sustained spam:
+From the official docs (*Client-server boundary*), a token bucket allows short bursts but prevents
+sustained spam. One change from that sample: it measures time with `os.clock()`, not `time()`.
+`time()` is game time, which falls behind real time while the server is busy: in a Studio test
+(0.742) a `task.wait(0.7)` early in a busy server took 3.2 s by `os.clock()` while `time()`
+advanced 0.44 s, so the sample's bucket refilled less than a quarter as fast as players were
+sending, and refused them. `os.clock()` is real elapsed time that system clock changes do not move
+(official `os.clock` reference).
 
+<!-- skilltest: provides TokenBucket; expect token-bucket -->
 ```luau
 --!strict
 -- ModuleScript in ServerScriptService
@@ -321,7 +330,7 @@ function TokenBucketModule.new(capacity: number, windowSeconds: number): TokenBu
 end
 
 function TokenBucketModule.allow(self: TokenBucket, userId: number): boolean
-    local now = time()
+    local now = os.clock() -- real time; time() lags behind it under server load
     local b = self.buckets[userId]
     if not b then
         b = { tokens = self.capacity, last = now }
@@ -345,6 +354,7 @@ return TokenBucketModule
 
 Always clean up on `PlayerRemoving` to prevent memory leaks:
 
+<!-- skilltest: prelude players rate-limiter -->
 ```luau
 --!strict
 Players.PlayerRemoving:Connect(function(player: Player)
@@ -411,7 +421,7 @@ security risks, as they can contain malicious scripts called backdoors."*
   minimal `Capabilities` (avoid granting `Network`, `DataStore`, `AssetRequire`)
 
   > ⚠️ **`Sandboxed = true` does nothing on its own.** Script capabilities are **experimental and
-  > available as a client beta** (official docs, read 2026-09-25), and the whole system is **off by
+  > available as a client beta** (official docs, re-read 2026-10-11), and the whole system is **off by
   > default**. You must first change `Workspace.SandboxedInstanceMode` from `Default` to
   > `Experimental` in the Properties window — it is `NotScriptable`, so no script can flip it (unlike
   > `Sandboxed` and `Capabilities`, which a script can set); only then does marking a `Model` / `Folder` / `Script` as `Sandboxed` constrain
@@ -461,6 +471,7 @@ security risks, as they can contain malicious scripts called backdoors."*
 
 This example demonstrates a fully validated weapon-fire handler combining all patterns:
 
+<!-- skilltest: requires TokenBucket -->
 ```luau
 --!strict
 -- Server Script in ServerScriptService
@@ -601,14 +612,14 @@ Combine device blocking with the heuristic detection patterns from
 
 ---
 
-## 11. Scoped User Identifiers Warning (October 2026)
-
-> **Upcoming**: October 2026 rollout — domain-scoped user IDs
+## 11. Scoped User Identifiers Warning
 
 > [!WARNING]
-> Starting October 2026, Roblox will begin rolling out **scoped user identifiers**.
-> Players will receive **domain-scoped user IDs** that differ per game/experience.
-> This is a significant change that affects cross-game systems.
+> Roblox is introducing **domain-scoped user IDs**: a player gets a different user ID in each
+> game, but only in games they first visit after the rollout. The June 2026 roadmap put the
+> rollout in October 2026; a staff update on 2026-09-01 delayed it, promising a new timeline in
+> October, and none had been posted by 2026-10-11 (DevForum topic 4677155). Opt-in testing is
+> available now. This affects cross-game systems; check the announcement for the current date.
 
 ### What Changes
 
@@ -655,5 +666,5 @@ end
 | Date | Change | Section |
 |------|--------|---------|
 | June 2026 | `BanAsync` gains `ApplyDeviceBlock` param (24hr, desktop only) | [§10](#10-banasync-api--device-blocking-june-2026) |
-| April 2026 | Server Authority promoted to "Client Beta"; live server testing enabled, APIs locked | [§5](#5-anti-cheat-design-philosophy) |
-| October 2026 (upcoming) | Scoped user identifiers rollout — domain-scoped IDs per game | [§11](#11-scoped-user-identifiers-warning-october-2026) |
+| July 2026 | Server Authority full release (2026-07-09); client beta had started 2026-04-30 | [§5](#5-anti-cheat-design-philosophy) |
+| Delayed (was October 2026) | Scoped user identifiers rollout — domain-scoped IDs per game; new timeline promised for October | [§11](#11-scoped-user-identifiers-warning) |

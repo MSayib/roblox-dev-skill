@@ -17,7 +17,7 @@
 
 ## Overview
 
-Roblox monetization (as of August 2026) consists of:
+Roblox monetization (checked 2026-10-11) consists of:
 1. **Game Passes** — One-time purchases granting permanent perks
 2. **Developer Products** — Repeatable purchases (consumables)
 3. **Transfers API** — Player-to-player Robux transfers (NEW, replaces cross-game sales)
@@ -104,6 +104,16 @@ MarketplaceService.ProcessReceipt = processReceipt
 > grant: see `worked-examples.md` §6 for the `UpdateAsync` pattern, tested in Studio 0.742. Roblox's
 > own sample checks only `if success then`, although its warning says a handler must return `true`.
 
+> **`BindReceiptHandler` is the newer route.** The official `MarketplaceService` reference
+> (2026-10-11) calls `ProcessReceipt` "legacy" and documents
+> `MarketplaceService:BindReceiptHandler(Enum.ReceiptType.DeveloperProduct, handler, filter?)`:
+> a handler per list of product IDs (or a catch-all), returning `Enum.ReceiptDecision.Processed` or
+> `NotProcessedYet`. A bound handler takes precedence and unmatched receipts fall through to
+> `ProcessReceipt`, so the two can coexist while you migrate. It has been in the API dump since at
+> least 0.733 (`Security: None`), and a game Script registered both forms in Studio 0.742 without
+> error; a full purchase through it was not run here. The idempotency rule is the same: record the
+> `PurchaseId` with the grant.
+
 ### 5. Subscriptions (Recurring In-Experience)
 
 Subscriptions allow recurring billing for exclusive perks within an experience.
@@ -128,19 +138,34 @@ end
 ```
 
 **Server-side — Handle subscription state changes:**
+<!-- skilltest: prelude subscription-id -->
 ```lua
-MarketplaceService.SubscriptionStatusChanged:Connect(function(player, subscriptionId, newStatus)
-    if subscriptionId == SUBSCRIPTION_ID then
-        if newStatus.IsSubscribed then
-            -- Grant perks
-        else
-            -- Revoke perks
-        end
+--!strict
+-- The event is on Players (MarketplaceService has no SubscriptionStatusChanged) and carries no
+-- status, so read it again. Only server scripts receive it.
+local MarketplaceService = game:GetService("MarketplaceService")
+local Players = game:GetService("Players")
+
+Players.UserSubscriptionStatusChanged:Connect(function(player: Player, subscriptionId: string)
+    if subscriptionId ~= SUBSCRIPTION_ID then
+        return
+    end
+    local ok, status = pcall(function()
+        return MarketplaceService:GetUserSubscriptionStatusAsync(player, subscriptionId)
+    end)
+    if not ok then
+        return -- the check failed: change nothing, check again later
+    end
+    if status.IsSubscribed then
+        -- Grant perks
+    else
+        -- Revoke perks
     end
 end)
 ```
 
 **Client-side — Prompt purchase:**
+<!-- skilltest: prelude subscription-id -->
 ```lua
 local MarketplaceService = game:GetService("MarketplaceService")
 local Players = game:GetService("Players")
@@ -151,6 +176,9 @@ MarketplaceService:PromptSubscriptionPurchase(player, SUBSCRIPTION_ID)
 
 **Key facts:**
 - Subscriptions are managed in the Creator Dashboard
+- `Players.UserSubscriptionStatusChanged` fires only after the server re-checks, which it does when
+  the purchase modal closes. A player who subscribed outside the experience must still be prompted
+  (the prompt says they are already subscribed) before the event fires
 - Revenue split: same as other in-experience purchases
 - Players can cancel anytime; access continues until the billing period ends
 - Use `GetUserSubscriptionDetailsAsync` for plan details (price, period)
@@ -174,14 +202,9 @@ MarketplaceService:PromptSubscriptionPurchase(player, SUBSCRIPTION_ID)
 |-------------|--------|
 | Sender | Must have active **Roblox Plus** subscription |
 | Recipient | No subscription required |
-| Age | Both users must complete Roblox age check |
-| Under 18 | Linked parental account with approval |
-| Under 16 | Parental approval required in most regions |
-| Per-transaction | 10–500 Robux |
-| Daily limit (no 2SV) | 500 Robux/day |
-| Monthly limit (no 2SV) | 1,000 Robux/month |
-| Daily limit (with 2SV) | 5,000 Robux/day |
-| Monthly limit (with 2SV) | 10,000 Robux/month |
+| Age | Sender and recipient: 18+ must be age checked; under 18 need a linked parental account and parental approval for **each** transfer |
+| Per-transaction | 10–500 Robux (official *Robux transfers* page) |
+| Daily / monthly limit | 500 Robux per day, 1,000 per month. Asked whether this would scale by age or verification, Roblox said it is "intentionally starting with this limit" (staff FAQ, May 2026). No higher tier is documented |
 | Reversibility | All transfers are **FINAL** |
 
 ### API Reference
@@ -258,7 +281,9 @@ end
 
 ## Roblox Plus Subscription
 
-> Launched April 30, 2026 — replaces old Roblox Premium.
+> Rolled out April 30, 2026 ("Introducing Roblox Plus", Roblox staff, 2026-04-10). It does not
+> replace Premium: the announcement says an existing Premium subscription still grants avatar
+> marketplace access.
 
 - Required for SENDING Robux via Transfers API
 - Includes: free private servers, purchase discounts, Robux transfers
@@ -269,18 +294,21 @@ end
 
 ## Publishing Requirements
 
-> Updated May 19, 2026
+> Rollout began May 19, 2026 ("Alternate Publishing Requirements for Roblox Kids and Select",
+> Roblox staff, 2026-05-11).
 
-- **Publishing fee**: 1,000 Robux one-time per game for "All Ages" publishing
-- **Alternative**: Active Roblox Plus subscription (no per-game fee)
-- **Refundable**: After 60+ days of maintained engagement without moderation actions
-- **Forfeited**: If game is permanently removed for Community Standards violations
+- **Publishing fee**: a one-time, refundable 1,000 Robux per game to publish to all ages
+- **Alternative**: an active Plus or Premium subscription (no per-game fee)
+- **Refunded** automatically 90 days after the game becomes eligible for Kids or Select accounts,
+  or 90 days after payment if it never does
+- **Forfeited** only if the game is permanently removed for severe Community Standards violations
 
 ---
 
 ## Managed Pricing
 
-> Launched H1 2026
+> Announced 2026-06-15 ("Managed Pricing: One System for Better Pricing and Earnings Growth",
+> Roblox staff); official *Managed pricing* and *Price optimization* pages.
 
 - Unifies Regional Pricing + Price Optimization into single automated workflow
 - Runs pricing tests at least every 90 days
@@ -336,8 +364,9 @@ Previously, developers could sell Game Passes and Developer Products from other
 experiences inside their own game. This was commonly used for "PLS DONATE" style
 donation games.
 
-**Why removed**: Developer products and passes were "never originally designed for
-peer-to-peer Robux transfers" — the pattern was exploited for fraud.
+**Why removed**: in Roblox's words, developer products and passes "were never designed for
+peer-to-peer Robux transfers", and the change protects players "from fraud and exploitation"
+(staff post, 2026-05-04).
 
 **Migration path**: Use the Transfers API (see above).
 

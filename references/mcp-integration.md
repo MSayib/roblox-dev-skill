@@ -1,6 +1,6 @@
 # Roblox Studio MCP Integration
 
-> **Primary source (re-verified 2026-09-25):**
+> **Primary source (re-verified 2026-10-11):**
 > https://create.roblox.com/docs/studio/mcp — raw markdown at
 > `https://raw.githubusercontent.com/Roblox/creator-docs/main/content/en-us/studio/mcp.md`
 >
@@ -105,7 +105,8 @@ Then connect the client one of three ways, in this order of preference:
 
   On Windows: `"command": "cmd.exe"`, `"args": ["/c", "%LOCALAPPDATA%\\Roblox\\mcp.bat"]`.
   Merge the `Roblox_Studio` entry into an existing `mcpServers` dictionary rather than replacing
-  the file, and mind the commas — invalid JSON fails silently at load.
+  the file, and mind the commas: "Missing commas will result in invalid JSON and prevent the
+  configuration from loading" (official page).
 - **CLI command**, for clients that want one: run the binary path above directly.
 
 **Verify:** Assistant → **…** → **Manage MCP Servers** → under *Enable Studio as MCP server*,
@@ -122,9 +123,9 @@ and re-check the JSON syntax. Any client that supports `stdio` works.
 
 ## Tool Reference
 
-**Counts, stated precisely.** The official docs page lists **26 tools**. The build observed in
-this session (2026-09-25) exposes **28** — those 26 plus `generate_texture` and `segment_mesh`,
-which are present but undocumented. Tool sets move; when a call fails with an unknown-tool
+**Counts, stated precisely.** The official docs page lists **26 tools** (recounted 2026-10-11).
+The build observed on 2026-10-11 (Studio 0.742) exposes **30**: those 26 plus `generate_texture`,
+`segment_mesh`, `list_plugin_guis` and `capture_plugin_gui`, which are present but undocumented. Tool sets move; when a call fails with an unknown-tool
 error, list what your host actually exposes instead of trusting this table.
 
 ### Scripts
@@ -205,6 +206,7 @@ nested.
 | `start_stop_play` | Starts or stops playtesting. |
 | `get_console_output` | Reads the Studio output log. |
 | `screen_capture` | Captures the viewport and returns image data; optionally takes a custom camera position and look-at target. |
+| `list_plugin_guis` / `capture_plugin_gui` | Lists plugin widgets with a `pluginGuiId` (hidden ones too), and screenshots a **visible** one by that id. Undocumented; from the live schema (2026-10-11). |
 
 ### Player input simulation
 
@@ -251,7 +253,7 @@ non-Roblox URL, use the host's own fetch tool or `curl`.
 Using `query` is the token-efficient path: it returns only matching sections with context rather
 than the whole page.
 
-**First-party skills exposed by the `skill` tool in this build (2026-09-25):**
+**First-party skills exposed by the `skill` tool (unchanged from 2026-09-25 to 2026-10-11):**
 `rbx-create-skill`, `rbx-debug`, `rbx-device-simulator-lua`, `rbx-docs-search`,
 `rbx-perf-profiling`, `rbx-scene-analysis`, `rbx-unit-test`. These are Roblox's, shipped inside
 Studio, and they are **narrower and more current than this skill on their specific topics** —
@@ -277,8 +279,10 @@ repository's references for architecture, security, and Luau standards, which th
 
 ### Known tool defect
 
-> **`script_grep` line numbers are unreliable.** Measured 2026-09-06: it placed a match at line
-> 171 that `script_read` showed was 15 lines lower. Use `script_grep` to find *which* script
+> **`script_grep` line numbers need confirming.** Measured 2026-09-06: it placed a match at line
+> 171 that `script_read` showed was 15 lines lower. On 2026-10-11 (Studio 0.742) two tests, a
+> generated script and a Rojo-synced one, returned the exact line, so the trigger is unknown.
+> Use `script_grep` to find *which* script
 > holds a string, then `script_read` to find *where*. Do not feed a `script_grep` line number
 > into an edit.
 
@@ -297,8 +301,9 @@ repository's references for architecture, security, and Luau standards, which th
 6. multi_edit           →  exact-match edits, one script per call
 ```
 
-**Why:** `multi_edit` matches `old_string` verbatim. Without a read, the call does not merely
-risk a bad edit — it fails outright. And blind whole-script rewrites break references, discard
+**Why:** `multi_edit` matches `old_string` verbatim, so an `old_string` guessed without a read
+usually fails the whole call (a read is not required: an edit whose text does match succeeds,
+tested 2026-10-11). And blind whole-script rewrites break references, discard
 project conventions, and destroy work done outside the agent session.
 
 ### 2. Test-After-Change
@@ -376,8 +381,9 @@ Summary only — the full threat model, including what this skill cannot enforce
 
 - **`execute_luau` is the command bar.** Plugin-level privilege, no timeout, no undo guarantee,
   no dry-run. Treat every call as a write to the user's place.
-- **Never delete services** (`Workspace`, `ReplicatedStorage`, …). Destroying core services
-  crashes Studio. Never `game:ClearAllChildren()`.
+- **Never delete services** (`Workspace`, `ReplicatedStorage`, …) and never
+  `game:ClearAllChildren()`. What Studio does then has not been tested here; do not find out on a
+  real place.
 - **Confirm the target place before the first mutation**, especially with several Studio windows
   open.
 - **Don't overwrite work you have not read.** The developer may have been editing outside your

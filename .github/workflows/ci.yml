@@ -73,6 +73,12 @@ jobs:
           # a Windows-style legacy code page: every tool must survive printing emoji into it
           PYTHONIOENCODING: cp1252
         run: python3 tools/robloxdocs/roblox-api-monitor.py --refs references --audit strict
+      - name: Claims register (no stale quote, no uncovered high-risk line, no regression, report current)
+        env:
+          ROBLOX_DOCS_HOME: ${{ runner.temp }}/RobloxDocs
+        run: |
+          python3 tools/skill-test/check_claims.py --strict --dump "$ROBLOX_DOCS_HOME/RobloxAPI/dumps/latest.json" --report docs/claims.md
+          git diff --exit-code docs/claims.md || { echo "docs/claims.md is out of date: run check_claims.py --report docs/claims.md"; exit 1; }
 
   static:
     name: Every Luau example under --!strict (luau-lsp)
