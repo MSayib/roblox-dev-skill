@@ -1,383 +1,106 @@
-# 🎮 Roblox Dev Skill — AI Coding Assistant for Roblox Development
+# 🎮 Roblox Dev Skill
 
 [![CI](https://github.com/MSayib/roblox-dev-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/MSayib/roblox-dev-skill/actions/workflows/ci.yml)
 
-An expert-level AI skill for Roblox game development with Luau. Works with
-[Claude Code](https://code.claude.com), [Antigravity](https://antigravity.google), Codex, Cursor,
-Gemini CLI, GitHub Copilot and every other agent that reads the open
-[Agent Skills](https://agentskills.io) format.
+**An [Agent Skill](https://agentskills.io) that makes an AI coding agent write correct, current Roblox
+code.** When you mention Roblox, Luau or Roblox Studio, the agent loads this skill: a routing file
+([`SKILL.md`](SKILL.md)) plus 14 reference guides on Luau, client-server architecture, security,
+DataStores, UI, performance, monetization, migration, and driving Roblox Studio through its MCP
+server. Works with Claude Code, Codex, Cursor, Gemini CLI, Antigravity, GitHub Copilot, and any
+agent that reads the Agent Skills format.
 
-> **Skill version:** 2.15.0 | **Engine:** 0.742.0.7421053 | **Luau:** 0.742 | **Ingested:** 2026-10-11
->
-> Dump downloaded, re-split, and diffed against 0.741 on that date: 940 classes / 648 enums /
-> 263 services / 48 deprecated. Every developer-visible change was run in Studio 0.742.
->
-> Roblox ships roughly weekly, so treat that number as *when this was last verified*, never as
-> today's version. `SKILL.md` carries the two commands that re-derive engine and Luau in one line
-> each — and the skill is instructed to tell you when its local dump looks stale rather than
-> pretending otherwise.
+> **Skill 2.16.0** · verified against Roblox Studio **0.742.0.7421053** and **Luau 0.742** on
+> 2026-10-11. Every code example was type-checked under `--!strict` and run in a real Studio place.
+> Roblox ships weekly, so this is *when it was last verified*, not today's version.
 
-## What Is This?
+It is Markdown an agent reads. It is **not** an MCP server and ships no tools: for Studio access,
+enable [Studio's built-in MCP server](https://create.roblox.com/docs/studio/mcp).
 
-A structured knowledge base that transforms your AI coding assistant into a
-**Roblox development expert**. When you mention anything Roblox-related, the skill
-auto-triggers and provides the AI with deep, accurate, research-verified knowledge
-about the Roblox platform.
+## Quick install
 
-> ### This is a skill, not an MCP server
->
-> The repo is tagged `mcp` because it teaches an agent to **drive Roblox's own Studio MCP server**
-> — which is [built into Roblox Studio](https://create.roblox.com/docs/studio/mcp). This project
-> ships **no tools, no transport, and no execute surface of its own**: it is Markdown that an agent
-> reads. If you are looking for something to put in `mcpServers`, you want Studio's built-in
-> server, not this. See [`references/mcp-integration.md`](references/mcp-integration.md) for how to
-> connect it and [`references/agent-safety.md`](references/agent-safety.md) for what that access
-> implies.
-
-### Key Features
-- 🧠 **Comprehensive knowledge base** — curated Roblox & Luau development guides across 14 reference topics
-- 🧩 **Worked examples for agents** — end-to-end sequences (request → routing → tool calls → verification), each with explicit *non-goals* so a near-miss request does not get pattern-matched to the wrong pattern
-- 📂 **Local-first API lookup** — pre-split `~/RobloxDocs/` JSON files: a typical class lookup reads ~2 KB against an 8.3 MB full dump (re-measured 2026-09-25)
-- 🔄 **Obsolescence detection** — the skill compares `metadata.json` against today's date and *asks* before updating. It is not self-updating and there is no background job; a human runs `roblox-api-monitor.sh`
-- 🎯 **Smart routing** — automatically selects the right reference based on your intent
-- 🔌 **MCP client guidance** — how to use Roblox's built-in Studio MCP server correctly, with its real tool signatures and limits
-- 🛡️ **Two threat models** — player→server anti-exploit (`security-hardening.md`) *and* agent→Studio safety (`agent-safety.md`)
-- 📚 **Migration-aware** — guides you through deprecated APIs and breaking changes
-- ⚡ **Multi-fallback** — local JSON → web docs → Context7
-- 🔬 **Self-auditing** — `audit-skill-examples.py` checks every code example against the API dump, so an example that cannot execute under the current security model fails the ingest instead of shipping
-
-## Installation
-
-### Step 1: Install the skill
-
-One command installs the skill once and links it into every agent you choose. No git clone.
-
-**macOS, Linux, WSL, Git Bash:**
+**macOS, Linux, WSL, Git Bash**
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/MSayib/roblox-dev-skill/master/install.sh | bash
 ```
 
-**Windows PowerShell:**
+**Windows PowerShell**
 
 ```powershell
 irm https://raw.githubusercontent.com/MSayib/roblox-dev-skill/master/install.ps1 | iex
 ```
 
-**Windows CMD:**
+**Windows CMD**
 
 ```bat
 curl -fsSL https://raw.githubusercontent.com/MSayib/roblox-dev-skill/master/install.cmd -o install.cmd && install.cmd
 ```
 
-The installer then:
+The installer asks which agents to set up (the ones it finds are pre-selected), stores the skill
+once, and links it into each agent, so one update reaches all of them. It can also set up
+[`~/RobloxDocs`](docs/robloxdocs.md), a local copy of the Roblox API for fast, offline lookups.
+It never deletes anything it did not create.
 
-1. **Asks which agents to set up**, with the ones it finds on your machine pre-selected. Toggle by
-   number and press Enter. Without a terminal (CI, scripts) it uses the detected defaults.
-2. **Stores the skill once** — `~/.local/share/roblox-dev-skill/` on macOS/Linux,
-   `%LOCALAPPDATA%\roblox-dev-skill\` on Windows — and **links** it into each agent's skills
-   folder. One copy on disk means one update reaches every agent. On Windows it uses a symlink, or
-   a directory junction when symlinks need admin rights, or a copy as a last resort.
-3. **Offers to set up `~/RobloxDocs/`** — it downloads the current Roblox API dump and splits it
-   into ~2 KB per-class files, so the agent answers API questions from local data. Needs Python 3.6+;
-   the skill works without it, using web docs.
+**Then restart your agent** and try:
 
-Nothing it did not create is ever deleted. An existing folder in the way is moved to a backup
-outside every skills folder (a backup inside one would load as a duplicate skill), and a link that
-points somewhere else is left alone unless you pass `--force`.
+> *Create a coin collection system for my Roblox game*
 
-### Step 2: Restart your agent
+You should get server-authoritative `--!strict` Luau that validates what the client sends. Options,
+updating, uninstalling and manual install: **[docs/installation.md](docs/installation.md)**.
 
-Agents scan their skills folders at startup. Then ask something like *"Create a coin collection
-system for my Roblox game"* — the skill should trigger and produce server-authoritative `--!strict`
-Luau.
+## What's inside
 
-### Supported agents
+| Reference | Covers |
+|---|---|
+| [worked-examples](references/worked-examples.md) | Eight end-to-end tasks for an agent (build, debug, migrate, look up, refuse, sell a product, migrate saved data, bind input), each ending in a tested verification |
+| [luau-fundamentals](references/luau-fundamentals.md) | Luau syntax, types and the New Type Solver, what each Luau release changed, beta and experimental features you cannot ship |
+| [project-structure](references/project-structure.md) | Services, Rojo, client/server layout, the Input Action System |
+| [networking](references/networking.md) | RemoteEvents, RemoteFunctions, unreliable remotes, bindables |
+| [security-hardening](references/security-hardening.md) | Server authority, validating remote input, anti-exploit, bans, script capabilities |
+| [datastore-persistence](references/datastore-persistence.md) | DataStoreService, ProfileStore, MemoryStoreService |
+| [performance-optimization](references/performance-optimization.md) | Memory, Parallel Luau and Actors, streaming, the frame pipeline |
+| [ui-systems](references/ui-systems.md) | GUI layout, StyleSheets, BillboardGui / SurfaceGui, ProximityPrompt |
+| [monetization](references/monetization.md) | Game passes, developer products, subscriptions, Robux transfers |
+| [legacy-migration](references/legacy-migration.md) | Deprecated APIs and replacements, what each engine release changed |
+| [mcp-integration](references/mcp-integration.md) | Studio MCP tools with their real signatures and limits |
+| [agent-safety](references/agent-safety.md) | What an agent with Studio access can break, and the rules that prevent it |
+| [studio-plugins-and-limits](references/studio-plugins-and-limits.md) | Plugins, `Script.Source` limits, engine limits |
+| [file-formats-and-assets](references/file-formats-and-assets.md) | `.rbxl`/`.rbxm`, meshes, importing |
 
-One link in **`~/.agents/skills`** — the cross-agent convention — already covers most agents. The
-installer adds native links only where an agent does not read that folder, so nothing shows up
-twice. Every path below was checked against the agent's own documentation (2026-09-25).
+How routing, lookup and the coverage dates work: **[docs/how-it-works.md](docs/how-it-works.md)**.
 
-| Agent | User skills folder | Covered by `~/.agents/skills` |
-|---|---|---|
-| Claude Code | `~/.claude/skills/` | — needs its own link |
-| Antigravity (2.0 / IDE) | `~/.gemini/config/skills/` | — needs its own link |
-| Antigravity CLI | `~/.gemini/antigravity-cli/skills/` | — needs its own link |
-| Kiro | `~/.kiro/skills/` | — needs its own link |
-| Codex (OpenAI) | `~/.agents/skills/` | ✓ (its native folder) |
-| Goose | `~/.agents/skills/` | ✓ (its native folder) |
-| Gemini CLI | `~/.gemini/skills/` | ✓ |
-| Cursor | `~/.cursor/skills/` | ✓ |
-| GitHub Copilot (CLI / VS Code) | `~/.copilot/skills/` | ✓ |
-| OpenCode | `~/.config/opencode/skills/` | ✓ |
-| Roo Code | `~/.roo/skills/` | ✓ |
-| Junie (JetBrains) | `~/.junie/skills/` | ✓ |
-| Amp | `~/.config/amp/skills/` | ✓ |
-| Anything else | `--path DIR` / `-Path DIR` | — |
+## How it stays correct
 
-`install.sh --list` (or `-List` in PowerShell) prints the same table with what it detected on your
-machine and the documentation URL behind each path.
+- **Every example is tested.** Each Luau block is type-checked with luau-lsp under `--!strict`, then
+  run in a real Studio place through Rojo, as a game Script (so security gates apply), a
+  LocalScript, or inside an Actor. The 2.16.0 pass found and fixed a script that could not compile,
+  a pool that leaked objects, player data shared between players, and a purchase handler that
+  charged for items it did not give. **[docs/testing.md](docs/testing.md)**
+- **Every engine release is diffed** member by member against the previous API dump, and the
+  developer-visible changes are run in Studio before the skill describes them.
+- **It says what it does not know.** Features that exist but are not enabled, betas you cannot
+  publish, and anything not yet tested are labelled as such.
 
-### Options
+History: **[CHANGELOG.md](CHANGELOG.md)** (machine-readable: [`metadata.json`](metadata.json)).
 
-Pass options after `bash -s --` in the one-liner, or use the script-block form in PowerShell:
+## For AI agents reading this
 
-```bash
-# non-interactive: exactly these agents, no RobloxDocs
-curl -fsSL https://raw.githubusercontent.com/MSayib/roblox-dev-skill/master/install.sh | bash -s -- --agents claude,universal --no-docs --yes
-
-# see what would happen, change nothing
-curl -fsSL https://raw.githubusercontent.com/MSayib/roblox-dev-skill/master/install.sh | bash -s -- --dry-run
-```
-
-```powershell
-& ([scriptblock]::Create((irm https://raw.githubusercontent.com/MSayib/roblox-dev-skill/master/install.ps1))) -Agents claude,universal -NoDocs -Yes
-```
-
-| bash | PowerShell | |
-|---|---|---|
-| `--agents a,b` | `-Agents a,b` | agent ids, `detected`, or `all` |
-| `--path DIR` | `-Path DIR` | also install into a custom skills folder |
-| `--yes` | `-Yes` | no questions |
-| `--dry-run` | `-DryRun` | show the plan, change nothing |
-| `--copy` | `-Copy` | copy instead of linking |
-| `--force` | `-Force` | replace a link that points elsewhere (it is backed up) |
-| `--docs` / `--no-docs` | `-Docs` / `-NoDocs` | set up RobloxDocs, or skip it |
-| `--docs-only` | `-DocsOnly` | only (re)install RobloxDocs |
-| `--ref TAG` | `-Ref TAG` | install a specific branch or tag |
-| `--update` | `-Update` | fetch the latest skill; links follow automatically |
-| `--uninstall` | `-Uninstall` | remove exactly what the installer made |
-| `--list` | `-List` | show supported agents and their folders |
-
-### Update and uninstall
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/MSayib/roblox-dev-skill/master/install.sh | bash -s -- --update     # links pick up the new version at once
-bash ~/.local/share/roblox-dev-skill/install.sh --uninstall
-```
-
-```powershell
-& ([scriptblock]::Create((irm https://raw.githubusercontent.com/MSayib/roblox-dev-skill/master/install.ps1))) -Update
-& "$env:LOCALAPPDATA\roblox-dev-skill\install.ps1" -Uninstall
-```
-
-Uninstall removes only the links and copies listed in the installer's manifest, and only while they
-still point at the installed skill. `~/RobloxDocs` is kept unless you add `--purge-docs`, which
-asks first — old API dumps are the evidence you diff new releases against.
-
-### Manual install
-
-Copy or clone the repository into any agent's skills folder from the table above. **The folder must
-be named `roblox-dev-skill`**: the [Agent Skills spec](https://agentskills.io/specification)
-requires the folder name to match the skill's `name`, and stricter agents skip a skill whose folder
-does not.
-
-```bash
-git clone https://github.com/MSayib/roblox-dev-skill.git ~/.agents/skills/roblox-dev-skill
-```
-
-> **If you followed an older version of this README:** it told Claude Code users to clone into
-> `~/.claude/skills/roblox-dev`, which breaks that rule, and told Antigravity users to clone into
-> `~/.gemini/config/plugins/roblox-dev-suite/skills/` — a plugin folder that Antigravity only loads
-> when a `plugin.json` manifest is present, which the repo never shipped. The installer detects an
-> old `roblox-dev` clone and moves it aside for you.
-
-## Directory Structure
-
-```
-roblox-dev-skill/
-├── SKILL.md                          # Main skill file (router + standards + workflows)
-├── metadata.json                     # Knowledge update tracking (timestamps, versions)
-├── CHANGELOG.md                      # Full version history
-├── README.md                         # This file
-├── install.sh                        # Installer: macOS, Linux, WSL, Git Bash (bash 3.2+)
-├── install.ps1                       # Installer: Windows PowerShell 5.1+ / PowerShell 7
-├── install.cmd                       # Installer: Windows CMD (launches install.ps1)
-├── references/                       # Deep-dive reference guides (14)
-│   ├── worked-examples.md            # End-to-end agent sequences + verification + non-goals
-│   ├── luau-fundamentals.md          # Luau language, types, naming, style
-│   ├── project-structure.md          # Architecture, Rojo, Script Sync, IAS
-│   ├── datastore-persistence.md      # DataStoreService, ProfileStore, MemoryStoreService
-│   ├── networking.md                 # RemoteEvents, client-server, BindableEvent caveats
-│   ├── security-hardening.md         # Anti-exploit, BanAsync, Server Authority (player→server)
-│   ├── agent-safety.md               # Agent→Studio trust boundary, destructive MCP ops
-│   ├── performance-optimization.md   # Memory, Parallel Luau, RunService frame pipeline
-│   ├── mcp-integration.md            # Roblox Studio MCP tools, real signatures and limits
-│   ├── ui-systems.md                 # GUI, UIShadow, StyleQuery, UIFlexItem, StyleSheet
-│   ├── legacy-migration.md           # Deprecated APIs, RunService events, Scoped UserIds
-│   ├── monetization.md               # Transfers API, Subscriptions, game passes
-│   ├── file-formats-and-assets.md    # rbxl/rbxm formats, ZSTD/LZ4, MeshContent, importing
-│   └── studio-plugins-and-limits.md  # Plugins, Script.Source limits, engine/HttpService limits
-├── evals/
-│   └── evals.json                    # Skill trigger accuracy test cases
-└── tools/robloxdocs/                 # RobloxDocs scripts the installer copies to ~/RobloxDocs/scripts
-```
-
-The installed skill contains only `SKILL.md`, `metadata.json`, `references/` and the license/docs —
-`evals/`, `tools/` and the installers stay in the repository.
-
-## Companion: `~/RobloxDocs/` (Local API Reference)
-
-The skill integrates with a **local API reference hub** for token-efficient lookups:
-
-```
-~/RobloxDocs/
-├── RobloxAPI/
-│   ├── dumps/                         # Full-API-Dump.json per version
-│   │   └── latest.json → (symlink)
-│   ├── classes/                       # 931 class JSONs (~2 KB median — measured below)
-│   ├── enums/                         # 635 enum JSONs
-│   ├── services/                      # 258 service JSONs (subset)
-│   ├── deprecated/                    # 48 deprecated class JSONs
-│   ├── class-index.json               # Lightweight index for quick lookup
-│   ├── enum-index.json
-│   ├── service-index.json
-│   ├── deprecated-index.json
-│   └── diffs/                         # member-level diffs between consecutive dumps
-├── scripts/
-│   ├── roblox-api-monitor.py          # check → download → validate → diff → split → audit
-│   ├── roblox-api-monitor.sh          # shim for the above (keeps the documented path working)
-│   ├── split-api-dump.py              # one-pass splitter (no jq)
-│   ├── diff-api-dumps.py              # member-level diff + grep-back into the skill's docs
-│   └── audit-skill-examples.py        # validates the skill's code examples against the dump
-├── config                             # SKILL_REFS=…, AUDIT_MODE=warn|strict|off
-└── README.md
-```
-
-**Why?** Re-measured 2026-10-01 on 0.741.19.7411056: the full dump is **8,356,896 bytes**, while the
-931 split class files are **101 B min / 2,054 B median / 4,782 B mean / 104,956 B max**. A typical
-class lookup therefore reads about **0.02%** of the dump. (An earlier README claimed "845× smaller"
-from a "~10KB" class file; neither number is reproducible — the median class file is ~2 KB.
-`SKILL.md` carries the command that re-measures both, including the `stat -L` needed to follow the
-`latest.json` symlink instead of measuring the link itself.)
-
-### Setting up and refreshing RobloxDocs
-
-The installer sets it up (`--docs-only` / `-DocsOnly` to do only that). To refresh it to a new
-engine version later:
-
-```bash
-~/RobloxDocs/scripts/roblox-api-monitor.sh                      # macOS, Linux, WSL, Git Bash
-python "%USERPROFILE%\RobloxDocs\scripts\roblox-api-monitor.py"    # Windows without bash
-```
-
-It checks the current Studio version, downloads the dump only when it changed, validates it before
-it replaces anything, diffs it member-by-member against the previous one, re-splits it, and audits
-the skill's code examples against it. It needs **Python 3.6+** and nothing else — no `jq`, no zsh.
-Roblox ships roughly weekly; the skill tells you when the local dump looks stale and never refreshes
-on its own.
-
-## Usage
-
-### Auto-Trigger
-The skill automatically activates when you mention Roblox-related topics:
-- `Roblox`, `Luau`, `Roblox Studio`, `DataStoreService`, `RemoteEvent`
-- `ProfileStore`, `Rojo`, `rbxl`, `rbxlx`, `rbxm`, `game pass`
-- `fbx`, `obj`, `gltf`, `import/export model`, `Universal Importer`
-- Any Roblox Engine API reference
-
-### Lookup Priority
-```
-1. Reference files (Routing Table in SKILL.md)    ← curated knowledge
-2. ~/RobloxDocs/RobloxAPI/classes/<Name>.json      ← local split JSON
-3. Web docs (create.roblox.com/docs/en-us/*.md)    ← live Roblox official
-4. robloxapi.github.io/ref                         ← visual API browser
-5. context7 MCP                                    ← fallback
-```
-
-### With Roblox Studio MCP
-
-The [Studio MCP server is built into Roblox Studio](https://create.roblox.com/docs/studio/mcp) —
-enable it via **Assistant → … → Manage MCP Servers → Enable Studio as MCP server**, then connect
-your client with quick connect. (The old standalone `studio-rust-mcp-server` binary is
-**archived**; you do not need it.)
-
-With it connected, the agent can read and write scripts in Studio, run Luau, explore the game
-tree, drive playtests, read console output, and capture screenshots. This skill supplies the
-part that is easy to get wrong: the **real** tool signatures and their limits —
-`multi_edit` edits *one* script per call with exact-string matching and works in the `Edit`
-datamodel only, `execute_luau` returns its result, `http_get` is allowlisted to Roblox docs URLs
-ending in `.md`, and every call takes a `studio_id` that nothing will double-check for you.
-
-> ⚠️ Roblox's own warning: *"MCP clients can read and modify content in your open Roblox places.
-> Make sure to only connect clients you trust."* There is no dry-run and no reliable undo — read
-> [`references/agent-safety.md`](references/agent-safety.md) before pointing an agent at a place
-> you care about.
-
-## Knowledge Coverage
-
-Each row says when that file's content was last verified — not that it is current today.
-
-| Topic | Status | Reference File |
-|-------|--------|---------------|
-| Luau language (strict mode, types, generics, `if local` beta) | ✅ **Luau 0.742** | `luau-fundamentals.md` |
-| Project architecture (services, Rojo, IAS) | ✅ **Oct 2026 (0.741)** | `project-structure.md` |
-| DataStore + ProfileStore + **MemoryStoreService** | ✅ Aug 2026 | `datastore-persistence.md` |
-| Client-Server networking + BindableEvent caveats | ✅ Aug 2026 | `networking.md` |
-| Security — player→server (BanAsync, server authority, exploits, script capabilities) | ✅ **Oct 2026** | `security-hardening.md` |
-| Safety — agent→Studio (destructive MCP ops, injection from place content) | ✅ Sep 2026 | `agent-safety.md` |
-| Worked examples (build / debug / migrate / verify / refuse) | ✅ **new in 2.12.0** | `worked-examples.md` |
-| Performance (Parallel Luau, **RunService pipeline**, plugin-only fidelity/LOD/streaming settings) | ✅ **Oct 2026 (0.742, tested in Studio)** | `performance-optimization.md` |
-| MCP integration (26 documented tools / 28 observed) | ✅ **re-verified 2026-09-25** against the official docs page + live schemas | `mcp-integration.md` |
-| UI (**UIFlexItem**, **StyleSheet/StyleRule**, StyleQuery) | ✅ Aug 2026 | `ui-systems.md` |
-| Legacy migration (RunService events, **0.742 additions**, per-release API tables) | ✅ **Oct 2026 (0.742)** | `legacy-migration.md` |
-| Studio plugins, `Script.Source` limits, engine limits | ✅ measured Aug 2026 | `studio-plugins-and-limits.md` |
-| Monetization (Transfers, **Subscriptions**) | ✅ Aug 2026 | `monetization.md` |
-| File formats (**ZSTD/LZ4**, **MeshContent**, importing) | ✅ Aug 2026 | `file-formats-and-assets.md` |
-
-## Update History
-
-Last three releases. **Full history: [CHANGELOG.md](CHANGELOG.md)** · machine-readable entries with
-per-release verification method: [`metadata.json`](metadata.json).
-
-| Version | Date | Highlights |
-|---------|------|-----------|
-| **2.15.0** | Oct 11, 2026 | **Engine 0.742 / Luau 0.742, tested in Studio, and a correction.** Run from a plain server Script in Studio 0.742, every member that is `Security: None` with the `PluginOrOpenCloud` capability fails with "lacking capability PluginOrOpenCloud". That includes the 0.740 fidelity and `Lighting` relaxations this skill had called script-writable since 2.11.0, plus 0.742's `StreamingEnabled`, `Model.LevelOfDetail` and `MeshPart.RenderFidelity`. All are corrected to plugin-only, and the example audit now treats that capability as plugin-only. The new 0.742 APIs (orthographic `Camera`, the `TestService` test registry, `CanUsersTransferRobuxAsync`, `GetSurfaceSlotsAsync`) exist but are **not enabled** yet. `UIBlur` can be created. `coroutine.finally` lost its `Debug` flag in Luau 0.742 but is `nil` in Studio. `if local` is a Studio beta that does not run in published games. Evals 47 → 52. |
-| **2.14.0** | Oct 1, 2026 | **Engine 0.741 / Luau 0.740, and the audit now reads prose.** New: `Player:GetFriendsInServerAsync()` (usable, not yet documented — do not guess its fields), `Enum.GradientType.Elliptical`. Luau 0.740's `if local` flags lost their `Debug` prefix but are still **off** in Studio; exact tables are `Debug`-gated. A new prose/table audit found that `legacy-migration.md` had listed `RobloxScriptSecurity` members as usable since 0.737 (`CallingService`, `AnimatedImageService`, `MomentsService`, …), and a `NotScriptable` check found that the IAS example (fixed in 2.12.0) **still could not run** — confirmed in Studio 0.741. The diff tool stopped reporting false mentions (`TestService.Enabled` "in six files") and now sees class-level and enum-item changes. |
-| **2.13.1** | Sep 25, 2026 | **CI across Linux, macOS (bash 3.2) and real Windows** (PowerShell 5.1, PowerShell 7, `cmd.exe`, Git Bash), running every README one-liner against the commit under test, plus a weekly run against the live Roblox API. It found six bugs on its first runs: the 2.13.0 `install.sh` failed on its GitHub download path for every user (bash 3.2 read a byte after an unbraced variable as part of its name — every earlier test had used `--source`, which skips that path), and five Windows-only bugs, including a cp1252 crash that stopped the example audit, an encoding-less `open()`, and Git Bash configs Windows Python could not read. |
-
-## Roadmap
-
-- **Widen the worked examples** (shipped in 2.12.0) to DataStore migrations, monetization receipts,
-  and UI/IAS flows, each with its own *Not this* list and eval coverage.
-- **Parse Luau properly in the example audit.** It matches simple assignments and method calls with
-  regular expressions; dynamic forms such as `obj[name] = value` pass unchecked.
-- **Resolve bare member names in prose.** The prose audit (2.14.0) checks `` `Class.Member` `` and
-  `` `Class:Method()` ``; a row written as `` `+MomentsService` (`CreatePostAsync`, …) `` names its
-  members without the class, so those are still checked by hand at ingest.
-- **Keep the weekly ingest cadence.** Each release is diffed dump-to-dump rather than trusted from
-  release-note prose, because that is what produces checkable changelog rows.
+Start at [`SKILL.md`](SKILL.md): it holds the standards (always `--!strict`, server authority,
+validate every remote argument) and a routing table that says which reference to open for which
+task. Where a reference and a worked example disagree, the reference wins. Treat the version line
+above as a date, and re-check the live engine version with the commands in `SKILL.md`.
 
 ## Contributing
 
-1. **Research-based only** — all content must be grounded in official Roblox documentation
-2. **No improvisation** — if unsure, flag it as a question rather than guessing
-3. **Update `metadata.json`** — bump version and add a changelog entry
-4. **Run evals** — verify trigger accuracy with `evals/evals.json`
-5. **Keep format consistent** — `--!strict` in all code examples, PascalCase for APIs
-6. **Audit your examples** — `python3 tools/robloxdocs/audit-skill-examples.py references` must
-   report 0 defects; it checks every Luau example against the current API dump
-7. **Validate against the spec** —
-   `uvx --from "git+https://github.com/agentskills/agentskills#subdirectory=skills-ref" skills-ref validate "$PWD"`
-8. **Run the installer suites** — `bash tests/install/test_unix.sh` and
-   `pwsh -File tests/install/test_powershell.ps1` (both use throwaway homes and never touch your
-   real agent folders), plus `python3 tests/lint/check_sources.py`. CI runs all of them on Linux,
-   macOS and Windows and must pass before merging.
+Ground every claim in official documentation, the API dump, or a test you ran, and pass the four
+test layers in [docs/testing.md](docs/testing.md) before opening a pull request.
 
-## License
+## License and credits
 
-MIT License — see [LICENSE](LICENSE) for details.
+MIT, see [LICENSE](LICENSE). Created by [@MSayib](https://github.com/MSayib), built with AI and
+fact-checked against [Roblox Creator Docs](https://create.roblox.com/docs), [Luau](https://luau.org),
+the Roblox API dump, and Roblox Studio itself.
 
-## Credits
-
-- **Creator**: [@MSayib](https://github.com/MSayib) — built collaboratively with AI (research-driven, fact-checked)
-- **Sources**: [Roblox Creator Docs](https://create.roblox.com/docs),
-  [Luau Language](https://luau.org), [Roblox DevForum](https://devforum.roblox.com),
-  [RobloxAPI/ref](https://robloxapi.github.io/ref)
-- **Skills Format**: Pioneered by [Anthropic](https://github.com/anthropics/skills)
-
-## ⭐ Star History
-
-If you find this skill helpful, don't forget to give it a ⭐ **star** on GitHub! It helps more developers discover the project and supports continued development.
+If the skill helps you, a ⭐ helps other developers find it.
 
 [![Star History Chart](https://api.star-history.com/svg?repos=MSayib/roblox-dev-skill&type=Date)](https://star-history.com/#MSayib/roblox-dev-skill&Date)

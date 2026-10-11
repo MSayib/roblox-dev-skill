@@ -116,6 +116,12 @@ PLUGINDECL = re.compile(r'--[^\n]*\b(?:plugin|command bar)\b[^\n]*\bonly\b', re.
 
 # Section F: `+Class.Member`, `Class:Method()`, `Class:Method(args)` inside one backtick span.
 PROSEREF  = re.compile(r'`\+?([A-Z]\w*)[.:]([A-Za-z_]\w*)(?:\([^`]*\))?`')
+BAREGROUP = re.compile(r'`\+?([A-Z]\w*)`\s*\(((?:\s*`[A-Za-z_]\w*(?:\(\))?`\s*,?)+(?:\s*…|\s*\.\.\.)?\s*)\)')
+BARENAME  = re.compile(r'`([A-Za-z_]\w*)(?:\(\))?`')
+# A parenthesised label after a class is often its security level or a tag, not a member.
+NOT_MEMBERS = {'None', 'PluginSecurity', 'LocalUserSecurity', 'RobloxScriptSecurity', 'RobloxSecurity',
+               'NotAccessibleSecurity', 'RobloxEngineSecurity', 'NotScriptable', 'NotCreatable',
+               'NotReplicated', 'ReadOnly', 'Deprecated', 'Hidden', 'Service', 'Yields'}
 FENCE     = re.compile(r'^\s*(```|~~~)')
 # What a context must say for each finding to be a deliberate, correct mention.
 SAYS_GONE     = re.compile(r'remov|renam|no such|does not exist|doesn.t exist|phantom|not a (?:real|member)|gone', re.I)
@@ -165,6 +171,18 @@ def resolve(classes, cn, name):
     return None
 
 
+def bare_member_refs(line):
+    """`+Class` (`MemberA`, `MemberB`, ...): members named without their class. Until 2.16.0 these
+    were checked by hand at every ingest; a row like `+MomentsService` (`CreatePostAsync`, ...) slipped
+    past the Class.Member pattern entirely."""
+    out = []
+    for cn, inner in BAREGROUP.findall(line):
+        for name in BARENAME.findall(inner):
+            if name not in NOT_MEMBERS:
+                out.append((cn, name))
+    return out
+
+
 def audit_prose(refdir, classes):
     F = []
     for path in sorted(glob.glob(os.path.join(refdir, '*.md'))):
@@ -172,7 +190,7 @@ def audit_prose(refdir, classes):
         with open(path, encoding='utf-8') as f:
             text = f.read()
         for ln, line, ctx in prose_contexts(text):
-            for cn, name in PROSEREF.findall(line):
+            for cn, name in PROSEREF.findall(line) + bare_member_refs(line):
                 if cn not in classes or name == 'new':   # unknown: a type, a module, a removed class
                     continue
                 m = resolve(classes, cn, name)

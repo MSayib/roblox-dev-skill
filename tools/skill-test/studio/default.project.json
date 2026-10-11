@@ -1,0 +1,163 @@
+{
+  "name": "roblox-dev-skill-test",
+  "servePort": 34871,
+  "tree": {
+    "$className": "DataModel",
+    "ServerScriptService": {
+      "$className": "ServerScriptService",
+      "SkillTestHarness": {
+        "$path": "Harness.server.luau"
+      },
+      "SkillTestServer": {
+        "$path": "generated/server"
+      },
+      "SkillTestActor": {
+        "$path": "generated/actor"
+      },
+      "ObjectPool": {
+        "$path": "generated/modules/ObjectPool.luau"
+      },
+      "ReceiptHandler": {
+        "$path": "generated/modules/ReceiptHandler.luau"
+      },
+      "PlayerDataSchema": {
+        "$path": "generated/modules/PlayerDataSchema.luau"
+      }
+    },
+    "ServerStorage": {
+      "$className": "ServerStorage",
+      "SkillTestSuite": {
+        "$path": "generated/SkillTestSuite.luau"
+      },
+      "NPCTemplate": {
+        "$path": "fixtures/NPCTemplate.model.json"
+      },
+      "RoundEnded": {
+        "$className": "BindableEvent"
+      },
+      "CalculateDamage": {
+        "$className": "BindableFunction"
+      },
+      "ProfileStore": {
+        "$path": "generated/modules/ProfileStore.luau"
+      }
+    },
+    "StarterPlayer": {
+      "$className": "StarterPlayer",
+      "StarterPlayerScripts": {
+        "$className": "StarterPlayerScripts",
+        "SkillTestClient": {
+          "$path": "generated/client"
+        }
+      }
+    },
+    "ReplicatedStorage": {
+      "$className": "ReplicatedStorage",
+      "RequestPurchase": {
+        "$className": "RemoteEvent"
+      },
+      "PlayerAction": {
+        "$className": "RemoteEvent"
+      },
+      "NotifyPlayer": {
+        "$className": "RemoteEvent"
+      },
+      "CollectCoin": {
+        "$className": "RemoteEvent"
+      },
+      "PurchaseItem": {
+        "$className": "RemoteEvent"
+      },
+      "MousePosition": {
+        "$className": "UnreliableRemoteEvent"
+      },
+      "GetInventory": {
+        "$className": "RemoteFunction"
+      },
+      "ItemData": {
+        "$className": "Folder"
+      },
+      "Remotes": {
+        "$className": "Folder",
+        "Interact": {
+          "$className": "RemoteEvent"
+        }
+      },
+      "Inputs": {
+        "$className": "Folder",
+        "PlayContext": {
+          "$className": "InputContext",
+          "CharacterSprint": {
+            "$className": "InputAction"
+          },
+          "CharacterMove": {
+            "$className": "InputAction",
+            "$properties": {
+              "Type": {
+                "Enum": 2
+              }
+            }
+          },
+          "ToggleShop": {
+            "$className": "InputAction",
+            "KeyboardBinding": {
+              "$className": "InputBinding",
+              "$properties": {
+                "KeyCode": {
+                  "Enum": 98
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Workspace": {
+      "$className": "Workspace",
+      "Coins": {
+        "$className": "Folder",
+        "Coin": {
+          "$className": "Part",
+          "$properties": {
+            "Anchored": true,
+            "CanCollide": false,
+            "Size": [
+              1,
+              1,
+              1
+            ],
+            "Position": [
+              0,
+              3,
+              0
+            ]
+          }
+        }
+      }
+    },
+    "StarterGui": {
+      "$className": "StarterGui",
+      "ShopGui": {
+        "$className": "ScreenGui",
+        "ShopFrame": {
+          "$className": "Frame",
+          "ItemTemplate": {
+            "$className": "Frame",
+            "$properties": {
+              "Visible": false
+            },
+            "NameLabel": {
+              "$className": "TextLabel"
+            },
+            "PriceLabel": {
+              "$className": "TextLabel"
+            },
+            "BuyButton": {
+              "$className": "TextButton"
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -372,6 +372,9 @@ function Install-Payload([string]$src, [string]$version) {
         if (Test-Path -LiteralPath $p) { Copy-Item -LiteralPath $p -Destination $new }
     }
     Copy-Item -LiteralPath (Join-Path $src 'references') -Destination (Join-Path $new 'references') -Recurse
+    # docs\ holds the pages README.md links to (absent in versions before 2.16.0)
+    $docs = Join-Path $src 'docs'
+    if (Test-Path -LiteralPath $docs) { Copy-Item -LiteralPath $docs -Destination (Join-Path $new 'docs') -Recurse }
     Set-Content -LiteralPath (Join-Path $new $Marker) -Value @("managed-by=$RepoName install.ps1", "version=$version", "installed=$Stamp")
     # swap in place: links point at $Payload, so they follow the new content automatically
     try {

@@ -1,14 +1,16 @@
 ---
 name: roblox-dev-skill
 description: >
-  Core scripting and engine skill for Roblox game development.
-  Covers full-lifecycle development: architecture, Luau scripting, debugging, security,
-  performance, data persistence, networking, and the Roblox Studio environment.
-  MUST use this skill whenever the user mentions: 'Roblox', 'Luau', 'Roblox Studio',
-  'ServerScriptService', 'ReplicatedStorage', 'DataStoreService', 'RemoteEvent',
-  or when working with Roblox Studio MCP tools like execute_luau, search_game_tree.
-  Note: For UI/UX design, refer to roblox-design-skill and roblox-design-intelligence.
-  For Audio, VFX, or Monetization, refer to their respective skills in the suite.
+  Verified, current Roblox and Luau knowledge for writing, reviewing and debugging Roblox game code.
+  Use it for ANY task that involves Roblox, Luau or Roblox Studio, even a quick question or a
+  one-line snippet: scripts and modules, RemoteEvents, DataStores and ProfileStore, ProcessReceipt
+  and monetization, UI, the Input Action System, Parallel Luau and Actors, performance, security
+  and anti-exploit, deprecated APIs, Rojo, and the Roblox Studio MCP tools (execute_luau,
+  multi_edit, script_read). It holds facts that general knowledge gets wrong (which properties a
+  game Script may set, features that exist but are not enabled, Studio betas that cannot be
+  published, engine and Luau changes up to 0.742) and worked examples tested in Studio, so consult
+  it before answering from memory. Not for Lua outside Roblox (Redis, OpenResty, WoW addons, LOVE)
+  or for other game engines.
 ---
 
 # Roblox Game Development Skill
@@ -121,7 +123,7 @@ Match user intent to the appropriate reference file. Read the file BEFORE genera
 
 | User Intent | Reference File |
 |---|---|
-| **How do I actually sequence this?** End-to-end worked patterns: build a server-authoritative feature, debug via MCP, migrate a deprecation, verify an API, refuse an unsafe request | `references/worked-examples.md` |
+| **How do I actually sequence this?** End-to-end worked patterns: build a server-authoritative feature, debug via MCP, migrate a deprecation, verify an API, refuse an unsafe request, grant a developer product, migrate saved data, open a menu from an Input Action | `references/worked-examples.md` |
 | Luau syntax, types, naming conventions, style | `references/luau-fundamentals.md` |
 | Project layout, architecture, patterns | `references/project-structure.md` |
 | Save/load player data, DataStore, ProfileStore | `references/datastore-persistence.md` |
@@ -136,7 +138,7 @@ Match user intent to the appropriate reference file. Read the file BEFORE genera
 | File formats, import/export, asset management | `references/file-formats-and-assets.md` |
 | Plugins, `Script.Source` limits, HttpService/engine limits | `references/studio-plugins-and-limits.md` |
 
-**Start with `worked-examples.md` when the task is a *doing* task** (build, debug, migrate, look up)
+**Start with `worked-examples.md` when the task is a *doing* task** (build, debug, migrate, look up, sell, bind input)
 rather than a *knowing* task. It gives the call sequence and the verification step, and each example
 carries a **Not this** list so a near-miss request routes to the right place instead of the nearest
 familiar pattern. Where an example and a reference file disagree, the reference file wins.

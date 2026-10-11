@@ -111,6 +111,14 @@ Higher fidelity = more memory and computation.
 > these members did not change between 0.740 and 0.742, so the old text was most likely wrong from
 > the start (0.740 and 0.741 can no longer be run to prove it).
 >
+> **At runtime, rebuild the mesh instead of writing the property.** A game Script *can* call
+> `AssetService:CreateMeshPartAsync(meshContent, options)`, whose `options` take
+> `CollisionFidelity`, `RenderFidelity` and `FluidFidelity`, and then `MeshPart:ApplyMesh(newPart)`
+> (both `Security: None`). Tested from a plain server Script in Studio 0.742: the direct write was
+> blocked, and `CreateMeshPartAsync(part.MeshContent, { CollisionFidelity = Box, RenderFidelity =
+> Performance })` + `part:ApplyMesh(result)` left the part at `Box` / `Performance`. It yields, and
+> it rejects large meshes ("Mesh extents size too large. Maximum is (2048, 2048, 2048)").
+>
 > **Set fidelity at author time**: in the Properties window, or from a plugin or the command bar
 > (both hold the capability; every member above was written at that level without a capability
 > error). `CollisionFidelity` can still be **read** from a game Script. One caveat from the same
@@ -121,6 +129,7 @@ Higher fidelity = more memory and computation.
 
 ```luau
 --!strict
+--@skilltest: plugin
 -- Command bar or plugin ONLY (needs the PluginOrOpenCloud capability).
 -- A game Script running this fails with "lacking capability PluginOrOpenCloud".
 -- Set non-collidable decorative MeshParts to Box fidelity at author time.
@@ -359,7 +368,7 @@ end)
 
 ### Actors as Unit of Parallel Execution
 
-`Actor` instances (inheriting from `DataModel`) are the unit of execution isolation.
+`Actor` instances (an `Actor` is a `Model`: `Actor` → `Model` → `PVInstance` → `Instance`) are the unit of execution isolation.
 Scripts under different Actors can run on multiple CPU cores simultaneously.
 
 - Scripts under the **same Actor** always execute sequentially with respect to each other
@@ -368,25 +377,30 @@ Scripts under different Actors can run on multiple CPU cores simultaneously.
 
 ### task.desynchronize() / task.synchronize()
 
-By default, code under Actors still runs serially. You must explicitly switch to parallel:
+By default, code under Actors still runs serially. You must explicitly switch to parallel.
+**The Script must be a descendant of an `Actor`**: outside one, `task.desynchronize()` and
+`ConnectParallel` fail ("Scripts that connect in parallel must be rooted under an Actor", seen in
+Studio 0.742).
 
 ```luau
 --!strict
+--@skilltest: actor
+-- A Script inside an Actor.
 local RunService = game:GetService("RunService")
 
-RunService.Heartbeat:ConnectParallel(function()
-    -- This runs in PARALLEL (can read DataModel, limited writes)
+RunService.Heartbeat:Connect(function()
+    task.desynchronize()
+    -- This runs in PARALLEL (can read the DataModel, limited writes)
     -- ... expensive computation ...
 
     task.synchronize()
-
     -- This runs SERIALLY (can modify instances freely)
-    -- ... apply results to DataModel ...
+    -- ... apply results to the DataModel ...
 end)
 ```
 
-**Alternative**: Use `signal:ConnectParallel()` to immediately run callbacks in parallel
-without calling `task.desynchronize()`.
+**Alternative**: `signal:ConnectParallel()` starts the callback already in parallel, so it needs no
+`task.desynchronize()` (same Actor requirement).
 
 > **Warning**: You cannot use `require()` in a desynchronized parallel phase.
 > Require modules first in a serial context.
@@ -465,39 +479,37 @@ expensive. Pool and reuse instead.
 
 ```luau
 --!strict
--- ModuleScript in ServerScriptService
+--@skilltest: provides ObjectPool
+-- ModuleScript "ObjectPool" in ServerScriptService
 
-type Pool<T> = {
+local ObjectPool = {}
+ObjectPool.__index = ObjectPool
+
+type PoolData<T> = {
     available: { T },
     inUse: { [T]: boolean },
     factory: () -> T,
     reset: (item: T) -> (),
 }
 
-local ObjectPool = {}
-ObjectPool.__index = ObjectPool
+export type Pool<T> = setmetatable<PoolData<T>, typeof(ObjectPool)>
 
 function ObjectPool.new<T>(factory: () -> T, reset: (item: T) -> (), preWarm: number?): Pool<T>
-    local pool: Pool<T> = {
+    local data: PoolData<T> = {
         available = {},
         inUse = {},
         factory = factory,
         reset = reset,
     }
-    setmetatable(pool, ObjectPool)
-
-    for i = 1, preWarm or 0 do
-        table.insert(pool.available, factory())
+    for _ = 1, preWarm or 0 do
+        table.insert(data.available, factory())
     end
-
-    return pool
+    return setmetatable(data, ObjectPool)
 end
 
 function ObjectPool.acquire<T>(self: Pool<T>): T
-    local item: T
-    if #self.available > 0 then
-        item = table.remove(self.available, #self.available) :: T
-    else
+    local item = table.remove(self.available)
+    if item == nil then
         item = self.factory()
     end
     self.inUse[item] = true
@@ -505,7 +517,9 @@ function ObjectPool.acquire<T>(self: Pool<T>): T
 end
 
 function ObjectPool.release<T>(self: Pool<T>, item: T)
-    if not self.inUse[item] then return end
+    if not self.inUse[item] then
+        return -- not from this pool, or already released
+    end
     self.inUse[item] = nil
     self.reset(item)
     table.insert(self.available, item)
@@ -518,34 +532,33 @@ Usage for NPC pooling:
 
 ```luau
 --!strict
+--@skilltest: requires ObjectPool NPCTemplate
+local ServerScriptService = game:GetService("ServerScriptService")
 local ServerStorage = game:GetService("ServerStorage")
-local ObjectPool = require(script.Parent.ObjectPool)
+local ObjectPool = require(ServerScriptService:WaitForChild("ObjectPool") :: ModuleScript)
 
 local npcTemplate = ServerStorage:WaitForChild("NPCTemplate") :: Model
 
-local npcPool = ObjectPool.new(
-    function(): Model
-        return npcTemplate:Clone()
-    end,
-    function(npc: Model)
-        -- Reset NPC state and move to storage
-        npc.Parent = ServerStorage
-        local humanoid = npc:FindFirstChildOfClass("Humanoid")
-        if humanoid then
-            humanoid.Health = humanoid.MaxHealth
-        end
-    end,
-    10 -- pre-warm with 10 NPCs
-)
+local npcPool = ObjectPool.new(function(): Model
+    return npcTemplate:Clone()
+end, function(npc: Model)
+    -- Reset NPC state and move to storage
+    npc.Parent = ServerStorage
+    local humanoid = npc:FindFirstChildOfClass("Humanoid")
+    if humanoid then
+        humanoid.Health = humanoid.MaxHealth
+    end
+end, 10) -- pre-warm with 10 NPCs
 
--- Spawn an NPC
-local npc = npcPool:acquire(npcPool)
+-- Spawn an NPC. `:` already passes the pool as self, so pass nothing else.
+local npc = npcPool:acquire()
 npc:PivotTo(CFrame.new(0, 5, 0))
 npc.Parent = workspace
 
 -- Return NPC to pool instead of destroying
-npcPool:release(npcPool, npc)
+npcPool:release(npc)
 ```
+
 
 ---
 
@@ -635,6 +648,7 @@ alternatives.
 
 ```luau
 --!strict
+--@skilltest: legacy
 -- LEGACY (deprecated, imprecise timing, throttled)
 spawn(function()
     wait(1)

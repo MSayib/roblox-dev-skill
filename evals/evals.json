@@ -1,6 +1,6 @@
 {
   "skill_name": "roblox-dev-skill",
-  "version": "2.15.0",
+  "version": "2.16.0",
   "evals": [
     {
       "id": 1,
@@ -271,7 +271,7 @@
       "expected_references": [
         "performance-optimization.md"
       ],
-      "notes": "Neither half can run from a game Script. CollisionFidelity (Security None since 0.740) and MeshPart.RenderFidelity (Security None since 0.742) both carry Capabilities.Write PluginOrOpenCloud, and an unsandboxed Script does not hold it: Studio 0.742 reports \"lacking capability PluginOrOpenCloud\" for both (tested 2026-10-11). Correct answer says the runtime loop fails, and offers the same loop for the command bar or a plugin, or setting both at author time. FAILS if it presents either write as working from a Script. Until 2.15.0 this note said CollisionFidelity was script-writable from 0.740; that was read from the dump and never run."
+      "notes": "Neither half can run from a game Script. CollisionFidelity (Security None since 0.740) and MeshPart.RenderFidelity (Security None since 0.742) both carry Capabilities.Write PluginOrOpenCloud, and an unsandboxed Script does not hold it: Studio 0.742 reports \"lacking capability PluginOrOpenCloud\" for both (tested 2026-10-11). Correct answer says the runtime loop fails, and offers the same loop for the command bar or a plugin, or setting both at author time. FAILS if it presents either write as working from a Script. Until 2.15.0 this note said CollisionFidelity was script-writable from 0.740; that was read from the dump and never run. A correct answer MAY instead offer the runtime path that works from a Script: AssetService:CreateMeshPartAsync(part.MeshContent, {CollisionFidelity = ..., RenderFidelity = ...}) then part:ApplyMesh(result) (tested in Studio 0.742; yields; large meshes are rejected: Mesh extents size too large, Maximum is (2048, 2048, 2048))."
     },
     {
       "id": 34,
@@ -400,7 +400,7 @@
       "expected_references": [
         "performance-optimization.md"
       ],
-      "notes": "TriangleMeshPart.CollisionFidelity is Security None but needs the PluginOrOpenCloud capability, so a server Script's write fails with \"lacking capability PluginOrOpenCloud\" (Studio 0.742, tested 2026-10-11). Correct answer says a server Script cannot do this and gives the CollectionService loop for the command bar or a plugin (which can write it, tested), or says to set it in the Properties window. It must NOT call the property NotScriptable: a plugin can write it, and reading it from a Script works. Until 2.15.0 this eval expected the runtime loop as the correct answer."
+      "notes": "TriangleMeshPart.CollisionFidelity is Security None but needs the PluginOrOpenCloud capability, so a server Script's write fails with \"lacking capability PluginOrOpenCloud\" (Studio 0.742, tested 2026-10-11). Correct answer says a server Script cannot do this and gives the CollectionService loop for the command bar or a plugin (which can write it, tested), or says to set it in the Properties window. It must NOT call the property NotScriptable: a plugin can write it, and reading it from a Script works. Until 2.15.0 this eval expected the runtime loop as the correct answer. A correct answer MAY instead offer the runtime path that works from a Script: AssetService:CreateMeshPartAsync(part.MeshContent, {CollisionFidelity = ..., RenderFidelity = ...}) then part:ApplyMesh(result) (tested in Studio 0.742; yields; large meshes are rejected: Mesh extents size too large, Maximum is (2048, 2048, 2048))."
     },
     {
       "id": 48,
@@ -446,6 +446,64 @@
         "performance-optimization.md"
       ],
       "notes": "Over-correction guard for the PluginOrOpenCloud lesson. Humanoid.Health needs the AvatarBehavior capability, which an ordinary Script DOES hold, and reading CollisionFidelity is allowed: both work from a plain server Script in Studio 0.742 (tested 2026-10-11). Correct answer writes the Touched handler with humanoid health changes and reads CollisionFidelity, without claiming either needs a plugin. FAILS if it says the Script cannot do either."
+    },
+    {
+      "id": 53,
+      "prompt": "My ProcessReceipt handler returns false when the player's data isn't loaded yet, but players still get charged and receive nothing. Here's my code: local success = pcall(handler, player) if success then return Enum.ProductPurchaseDecision.PurchaseGranted end",
+      "should_trigger": true,
+      "expected_references": [
+        "monetization.md",
+        "worked-examples.md"
+      ],
+      "notes": "pcall's first value is only 'did not error'; the handler's false is ignored, so PurchaseGranted is returned for a grant that did not happen. Correct answer checks `ok and granted == true`, returns NotProcessedYet otherwise (the purchase is retried on rejoin, never dropped by that answer), and makes the handler idempotent on PurchaseId (record and grant in one UpdateAsync). Studio 0.742: the corrected pattern passed all five receipt cases. FAILS if it keeps `if success then`."
+    },
+    {
+      "id": 54,
+      "prompt": "I renamed the saved field Coins to coins and changed inventory from a list to counts. Easiest is to just use a new DataStore name PlayerData_v2, right?",
+      "should_trigger": true,
+      "expected_references": [
+        "datastore-persistence.md",
+        "worked-examples.md"
+      ],
+      "notes": "A new DataStore name is an empty store: every player loses progress. Correct answer keeps the name, adds a version field, migrates on load step by step (data with no version = v1), refuses saves newer than the server knows, and never falls back to defaults on a failed read. FAILS if it recommends the new store name without a migration of the old data."
+    },
+    {
+      "id": 55,
+      "prompt": "Make pressing B (and Y on gamepad) open my shop GUI using the new Input Action System",
+      "should_trigger": true,
+      "expected_references": [
+        "project-structure.md",
+        "worked-examples.md"
+      ],
+      "notes": "Client-only: an InputAction (Type Bool) under an InputContext with one InputBinding per device (KeyCode B, KeyCode ButtonY, touch via UIButton), and a LocalScript listening to Pressed that toggles the ScreenGui. Verified in Studio 0.742 with a real key press. FAILS if it routes the toggle through a RemoteEvent, uses non-existent members (Activated, InputType, Enum.InputActionType.Button), or tries to set PlayerScriptsUseInputActionSystem from a script."
+    },
+    {
+      "id": 56,
+      "prompt": "Why does Roblox not catch type errors in this script? The first line is: --!strict -- enforce types",
+      "should_trigger": true,
+      "expected_references": [
+        "luau-fundamentals.md"
+      ],
+      "notes": "A directive line with anything after it is ignored: luau-analyze 0.742 reports 'Comment directive with the type checking mode has extra symbols at the end of the line' and checks the file in the default nonstrict mode. Correct answer: put only `--!strict` on that line and move the comment down. FAILS if it blames something else."
+    },
+    {
+      "id": 57,
+      "prompt": "Give each new player default data: local DEFAULT = table.freeze({Coins = 0, Inventory = {}}) then sessionData[player] = table.clone(DEFAULT)",
+      "should_trigger": true,
+      "expected_references": [
+        "project-structure.md",
+        "datastore-persistence.md"
+      ],
+      "notes": "table.clone is shallow: every clone shares DEFAULT.Inventory, so an item given to one player appears for all (reproduced in Studio 0.742). Correct answer builds a fresh table per player (a defaultData() function) or deep-copies. FAILS if it accepts the shallow clone."
+    },
+    {
+      "id": 58,
+      "prompt": "Run my pathfinding in parallel: RunService.Heartbeat:ConnectParallel(function() ... end) in a Script in ServerScriptService",
+      "should_trigger": true,
+      "expected_references": [
+        "performance-optimization.md"
+      ],
+      "notes": "ConnectParallel and task.desynchronize only work in a Script that is a descendant of an Actor; in ServerScriptService it errors 'Scripts that connect in parallel must be rooted under an Actor' (Studio 0.742). Correct answer moves the Script under an Actor (one per independent unit) and keeps DataModel writes after task.synchronize(). FAILS if it presents the snippet as working where it is."
     }
   ]
 }

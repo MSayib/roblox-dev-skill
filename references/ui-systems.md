@@ -184,6 +184,7 @@ Instance.new("UIListLayout").Parent = scroll
 ### BillboardGui (always faces camera)
 
 ```luau
+--@skilltest: project-tree
 local billboard = Instance.new("BillboardGui")
 billboard.Size = UDim2.fromOffset(200, 50)
 billboard.StudsOffset = Vector3.new(0, 3, 0)
@@ -201,6 +202,7 @@ nameLabel.Parent = billboard
 ### SurfaceGui (renders on a Part face)
 
 ```luau
+--@skilltest: project-tree
 local surfaceGui = Instance.new("SurfaceGui")
 surfaceGui.Face = Enum.NormalId.Front
 surfaceGui.PixelsPerStud = 50
@@ -274,17 +276,22 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local player = Players.LocalPlayer
-local shopGui = player.PlayerGui:WaitForChild("ShopGui")
+local playerGui = player:WaitForChild("PlayerGui")
+local shopGui = playerGui:WaitForChild("ShopGui")
 local shopFrame = shopGui:WaitForChild("ShopFrame")
-local itemTemplate = shopFrame:WaitForChild("ItemTemplate")
+local itemTemplate = shopFrame:WaitForChild("ItemTemplate") :: Frame
 local PurchaseRemote = ReplicatedStorage:WaitForChild("PurchaseItem") :: RemoteEvent
 
 local function createItemEntry(itemName: string, price: number)
     local entry = itemTemplate:Clone()
     entry.Name = itemName
     entry.Visible = true
-    (entry:FindFirstChild("NameLabel") :: TextLabel).Text = itemName
-    (entry:FindFirstChild("PriceLabel") :: TextLabel).Text = tostring(price) .. " coins"
+    -- Bind to locals: a line that starts with "(" after a statement is "Ambiguous syntax" in Luau
+    -- and the whole script fails to compile (an earlier version of this example did exactly that).
+    local nameLabel = entry:FindFirstChild("NameLabel") :: TextLabel
+    local priceLabel = entry:FindFirstChild("PriceLabel") :: TextLabel
+    nameLabel.Text = itemName
+    priceLabel.Text = `{price} coins`
     local buyButton = entry:FindFirstChild("BuyButton") :: TextButton
     buyButton.Activated:Connect(function()
         PurchaseRemote:FireServer(itemName)
@@ -300,6 +307,7 @@ end
 Interaction UI when a player is near a Part — Roblox renders it automatically.
 
 ```luau
+--@skilltest: project-tree
 local prompt = Instance.new("ProximityPrompt")
 prompt.ObjectText = "Treasure Chest"
 prompt.ActionText = "Open"

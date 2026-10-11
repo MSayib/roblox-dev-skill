@@ -92,6 +92,7 @@ try {
     Check 'universal installed' { Test-Installed (AgentDir '.agents/skills') }
     Check 'claude installed' { Test-Installed (AgentDir '.claude/skills') }
     Check 'antigravity installed' { Test-Installed (AgentDir '.gemini/config/skills') }
+    Check 'payload has docs the README links to' { Test-Path (Join-Path (Join-Path $Payload 'docs') 'installation.md') }
     Check 'payload excludes evals, tools, installers' { -not (Test-Path (Join-Path $Payload 'evals')) -and -not (Test-Path (Join-Path $Payload 'tools')) -and -not (Test-Path (Join-Path $Payload 'install.ps1')) }
     Check 'manifest has 3 entries' { @(Get-Content (Join-Path $Store 'manifest.tsv')).Count -eq 3 }
 
