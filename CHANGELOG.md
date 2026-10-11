@@ -210,6 +210,14 @@ Every dated statement traced to its Roblox staff post or official page.
   for"; the old text added "originally" inside the quote). Managed Pricing is dated (2026-06-15)
   and its 60,000-transaction and 90-day figures match the official pages.
 
+### Fixed — found by verifying `ui-systems.md`
+
+- **Per-corner `UICorner` rounding does not need a beta.** It and `UIShadow` were fully released and
+  made publishable on 2026-06-23, and the "New UI Capabilities" flag was removed. The official
+  `UICorner` reference still says "currently in beta"; the text now says which source is newer.
+- StyleQuery's full release is dated (2026-05-11). UIShadow's `ZIndex`, text and gradient limits
+  match the official reference.
+
 ### Added — claims register
 
 - `tools/skill-test/claims.json` + `check_claims.py` + generated `docs/claims.md`: every

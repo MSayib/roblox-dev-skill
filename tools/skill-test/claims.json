@@ -4162,17 +4162,17 @@
    "id": "ui-systems-002",
    "file": "references/ui-systems.md",
    "quote": "[StyleQuery — Responsive Style Queries (May 2026)](#stylequery--responsive-style-queries-may-2026)",
-   "status": "unverified",
+   "status": "docs",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "DevForum topic 4566519 (Roblox Staff, 2026-04-09; update 2026-05-11)",
+   "evidence": "Full release 2026-05-11.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "ui-systems-003",
    "file": "references/ui-systems.md",
    "quote": "**`AnchorPoint`** shifts the origin (0–1 per axis). Center an element:",
-   "status": "unverified",
+   "status": "advice",
    "kind": "number",
    "source": "",
    "evidence": "",
@@ -4182,57 +4182,47 @@
    "id": "ui-systems-004",
    "file": "references/ui-systems.md",
    "quote": "`ZIndex` | `number` | Render order among sibling `UIShadow` instances (negative values only)",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Roblox/creator-docs UIShadow.yaml",
+   "evidence": "\"Since all shadows are rendered below the parent instance, ZIndex can only be negative.\"",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "ui-systems-005",
    "file": "references/ui-systems.md",
    "quote": "Does **not** render text-shaped shadows — only the rectangular bounding box.",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Roblox/creator-docs UIShadow.yaml",
+   "evidence": "\"renders a shadow of the object's rectangular bounding area, not of the text\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "ui-systems-006",
    "file": "references/ui-systems.md",
    "quote": "Cannot apply `UIGradient` to a `UIShadow`.",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Roblox/creator-docs UIShadow.yaml",
+   "evidence": "\"You cannot apply textures or UIGradients to a UIShadow.\"",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "ui-systems-007",
    "file": "references/ui-systems.md",
    "quote": "`StyleQuery.IsActive` (read-only `boolean`) — `true` when all conditions match.",
-   "status": "unverified",
+   "status": "dump",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "ui-systems-008",
-   "file": "references/ui-systems.md",
-   "quote": "feature enabled in Studio since June 2026. Writing to `CornerRadius`",
-   "status": "unverified",
-   "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "API dump 0.742",
+   "evidence": "StyleQuery.IsActive tags ReadOnly.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "ui-systems-009",
    "file": "references/ui-systems.md",
    "quote": "**Legacy comparison — uniform rounding only:**",
-   "status": "unverified",
+   "status": "advice",
    "kind": "negative",
    "source": "",
    "evidence": "",
@@ -6406,6 +6396,76 @@
    "status": "false",
    "source": "",
    "evidence": "No source; staff FAQ gives 500/day, 1,000/month.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "ui-systems-010",
+   "file": "references/ui-systems.md",
+   "quote": "Fully released 2026-05-11 (staff update to \"[Full Release] StyleQuery + More Styling Features!\");",
+   "status": "docs",
+   "kind": "number",
+   "source": "DevForum topic 4566519 (Roblox Staff, 2026-04-09; update 2026-05-11)",
+   "evidence": "\"StyleQuery and enhanced pseudoinstance styling are now fully released\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "ui-systems-011",
+   "file": "references/ui-systems.md",
+   "quote": "it had been a Studio beta since 2026-04-09.",
+   "status": "docs",
+   "kind": "number",
+   "source": "DevForum topic 4566519 (Roblox Staff, 2026-04-09; update 2026-05-11)",
+   "evidence": "Topic created 2026-04-09 as a Studio beta.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "ui-systems-012",
+   "file": "references/ui-systems.md",
+   "quote": "2026-06-23 (\"[Full Release] New UI Capabilities: Shadows & Individual Corners!\", Roblox staff",
+   "status": "docs",
+   "kind": "number",
+   "source": "DevForum topic 4636263 (Roblox Staff, 2026-05-14; update 2026-06-23)",
+   "evidence": "As above.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "ui-systems-013",
+   "file": "references/ui-systems.md",
+   "quote": "update), and the \"New UI Capabilities\" Studio beta flag was removed. The official `UICorner`",
+   "status": "docs",
+   "kind": "negative",
+   "source": "DevForum topic 4636263 (Roblox Staff, 2026-05-14; update 2026-06-23)",
+   "evidence": "As above.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "ui-systems-014",
+   "file": "references/ui-systems.md",
+   "quote": "reference still says \"currently in beta\" (checked 2026-10-11); the staff post is newer. In",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs UICorner.yaml (2026-10-11)",
+   "evidence": "TopLeftRadius etc.: \"This property is currently in beta\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "ui-systems-015",
+   "file": "references/ui-systems.md",
+   "quote": "Studio 0.742 a LocalScript set and read back all four properties. Writing to `CornerRadius`",
+   "status": "studio",
+   "kind": "number",
+   "source": "expect/per-corner-radius.luau",
+   "evidence": "3/3 PASS in the client harness 2026-10-11.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "false-percorner-beta-required",
+   "file": "references/ui-systems.md",
+   "quote": "Per-corner properties require the **New UI Capabilities** beta",
+   "kind": "regression",
+   "status": "false",
+   "source": "",
+   "evidence": "Fully released 2026-06-23; flag removed.",
    "checked": "2026-10-11, engine 0.742.0.7421053"
   }
  ]

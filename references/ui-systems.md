@@ -446,6 +446,9 @@ shadowImage.Parent = card  -- layered behind content
 
 ## StyleQuery — Responsive Style Queries (May 2026)
 
+Fully released 2026-05-11 (staff update to "[Full Release] StyleQuery + More Styling Features!");
+it had been a Studio beta since 2026-04-09.
+
 `StyleQuery` enables CSS-like conditional styling for Roblox UI. It works with
 the `StyleRule` system to dynamically activate styles based on device,
 container size, or accessibility settings.
@@ -563,8 +566,11 @@ ScreenGui
 | `BottomRightRadius` | `UDim` | Bottom-right corner radius |
 | `BottomLeftRadius` | `UDim` | Bottom-left corner radius |
 
-> **Note:** Per-corner properties require the **New UI Capabilities** beta
-> feature enabled in Studio since June 2026. Writing to `CornerRadius`
+> **Note:** Per-corner rounding and `UIShadow` are **fully released and publishable** since
+> 2026-06-23 ("[Full Release] New UI Capabilities: Shadows & Individual Corners!", Roblox staff
+> update), and the "New UI Capabilities" Studio beta flag was removed. The official `UICorner`
+> reference still says "currently in beta" (checked 2026-10-11); the staff post is newer. In
+> Studio 0.742 a LocalScript set and read back all four properties. Writing to `CornerRadius`
 > overwrites all four individual values.
 
 <!-- skilltest: prelude screen-gui; expect per-corner-radius -->

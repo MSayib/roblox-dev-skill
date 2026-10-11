@@ -19,9 +19,9 @@ Every factual claim a reader could act on wrongly, with how it was verified. **s
 | `references/project-structure.md` | 6 | 9 | 6 | 2 | 3 | 0 | 2 |
 | `references/security-hardening.md` | 12 | 26 | 3 | 0 | 7 | 0 | 4 |
 | `references/studio-plugins-and-limits.md` | 16 | 1 | 1 | 1 | 9 | 0 | 0 |
-| `references/ui-systems.md` | 1 | 0 | 0 | 0 | 0 | 8 | 1 |
+| `references/ui-systems.md` | 2 | 9 | 1 | 0 | 2 | 0 | 2 |
 | `references/worked-examples.md` | 17 | 4 | 4 | 1 | 19 | 0 | 1 |
-| **total** | **179** | **147** | **63** | **73** | **101** | **24** | **53** |
+| **total** | **180** | **156** | **64** | **73** | **103** | **16** | **54** |
 
 ## Verified claims
 
@@ -348,6 +348,11 @@ Every factual claim a reader could act on wrongly, with how it was verified. **s
 | `references/studio-plugins-and-limits.md`: **No practical response size ceiling** up to at least 32 MB. | studio | As recorded. (Plugin measurements recorded 2026-08-06 (skill 2.x), as the text says) |
 | `references/studio-plugins-and-limits.md`: **Swap MeshParts properly.** `MeshId` is not assignable at runtime; build a | dump | MeshPart.MeshId / MeshContent Write NotAccessibleSecurity. (API dump 0.742) |
 | `references/studio-plugins-and-limits.md`: `robloxapi/rbxfile` (Go) \| Works, but unmaintained since 2023 — see fidelity note below | source | Last commit 2023-02-14. (GitHub API repos/robloxapi/rbxfile) |
+| `references/ui-systems.md`: [StyleQuery — Responsive Style Queries (May 2026)](#stylequery--responsive-style-queries-may-2026) | docs | Full release 2026-05-11. (DevForum topic 4566519 (Roblox Staff, 2026-04-09; update 2026-05-11)) |
+| `references/ui-systems.md`: `ZIndex` \| `number` \| Render order among sibling `UIShadow` instances (negative values only) | docs | "Since all shadows are rendered below the parent instance, ZIndex can only be negative." (Roblox/creator-docs UIShadow.yaml) |
+| `references/ui-systems.md`: Does **not** render text-shaped shadows — only the rectangular bounding box. | docs | "renders a shadow of the object's rectangular bounding area, not of the text". (Roblox/creator-docs UIShadow.yaml) |
+| `references/ui-systems.md`: Cannot apply `UIGradient` to a `UIShadow`. | docs | "You cannot apply textures or UIGradients to a UIShadow." (Roblox/creator-docs UIShadow.yaml) |
+| `references/ui-systems.md`: `StyleQuery.IsActive` (read-only `boolean`) — `true` when all conditions match. | dump | StyleQuery.IsActive tags ReadOnly. (API dump 0.742) |
 | `references/worked-examples.md`: reject the unhappy path. Fire it **from the Client datamodel**: a server cannot raise its own | studio | Server cannot raise its own OnServerEvent; fired from the Client datamodel (2.16.0). (metadata.json 2.16.0 verified_by (worked-example verifications run in Studio 0.742)) |
 | `references/worked-examples.md`: string, `nil`, a table, a `Part` from outside `coinFolder`, and 50 calls in a loop at a coin out of | studio | Junk payloads run as listed (2.16.0). (metadata.json 2.16.0 verified_by (worked-example verifications run in Studio 0.742)) |
 | `references/worked-examples.md`: in Studio 0.742, 2026-10-11: all junk rejected, the valid claim accepted, a second claim of the same | studio | All junk rejected, valid claim accepted, second claim rejected. (metadata.json 2.16.0 verified_by (worked-example verifications run in Studio 0.742)) |
@@ -543,3 +548,10 @@ Every factual claim a reader could act on wrongly, with how it was verified. **s
 | `references/monetization.md`: "never originally designed for | false | Actual wording: "were never designed for". |
 | `references/monetization.md`: Both users must complete Roblox age check | false | Under-18 users need parental approval per transfer. |
 | `references/monetization.md`: \| Daily limit (with 2SV) \| 5,000 Robux/day \| | false | No source; staff FAQ gives 500/day, 1,000/month. |
+| `references/ui-systems.md`: Fully released 2026-05-11 (staff update to "[Full Release] StyleQuery + More Styling Features!"); | docs | "StyleQuery and enhanced pseudoinstance styling are now fully released". (DevForum topic 4566519 (Roblox Staff, 2026-04-09; update 2026-05-11)) |
+| `references/ui-systems.md`: it had been a Studio beta since 2026-04-09. | docs | Topic created 2026-04-09 as a Studio beta. (DevForum topic 4566519 (Roblox Staff, 2026-04-09; update 2026-05-11)) |
+| `references/ui-systems.md`: 2026-06-23 ("[Full Release] New UI Capabilities: Shadows & Individual Corners!", Roblox staff | docs | As above. (DevForum topic 4636263 (Roblox Staff, 2026-05-14; update 2026-06-23)) |
+| `references/ui-systems.md`: update), and the "New UI Capabilities" Studio beta flag was removed. The official `UICorner` | docs | As above. (DevForum topic 4636263 (Roblox Staff, 2026-05-14; update 2026-06-23)) |
+| `references/ui-systems.md`: reference still says "currently in beta" (checked 2026-10-11); the staff post is newer. In | docs | TopLeftRadius etc.: "This property is currently in beta". (Roblox/creator-docs UICorner.yaml (2026-10-11)) |
+| `references/ui-systems.md`: Studio 0.742 a LocalScript set and read back all four properties. Writing to `CornerRadius` | studio | 3/3 PASS in the client harness 2026-10-11. (expect/per-corner-radius.luau) |
+| `references/ui-systems.md`: Per-corner properties require the **New UI Capabilities** beta | false | Fully released 2026-06-23; flag removed. |
