@@ -13,15 +13,15 @@ Every factual claim a reader could act on wrongly, with how it was verified. **s
 | `references/legacy-migration.md` | 20 | 22 | 41 | 6 | 3 | 0 | 13 |
 | `references/luau-fundamentals.md` | 11 | 10 | 1 | 40 | 3 | 0 | 3 |
 | `references/mcp-integration.md` | 31 | 12 | 2 | 2 | 6 | 0 | 4 |
-| `references/monetization.md` | 0 | 1 | 0 | 0 | 0 | 14 | 1 |
+| `references/monetization.md` | 0 | 1 | 0 | 0 | 0 | 17 | 1 |
 | `references/networking.md` | 0 | 0 | 0 | 0 | 0 | 16 | 0 |
 | `references/performance-optimization.md` | 28 | 16 | 3 | 6 | 1 | 0 | 6 |
 | `references/project-structure.md` | 0 | 0 | 0 | 0 | 0 | 23 | 0 |
 | `references/security-hardening.md` | 12 | 26 | 3 | 0 | 7 | 0 | 4 |
 | `references/studio-plugins-and-limits.md` | 1 | 0 | 0 | 0 | 0 | 25 | 0 |
 | `references/ui-systems.md` | 1 | 0 | 0 | 0 | 0 | 8 | 1 |
-| `references/worked-examples.md` | 0 | 0 | 0 | 0 | 0 | 45 | 1 |
-| **total** | **124** | **90** | **52** | **65** | **37** | **202** | **36** |
+| `references/worked-examples.md` | 17 | 4 | 4 | 1 | 19 | 0 | 1 |
+| **total** | **141** | **94** | **56** | **66** | **56** | **160** | **36** |
 
 ## Verified claims
 
@@ -278,6 +278,32 @@ Every factual claim a reader could act on wrongly, with how it was verified. **s
 | `references/security-hardening.md`: **Note**: Always wrap `BanAsync` in `pcall()` — it is a yielding function that can fail | docs | BanAsync tagged Yields; pcall is the skill guidance. (creator-docs Players.yaml) |
 | `references/security-hardening.md`: using raw `UserId` values, those IDs will no longer match across games | docs | Cross-game shared moderation will be impacted. (DevForum topic 4677155) |
 | `references/security-hardening.md`: June 2026 \| `BanAsync` gains `ApplyDeviceBlock` param (24hr, desktop only) \| [§10](#10-banasync-api--device-blocking-june-2026) | docs | 24-hour device block, desktop only. (Roblox/creator-docs Players.yaml BanAsync; DevForum topic 4668265 (Roblox Staff, 2026-06-04)) |
+| `references/worked-examples.md`: reject the unhappy path. Fire it **from the Client datamodel**: a server cannot raise its own | studio | Server cannot raise its own OnServerEvent; fired from the Client datamodel (2.16.0). (metadata.json 2.16.0 verified_by (worked-example verifications run in Studio 0.742)) |
+| `references/worked-examples.md`: string, `nil`, a table, a `Part` from outside `coinFolder`, and 50 calls in a loop at a coin out of | studio | Junk payloads run as listed (2.16.0). (metadata.json 2.16.0 verified_by (worked-example verifications run in Studio 0.742)) |
+| `references/worked-examples.md`: in Studio 0.742, 2026-10-11: all junk rejected, the valid claim accepted, a second claim of the same | studio | All junk rejected, valid claim accepted, second claim rejected. (metadata.json 2.16.0 verified_by (worked-example verifications run in Studio 0.742)) |
+| `references/worked-examples.md`: coin rejected, no errors.) | studio | As above. (metadata.json 2.16.0 verified_by (worked-example verifications run in Studio 0.742)) |
+| `references/worked-examples.md`: update, check whether Luau 0.739's stricter in-body generic checking is the cause | source | "Typecheck generics within function bodies more strictly". (luau-lang/luau release 0.739) |
+| `references/worked-examples.md`: `multi_edit` fails during a playtest \| Its `datamodel_type` enum is `Edit` only. Step 5 is mandatory | studio | multi_edit enum [Edit]. (MCP schema) |
+| `references/worked-examples.md`: `multi_edit` fails with no match \| `old_string` must match **exactly**, whitespace included. You skipped `script_read` | studio | A non-matching old_string errors. (multi_edit run 2026-10-11) |
+| `references/worked-examples.md`: `UserInputService` → IAS. Neither `UserInputService` nor `ContextActionService` is deprecated; | dump | UserInputService tags NotCreatable/Service/NotReplicated; ContextActionService NotCreatable/Service; no Deprecated. (API dump 0.742) |
+| `references/worked-examples.md`: A `Deprecated` tag often carries a `PreferredDescriptorName` naming the replacement — that is | dump | Deprecated members carry PreferredDescriptorName (e.g. PlayerOwnsAsset -> PlayerOwnsAssetAsync). (API dumps) |
+| `references/worked-examples.md`: `multi_edit` per script — one call each. `replace_all: true` only when the symbol is unambiguous. | studio | One file_path per call. (MCP schema) |
+| `references/worked-examples.md`: **cannot write it**. This is the check that would have caught a broken `CollisionFidelity` | studio | CollisionFidelity write from a Script failed. (SkillTestClaimProbe 2026-10-11) |
+| `references/worked-examples.md`: `RemoteEvent` (in Studio 0.742 it wrote `Humanoid.Health` and assigned `OnServerInvoke`), but | studio | Health write and OnServerInvoke assignment from a plain Script. (2.15.0 probes) |
+| `references/worked-examples.md`: **not `PluginOrOpenCloud`**: those writes fail with "lacking capability PluginOrOpenCloud" even | studio | Writes failed with lacking capability PluginOrOpenCloud. (SkillTestClaimProbe 2026-10-11) |
+| `references/worked-examples.md`: when `Security` is `None`. Treat `Security: None` + `PluginOrOpenCloud` as plugin-only. | studio | Every such member failed from a Script. (SkillTestClaimProbe 2026-10-11) |
+| `references/worked-examples.md`: `Tags` — `Deprecated`, `Yields`, `ReadOnly`, `NotScriptable`. | dump | Member tag names as in the dump. (API dump 0.742) |
+| `references/worked-examples.md`: **A handler returns `true` only once the item is really granted.** Roblox's own sample checks | docs | Official sample: pcall(handler, ...) then "if success then"; warning: handlers "must return true". (Roblox/creator-docs production/monetization/developer-products.md; MarketplaceService.yaml) |
+| `references/worked-examples.md`: only that the handler did not *error* (`if success then`), although the warning under it says | docs | As above. (Roblox/creator-docs production/monetization/developer-products.md; MarketplaceService.yaml) |
+| `references/worked-examples.md`: purchase each time the player joins, and a purchase only counts as resolved once | docs | Called for unresolved purchases when "A user joins the server". (MarketplaceService.yaml ProcessReceipt) |
+| `references/worked-examples.md`: retried when the player next joins; it is never refunded or dropped by that answer. | docs | "Unresolved developer product purchases are not removed or refunded". (MarketplaceService.yaml ProcessReceipt) |
+| `references/worked-examples.md`: (Run exactly this way in Studio 0.742, 2026-10-11, against a real DataStore: all five matched.) Use | studio | expect/receipt-idempotent.luau 5/5 PASS in the harness (2026-10-11). (Studio harness expectations 2026-10-11; metadata.json 2.16.0 verified_by (worked-example verifications run in Studio 0.742)) |
+| `references/worked-examples.md`: newer server already upgraded. It must not "fix" it down or save over it: reject the load. | studio | expect/schema-migrates: a v4 save errors. (Studio harness expectations 2026-10-11) |
+| `references/worked-examples.md`: `Coins` key; a v3 save comes back unchanged; a v4 save errors. Then round-trip one save through a | studio | expect/schema-migrates 11/11 PASS; load-new-player 2/2. (Studio harness expectations 2026-10-11) |
+| `references/worked-examples.md`: way in Studio 0.742, 2026-10-11: all four matched.) | studio | As above. (Studio harness expectations 2026-10-11; metadata.json 2.16.0 verified_by (worked-example verifications run in Studio 0.742)) |
+| `references/worked-examples.md`: `true`, then `false`. (Run exactly this way in Studio 0.742, 2026-10-11, with the hierarchy above | studio | user_keyboard_input toggled the menu true then false (2.16.0). (metadata.json 2.16.0 verified_by (worked-example verifications run in Studio 0.742)) |
+| `references/worked-examples.md`: `InputContext` is `Enabled` and that a higher-`Priority` context with `Sink` is not consuming the | dump | InputContext members Enabled, Priority, Sink. (API dump 0.742) |
+| `references/worked-examples.md`: `multi_edit` during a playtest, or without `script_read` \| `Edit` datamodel only; `old_string` is exact-match | studio | Edit only; exact match. (MCP schema; multi_edit run 2026-10-11) |
 | `SKILL.md`: developer-visible change run in Studio 0.742. 940 classes / 648 enums; locally, 263 class files | dump | 940 classes, 648 enums; 263 classes named *Service (services/ folder, split-api-dump.py rule); 343 carry the Service tag. (API dump 0.742.0.7421053 (~/RobloxDocs/RobloxAPI)) |
 | `SKILL.md`: named `*Service` (343 classes carry the `Service` tag) and 48 deprecated classes (477 members). | dump | 48 classes tagged Deprecated; deprecated-index.json lists 477 members. (API dump 0.742.0.7421053 (~/RobloxDocs/RobloxAPI)) |
 | `SKILL.md`: The docs page lists **26 tools**; the build observed 2026-10-11 (Studio 0.742) exposed **30**: | studio | Docs page tool rows counted 2026-10-11: 26. Connected build: 30 (adds generate_texture, segment_mesh, list_plugin_guis, capture_plugin_gui). (create.roblox.com/docs/studio/mcp.md via http_get; MCP tools of this session (Studio 0.742, place MieGede NewWorld)) |

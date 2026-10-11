@@ -299,6 +299,10 @@ nothing", "players got the item twice".
 - Player-to-player Robux → the Transfers API in `monetization.md`
 - An in-game currency purchase that costs no Robux → example 1 (a server-validated remote)
 
+This example uses `ProcessReceipt`. The official reference now presents
+`MarketplaceService:BindReceiptHandler` as the alternative (see `monetization.md`); the
+`PurchaseId` rule below applies to both.
+
 **Routing:** `monetization.md` + `datastore-persistence.md`.
 
 **Sequence:**

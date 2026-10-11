@@ -104,6 +104,16 @@ MarketplaceService.ProcessReceipt = processReceipt
 > grant: see `worked-examples.md` §6 for the `UpdateAsync` pattern, tested in Studio 0.742. Roblox's
 > own sample checks only `if success then`, although its warning says a handler must return `true`.
 
+> **`BindReceiptHandler` is the newer route.** The official `MarketplaceService` reference
+> (2026-10-11) calls `ProcessReceipt` "legacy" and documents
+> `MarketplaceService:BindReceiptHandler(Enum.ReceiptType.DeveloperProduct, handler, filter?)`:
+> a handler per list of product IDs (or a catch-all), returning `Enum.ReceiptDecision.Processed` or
+> `NotProcessedYet`. A bound handler takes precedence and unmatched receipts fall through to
+> `ProcessReceipt`, so the two can coexist while you migrate. It has been in the API dump since at
+> least 0.733 (`Security: None`), and a game Script registered both forms in Studio 0.742 without
+> error; a full purchase through it was not run here. The idempotency rule is the same: record the
+> `PurchaseId` with the grant.
+
 ### 5. Subscriptions (Recurring In-Experience)
 
 Subscriptions allow recurring billing for exclusive perks within an experience.

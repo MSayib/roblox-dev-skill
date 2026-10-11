@@ -141,6 +141,17 @@ against the 0.737–0.742 source tarballs, and the beta claims against the staff
   2026-06-04 and the `BanAsync` reference), Script Capabilities (client beta, `Unassigned`,
   the quoted error), decompilation of replicated modules, server-only data stores.
 
+### Added — found by verifying `worked-examples.md`
+
+- **`MarketplaceService:BindReceiptHandler` for developer products.** The official reference now
+  calls `ProcessReceipt` "legacy" and documents per-product (or catch-all) handlers returning
+  `Enum.ReceiptDecision`; bound handlers take precedence and unmatched receipts fall through. It
+  has been in the dump since at least 0.733, and a game Script registered both forms in Studio
+  0.742. `monetization.md` and `worked-examples.md` §6 now say so (the tested `ProcessReceipt`
+  example stays; a full purchase through `BindReceiptHandler` was not run).
+- Every other claim in the file held: its verification sections were run in 2.16.0 and the
+  receipt and migration ones again today as harness expectations.
+
 ### Added — claims register
 
 - `tools/skill-test/claims.json` + `check_claims.py` + generated `docs/claims.md`: every
