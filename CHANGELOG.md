@@ -117,6 +117,18 @@ against the 0.737–0.742 source tarballs, and the beta claims against the staff
 - "Team members without the beta cannot compile `if local`" is now tested: in a Studio 0.742
   without the beta, a game Script and a plugin `loadstring` both fail to parse it.
 
+### Fixed — found by verifying `mcp-integration.md` claim by claim
+
+- **"Without a read, `multi_edit` fails outright" was false** (same defect as in SKILL.md, a second
+  copy): a matching edit on a never-read script succeeds. A guessed `old_string` does fail.
+- **Tool count 28 → 30**: `list_plugin_guis` and `capture_plugin_gui` added to the table.
+- **"Destroying core services crashes Studio"** was never tested; removed (the advice stays).
+  **"Invalid JSON fails silently"** became the official wording ("prevent the configuration from
+  loading").
+- Re-verified 2026-10-11: the archived Rust server repo, the `http_get` allowlist
+  (`openapi.json` rejected too), `NotScriptable` reads failing even through `execute_luau` on 0.742,
+  `ScriptDebuggerService` all `PluginSecurity`, the `subagent` types, the seven `rbx-*` skills.
+
 ### Added — claims register
 
 - `tools/skill-test/claims.json` + `check_claims.py` + generated `docs/claims.md`: every

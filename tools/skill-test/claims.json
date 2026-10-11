@@ -2349,20 +2349,10 @@
    "checked": ""
   },
   {
-   "id": "mcp-integration-001",
-   "file": "references/mcp-integration.md",
-   "quote": "**Primary source (re-verified 2026-09-25):**",
-   "status": "unverified",
-   "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
    "id": "mcp-integration-002",
    "file": "references/mcp-integration.md",
    "quote": "**This skill is not an MCP server.** It is a knowledge base that is *read by* an agent which",
-   "status": "unverified",
+   "status": "advice",
    "kind": "negative",
    "source": "",
    "evidence": "",
@@ -2372,147 +2362,127 @@
    "id": "mcp-integration-003",
    "file": "references/mcp-integration.md",
    "quote": "It **runs as a local process on your machine** and speaks **`stdio` transport**. It is not a",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Roblox/creator-docs studio/mcp.md (read 2026-10-11)",
+   "evidence": "\"The server runs as a local process on your machine ... stdio transport\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "mcp-integration-004",
    "file": "references/mcp-integration.md",
    "quote": "running Studio session. Studio must be open, with the server enabled, or every call fails.",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Roblox/creator-docs studio/mcp.md (read 2026-10-11)",
+   "evidence": "All actions go through the running Studio session.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "mcp-integration-005",
    "file": "references/mcp-integration.md",
    "quote": "GitHub) is **archived** — verified 2026-09-25 via the GitHub API: `archived: true`, last push",
-   "status": "unverified",
+   "status": "source",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "GitHub API repos/Roblox/studio-rust-mcp-server",
+   "evidence": "archived=true, pushed_at 2026-04-03 (re-checked 2026-10-11).",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "mcp-integration-006",
    "file": "references/mcp-integration.md",
    "quote": "2026-04-03. Do not install it, and do not follow guides that tell you to. Nothing needs to run",
-   "status": "unverified",
+   "status": "source",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "GitHub API",
+   "evidence": "As above.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "mcp-integration-007",
    "file": "references/mcp-integration.md",
    "quote": "apart by place ID; local places with no place ID are listed by name only.",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Roblox/creator-docs studio/mcp.md (read 2026-10-11)",
+   "evidence": "\"Local places that don't have a place ID are listed by name only.\"",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "mcp-integration-008",
    "file": "references/mcp-integration.md",
    "quote": "`Edit` is the saved place. `Client` and `Server` exist **only while a playtest is running**.",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "MCP tool schemas of this session (Studio 0.742)",
+   "evidence": "get_studio_state lists only Edit outside a playtest; Server/Client during one.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "mcp-integration-009",
    "file": "references/mcp-integration.md",
    "quote": "`execute_luau` accepts all three, but **`multi_edit` accepts `Edit` only** — you cannot edit",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "MCP tool schemas of this session (Studio 0.742)",
+   "evidence": "multi_edit enum [Edit]; execute_luau [Edit, Client, Server].",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "mcp-integration-010",
    "file": "references/mcp-integration.md",
    "quote": "**`ScriptDebuggerService` is `PluginSecurity`, so game code cannot reach it.** It does expose",
-   "status": "unverified",
+   "status": "dump",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "API dump 0.742",
+   "evidence": "All 12 ScriptDebuggerService members PluginSecurity.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "mcp-integration-011",
    "file": "references/mcp-integration.md",
    "quote": "dump). A Script or LocalScript calling them errors; only a plugin, the command bar, or",
-   "status": "unverified",
+   "status": "dump",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "API dump 0.742",
+   "evidence": "PluginSecurity members are not callable from game scripts.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "mcp-integration-012",
    "file": "references/mcp-integration.md",
    "quote": "**Studio Assistant \"Planning Mode\" is not exposed by any MCP tool**, and this file has never",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "mcp-integration-013",
-   "file": "references/mcp-integration.md",
-   "quote": "the file, and mind the commas — invalid JSON fails silently at load.",
-   "status": "unverified",
-   "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "MCP tool schemas of this session (Studio 0.742)",
+   "evidence": "Not among the 30 connected tools (2026-10-11).",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "mcp-integration-014",
    "file": "references/mcp-integration.md",
    "quote": "Roblox places. Make sure to only connect clients you trust.\"* Read",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "mcp-integration-015",
-   "file": "references/mcp-integration.md",
-   "quote": "this session (2026-09-25) exposes **28** — those 26 plus `generate_texture` and `segment_mesh`,",
-   "status": "unverified",
-   "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Roblox/creator-docs studio/mcp.md (read 2026-10-11)",
+   "evidence": "Quoted verbatim.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "mcp-integration-016",
    "file": "references/mcp-integration.md",
    "quote": "which are present but undocumented. Tool sets move; when a call fails with an unknown-tool",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "MCP tool schemas of this session (Studio 0.742); Roblox/creator-docs studio/mcp.md (read 2026-10-11)",
+   "evidence": "The four are connected and absent from the page.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "mcp-integration-017",
    "file": "references/mcp-integration.md",
    "quote": "error, list what your host actually exposes instead of trusting this table.",
-   "status": "unverified",
+   "status": "advice",
    "kind": "negative",
    "source": "",
    "evidence": "",
@@ -2522,257 +2492,207 @@
    "id": "mcp-integration-018",
    "file": "references/mcp-integration.md",
    "quote": "`script_read` | Reads a script by dot-notation path. Output is `LINE_NUMBER→LINE_CONTENT`. Reads the whole script by default; for large scripts pass `should_read_entire_file: false` with `start_line_one_indexed` + `end_line_one_indexed_inclusive`. Never creates a script.",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "MCP tool schemas of this session (Studio 0.742)",
+   "evidence": "script_read schema: LINE_NUMBER→LINE_CONTENT, should_read_entire_file, start/end lines.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "mcp-integration-019",
    "file": "references/mcp-integration.md",
    "quote": "`multi_edit` | Applies **several edits to one script** in a single atomic call. Creates the script if the path does not exist.",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "MCP tool schemas of this session (Studio 0.742); execute_luau / multi_edit runs, 2026-10-11",
+   "evidence": "Schema; a call created/edited one script.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "mcp-integration-020",
    "file": "references/mcp-integration.md",
    "quote": "**Atomic:** if any edit fails to apply, the whole call fails and nothing is written. Plan the",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "execute_luau / multi_edit runs, 2026-10-11",
+   "evidence": "Edit 1 valid + edit 2 non-matching: call errored, script unchanged.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "mcp-integration-021",
    "file": "references/mcp-integration.md",
    "quote": "`script_read` first. A `multi_edit` written from a guessed `old_string` simply errors.",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "execute_luau / multi_edit runs, 2026-10-11",
+   "evidence": "A non-matching old_string errored (\"old_string ... not found\").",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "mcp-integration-022",
    "file": "references/mcp-integration.md",
    "quote": "`execute_luau` | Runs Luau in Studio and **returns the result of the code, or the error**. Requires `datamodel_type`: `Edit`, `Client`, or `Server`.",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "MCP tool schemas of this session (Studio 0.742); execute_luau / multi_edit runs, 2026-10-11",
+   "evidence": "Returned values and errors throughout the session.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "mcp-integration-023",
    "file": "references/mcp-integration.md",
    "quote": "`PluginSecurity` members that a Script cannot.",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "execute_luau / multi_edit runs, 2026-10-11",
+   "evidence": "execute_luau wrote PluginOrOpenCloud CollisionFidelity (plugin case) that a game Script cannot.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "mcp-integration-024",
    "file": "references/mcp-integration.md",
    "quote": "**That privilege does not reach `NotScriptable` properties.** These are Properties-window-only",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "execute_luau / multi_edit runs, 2026-10-11",
+   "evidence": "execute_luau (Edit, 0.742): StreamingIntegrityMode, PhysicsSteppingMethod, UseNewLuauTypeSolver -> \"is not a valid member of Workspace\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "mcp-integration-025",
    "file": "references/mcp-integration.md",
    "quote": "0.741.19.7411056: reading any of them from `execute_luau` fails with",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "execute_luau / multi_edit runs, 2026-10-11",
+   "evidence": "Re-run on 0.742 with the same result.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "mcp-integration-026",
    "file": "references/mcp-integration.md",
    "quote": "`<Name> is not a valid member of Workspace \"Workspace\"`. That message reads like a typo, and it is",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "execute_luau / multi_edit runs, 2026-10-11",
+   "evidence": "Exact message observed.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "mcp-integration-027",
    "file": "references/mcp-integration.md",
    "quote": "playtest DataModel, which only exists while a playtest is running.",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "MCP tool schemas of this session (Studio 0.742)",
+   "evidence": "Server/Client datamodels only during a playtest.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "mcp-integration-028",
    "file": "references/mcp-integration.md",
    "quote": "Luau values and that `print()` was the only way out — that was wrong. `print()` is still",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "execute_luau / multi_edit runs, 2026-10-11",
+   "evidence": "execute_luau returned values all session.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "mcp-integration-029",
    "file": "references/mcp-integration.md",
    "quote": "and `unit_test`. A subagent returns one final text summary and cannot be conversed with or",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "MCP tool schemas of this session (Studio 0.742); Roblox/creator-docs studio/mcp.md (read 2026-10-11)",
+   "evidence": "Schema options explore, screen_capture, unit_test; docs name explore and playtest; one final text result, no back-and-forth, no nesting.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "mcp-integration-030",
    "file": "references/mcp-integration.md",
    "quote": "`store_image` | **Local file → URI.** Loads a png/jpg/jpeg from an absolute local path (**max 5 MB**) and returns an `IMAGEID_<id>` URI for other tools, e.g. as `attachedImageUri` for `generate_procedural_model`.",
-   "status": "unverified",
+   "status": "docs",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "MCP tool schemas of this session (Studio 0.742)",
+   "evidence": "Schema: png/jpg/jpeg, 5MB, IMAGEID_ URI.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "mcp-integration-031",
    "file": "references/mcp-integration.md",
    "quote": "`upload_image` as taking a local file.** It does not: it takes URLs and returns a map. A local",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "MCP tool schemas of this session (Studio 0.742)",
+   "evidence": "Schema: batch from http server URLs, returns imagePath->assetId map.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "mcp-integration-032",
    "file": "references/mcp-integration.md",
    "quote": "its own `async: true` argument. Its `timeout` defaults to 600 s. Async is a per-tool argument,",
-   "status": "unverified",
+   "status": "docs",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "MCP tool schemas of this session (Studio 0.742)",
+   "evidence": "wait_job_finished timeout default 600 s; jobId from a tool async argument.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "mcp-integration-033",
    "file": "references/mcp-integration.md",
    "quote": "`http_get` | Fetches Roblox documentation **from an allowlist only**. Supports in-content keyword search via `query`, with `context_lines` (default 3) and `return_full`.",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "MCP tool schemas of this session (Studio 0.742)",
+   "evidence": "Schema: allowlist, query, context_lines default 3, return_full.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "mcp-integration-034",
    "file": "references/mcp-integration.md",
    "quote": "rejected, which notably includes `llms-full.txt` and `openapi.json`. For those, and for any",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "execute_luau / multi_edit runs, 2026-10-11",
+   "evidence": "http_get llms-full.txt and cloud/openapi.json both \"URL not allowed\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "mcp-integration-035",
    "file": "references/mcp-integration.md",
    "quote": "Using `query` is the token-efficient path: it returns only matching sections with context rather",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "mcp-integration-036",
-   "file": "references/mcp-integration.md",
-   "quote": "**First-party skills exposed by the `skill` tool in this build (2026-09-25):**",
-   "status": "unverified",
-   "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "mcp-integration-038",
-   "file": "references/mcp-integration.md",
-   "quote": "**Why:** `multi_edit` matches `old_string` verbatim. Without a read, the call does not merely",
-   "status": "unverified",
-   "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "mcp-integration-039",
-   "file": "references/mcp-integration.md",
-   "quote": "risk a bad edit — it fails outright. And blind whole-script rewrites break references, discard",
-   "status": "unverified",
-   "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "execute_luau / multi_edit runs, 2026-10-11",
+   "evidence": "query returned matching sections only.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "mcp-integration-040",
    "file": "references/mcp-integration.md",
    "quote": "**Step 4 is not optional.** `multi_edit` accepts `datamodel_type: \"Edit\"` and nothing else, so",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "MCP tool schemas of this session (Studio 0.742)",
+   "evidence": "multi_edit enum [Edit].",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "mcp-integration-041",
    "file": "references/mcp-integration.md",
    "quote": "attempting to patch a script mid-playtest fails. Earlier versions of this file showed",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "MCP tool schemas of this session (Studio 0.742)",
+   "evidence": "multi_edit enum [Edit].",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "mcp-integration-042",
    "file": "references/mcp-integration.md",
    "quote": "Summary only — the full threat model, including what this skill cannot enforce, is in",
-   "status": "unverified",
-   "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "mcp-integration-043",
-   "file": "references/mcp-integration.md",
-   "quote": "**Never delete services** (`Workspace`, `ReplicatedStorage`, …). Destroying core services",
-   "status": "unverified",
-   "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "mcp-integration-044",
-   "file": "references/mcp-integration.md",
-   "quote": "crashes Studio. Never `game:ClearAllChildren()`.",
-   "status": "unverified",
+   "status": "advice",
    "kind": "negative",
    "source": "",
    "evidence": "",
@@ -2782,7 +2702,7 @@
    "id": "mcp-integration-045",
    "file": "references/mcp-integration.md",
    "quote": "Errors that were in this file and are now fixed. Kept visible so an agent that remembers an old",
-   "status": "unverified",
+   "status": "advice",
    "kind": "negative",
    "source": "",
    "evidence": "",
@@ -2792,7 +2712,7 @@
    "id": "mcp-integration-046",
    "file": "references/mcp-integration.md",
    "quote": "version does not reintroduce them.",
-   "status": "unverified",
+   "status": "advice",
    "kind": "negative",
    "source": "",
    "evidence": "",
@@ -2802,61 +2722,61 @@
    "id": "mcp-integration-047",
    "file": "references/mcp-integration.md",
    "quote": "`run_as_job` is a tool | **No such tool**, in the docs or in the live build. Async is a per-tool `async: true` argument that returns a `jobId`; `wait_job_finished` consumes that id. v2.7.0 introduced this error while \"adding real tools\". | Official docs page + live tool list, 2026-09-25",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "MCP tool schemas of this session (Studio 0.742); Roblox/creator-docs studio/mcp.md (read 2026-10-11)",
+   "evidence": "Absent from the 30 tools and the 26 documented.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "mcp-integration-048",
    "file": "references/mcp-integration.md",
    "quote": "`multi_edit` works during a playtest | `datamodel_type` enum is **`Edit` only**. | Live schema",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "MCP tool schemas of this session (Studio 0.742)",
+   "evidence": "enum [Edit].",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "mcp-integration-049",
    "file": "references/mcp-integration.md",
    "quote": "\"MCP tools do not return Luau values directly\" | `execute_luau` **returns the result or the error**. | Live schema + official docs",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "execute_luau / multi_edit runs, 2026-10-11",
+   "evidence": "Values returned.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "mcp-integration-050",
    "file": "references/mcp-integration.md",
    "quote": "`upload_image` uploads a local image file | It uploads a **batch from HTTP(S) URLs** and returns an imagePath→assetId map. Local files go through `store_image` → `IMAGEID_` URI, ≤5 MB, png/jpg/jpeg. | Live schemas",
-   "status": "unverified",
+   "status": "docs",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "MCP tool schemas of this session (Studio 0.742)",
+   "evidence": "Schemas of upload_image and store_image.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "mcp-integration-051",
    "file": "references/mcp-integration.md",
    "quote": "`http_get` fetches any URL from Studio | **Allowlisted** to Roblox docs domains, and the URL must end in `.md` or be `llms.txt`. `llms-full.txt` and `openapi.json` are rejected. | Live schema",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "execute_luau / multi_edit runs, 2026-10-11",
+   "evidence": "Allowlist enforced; llms-full.txt/openapi.json rejected.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "mcp-integration-052",
    "file": "references/mcp-integration.md",
    "quote": "`set_active_studio` is a tool | Does not exist. Targeting is per call via `studio_id`. (Corrected in v2.7.0, kept here as a guard.) | Official docs",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "MCP tool schemas of this session (Studio 0.742); Roblox/creator-docs studio/mcp.md (read 2026-10-11)",
+   "evidence": "No such tool; every call takes studio_id.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "monetization-002",
@@ -5112,21 +5032,21 @@
    "id": "mcp-integration-053",
    "file": "references/mcp-integration.md",
    "quote": "**`script_grep` line numbers need confirming.** Measured 2026-09-06: it placed a match at line",
-   "status": "unverified",
+   "status": "studio",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "execute_luau / multi_edit runs, 2026-10-11",
+   "evidence": "2026-10-11 two script_grep tests exact; 2026-09-06 offset not reproduced.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "mcp-integration-054",
    "file": "references/mcp-integration.md",
    "quote": "171 that `script_read` showed was 15 lines lower. On 2026-10-11 (Studio 0.742) two tests, a",
-   "status": "unverified",
+   "status": "studio",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "execute_luau / multi_edit runs, 2026-10-11",
+   "evidence": "Historical observation as stated.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "SKILL-059",
@@ -5996,6 +5916,126 @@
    "status": "false",
    "source": "",
    "evidence": "Docs only describe server-side scripts.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "mcp-integration-055",
+   "file": "references/mcp-integration.md",
+   "quote": "**Counts, stated precisely.** The official docs page lists **26 tools** (recounted 2026-10-11).",
+   "status": "studio",
+   "kind": "number",
+   "source": "Roblox/creator-docs studio/mcp.md (read 2026-10-11); MCP tool schemas of this session (Studio 0.742)",
+   "evidence": "26 documented tool rows; 30 connected.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "mcp-integration-056",
+   "file": "references/mcp-integration.md",
+   "quote": "The build observed on 2026-10-11 (Studio 0.742) exposes **30**: those 26 plus `generate_texture`,",
+   "status": "studio",
+   "kind": "number",
+   "source": "MCP tool schemas of this session (Studio 0.742)",
+   "evidence": "30 connected tools.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "mcp-integration-057",
+   "file": "references/mcp-integration.md",
+   "quote": "`list_plugin_guis` / `capture_plugin_gui` | Lists plugin widgets with a `pluginGuiId` (hidden ones too), and screenshots a **visible** one by that id. Undocumented; from the live schema (2026-10-11).",
+   "status": "docs",
+   "kind": "number",
+   "source": "MCP tool schemas of this session (Studio 0.742)",
+   "evidence": "Schema: lists widgets incl. hidden; capture needs a visible widget.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "mcp-integration-058",
+   "file": "references/mcp-integration.md",
+   "quote": "usually fails the whole call (a read is not required: an edit whose text does match succeeds,",
+   "status": "studio",
+   "kind": "negative",
+   "source": "execute_luau / multi_edit runs, 2026-10-11",
+   "evidence": "As above.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "mcp-integration-059",
+   "file": "references/mcp-integration.md",
+   "quote": "tested 2026-10-11). And blind whole-script rewrites break references, discard",
+   "status": "studio",
+   "kind": "number",
+   "source": "execute_luau / multi_edit runs, 2026-10-11",
+   "evidence": "A never-read script was edited successfully.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "mcp-integration-060",
+   "file": "references/mcp-integration.md",
+   "quote": "**Never delete services** (`Workspace`, `ReplicatedStorage`, …) and never",
+   "status": "advice",
+   "kind": "negative",
+   "source": "",
+   "evidence": "",
+   "checked": ""
+  },
+  {
+   "id": "mcp-integration-061",
+   "file": "references/mcp-integration.md",
+   "quote": "**Primary source (re-verified 2026-10-11):**",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs studio/mcp.md (read 2026-10-11)",
+   "evidence": "Re-read the official page 2026-10-11.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "mcp-integration-062",
+   "file": "references/mcp-integration.md",
+   "quote": "**First-party skills exposed by the `skill` tool (unchanged from 2026-09-25 to 2026-10-11):**",
+   "status": "studio",
+   "kind": "number",
+   "source": "MCP tool schemas of this session (Studio 0.742)",
+   "evidence": "skill tool lists the same seven rbx-* skills on 2026-10-11.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "false-mcp-28-tools",
+   "file": "references/mcp-integration.md",
+   "quote": "this session (2026-09-25) exposes **28**",
+   "kind": "regression",
+   "status": "false",
+   "source": "",
+   "evidence": "30 tools on 2026-10-11.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "false-mcp-read-or-fail",
+   "file": "references/mcp-integration.md",
+   "quote": "Without a read, the call does not merely",
+   "kind": "regression",
+   "status": "false",
+   "source": "",
+   "evidence": "A never-read script was edited successfully (2026-10-11).",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "false-mcp-json-silent",
+   "file": "references/mcp-integration.md",
+   "quote": "invalid JSON fails silently at load",
+   "kind": "regression",
+   "status": "false",
+   "source": "",
+   "evidence": "Docs: invalid JSON prevents the configuration from loading; \"silently\" unsupported.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "false-mcp-crash-studio",
+   "file": "references/mcp-integration.md",
+   "quote": "Destroying core services crashes Studio",
+   "kind": "regression",
+   "status": "false",
+   "source": "",
+   "evidence": "Never tested; claim removed.",
    "checked": "2026-10-11, engine 0.742.0.7421053"
   }
  ]
