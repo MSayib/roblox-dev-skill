@@ -18,10 +18,10 @@ Every factual claim a reader could act on wrongly, with how it was verified. **s
 | `references/performance-optimization.md` | 28 | 16 | 3 | 6 | 1 | 0 | 6 |
 | `references/project-structure.md` | 0 | 0 | 0 | 0 | 0 | 23 | 0 |
 | `references/security-hardening.md` | 12 | 26 | 3 | 0 | 7 | 0 | 4 |
-| `references/studio-plugins-and-limits.md` | 1 | 0 | 0 | 0 | 0 | 25 | 0 |
+| `references/studio-plugins-and-limits.md` | 16 | 1 | 1 | 1 | 9 | 0 | 0 |
 | `references/ui-systems.md` | 1 | 0 | 0 | 0 | 0 | 8 | 1 |
 | `references/worked-examples.md` | 17 | 4 | 4 | 1 | 19 | 0 | 1 |
-| **total** | **154** | **110** | **56** | **70** | **83** | **105** | **44** |
+| **total** | **169** | **111** | **57** | **71** | **92** | **80** | **44** |
 
 ## Verified claims
 
@@ -299,6 +299,22 @@ Every factual claim a reader could act on wrongly, with how it was verified. **s
 | `references/security-hardening.md`: **Note**: Always wrap `BanAsync` in `pcall()` — it is a yielding function that can fail | docs | BanAsync tagged Yields; pcall is the skill guidance. (creator-docs Players.yaml) |
 | `references/security-hardening.md`: using raw `UserId` values, those IDs will no longer match across games | docs | Cross-game shared moderation will be impacted. (DevForum topic 4677155) |
 | `references/security-hardening.md`: June 2026 \| `BanAsync` gains `ApplyDeviceBlock` param (24hr, desktop only) \| [§10](#10-banasync-api--device-blocking-june-2026) | docs | 24-hour device block, desktop only. (Roblox/creator-docs Players.yaml BanAsync; DevForum topic 4668265 (Roblox Staff, 2026-06-04)) |
+| `references/studio-plugins-and-limits.md`: plus direct empirical measurement in Roblox Studio (2026-08-06) | studio | Measurements of 2026-08-06; the source limit and UpdateSourceAsync re-run 2026-10-11. (Plugin measurements recorded 2026-08-06 (skill 2.x), as the text says) |
+| `references/studio-plugins-and-limits.md`: **Measured 2026-08-06.** These differ by an enormous margin, and confusing them | studio | 199,999 OK / 200,000 rejected; UpdateSourceAsync 16 MiB intact. (execute_luau Edit re-measurement 2026-10-11) |
+| `references/studio-plugins-and-limits.md`: `Script.Source = x` (direct assignment) \| **199,999 bytes.** 200,000 is rejected | studio | "Provided string length (200000) is greater than or equal to max length (200000)". (execute_luau Edit re-measurement 2026-10-11) |
+| `references/studio-plugins-and-limits.md`: `ScriptEditorService:UpdateSourceAsync` \| **No limit found up to 64 MiB** | studio | 64 MiB in 2026-08; 16 MiB re-run 2026-10-11 intact. (Plugin measurements recorded 2026-08-06 (skill 2.x), as the text says; execute_luau Edit re-measurement 2026-10-11) |
+| `references/studio-plugins-and-limits.md`: `UpdateSourceAsync` stored 8 / 16 / 32 / 64 MiB intact (verified by checking | studio | As above. (Plugin measurements recorded 2026-08-06 (skill 2.x), as the text says; execute_luau Edit re-measurement 2026-10-11) |
+| `references/studio-plugins-and-limits.md`: first and last characters); 64 MiB completed in 0.48 s. | studio | Timing from 2026-08-06; not re-run. (Plugin measurements recorded 2026-08-06 (skill 2.x), as the text says) |
+| `references/studio-plugins-and-limits.md`: **Measured 2026-08-06.** A plugin made successful `HttpService:GetAsync` calls | studio | Plugin HTTP calls without HttpEnabled (2026-08-06). Docs: GetAsync/RequestAsync usable by plugins. (Plugin measurements recorded 2026-08-06 (skill 2.x), as the text says) |
+| `references/studio-plugins-and-limits.md`: so a plugin that needed the setting would be unusable on local files. It doesn't. | studio | As above. (Plugin measurements recorded 2026-08-06 (skill 2.x), as the text says) |
+| `references/studio-plugins-and-limits.md`: Documented: **500 requests/minute** for external HTTP, and a separate | docs | "overall limit of 500 HTTP requests per minute"; "2500 Open Cloud requests per minute". (creator-docs cloud-services/http-service.md) |
+| `references/studio-plugins-and-limits.md`: **Measured 2026-08-06, from plugin context:** | studio | Response sizes 1-32 MB and gzip measured 2026-08-06. (Plugin measurements recorded 2026-08-06 (skill 2.x), as the text says) |
+| `references/studio-plugins-and-limits.md`: 1 / 4 / 16 MB raw JSON \| received intact (16 MB in 0.09 s) | studio | As recorded. (Plugin measurements recorded 2026-08-06 (skill 2.x), as the text says) |
+| `references/studio-plugins-and-limits.md`: 32 MB raw JSON \| **33,554,423 bytes intact**, 0.16 s — no truncation | studio | As recorded. (Plugin measurements recorded 2026-08-06 (skill 2.x), as the text says) |
+| `references/studio-plugins-and-limits.md`: 16 MB sent with `Content-Encoding: gzip` \| **16,777,207 bytes returned already decompressed** | studio | As recorded. (Plugin measurements recorded 2026-08-06 (skill 2.x), as the text says) |
+| `references/studio-plugins-and-limits.md`: **No practical response size ceiling** up to at least 32 MB. | studio | As recorded. (Plugin measurements recorded 2026-08-06 (skill 2.x), as the text says) |
+| `references/studio-plugins-and-limits.md`: **Swap MeshParts properly.** `MeshId` is not assignable at runtime; build a | dump | MeshPart.MeshId / MeshContent Write NotAccessibleSecurity. (API dump 0.742) |
+| `references/studio-plugins-and-limits.md`: `robloxapi/rbxfile` (Go) \| Works, but unmaintained since 2023 — see fidelity note below | source | Last commit 2023-02-14. (GitHub API repos/robloxapi/rbxfile) |
 | `references/worked-examples.md`: reject the unhappy path. Fire it **from the Client datamodel**: a server cannot raise its own | studio | Server cannot raise its own OnServerEvent; fired from the Client datamodel (2.16.0). (metadata.json 2.16.0 verified_by (worked-example verifications run in Studio 0.742)) |
 | `references/worked-examples.md`: string, `nil`, a table, a `Part` from outside `coinFolder`, and 50 calls in a loop at a coin out of | studio | Junk payloads run as listed (2.16.0). (metadata.json 2.16.0 verified_by (worked-example verifications run in Studio 0.742)) |
 | `references/worked-examples.md`: in Studio 0.742, 2026-10-11: all junk rejected, the valid claim accepted, a second claim of the same | studio | All junk rejected, valid claim accepted, second claim rejected. (metadata.json 2.16.0 verified_by (worked-example verifications run in Studio 0.742)) |
@@ -462,3 +478,5 @@ Every factual claim a reader could act on wrongly, with how it was verified. **s
 | `references/agent-safety.md`: **not** leave its own waypoint: one Undo after it removed the script that an earlier | studio | One Undo after a multi_edit removed the script created by the preceding execute_luau call. (execute_luau / multi_edit + ChangeHistoryService:Undo() in Studio 0.742 Edit, 2026-10-11) |
 | `references/agent-safety.md`: command-bar-level changes historically do not | false | Measured: execute_luau calls leave undo waypoints. |
 | `references/agent-safety.md`: Studio crashes; the place may be left mangled | false | Never tested; removed. |
+| `references/studio-plugins-and-limits.md`: bytes assigned, 200,000 rejected with "Provided string length (200000) is greater than or equal to | studio | As stated. (execute_luau Edit re-measurement 2026-10-11) |
+| `references/studio-plugins-and-limits.md`: max length (200000)"; `UpdateSourceAsync` stored 1 and 16 MiB intact (64 MiB not re-run). | studio | As stated. (execute_luau Edit re-measurement 2026-10-11) |

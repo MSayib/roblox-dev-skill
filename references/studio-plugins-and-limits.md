@@ -32,7 +32,9 @@ is greater than or equal to max length (200000)
 ```
 
 `UpdateSourceAsync` stored 8 / 16 / 32 / 64 MiB intact (verified by checking
-first and last characters); 64 MiB completed in 0.48 s.
+first and last characters); 64 MiB completed in 0.48 s. Re-measured 2026-10-11 on 0.742: 199,999
+bytes assigned, 200,000 rejected with "Provided string length (200000) is greater than or equal to
+max length (200000)"; `UpdateSourceAsync` stored 1 and 16 MiB intact (64 MiB not re-run).
 
 ### Which to use
 
