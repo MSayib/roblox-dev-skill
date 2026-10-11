@@ -37,6 +37,32 @@ port 34871, with all layers re-run after the last edit.
 - **`ui-systems.md` ScreenGui example failed `--!strict`.** `player.PlayerGui` is a child, not a
   property; now `player:WaitForChild("PlayerGui")`.
 
+### Fixed — found by verifying SKILL.md claim by claim
+
+- **Context7's tools were named backwards.** SKILL.md said the second tool is `get-library-docs`
+  and that `query-docs` does not exist; the upstash/context7 README (2026-10-11) lists
+  `resolve-library-id` and `query-docs`. Same fix in `worked-examples.md`.
+- **"`script_read` first or `multi_edit` simply fails" was false.** A `multi_edit` on a script
+  never read succeeded (Studio 0.742). Atomicity was confirmed: a call with one non-matching edit
+  failed and left the script unchanged.
+- **"263 services" counted names, not services.** It is the number of classes named `*Service`
+  (the local `services/` folder); 343 classes carry the `Service` tag. "48 deprecated" is
+  classes; 477 members are deprecated. Reworded in SKILL.md and `legacy-migration.md`.
+- **MCP tool count**: the docs page still lists 26 tools; the connected build now exposes 30
+  (`list_plugin_guis` and `capture_plugin_gui` added to the table).
+- **`script_grep` line numbers**: the 15-line offset seen on 2026-09-06 did not reproduce in two
+  tests on 0.742; the text now says so and still says to confirm with `script_read`.
+- Dump size figures re-measured on 0.742 (8,438,918 B; 940 class files).
+
+### Added — claims register
+
+- `tools/skill-test/claims.json` + `check_claims.py` + generated `docs/claims.md`: every
+  high-risk prose line (numbers, versions, "cannot / only / not enabled / deprecated") is
+  registered; stale quotes fail; text verified wrong is guarded against coming back; prose API
+  mentions are checked against the dump. First pass: SKILL.md fully classified (20 studio,
+  3 docs, 2 dump, 11 source, 17 advice, 0 unverified); 8 regression guards across the files; the reference files
+  are seeded as unverified (490) and are verified next, highest risk first.
+
 ### Added — tests
 
 - **Preludes** (`tools/skill-test/preludes/`, 26) supply the reader's names, declared with an HTML

@@ -307,7 +307,7 @@ failure recovery. Data loss is irreversible.
 
 Derived by diffing the **0.741 and 0.742 Full API Dumps locally** with
 `tools/robloxdocs/diff-api-dumps.py`, 2026-10-11. **940 classes (+10, −1), 648 enums (+8, −1),
-263 services, 48 deprecated.** Luau 0.742 (2026-10-10) — see `luau-fundamentals.md`.
+263 classes named `*Service` (343 tagged `Service`), 48 deprecated classes (477 members).** Luau 0.742 (2026-10-10) — see `luau-fundamentals.md`.
 Every developer-visible row was **run in Studio 0.742.0.7421053** on an empty baseplate, from an
 ordinary server `Script` (`Sandboxed = false`) or a `LocalScript` during a playtest, unless it says
 *dump only*. None of the new members below has a page on create.roblox.com yet (checked 2026-10-11

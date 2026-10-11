@@ -277,8 +277,10 @@ repository's references for architecture, security, and Luau standards, which th
 
 ### Known tool defect
 
-> **`script_grep` line numbers are unreliable.** Measured 2026-09-06: it placed a match at line
-> 171 that `script_read` showed was 15 lines lower. Use `script_grep` to find *which* script
+> **`script_grep` line numbers need confirming.** Measured 2026-09-06: it placed a match at line
+> 171 that `script_read` showed was 15 lines lower. On 2026-10-11 (Studio 0.742) two tests, a
+> generated script and a Rojo-synced one, returned the exact line, so the trigger is unknown.
+> Use `script_grep` to find *which* script
 > holds a string, then `script_read` to find *where*. Do not feed a `script_grep` line number
 > into an edit.
 

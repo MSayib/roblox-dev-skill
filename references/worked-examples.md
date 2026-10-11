@@ -201,8 +201,8 @@ notice introduced by your fix is a future break.
 
    A `Deprecated` tag often carries a `PreferredDescriptorName` naming the replacement — that is
    the authoritative answer, not a guess.
-2. `script_grep("<oldName>")` to find which scripts are affected. Capped at 50 matches, and its
-   line numbers are unreliable.
+2. `script_grep("<oldName>")` to find which scripts are affected. Capped at 50 matches; confirm
+   its line numbers with `script_read` (once seen 15 lines off).
 3. `script_read` each hit. **Check whether the replacement yields**: `GetTranslatorForPlayer` →
    `GetTranslatorForPlayerAsync` and `CreateCall` → `CreateCallAsync` are both now yielding calls,
    so a drop-in text substitution changes control flow.
@@ -244,7 +244,7 @@ jq '.Members[] | select(.Name=="<Member>")' ~/RobloxDocs/RobloxAPI/classes/<Clas
 - `Tags` — `Deprecated`, `Yields`, `ReadOnly`, `NotScriptable`.
 
 Then fall through: local dump → `create.roblox.com/docs/en-us/{path}.md` → Context7
-(`resolve-library-id` → `get-library-docs`). If it is still unclear, **ask the user** rather than
+(`resolve-library-id` → `query-docs`). If it is still unclear, **ask the user** rather than
 inventing a plausible member name.
 
 **Verification:** `execute_luau` the one-liner before building on it.

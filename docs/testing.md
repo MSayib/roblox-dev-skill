@@ -2,7 +2,8 @@
 
 [← README](../README.md)
 
-Every Luau example in this skill is checked four ways before a release. Each check exists because
+Every Luau example in this skill is checked four ways before a release, and its prose against a
+claims register. Each check exists because
 an earlier version shipped a defect the others could not see; [CHANGELOG.md](../CHANGELOG.md) names
 them.
 
@@ -12,6 +13,7 @@ them.
 | **Runtime in Studio** (`tools/skill-test/studio/`) | What only running shows: capability gates, features present but not enabled, logic bugs, compile errors the Roblox compiler raises | see below |
 | **API audit** (`tools/robloxdocs/audit-skill-examples.py`) | Examples and prose that name elevated, `NotScriptable`, capability-gated (`PluginOrOpenCloud`), deprecated or missing members | `python3 tools/robloxdocs/audit-skill-examples.py references` |
 | **Evals** (`evals/evals.json`) | Whether an agent using the skill answers correctly, including the traps the defects above came from | see below |
+| **Claims register** (`tools/skill-test/claims.json`) | Prose claims: what each says, how it was verified, and whether text verified wrong has come back | `python3 tools/skill-test/check_claims.py --strict --report docs/claims.md` |
 
 ## Static analysis
 
@@ -127,6 +129,23 @@ Use the HTML form for anything that only concerns the tests (`prelude`, `expect`
 | `--@skilltest: requires X` | Needs module `X`, which the test project provides |
 | `--@skilltest: provides X` | This block is module `X` for other blocks |
 | `--@skilltest: fragment` / `skip <why>` | Not a complete program / do not run |
+
+## Claims register
+
+Code is checked by running it; prose is checked against the register. Each entry anchors to an
+exact quote of the text and records its status: **studio** (run in Studio), **docs** (official
+documentation), **dump** (the API dump), **source** (Luau/Roblox source, release notes, published
+flags), **advice** (a recommendation, nothing to verify), **unverified**, or **false** (verified
+wrong and fixed; the old wrong text must not come back). `check_claims.py`:
+
+- fails on a **stale** claim (its quote is no longer in the text: re-verify and update it);
+- finds every **high-risk line** (numbers and limits, versions, "cannot / only / not enabled /
+  deprecated") that no claim covers; `--seed` adds them as `unverified`;
+- checks every `Class.Member` named in prose against the API dump;
+- writes [`claims.md`](claims.md), the per-file status table and the evidence for every verified
+  claim.
+
+A claim that cannot be verified must say so in the text, or go.
 
 ## Evals
 
