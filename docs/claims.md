@@ -9,7 +9,7 @@ Every factual claim a reader could act on wrongly, with how it was verified. **s
 | `SKILL.md` | 20 | 3 | 2 | 11 | 17 | 0 | 3 |
 | `references/agent-safety.md` | 7 | 3 | 0 | 0 | 18 | 0 | 2 |
 | `references/datastore-persistence.md` | 6 | 13 | 0 | 4 | 9 | 0 | 6 |
-| `references/file-formats-and-assets.md` | 0 | 0 | 0 | 0 | 0 | 16 | 0 |
+| `references/file-formats-and-assets.md` | 7 | 9 | 0 | 1 | 1 | 0 | 4 |
 | `references/legacy-migration.md` | 20 | 22 | 41 | 6 | 3 | 0 | 13 |
 | `references/luau-fundamentals.md` | 11 | 10 | 1 | 40 | 3 | 0 | 3 |
 | `references/mcp-integration.md` | 31 | 12 | 2 | 2 | 6 | 0 | 4 |
@@ -21,7 +21,7 @@ Every factual claim a reader could act on wrongly, with how it was verified. **s
 | `references/studio-plugins-and-limits.md` | 16 | 1 | 1 | 1 | 9 | 0 | 0 |
 | `references/ui-systems.md` | 2 | 9 | 1 | 0 | 2 | 0 | 2 |
 | `references/worked-examples.md` | 17 | 4 | 4 | 1 | 19 | 0 | 1 |
-| **total** | **180** | **156** | **64** | **73** | **103** | **16** | **54** |
+| **total** | **187** | **165** | **64** | **74** | **104** | **0** | **58** |
 
 ## Verified claims
 
@@ -82,6 +82,17 @@ Every factual claim a reader could act on wrongly, with how it was verified. **s
 | `references/datastore-persistence.md`: Only **one server** can "own" a player's data at a time | source | ProfileStore session locking (SESSION_STEAL, ASSUME_DEAD). (ProfileStore.luau (official repo) / ProfileService.lua) |
 | `references/datastore-persistence.md`: Automatically saves data at regular intervals (default: **300 seconds**) | source | AUTO_SAVE_PERIOD = 300. (ProfileStore.luau (official repo) / ProfileService.lua) |
 | `references/datastore-persistence.md`: **Auto-save interval** \| 30 seconds \| 300 seconds (configurable) | source | ProfileService SETTINGS.AutoSaveProfiles = 30; ProfileStore AUTO_SAVE_PERIOD = 300, settable via ProfileStore.SetConstant. (ProfileStore.luau (official repo) / ProfileService.lua) |
+| `references/file-formats-and-assets.md`: Roblox supports places up to **100 MB** (104,857,600 bytes) | docs | "Roblox supports places up to 100 MB (104,857,600 bytes)". (creator-docs includes/place-size-limit.md) |
+| `references/file-formats-and-assets.md`: Detection: check first 4 bytes of each chunk payload for ZSTD magic `28 B5 2F FD`; | studio | 2,983 chunk payloads start with 28 B5 2F FD. (Starship.rbxl binary chunks parsed 2026-10-11 (python, zstandard)) |
+| `references/file-formats-and-assets.md`: `rbxfile` (Go): ⚠️ LZ4 only — will fail on ZSTD chunks | source | Only github.com/bkaradzic/go-lz4; no ZSTD codec. (robloxapi/rbxfile rbxl/model.go, go.mod) |
+| `references/file-formats-and-assets.md`: Rewriting with LZ4 default: 2.9 MB → 5.0 MB (+72%). | studio | As recorded; not re-run. (Measurement recorded 2026-08-11) |
+| `references/file-formats-and-assets.md`: `.obj` \| Static geometry only. No rigging/animation/hierarchy. Best for simple static meshes. | docs | fbx/gltf support hierarchies, rigs, animation; obj listed without them. (creator-docs studio/importer.md) |
+| `references/file-formats-and-assets.md`: Single track/stream only | docs | "a single track/stream in either .mp3, .ogg, .wav or .flac". (creator-docs audio/assets.md) |
+| `references/file-formats-and-assets.md`: Max **20 MB** file size | docs | "less than 20 MB in size and 7 minutes in duration". (creator-docs audio/assets.md) |
+| `references/file-formats-and-assets.md`: Max **7 minutes** duration | docs | As above. (creator-docs audio/assets.md) |
+| `references/file-formats-and-assets.md`: Import Only As Model \| Enabled \| Imports as single asset even with multiple children | docs | "By default, this is enabled." (creator-docs studio/importer.md) |
+| `references/file-formats-and-assets.md`: Upload to Roblox \| Enabled \| Adds to Toolbox & Asset Manager. Disable for local-only testing | docs | "adds the model to your Toolbox and Asset Manager ... By default, this is enabled." (creator-docs studio/importer.md) |
+| `references/file-formats-and-assets.md`: Studio automatically generates recovery files when saves fail. | docs | "If saving to Roblox fails due to the file size limit, Studio automatically generates a backup ... recovery file". (creator-docs projects/place-files.md) |
 | `references/legacy-migration.md`: `LocalizationService:GetTranslatorForPlayer()` \| `:GetTranslatorForPlayerAsync()` \| ⚠️ Mostly \| Deprecated in engine **0.740**. The async form **yields** — w | dump | GetTranslatorForPlayer gained Deprecated in 0.740 (not in 0.739); GetTranslatorForPlayerAsync has Yields. (scratchpad verify_legacy_dump.py over local dumps 0.733-0.742 (81 assertions)) |
 | `references/legacy-migration.md`: `CallingService:CreateCall()` \| `:CreateCallAsync()` \| — \| Renamed in 0.739 and now yields — but **both are `RobloxScriptSecurity`**, as is every `CallingSer | dump | CallingService first in 0.737; every member in 0.737-0.742 RobloxScriptSecurity; CreateCall in 0.738, CreateCallAsync (Yields) in 0.739. (scratchpad verify_legacy_dump.py over local dumps 0.733-0.742 (81 assertions)) |
 | `references/legacy-migration.md`: standard replacement (available since 2021). | docs | Task library announced 2021-08-02. (DevForum topic 1387845 "Task Library - Now Available!" (2021-08-02)) |
@@ -555,3 +566,13 @@ Every factual claim a reader could act on wrongly, with how it was verified. **s
 | `references/ui-systems.md`: reference still says "currently in beta" (checked 2026-10-11); the staff post is newer. In | docs | TopLeftRadius etc.: "This property is currently in beta". (Roblox/creator-docs UICorner.yaml (2026-10-11)) |
 | `references/ui-systems.md`: Studio 0.742 a LocalScript set and read back all four properties. Writing to `CornerRadius` | studio | 3/3 PASS in the client harness 2026-10-11. (expect/per-corner-radius.luau) |
 | `references/ui-systems.md`: Per-corner properties require the **New UI Capabilities** beta | false | Fully released 2026-06-23; flag removed. |
+| `references/file-formats-and-assets.md`: ZSTD \| `28 B5 2F FD` \| **Current default**: every compressed chunk of a place Studio saved in August 2026 used it (when Studio switched is not documented) | studio | All compressed chunks ZSTD in a place saved 2026-08-09. (Starship.rbxl binary chunks parsed 2026-10-11 (python, zstandard)) |
+| `references/file-formats-and-assets.md`: Measured on `Starship.rbxl` (saved 2026-08-09; recounted 2026-10-11): 2,983 chunks ZSTD, plus the | studio | 2,983 ZSTD + 1 uncompressed END. (Starship.rbxl binary chunks parsed 2026-10-11 (python, zstandard)) |
+| `references/file-formats-and-assets.md`: `.gif` \| Accepted by the Importer (official page). Whether an animated GIF plays is not documented and was not tested here. | docs | Lists .gif among image formats; animation not documented. (creator-docs studio/importer.md) |
+| `references/file-formats-and-assets.md`: **Important for asset scanning:** which name a file stores is not documented, so check both. | studio | PROP names: MeshId, TextureID, SoundId, AnimationId, Image; EmissiveMaskContent. (Starship.rbxl binary chunks parsed 2026-10-11 (python, zstandard)) |
+| `references/file-formats-and-assets.md`: Measured on `Starship.rbxl` (saved by Studio 2026-08-09): its PROP chunks use the **legacy** names | studio | As above. (Starship.rbxl binary chunks parsed 2026-10-11 (python, zstandard)) |
+| `references/file-formats-and-assets.md`: `EmissiveMaskContent`, which has no legacy twin. A scanner that only knew the `*Content` names | studio | As above. (Starship.rbxl binary chunks parsed 2026-10-11 (python, zstandard)) |
+| `references/file-formats-and-assets.md`: Studio writes ZSTD since ~2025 | false | No source for the year. |
+| `references/file-formats-and-assets.md`: all 2,984 chunks used ZSTD | false | 2,983 ZSTD + uncompressed END. |
+| `references/file-formats-and-assets.md`: Static only (animated GIFs not supported as animated) | false | Not documented, not tested. |
+| `references/file-formats-and-assets.md`: Code that only checks legacy names will miss assets saved by | false | Measured file uses legacy names. |

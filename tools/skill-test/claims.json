@@ -982,147 +982,107 @@
    "id": "file-formats-and-assets-001",
    "file": "references/file-formats-and-assets.md",
    "quote": "Roblox supports places up to **100 MB** (104,857,600 bytes)",
-   "status": "unverified",
+   "status": "docs",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "file-formats-and-assets-002",
-   "file": "references/file-formats-and-assets.md",
-   "quote": "ZSTD | `28 B5 2F FD` | **Current default** — Studio writes ZSTD since ~2025",
-   "status": "unverified",
-   "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "creator-docs includes/place-size-limit.md",
+   "evidence": "\"Roblox supports places up to 100 MB (104,857,600 bytes)\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "file-formats-and-assets-003",
    "file": "references/file-formats-and-assets.md",
    "quote": "Detection: check first 4 bytes of each chunk payload for ZSTD magic `28 B5 2F FD`;",
-   "status": "unverified",
+   "status": "studio",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Starship.rbxl binary chunks parsed 2026-10-11 (python, zstandard)",
+   "evidence": "2,983 chunk payloads start with 28 B5 2F FD.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "file-formats-and-assets-004",
    "file": "references/file-formats-and-assets.md",
    "quote": "`rbxfile` (Go): ⚠️ LZ4 only — will fail on ZSTD chunks",
-   "status": "unverified",
+   "status": "source",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "file-formats-and-assets-005",
-   "file": "references/file-formats-and-assets.md",
-   "quote": "Measured 2026-08-11 on `Starship.rbxl`: all 2,984 chunks used ZSTD.",
-   "status": "unverified",
-   "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "robloxapi/rbxfile rbxl/model.go, go.mod",
+   "evidence": "Only github.com/bkaradzic/go-lz4; no ZSTD codec.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "file-formats-and-assets-006",
    "file": "references/file-formats-and-assets.md",
    "quote": "Rewriting with LZ4 default: 2.9 MB → 5.0 MB (+72%).",
-   "status": "unverified",
+   "status": "studio",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Measurement recorded 2026-08-11",
+   "evidence": "As recorded; not re-run.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "file-formats-and-assets-007",
    "file": "references/file-formats-and-assets.md",
    "quote": "`.obj` | Static geometry only. No rigging/animation/hierarchy. Best for simple static meshes.",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "file-formats-and-assets-008",
-   "file": "references/file-formats-and-assets.md",
-   "quote": "`.gif` | Static only (animated GIFs not supported as animated).",
-   "status": "unverified",
-   "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "creator-docs studio/importer.md",
+   "evidence": "fbx/gltf support hierarchies, rigs, animation; obj listed without them.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "file-formats-and-assets-009",
    "file": "references/file-formats-and-assets.md",
    "quote": "Single track/stream only",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "creator-docs audio/assets.md",
+   "evidence": "\"a single track/stream in either .mp3, .ogg, .wav or .flac\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "file-formats-and-assets-010",
    "file": "references/file-formats-and-assets.md",
    "quote": "Max **20 MB** file size",
-   "status": "unverified",
+   "status": "docs",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "creator-docs audio/assets.md",
+   "evidence": "\"less than 20 MB in size and 7 minutes in duration\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "file-formats-and-assets-011",
    "file": "references/file-formats-and-assets.md",
    "quote": "Max **7 minutes** duration",
-   "status": "unverified",
+   "status": "docs",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "creator-docs audio/assets.md",
+   "evidence": "As above.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "file-formats-and-assets-012",
    "file": "references/file-formats-and-assets.md",
    "quote": "Import Only As Model | Enabled | Imports as single asset even with multiple children",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "creator-docs studio/importer.md",
+   "evidence": "\"By default, this is enabled.\"",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "file-formats-and-assets-013",
    "file": "references/file-formats-and-assets.md",
    "quote": "Upload to Roblox | Enabled | Adds to Toolbox & Asset Manager. Disable for local-only testing",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "file-formats-and-assets-014",
-   "file": "references/file-formats-and-assets.md",
-   "quote": "generations. Code that only checks legacy names will miss assets saved by",
-   "status": "unverified",
-   "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "creator-docs studio/importer.md",
+   "evidence": "\"adds the model to your Toolbox and Asset Manager ... By default, this is enabled.\"",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "file-formats-and-assets-015",
    "file": "references/file-formats-and-assets.md",
    "quote": "If you hit the **100 MB place file limit**:",
-   "status": "unverified",
+   "status": "advice",
    "kind": "number",
    "source": "",
    "evidence": "",
@@ -1132,11 +1092,11 @@
    "id": "file-formats-and-assets-016",
    "file": "references/file-formats-and-assets.md",
    "quote": "Studio automatically generates recovery files when saves fail.",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "creator-docs projects/place-files.md",
+   "evidence": "\"If saving to Roblox fails due to the file size limit, Studio automatically generates a backup ... recovery file\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "legacy-migration-002",
@@ -6466,6 +6426,106 @@
    "status": "false",
    "source": "",
    "evidence": "Fully released 2026-06-23; flag removed.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "file-formats-and-assets-017",
+   "file": "references/file-formats-and-assets.md",
+   "quote": "ZSTD | `28 B5 2F FD` | **Current default**: every compressed chunk of a place Studio saved in August 2026 used it (when Studio switched is not documented)",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Starship.rbxl binary chunks parsed 2026-10-11 (python, zstandard)",
+   "evidence": "All compressed chunks ZSTD in a place saved 2026-08-09.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "file-formats-and-assets-018",
+   "file": "references/file-formats-and-assets.md",
+   "quote": "Measured on `Starship.rbxl` (saved 2026-08-09; recounted 2026-10-11): 2,983 chunks ZSTD, plus the",
+   "status": "studio",
+   "kind": "number",
+   "source": "Starship.rbxl binary chunks parsed 2026-10-11 (python, zstandard)",
+   "evidence": "2,983 ZSTD + 1 uncompressed END.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "file-formats-and-assets-019",
+   "file": "references/file-formats-and-assets.md",
+   "quote": "`.gif` | Accepted by the Importer (official page). Whether an animated GIF plays is not documented and was not tested here.",
+   "status": "docs",
+   "kind": "negative",
+   "source": "creator-docs studio/importer.md",
+   "evidence": "Lists .gif among image formats; animation not documented.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "file-formats-and-assets-020",
+   "file": "references/file-formats-and-assets.md",
+   "quote": "**Important for asset scanning:** which name a file stores is not documented, so check both.",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Starship.rbxl binary chunks parsed 2026-10-11 (python, zstandard)",
+   "evidence": "PROP names: MeshId, TextureID, SoundId, AnimationId, Image; EmissiveMaskContent.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "file-formats-and-assets-021",
+   "file": "references/file-formats-and-assets.md",
+   "quote": "Measured on `Starship.rbxl` (saved by Studio 2026-08-09): its PROP chunks use the **legacy** names",
+   "status": "studio",
+   "kind": "number",
+   "source": "Starship.rbxl binary chunks parsed 2026-10-11 (python, zstandard)",
+   "evidence": "As above.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "file-formats-and-assets-022",
+   "file": "references/file-formats-and-assets.md",
+   "quote": "`EmissiveMaskContent`, which has no legacy twin. A scanner that only knew the `*Content` names",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Starship.rbxl binary chunks parsed 2026-10-11 (python, zstandard)",
+   "evidence": "As above.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "false-zstd-since-2025",
+   "file": "references/file-formats-and-assets.md",
+   "quote": "Studio writes ZSTD since ~2025",
+   "kind": "regression",
+   "status": "false",
+   "source": "",
+   "evidence": "No source for the year.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "false-starship-2984",
+   "file": "references/file-formats-and-assets.md",
+   "quote": "all 2,984 chunks used ZSTD",
+   "kind": "regression",
+   "status": "false",
+   "source": "",
+   "evidence": "2,983 ZSTD + uncompressed END.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "false-gif-static",
+   "file": "references/file-formats-and-assets.md",
+   "quote": "Static only (animated GIFs not supported as animated)",
+   "kind": "regression",
+   "status": "false",
+   "source": "",
+   "evidence": "Not documented, not tested.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "false-legacy-names-miss",
+   "file": "references/file-formats-and-assets.md",
+   "quote": "Code that only checks legacy names will miss assets saved by",
+   "kind": "regression",
+   "status": "false",
+   "source": "",
+   "evidence": "Measured file uses legacy names.",
    "checked": "2026-10-11, engine 0.742.0.7421053"
   }
  ]

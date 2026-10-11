@@ -218,6 +218,17 @@ Every dated statement traced to its Roblox staff post or official page.
 - StyleQuery's full release is dated (2026-05-11). UIShadow's `ZIndex`, text and gradient limits
   match the official reference.
 
+### Fixed — found by verifying `file-formats-and-assets.md`
+
+- **"Code that only checks legacy property names will miss assets saved by modern Studio" was not
+  borne out**: a place Studio saved in August 2026 stores `MeshId`, `TextureID`, `SoundId`,
+  `AnimationId` and `Image` (legacy names) and only `EmissiveMaskContent` among `*Content` names.
+  The advice to check both names stays, with the measurement.
+- "Studio writes ZSTD since ~2025" had no source for the year; "all 2,984 chunks used ZSTD" was
+  2,983 plus the uncompressed `END` chunk; "animated GIFs are static" is undocumented and untested,
+  now said as such. Place size, audio limits, Importer defaults and auto-recovery match the
+  official pages; `rbxfile` depends on an LZ4 codec only.
+
 ### Added — claims register
 
 - `tools/skill-test/claims.json` + `check_claims.py` + generated `docs/claims.md`: every
