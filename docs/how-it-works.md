@@ -78,22 +78,23 @@ ending in `.md`, and every call takes a `studio_id` that nothing will double-che
 ## Knowledge coverage
 
 Each row says when that file's content was last verified — not that it is current today. Since
-2.16.0 every code example in every file is also type-checked and run in Studio on each release
-([testing.md](testing.md)).
+2.16.0 every code example in every file is also type-checked and run in Studio on each release,
+and since 2.17.0 every high-risk statement in the prose is in a claims register with how it was
+verified ([testing.md](testing.md), [claims.md](claims.md)).
 
 | Topic | Status | Reference File |
 |-------|--------|---------------|
-| Luau language (strict mode, types, generics, `if local` beta) | ✅ **Luau 0.742** | `luau-fundamentals.md` |
-| Project architecture (services, Rojo, IAS) | ✅ **Oct 2026 (0.741)** | `project-structure.md` |
-| DataStore + ProfileStore + **MemoryStoreService** | ✅ Aug 2026 | `datastore-persistence.md` |
-| Client-Server networking + BindableEvent caveats | ✅ Aug 2026 | `networking.md` |
-| Security — player→server (BanAsync, server authority, exploits, script capabilities) | ✅ **Oct 2026** | `security-hardening.md` |
-| Safety — agent→Studio (destructive MCP ops, injection from place content) | ✅ Sep 2026 | `agent-safety.md` |
-| Worked examples (build / debug / migrate / verify / refuse / sell / migrate data / bind input) | ✅ **Oct 2026: every Verification section run in Studio 0.742** | `worked-examples.md` |
-| Performance (Parallel Luau, **RunService pipeline**, plugin-only fidelity/LOD/streaming settings) | ✅ **Oct 2026 (0.742, tested in Studio)** | `performance-optimization.md` |
-| MCP integration (26 documented tools / 28 observed) | ✅ **re-verified 2026-09-25** against the official docs page + live schemas | `mcp-integration.md` |
-| UI (**UIFlexItem**, **StyleSheet/StyleRule**, StyleQuery) | ✅ Aug 2026 | `ui-systems.md` |
-| Legacy migration (RunService events, **0.742 additions**, per-release API tables) | ✅ **Oct 2026 (0.742)** | `legacy-migration.md` |
-| Studio plugins, `Script.Source` limits, engine limits | ✅ measured Aug 2026 | `studio-plugins-and-limits.md` |
-| Monetization (Transfers, **Subscriptions**) | ✅ Aug 2026 | `monetization.md` |
-| File formats (**ZSTD/LZ4**, **MeshContent**, importing) | ✅ Aug 2026 | `file-formats-and-assets.md` |
+| Luau language (strict mode, types, generics, `if local` beta) | ✅ **Luau 0.742**, claims checked 2026-10-11 | `luau-fundamentals.md` |
+| Project architecture (services, Rojo, IAS, Script Sync) | ✅ claims checked 2026-10-11 | `project-structure.md` |
+| DataStore + ProfileStore + **MemoryStoreService** | ✅ claims checked 2026-10-11 (limits measured) | `datastore-persistence.md` |
+| Client-Server networking + BindableEvent caveats | ✅ claims checked 2026-10-11 | `networking.md` |
+| Security — player→server (BanAsync, server authority, exploits, script capabilities) | ✅ claims checked 2026-10-11 | `security-hardening.md` |
+| Safety — agent→Studio (destructive MCP ops, injection from place content) | ✅ claims checked 2026-10-11 (undo measured) | `agent-safety.md` |
+| Worked examples (build / debug / migrate / verify / refuse / sell / migrate data / bind input) | ✅ **every Verification section run in Studio 0.742**; receipts and migrations asserted on each test run | `worked-examples.md` |
+| Performance (Parallel Luau, **RunService pipeline**, plugin-only fidelity/LOD/streaming settings) | ✅ claims checked 2026-10-11 (0.742, tested in Studio) | `performance-optimization.md` |
+| MCP integration (26 documented tools / 30 observed) | ✅ **re-verified 2026-10-11** against the official docs page + live schemas | `mcp-integration.md` |
+| UI (**UIFlexItem**, **StyleSheet/StyleRule**, StyleQuery, UIShadow, per-corner UICorner) | ✅ claims checked 2026-10-11 | `ui-systems.md` |
+| Legacy migration (RunService events, **0.742 additions**, per-release API tables) | ✅ claims checked 2026-10-11 against dumps 0.723–0.742 | `legacy-migration.md` |
+| Studio plugins, `Script.Source` limits, engine limits | ✅ measured Aug 2026, source limits re-measured 2026-10-11 | `studio-plugins-and-limits.md` |
+| Monetization (Transfers, **Subscriptions**) | ✅ claims checked 2026-10-11 | `monetization.md` |
+| File formats (**ZSTD/LZ4**, **MeshContent**, importing) | ✅ claims checked 2026-10-11 | `file-formats-and-assets.md` |

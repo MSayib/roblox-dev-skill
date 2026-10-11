@@ -11,11 +11,17 @@ reference content was verified against at that time.
 
 ---
 
-## Unreleased
+## 2.17.0 — Oct 11, 2026
 
-**Fragments run, and the important examples assert what they do.** No engine change (0.742.0.7421053
-/ Luau 0.742). Every result below is from Studio 0.742 in the owner's test place through Rojo on
-port 34871, with all layers re-run after the last edit.
+**Every claim checked, the fragments run, and the important examples assert what they do.** No
+engine change (0.742.0.7421053 / Luau 0.742). Three new test layers: preludes that let the 48
+fragment blocks run, behavioural expectations on 27 blocks, and a claims register covering every
+high-risk prose line (652 claims: 187 run in Studio, 165 official docs, 64 API dump, 74 source,
+104 advice, **0 unverified**). Verifying them found **58 wrong statements**, each fixed and kept as
+a regression guard. Every result below is from Studio 0.742 in the owner's test place through Rojo
+on port 34871 (place 118652544255235), with all layers re-run after the last edit: server 97/97
+cases and 20/20 expectations, client 27/27 and 5/5, plugin 3/3 and 2/2, static 0 unexplained
+findings, API audit 0 defects.
 
 ### Fixed — found by running the 48 fragments for the first time
 
