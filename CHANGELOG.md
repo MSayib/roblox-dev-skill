@@ -11,11 +11,76 @@ reference content was verified against at that time.
 
 ---
 
-## Unreleased — Luau 0.741 (checked Oct 7, 2026; ships with the engine 0.742 ingest)
+## 2.15.0 — Oct 11, 2026
 
-**Luau 0.741, and `if local` is now a Studio beta that still cannot ship.** The engine is unchanged at
-0.741.19.7411056. `DeployHistory.txt` shows 0.742.0.7421053 deployed as `version-hidden` on Oct 5,
-but neither `WindowsStudio64` nor `MacStudio` serves it yet, so there is no new dump to ingest.
+**Engine 0.742.0.7421053 / Luau 0.742, with every developer-visible change run in Studio, and a
+correction to a claim this skill had made since 2.11.0.** Engine 0.742 went live on all four
+platforms (Windows and Mac, Studio and Player). Every row below marked *tested* was run in Studio
+0.742.0.7421053 on an empty baseplate. The probes ran from an ordinary server `Script`
+(`Sandboxed = false`) or a `LocalScript` during a playtest, and from MCP `execute_luau` for the
+plugin / command-bar level. The probe scripts were removed afterwards.
+
+### Corrected — `PluginOrOpenCloud` blocks ordinary game Scripts
+
+2.11.0 read the 0.740 dump, saw `CollisionFidelity`, `FluidFidelity`, `PartOperation.RenderFidelity`,
+`SmoothingAngle`, `Lighting.LightingStyle` and `PrioritizeLightingQuality` go to `Security: None`
+with a new `PluginOrOpenCloud` capability, and called them "script-writable at runtime". It also
+said the capability "only applies inside a sandboxed container". Neither claim was ever run.
+
+Tested in 0.742, a plain server Script fails on every one of those writes with
+`The current thread cannot write '<Property>' (lacking capability PluginOrOpenCloud)`. The same
+Script writes `Part.Color`, `Part.CanCollide` and `Humanoid.Health` (`AvatarBehavior`) without
+error, and `execute_luau` (plugin level) writes all of them. So `Security: None` +
+`PluginOrOpenCloud` is **plugin-only**. The capability metadata on these members did not change
+from 0.740 to 0.742, so the old text was most likely wrong from the start. 0.740 and 0.741 can no
+longer be run to prove it.
+
+- `performance-optimization.md` §3 is rewritten around the measured result. Its runtime
+  `CollectionService` loop is now labelled command bar / plugin only.
+  `legacy-migration.md`'s 0.740 rows, `security-hardening.md`'s capability table and
+  `worked-examples.md`'s "read three fields" step are corrected the same way.
+- `audit-skill-examples.py` treats a `PluginOrOpenCloud` read/write capability as plugin-only in
+  section A, instead of section B's "only bites inside a sandboxed container". That alone was not
+  enough: the 2.14.0 loop still passed as "plugin context", because its comment said "on older
+  clients do this in Studio or a plugin". A comment now counts as plugin context only when it
+  declares the block plugin-only ("command bar or plugin ONLY"). Code that uses plugin APIs still
+  counts as before. Run against the 2.14.0 references, the audit now reports the loop as a DEFECT
+  and exits 1. The current references pass with 0 defects.
+- Evals #33 and #47 had encoded the wrong answer (the runtime loop as correct). Both now expect the
+  loop to be refused for a game Script and offered for the command bar or a plugin.
+
+### Engine 0.742 (940 classes +10 −1, 648 enums +8 −1, 263 services, 48 deprecated)
+
+- **Seven more `PluginOrOpenCloud` relaxations, all still plugin-only (*tested*):**
+  `Workspace.StreamingEnabled`, `FallenPartsDestroyHeight`, `FallHeightEnabled`,
+  `LuauTypeCheckMode`, `Model.LevelOfDetail` (even reading fails), `MeshPart.RenderFidelity`, and
+  `HumanoidRigDescription.OriginOffset`. `performance-optimization.md` had said
+  "Enable via `Workspace.StreamingEnabled = true`". It now says Properties window: the official page
+  calls the property not scriptable, and the write fails.
+- **Present but not enabled (*tested*):** `Camera.ProjectionType` / `OrthographicSize` (writes are
+  silently ignored), `MeshPart:GetSurfaceSlotsAsync()`, the `TestService` test registry,
+  `MarketplaceService:CanUsersTransferRobuxAsync()` and `ModerationService:BindViolationProcessor()`,
+  each with its own "not enabled" error. `Workspace.ReplicationFrequency` / `ReplicationThroughput`
+  cannot even be read by a Script.
+- **Usable (*tested*):** `Decal.ResampleMode` (read/write) and `SurfaceAppearance.SurfaceSlot`
+  (read). `UIBlur` can be created and parented in `PlayerGui`, but whether it renders a blur was
+  **not** verified.
+- **Removed:** `AnimatedImage` and `Enum.AnimatedImagePlaybackState`. They were never usable: every
+  member was `RobloxScriptSecurity`.
+- No new page for any of these on create.roblox.com yet (checked in Roblox/creator-docs).
+
+### Luau 0.742
+
+- `coroutine.finally` is "no longer gated behind a debug flag". In the 0.742 source the flag was only
+  renamed (`DebugLuauCoroutineFinally` → `LuauCoroutineFinally`, plus
+  `LuauCoroutineFinallyAnalysis`) and still defaults to off. No Studio client setting enables it, and
+  **`coroutine.finally` is `nil` in Studio 0.742** (*tested*, Script and command bar). New prototype
+  flag: `DebugLuauUserDefinedClassesRuntime`.
+- Analysis fixes (strict-mode scope handling, unifier rewrite rules, `~nil` refinement of blocked
+  types, grouped `error` calls), a faster `string.gsub` for plain patterns, and compiler / NCG fixes.
+  No new standard-library function is usable in Roblox.
+- `if local` gates are unchanged, and the Studio beta flags are unchanged
+  (`FFlagLuauIfLocalBetaFeature = True`, rollout 0%).
 
 ### Changed — `if local` / `if const` became a Studio beta on 2026-10-06
 
@@ -32,7 +97,7 @@ and for collaborators without the beta, the beta's limits (one name and one valu
 `local` + `if` form. `if local` is shown only to a user who is experimenting in Studio, with a note
 that it must be rewritten before publishing.
 
-### Luau 0.741
+### Luau 0.741 (checked Oct 7, 2026)
 
 - Analysis: jump-to-definition works on function return annotations. A crash on a type assertion
   inside `typeof(...)` inside a type alias is fixed.
@@ -43,8 +108,13 @@ that it must be rewritten before publishing.
 - The feature gates are the same as in 0.740 (checked in the 0.741 source tarball). Exact tables,
   classes, `coroutine.finally` and the `integer` library are still off in Studio.
 
-### Evals 47 → 49
+### Evals 47 → 52
 
+- **#50**: `coroutine.finally` after the 0.742 release note. It is `nil` in Studio.
+- **#51**: toggling `StreamingEnabled` from a server Script. It cannot be done. The answer offers
+  `ModelStreamingMode` and `RequestStreamAroundAsync`, both run from a Script in Studio 0.742.
+- **#52**: an over-correction guard. `Humanoid.Health` writes and `CollisionFidelity` reads work
+  from a plain Script, so they must not be sent to a plugin.
 - **#48**: "it works in playtest, can I publish?" The correct answer is no: rewrite every `if local`
   before publishing.
 - **#49**: an over-correction guard. A user who has opted into the beta and wants to experiment in

@@ -1,6 +1,6 @@
 {
   "skill_name": "roblox-dev-skill",
-  "version": "2.14.0",
+  "version": "2.15.0",
   "evals": [
     {
       "id": 1,
@@ -271,7 +271,7 @@
       "expected_references": [
         "performance-optimization.md"
       ],
-      "notes": "Half the request is impossible. CollisionFidelity became script-writable in engine 0.740 (was PluginSecurity), but MeshPart.RenderFidelity is STILL PluginSecurity and was NOT relaxed. Correct answer scripts CollisionFidelity, refuses RenderFidelity at runtime, and points to Studio/plugin for it. Guards both the old false negative and an over-correction."
+      "notes": "Neither half can run from a game Script. CollisionFidelity (Security None since 0.740) and MeshPart.RenderFidelity (Security None since 0.742) both carry Capabilities.Write PluginOrOpenCloud, and an unsandboxed Script does not hold it: Studio 0.742 reports \"lacking capability PluginOrOpenCloud\" for both (tested 2026-10-11). Correct answer says the runtime loop fails, and offers the same loop for the command bar or a plugin, or setting both at author time. FAILS if it presents either write as working from a Script. Until 2.15.0 this note said CollisionFidelity was script-writable from 0.740; that was read from the dump and never run."
     },
     {
       "id": 34,
@@ -400,7 +400,7 @@
       "expected_references": [
         "performance-optimization.md"
       ],
-      "notes": "Over-correction guard for the NotScriptable lesson. TriangleMeshPart.CollisionFidelity is script-writable since engine 0.740 (Write: None), and it is NOT NotScriptable. Correct answer writes the CollectionService loop and does NOT send the user to the Properties window or a plugin for it. It may note that MeshPart.RenderFidelity is still PluginSecurity."
+      "notes": "TriangleMeshPart.CollisionFidelity is Security None but needs the PluginOrOpenCloud capability, so a server Script's write fails with \"lacking capability PluginOrOpenCloud\" (Studio 0.742, tested 2026-10-11). Correct answer says a server Script cannot do this and gives the CollectionService loop for the command bar or a plugin (which can write it, tested), or says to set it in the Properties window. It must NOT call the property NotScriptable: a plugin can write it, and reading it from a Script works. Until 2.15.0 this eval expected the runtime loop as the correct answer."
     },
     {
       "id": 48,
@@ -419,6 +419,33 @@
         "luau-fundamentals.md"
       ],
       "notes": "Over-correction guard for the `if local` lesson. The user has opted into the Studio beta for experimentation, so refusing is wrong. Correct answer shows nested `if local` statements (one name, one value each -- no `if local ok, err = pcall(...)`, no compound conditions) and notes the code must be rewritten before publishing."
+    },
+    {
+      "id": 50,
+      "prompt": "Luau 0.742 stopped gating coroutine.finally behind a debug flag. Use it in my Roblox server script to clean up when a coroutine dies.",
+      "should_trigger": true,
+      "expected_references": [
+        "luau-fundamentals.md"
+      ],
+      "notes": "The 0.742 change only renamed the gate (DebugLuauCoroutineFinally -> LuauCoroutineFinally, default off); no Studio client setting enables it, and coroutine.finally is nil in Studio 0.742 from a Script and from the command bar (tested 2026-10-11). Correct answer says it is not available in Roblox and writes the cleanup another way (pcall around the body, task.cancel/coroutine.close paths, or a Janitor/Trove). FAILS if it calls coroutine.finally."
+    },
+    {
+      "id": 51,
+      "prompt": "Turn StreamingEnabled off from a server script when the match starts, then back on after",
+      "should_trigger": true,
+      "expected_references": [
+        "performance-optimization.md"
+      ],
+      "notes": "Workspace.StreamingEnabled is a place setting: the official page says it is not scriptable and must be set in Studio, and in Studio 0.742 a server Script writing it fails with \"lacking capability PluginOrOpenCloud\" even though the dump's write security became None in 0.742 (tested 2026-10-11). Reading it works. Correct answer says it cannot be toggled at runtime and suggests what a Script can do instead: Model.ModelStreamingMode (written from a Script, tested) and Player:RequestStreamAroundAsync (called from a Script, tested), or a separate place. It must NOT suggest writing StreamingIntegrityMode/StreamingMinRadius/StreamingTargetRadius from a script (NotScriptable). FAILS if it writes workspace.StreamingEnabled = ... as working code."
+    },
+    {
+      "id": 52,
+      "prompt": "Write a server Script that damages players who touch a lava part and prints each lava MeshPart's CollisionFidelity",
+      "should_trigger": true,
+      "expected_references": [
+        "performance-optimization.md"
+      ],
+      "notes": "Over-correction guard for the PluginOrOpenCloud lesson. Humanoid.Health needs the AvatarBehavior capability, which an ordinary Script DOES hold, and reading CollisionFidelity is allowed: both work from a plain server Script in Studio 0.742 (tested 2026-10-11). Correct answer writes the Touched handler with humanoid health changes and reads CollisionFidelity, without claiming either needs a plugin. FAILS if it says the Script cannot do either."
     }
   ]
 }

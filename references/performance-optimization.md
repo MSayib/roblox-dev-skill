@@ -33,7 +33,8 @@ computation. More objects = more draw calls = lower frame rate.
 - **Merge decorative geometry** — combine small decorative parts into single MeshParts
 - **Reduce mechanism complexity** — minimize constraints/joints in assemblies
 - **Set `Model.LevelOfDetail`** to `Enum.ModelLevelOfDetail.SLIM` for distant models (in Studio's
-  Properties window or a plugin — it is `PluginSecurity`)
+  Properties window or a plugin — it needs the `PluginOrOpenCloud` capability, so a game Script can
+  neither read nor write it)
 - **Cull distant objects** — only spawn NPCs when users are nearby; despawn when out of range
 
 **Draw call instancing**: Roblox collapses identical meshes into a single draw call when
@@ -58,9 +59,9 @@ end
 - Unions store complex geometry data and can't benefit from instancing
 - MeshParts with identical `MeshContent` are collapsed into single draw calls
 - MeshParts support `SurfaceAppearance` for PBR materials
-- MeshParts have configurable `CollisionFidelity` and `RenderFidelity` — but note the write
-  permissions differ: `CollisionFidelity` is script-writable from engine 0.740, while
-  `MeshPart.RenderFidelity` remains **`PluginSecurity`** (Studio / plugin only). See §3.
+- MeshParts have configurable `CollisionFidelity` and `RenderFidelity` — set both at author time
+  (Properties window, plugin or command bar). Neither can be written from a game Script: both
+  need the `PluginOrOpenCloud` capability, which an ordinary Script does not hold. See §3.
 
 **Rule**: Use MeshParts created in external 3D tools (Blender, Maya) instead of building
 complex shapes from CSG unions in Studio.
@@ -87,40 +88,42 @@ Higher fidelity = more memory and computation.
 - Disable all collision channels (`CanCollide`, `CanTouch`, `CanQuery` = false) on
   purely decorative parts to save memory
 
-> ### ⚠️ `CollisionFidelity` only became script-writable in engine 0.740
+> ### ⚠️ Fidelity properties are plugin-only — a game Script cannot write them
 >
-> Verified by diffing the 0.739 and 0.740 Full API Dumps locally, 2026-09-25:
+> **Measured in Studio 0.742.0.7421053 on 2026-10-11**, from an ordinary server `Script`
+> (`Sandboxed = false`, in `ServerScriptService`, during a playtest). Every write below failed with
+> `The current thread cannot write '<Property>' (lacking capability PluginOrOpenCloud)`, while the
+> same Script wrote `Part.Color`, `Part.CanCollide` and `Humanoid.Health` without error:
 >
-> | Member | 0.739 `Security.Write` | 0.740 `Security.Write` | 0.740 `Capabilities.Write` |
+> | Member | `Security.Write` (dump) | `Capabilities.Write` (dump) | From a game Script |
 > |---|---|---|---|
-> | `TriangleMeshPart.CollisionFidelity` | `PluginSecurity` | **`None`** | `["PluginOrOpenCloud"]` |
-> | `TriangleMeshPart.FluidFidelity` | `PluginSecurity` | **`None`** | `["PluginOrOpenCloud"]` |
-> | `PartOperation.RenderFidelity` | `PluginSecurity` | **`None`** | `["PluginOrOpenCloud"]` |
-> | `PartOperation.SmoothingAngle` | `PluginSecurity` | **`None`** | `["PluginOrOpenCloud"]` |
-> | `MeshPart.RenderFidelity` | `PluginSecurity` | **`PluginSecurity`** (unchanged) | — |
+> | `TriangleMeshPart.CollisionFidelity` | `None` since 0.740 (was `PluginSecurity`) | `PluginOrOpenCloud` | ❌ fails |
+> | `TriangleMeshPart.FluidFidelity` | `None` since 0.740 | `PluginOrOpenCloud` | ❌ fails |
+> | `PartOperation.RenderFidelity` / `.SmoothingAngle` | `None` since 0.740 | `PluginOrOpenCloud` | ❌ fails |
+> | `MeshPart.RenderFidelity` | `None` since **0.742** (was `PluginSecurity`) | `PluginOrOpenCloud` | ❌ fails |
+> | `Model.LevelOfDetail` | `None` since **0.742** (was `PluginSecurity`) | `PluginOrOpenCloud` (read **and** write) | ❌ even reading fails |
 >
-> **What this means in an ordinary experience:** the runtime example below **could not work from a
-> normal Script before 0.740** — writing `CollisionFidelity` threw a lacking-capability error, and
-> only a plugin or the command bar could do it. From 0.740 it works. This file previously shipped
-> that example with no such caveat. **On an older client, set `CollisionFidelity` at author time in
-> Studio instead.**
+> **Correction (2.15.0).** From 2.11.0 to 2.14.0 this section said these became "script-writable at
+> runtime" in 0.740 and that the `PluginOrOpenCloud` capability "only applies inside a sandboxed
+> container". Both claims were read from the dump and never run. A Security change from
+> `PluginSecurity` to `None` plus a new `PluginOrOpenCloud` capability **moves the gate; it does not
+> open it**: an unsandboxed game Script does not hold `PluginOrOpenCloud`. The capability metadata on
+> these members did not change between 0.740 and 0.742, so the old text was most likely wrong from
+> the start (0.740 and 0.741 can no longer be run to prove it).
 >
-> **Do not generalize the change.** `MeshPart.RenderFidelity` was **not** relaxed — MeshPart
-> overrides the property and it is still `PluginSecurity`. So on a MeshPart you can now script
-> `CollisionFidelity` but still **not** `RenderFidelity`.
->
-> **The gate moved rather than vanished.** 0.740 also attaches `Capabilities.Write:
-> ["PluginOrOpenCloud"]` to each relaxed member. Capabilities only apply inside a **sandboxed
-> container**, which is experimental and opt-in (`Workspace.SandboxedInstanceMode` must be set to
-> `Experimental` in the Properties window — it is `NotScriptable` — and the container marked
-> `Sandboxed`) — so in a default experience this does not
-> affect you. `PluginOrOpenCloud` is **not listed on the public Script capabilities page**, so if
-> you do use sandboxing, test the write rather than trusting this table.
+> **Set fidelity at author time**: in the Properties window, or from a plugin or the command bar
+> (both hold the capability; every member above was written at that level without a capability
+> error). `CollisionFidelity` can still be **read** from a game Script. One caveat from the same
+> test: on a new, empty, unparented `MeshPart` / `UnionOperation`, `FluidFidelity` and
+> `PartOperation.RenderFidelity` read back `Automatic` after the write, while
+> `CollisionFidelity` and `MeshPart.RenderFidelity` kept the new value. Check the value on a real
+> part after setting it.
 
 ```luau
 --!strict
--- Batch-set non-collidable decorative parts to Box fidelity.
--- Requires engine 0.740+ at runtime; on older clients do this in Studio or a plugin.
+-- Command bar or plugin ONLY (needs the PluginOrOpenCloud capability).
+-- A game Script running this fails with "lacking capability PluginOrOpenCloud".
+-- Set non-collidable decorative MeshParts to Box fidelity at author time.
 local CollectionService = game:GetService("CollectionService")
 
 for _, part in CollectionService:GetTagged("Decorative") do
@@ -150,8 +153,9 @@ Per docs: *"Handling shadows is an expensive process."*
 
 - Set `MeshPart.RenderFidelity` to `Automatic` or `Performance` — allows engine to use
   lower-poly alternatives at distance
-- Set `Model.LevelOfDetail` to `SLIM` for distant model representations (`PluginSecurity`:
-  set it in Studio's Properties window or from a plugin, not from a game Script)
+- Set `Model.LevelOfDetail` to `SLIM` for distant model representations (plugin-only through the
+  `PluginOrOpenCloud` capability: set it in Studio's Properties window or from a plugin, not from a
+  game Script)
 - Enable `Workspace.EnableSLIMAvatars` for optimized distant avatar rendering — a Properties-window
   setting (`Enum.RolloutState`); it is `NotScriptable`, so no script can set it
 
@@ -551,9 +555,14 @@ Per docs: *"Instance streaming selectively loads out parts of the data model tha
 required, which can lead to considerably reduced load times and increase the client's
 ability to prevent crashes when it comes under memory pressure."*
 
-Enable via `Workspace.StreamingEnabled = true`.
+Enable it in the Properties window (Workspace → `StreamingEnabled`). It is **not scriptable** for
+game code: the official page says it "must be set on the `Workspace` object in Studio", and in
+Studio 0.742 a game Script writing it fails with "lacking capability PluginOrOpenCloud" (the dump's
+write security changed from `PluginSecurity` to `None` in 0.742, but the capability keeps it
+plugin-only). A Script may read it.
 
-**Key properties:**
+**Key properties** (Properties window only: all three are `NotScriptable`, and a Script indexing
+`StreamingIntegrityMode` gets "is not a valid member of Workspace" in Studio 0.742):
 - `StreamingMinRadius` — minimum distance (studs) that content always streams in
 - `StreamingTargetRadius` — target distance the engine tries to maintain
 - `StreamingIntegrityMode` — behavior when required content isn't loaded yet
