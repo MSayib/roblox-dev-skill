@@ -8,7 +8,7 @@ Every factual claim a reader could act on wrongly, with how it was verified. **s
 |---|---|---|---|---|---|---|---|
 | `SKILL.md` | 20 | 3 | 2 | 11 | 17 | 0 | 3 |
 | `references/agent-safety.md` | 0 | 0 | 0 | 0 | 0 | 26 | 0 |
-| `references/datastore-persistence.md` | 0 | 0 | 0 | 0 | 0 | 29 | 0 |
+| `references/datastore-persistence.md` | 6 | 13 | 0 | 4 | 9 | 0 | 6 |
 | `references/file-formats-and-assets.md` | 0 | 0 | 0 | 0 | 0 | 16 | 0 |
 | `references/legacy-migration.md` | 20 | 22 | 41 | 6 | 3 | 0 | 13 |
 | `references/luau-fundamentals.md` | 11 | 10 | 1 | 40 | 3 | 0 | 3 |
@@ -21,7 +21,7 @@ Every factual claim a reader could act on wrongly, with how it was verified. **s
 | `references/studio-plugins-and-limits.md` | 1 | 0 | 0 | 0 | 0 | 25 | 0 |
 | `references/ui-systems.md` | 1 | 0 | 0 | 0 | 0 | 8 | 1 |
 | `references/worked-examples.md` | 17 | 4 | 4 | 1 | 19 | 0 | 1 |
-| **total** | **141** | **94** | **56** | **66** | **56** | **160** | **36** |
+| **total** | **147** | **107** | **56** | **70** | **65** | **131** | **42** |
 
 ## Verified claims
 
@@ -61,6 +61,22 @@ Every factual claim a reader could act on wrongly, with how it was verified. **s
 | `SKILL.md`: **`/roblox-update` is NOT a registered slash command.** Earlier versions of this file presented it | source | No roblox-update command in ~/.claude/commands (2026-10-11); the repo ships no commands/ directory. (ls ~/.claude/commands; repo tree) |
 | `SKILL.md`: as one; it has never been installed in `~/.claude/commands/` or shipped by a plugin, so typing it | source | No roblox-update command in ~/.claude/commands (2026-10-11); the repo ships no commands/ directory. (ls ~/.claude/commands; repo tree) |
 | `SKILL.md`: `name` field above, and stricter agents skip a skill whose folder does not. | docs | Spec: the skill directory name must match the name field; skills-ref validate rejects a mismatch (2.16.0). (agentskills specification (skills-ref)) |
+| `references/datastore-persistence.md`: **Critical rule:** DataStoreService is **server-side only**. Attempting to access | docs | "Attempting client-side access in a LocalScript causes an error." (creator-docs cloud-services/data-stores/index.md) |
+| `references/datastore-persistence.md`: it from a `LocalScript` throws an error. All DataStore calls must live in `Script` | docs | As above. (creator-docs cloud-services/data-stores/index.md) |
+| `references/datastore-persistence.md`: **Budget cost** \| Write limit only \| Both read AND write limits | docs | UpdateAsync is listed under both the Read and the Write throughput limits; SetAsync only under Write. (Roblox/creator-docs cloud-services/data-stores/error-codes-and-limits.md) |
+| `references/datastore-persistence.md`: Read \| 25 MB per minute per key | docs | Per-key throughput: Read 25 MB per minute. (Roblox/creator-docs cloud-services/data-stores/error-codes-and-limits.md) |
+| `references/datastore-persistence.md`: Write \| 4 MB per minute per key | docs | Per-key throughput: Write 4 MB per minute. (Roblox/creator-docs cloud-services/data-stores/error-codes-and-limits.md) |
+| `references/datastore-persistence.md`: Key value (data) \| 4,194,304 (4 MB) | docs | "4,194,304 per key". (Roblox/creator-docs cloud-services/data-stores/error-codes-and-limits.md) |
+| `references/datastore-persistence.md`: Queue limit: 30 requests per queue. When full, requests are dropped (error 301–306). | docs | "Each queue has a limit of 30 requests ... error code in the 301-306 range". (Roblox/creator-docs cloud-services/data-stores/error-codes-and-limits.md) |
+| `references/datastore-persistence.md`: `OrderedDataStore` stores **integer values only** and supports sorted queries. | studio | SetAsync 5 and -3 accepted; 1.5 -> "103: double is not allowed"; "7" -> "103: string is not allowed". (Studio 0.742 playtest, execute_luau Server, 2026-10-11) |
+| `references/datastore-persistence.md`: **Note:** OrderedDataStore does NOT support versioning or metadata. | docs | "Ordered data stores don't support versioning and metadata". (creator-docs cloud-services/data-stores/index.md) |
+| `references/datastore-persistence.md`: `HashMap` \| 128 chars \| 32 KB \| Session state, cross-server cache | docs | "key size limit of 128 characters and a value size limit of 32 KB". (Roblox/creator-docs cloud-services/memory-stores (index, sorted-map, hash-map) and MemoryStore* reference) |
+| `references/datastore-persistence.md`: **Caution:** MemoryStoreService is for **temporary** data only. It is not a | docs | Items expire (TTL eviction). (Roblox/creator-docs cloud-services/memory-stores (index, sorted-map, hash-map) and MemoryStore* reference) |
+| `references/datastore-persistence.md`: write overwrites them. The latest version never expires. | docs | "Versioned backups expire 30 days after a new write overwrites them. The latest version never expires." (creator-docs versioning-listing-and-caching.md) |
+| `references/datastore-persistence.md`: As of April 9, 2026, DataStore limits are calculated at **experience level** (not per-server). | docs | "As of April 9, we have begun rolling out Data Stores Storage Limits and Modern Experience-Level Access Limits". (DevForum topic 4504347 (Roblox Staff), April 9 update) |
+| `references/datastore-persistence.md`: Only **one server** can "own" a player's data at a time | source | ProfileStore session locking (SESSION_STEAL, ASSUME_DEAD). (ProfileStore.luau (official repo) / ProfileService.lua) |
+| `references/datastore-persistence.md`: Automatically saves data at regular intervals (default: **300 seconds**) | source | AUTO_SAVE_PERIOD = 300. (ProfileStore.luau (official repo) / ProfileService.lua) |
+| `references/datastore-persistence.md`: **Auto-save interval** \| 30 seconds \| 300 seconds (configurable) | source | ProfileService SETTINGS.AutoSaveProfiles = 30; ProfileStore AUTO_SAVE_PERIOD = 300, settable via ProfileStore.SetConstant. (ProfileStore.luau (official repo) / ProfileService.lua) |
 | `references/legacy-migration.md`: `LocalizationService:GetTranslatorForPlayer()` \| `:GetTranslatorForPlayerAsync()` \| ⚠️ Mostly \| Deprecated in engine **0.740**. The async form **yields** — w | dump | GetTranslatorForPlayer gained Deprecated in 0.740 (not in 0.739); GetTranslatorForPlayerAsync has Yields. (scratchpad verify_legacy_dump.py over local dumps 0.733-0.742 (81 assertions)) |
 | `references/legacy-migration.md`: `CallingService:CreateCall()` \| `:CreateCallAsync()` \| — \| Renamed in 0.739 and now yields — but **both are `RobloxScriptSecurity`**, as is every `CallingSer | dump | CallingService first in 0.737; every member in 0.737-0.742 RobloxScriptSecurity; CreateCall in 0.738, CreateCallAsync (Yields) in 0.739. (scratchpad verify_legacy_dump.py over local dumps 0.733-0.742 (81 assertions)) |
 | `references/legacy-migration.md`: standard replacement (available since 2021). | docs | Task library announced 2021-08-02. (DevForum topic 1387845 "Task Library - Now Available!" (2021-08-02)) |
@@ -421,3 +437,16 @@ Every factual claim a reader could act on wrongly, with how it was verified. **s
 | `references/security-hardening.md`: available as a client beta** (official docs, re-read 2026-10-11), and the whole system is **off by | docs | "Script capabilities are experimental and available as a client beta." (Roblox/creator-docs scripting/capabilities.md (read 2026-10-11)) |
 | `references/security-hardening.md`: ### Server Authority (Client Beta — Updated April 2026) | false | Full release 2026-07-09 (DevForum 4727993). |
 | `references/security-hardening.md`: The most reliable solution for preventing physics and movement exploits | false | Quote not found in the current official pages. |
+| `references/datastore-persistence.md`: `SortedMap` \| 128 chars (sort key 128 chars) \| 32 KB \| Leaderboards, matchmaking queues | studio | Docs: key 128 chars, value 32 KB, sort key 128 chars. 32 KB accepted, 33 KB ItemValueSizeTooLarge. (Roblox/creator-docs cloud-services/memory-stores (index, sorted-map, hash-map) and MemoryStore* reference; Studio 0.742 playtest, execute_luau Server, 2026-10-11) |
+| `references/datastore-persistence.md`: `Queue` \| — \| 32 KB per item (measured: not stated on the official page) \| Job queues, event pipelines | studio | 32 KB item accepted, 33 KB ItemValueSizeTooLarge; size not stated on the page. (Studio 0.742 playtest, execute_luau Server, 2026-10-11) |
+| `references/datastore-persistence.md`: A single sorted map or queue holds at most 1,000,000 items and 100 MB. Measured in Studio 0.742: | docs | "Maximum number of items: 1,000,000; Maximum total size: 100 MB". (Roblox/creator-docs cloud-services/memory-stores (index, sorted-map, hash-map) and MemoryStore* reference) |
+| `references/datastore-persistence.md`: a 32 KB value or queue item was accepted, 33 KB failed with `ItemValueSizeTooLarge`. | studio | As measured. (Studio 0.742 playtest, execute_luau Server, 2026-10-11) |
+| `references/datastore-persistence.md`: Memory \| `64 KB + 1.2 KB × [number of users]` for the whole game; a playtest reported a quota of 65,536 bytes | studio | Docs formula; playtest error quoted a quota of 65536 bytes. (Roblox/creator-docs cloud-services/memory-stores (index, sorted-map, hash-map) and MemoryStore* reference; Studio 0.742 playtest, execute_luau Server, 2026-10-11) |
+| `references/datastore-persistence.md`: Expiration \| 0 to 3,888,000 seconds (45 days, also the default); outside that range: `InvalidExpirationTime` | studio | Reference: maximum 45 days (3,888,000 s), default 45 days; playtest: "expiration time must be between 0 and 3,888,000". (Roblox/creator-docs cloud-services/memory-stores (index, sorted-map, hash-map) and MemoryStore* reference; Studio 0.742 playtest, execute_luau Server, 2026-10-11) |
+| `references/datastore-persistence.md`: Last commit to its repository: June 2023; it does not use DataStore versioning or metadata | source | pushed_at 2023-06-27. (GitHub API repos/Kampfkarren/Roblox) |
+| `references/datastore-persistence.md`: \| `SortedMap` \| 128 chars \| 1 KB \| | false | Docs and measurement: 32 KB. |
+| `references/datastore-persistence.md`: \| `Queue` \| — \| 1 KB per item \| | false | Measured: 32 KB accepted. |
+| `references/datastore-persistence.md`: `1000 + 100 × numPlayers` requests/min | false | Docs: 1000 + 120 x concurrent users request units, shared. |
+| `references/datastore-persistence.md`: 64 MB per partition (per universe) | false | Docs: 64 KB + 1.2 KB x users; playtest quota 65,536 bytes. |
+| `references/datastore-persistence.md`: \| Min TTL \| 10 seconds \| | false | Expiration accepted range 0 to 3,888,000. |
+| `references/datastore-persistence.md`: ### DataStore2 (Berezaa) | false | Module by Kampfkarren; the method is berezaa's. |

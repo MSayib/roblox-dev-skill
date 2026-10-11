@@ -152,6 +152,21 @@ against the 0.737–0.742 source tarballs, and the beta claims against the staff
 - Every other claim in the file held: its verification sections were run in 2.16.0 and the
   receipt and migration ones again today as harness expectations.
 
+### Fixed — found by verifying `datastore-persistence.md` claim by claim
+
+- **The MemoryStore limits table was wrong in five places.** Sorted map values and queue items are
+  32 KB, not 1 KB (measured: 32 KB accepted, 33 KB `ItemValueSizeTooLarge`); the request quota is
+  `1000 + 120 × concurrent users` request units shared by all calls, not `1000 + 100 × players`
+  each for read and write; memory is `64 KB + 1.2 KB × users` per game, not "64 MB per
+  partition" (a playtest reported a 65,536-byte quota); expiration is 0–3,888,000 s, there is no
+  10-second minimum (`InvalidExpirationTime` quotes the range). Rewritten from the official pages
+  and the measurements.
+- **DataStore2 is Kampfkarren's module**, not berezaa's (berezaa conceived its default saving
+  method). Its "deprecated" reasons now say what its source shows and that the label is this
+  skill's advice, not a Roblox status.
+- Measured: an `OrderedDataStore` rejects `1.5` and `"7"` with error 103 and accepts negative
+  integers. ProfileStore's 300 s auto-save is settable with `ProfileStore.SetConstant`.
+
 ### Added — claims register
 
 - `tools/skill-test/claims.json` + `check_claims.py` + generated `docs/claims.md`: every

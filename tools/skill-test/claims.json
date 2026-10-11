@@ -782,7 +782,7 @@
    "id": "datastore-persistence-001",
    "file": "references/datastore-persistence.md",
    "quote": "[Error Codes & Limits](https://create.roblox.com/docs/cloud-services/data-stores/error-codes-and-limits) ·",
-   "status": "unverified",
+   "status": "advice",
    "kind": "negative",
    "source": "",
    "evidence": "",
@@ -792,7 +792,7 @@
    "id": "datastore-persistence-002",
    "file": "references/datastore-persistence.md",
    "quote": "[Error Handling with pcall](#error-handling-with-pcall)",
-   "status": "unverified",
+   "status": "advice",
    "kind": "negative",
    "source": "",
    "evidence": "",
@@ -802,7 +802,7 @@
    "id": "datastore-persistence-003",
    "file": "references/datastore-persistence.md",
    "quote": "[Storage & Access Limits (2026)](#storage--access-limits-2026)",
-   "status": "unverified",
+   "status": "advice",
    "kind": "number",
    "source": "",
    "evidence": "",
@@ -812,27 +812,27 @@
    "id": "datastore-persistence-004",
    "file": "references/datastore-persistence.md",
    "quote": "**Critical rule:** DataStoreService is **server-side only**. Attempting to access",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "creator-docs cloud-services/data-stores/index.md",
+   "evidence": "\"Attempting client-side access in a LocalScript causes an error.\"",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "datastore-persistence-005",
    "file": "references/datastore-persistence.md",
    "quote": "it from a `LocalScript` throws an error. All DataStore calls must live in `Script`",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "creator-docs cloud-services/data-stores/index.md",
+   "evidence": "As above.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "datastore-persistence-006",
    "file": "references/datastore-persistence.md",
    "quote": "**Speed** | Faster (write only) | Slower (read then write)",
-   "status": "unverified",
+   "status": "advice",
    "kind": "negative",
    "source": "",
    "evidence": "",
@@ -842,17 +842,17 @@
    "id": "datastore-persistence-007",
    "file": "references/datastore-persistence.md",
    "quote": "**Budget cost** | Write limit only | Both read AND write limits",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Roblox/creator-docs cloud-services/data-stores/error-codes-and-limits.md",
+   "evidence": "UpdateAsync is listed under both the Read and the Write throughput limits; SetAsync only under Write.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "datastore-persistence-008",
    "file": "references/datastore-persistence.md",
    "quote": "only for fire-and-forget writes where overwrites are acceptable (e.g., analytics",
-   "status": "unverified",
+   "status": "advice",
    "kind": "negative",
    "source": "",
    "evidence": "",
@@ -862,7 +862,7 @@
    "id": "datastore-persistence-009",
    "file": "references/datastore-persistence.md",
    "quote": "**All DataStore calls are network requests and can fail.** You MUST wrap every",
-   "status": "unverified",
+   "status": "advice",
    "kind": "negative",
    "source": "",
    "evidence": "",
@@ -872,7 +872,7 @@
    "id": "datastore-persistence-010",
    "file": "references/datastore-persistence.md",
    "quote": "call in `pcall`. This is not optional.",
-   "status": "unverified",
+   "status": "advice",
    "kind": "negative",
    "source": "",
    "evidence": "",
@@ -882,177 +882,127 @@
    "id": "datastore-persistence-011",
    "file": "references/datastore-persistence.md",
    "quote": "Read | 25 MB per minute per key",
-   "status": "unverified",
+   "status": "docs",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Roblox/creator-docs cloud-services/data-stores/error-codes-and-limits.md",
+   "evidence": "Per-key throughput: Read 25 MB per minute.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "datastore-persistence-012",
    "file": "references/datastore-persistence.md",
    "quote": "Write | 4 MB per minute per key",
-   "status": "unverified",
+   "status": "docs",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Roblox/creator-docs cloud-services/data-stores/error-codes-and-limits.md",
+   "evidence": "Per-key throughput: Write 4 MB per minute.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "datastore-persistence-013",
    "file": "references/datastore-persistence.md",
    "quote": "Key value (data) | 4,194,304 (4 MB)",
-   "status": "unverified",
+   "status": "docs",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Roblox/creator-docs cloud-services/data-stores/error-codes-and-limits.md",
+   "evidence": "\"4,194,304 per key\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "datastore-persistence-014",
    "file": "references/datastore-persistence.md",
    "quote": "Queue limit: 30 requests per queue. When full, requests are dropped (error 301–306).",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Roblox/creator-docs cloud-services/data-stores/error-codes-and-limits.md",
+   "evidence": "\"Each queue has a limit of 30 requests ... error code in the 301-306 range\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "datastore-persistence-015",
    "file": "references/datastore-persistence.md",
    "quote": "`OrderedDataStore` stores **integer values only** and supports sorted queries.",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Studio 0.742 playtest, execute_luau Server, 2026-10-11",
+   "evidence": "SetAsync 5 and -3 accepted; 1.5 -> \"103: double is not allowed\"; \"7\" -> \"103: string is not allowed\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "datastore-persistence-016",
    "file": "references/datastore-persistence.md",
    "quote": "**Note:** OrderedDataStore does NOT support versioning or metadata.",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "datastore-persistence-017",
-   "file": "references/datastore-persistence.md",
-   "quote": "`SortedMap` | 128 chars | 1 KB | Leaderboards, matchmaking queues",
-   "status": "unverified",
-   "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "datastore-persistence-018",
-   "file": "references/datastore-persistence.md",
-   "quote": "`Queue` | — | 1 KB per item | Job queues, event pipelines",
-   "status": "unverified",
-   "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "creator-docs cloud-services/data-stores/index.md",
+   "evidence": "\"Ordered data stores don't support versioning and metadata\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "datastore-persistence-019",
    "file": "references/datastore-persistence.md",
    "quote": "`HashMap` | 128 chars | 32 KB | Session state, cross-server cache",
-   "status": "unverified",
+   "status": "docs",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "datastore-persistence-020",
-   "file": "references/datastore-persistence.md",
-   "quote": "Total data | 64 MB per partition (per universe)",
-   "status": "unverified",
-   "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "datastore-persistence-021",
-   "file": "references/datastore-persistence.md",
-   "quote": "Min TTL | 10 seconds",
-   "status": "unverified",
-   "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Roblox/creator-docs cloud-services/memory-stores (index, sorted-map, hash-map) and MemoryStore* reference",
+   "evidence": "\"key size limit of 128 characters and a value size limit of 32 KB\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "datastore-persistence-022",
    "file": "references/datastore-persistence.md",
    "quote": "**Caution:** MemoryStoreService is for **temporary** data only. It is not a",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Roblox/creator-docs cloud-services/memory-stores (index, sorted-map, hash-map) and MemoryStore* reference",
+   "evidence": "Items expire (TTL eviction).",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "datastore-persistence-023",
    "file": "references/datastore-persistence.md",
    "quote": "write overwrites them. The latest version never expires.",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "creator-docs versioning-listing-and-caching.md",
+   "evidence": "\"Versioned backups expire 30 days after a new write overwrites them. The latest version never expires.\"",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "datastore-persistence-024",
    "file": "references/datastore-persistence.md",
    "quote": "As of April 9, 2026, DataStore limits are calculated at **experience level** (not per-server).",
-   "status": "unverified",
+   "status": "docs",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "DevForum topic 4504347 (Roblox Staff), April 9 update",
+   "evidence": "\"As of April 9, we have begun rolling out Data Stores Storage Limits and Modern Experience-Level Access Limits\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "datastore-persistence-025",
    "file": "references/datastore-persistence.md",
    "quote": "Only **one server** can \"own\" a player's data at a time",
-   "status": "unverified",
+   "status": "source",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "ProfileStore.luau (official repo) / ProfileService.lua",
+   "evidence": "ProfileStore session locking (SESSION_STEAL, ASSUME_DEAD).",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "datastore-persistence-026",
    "file": "references/datastore-persistence.md",
    "quote": "Automatically saves data at regular intervals (default: **300 seconds**)",
-   "status": "unverified",
+   "status": "source",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "ProfileStore.luau (official repo) / ProfileService.lua",
+   "evidence": "AUTO_SAVE_PERIOD = 300.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "datastore-persistence-027",
    "file": "references/datastore-persistence.md",
    "quote": "**Never store Instances** — only serializable Luau types (string, number, boolean, table, buffer)",
-   "status": "unverified",
-   "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "datastore-persistence-028",
-   "file": "references/datastore-persistence.md",
-   "quote": "**Why it's deprecated:**",
-   "status": "unverified",
+   "status": "advice",
    "kind": "negative",
    "source": "",
    "evidence": "",
@@ -1062,11 +1012,11 @@
    "id": "datastore-persistence-029",
    "file": "references/datastore-persistence.md",
    "quote": "**Auto-save interval** | 30 seconds | 300 seconds (configurable)",
-   "status": "unverified",
+   "status": "source",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "ProfileStore.luau (official repo) / ProfileService.lua",
+   "evidence": "ProfileService SETTINGS.AutoSaveProfiles = 30; ProfileStore AUTO_SAVE_PERIOD = 300, settable via ProfileStore.SetConstant.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "file-formats-and-assets-001",
@@ -6097,6 +6047,146 @@
    "source": "",
    "evidence": "",
    "checked": ""
+  },
+  {
+   "id": "datastore-persistence-028",
+   "file": "references/datastore-persistence.md",
+   "quote": "`SortedMap` | 128 chars (sort key 128 chars) | 32 KB | Leaderboards, matchmaking queues",
+   "status": "studio",
+   "kind": "number",
+   "source": "Roblox/creator-docs cloud-services/memory-stores (index, sorted-map, hash-map) and MemoryStore* reference; Studio 0.742 playtest, execute_luau Server, 2026-10-11",
+   "evidence": "Docs: key 128 chars, value 32 KB, sort key 128 chars. 32 KB accepted, 33 KB ItemValueSizeTooLarge.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "datastore-persistence-030",
+   "file": "references/datastore-persistence.md",
+   "quote": "`Queue` | — | 32 KB per item (measured: not stated on the official page) | Job queues, event pipelines",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.742 playtest, execute_luau Server, 2026-10-11",
+   "evidence": "32 KB item accepted, 33 KB ItemValueSizeTooLarge; size not stated on the page.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "datastore-persistence-031",
+   "file": "references/datastore-persistence.md",
+   "quote": "A single sorted map or queue holds at most 1,000,000 items and 100 MB. Measured in Studio 0.742:",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs cloud-services/memory-stores (index, sorted-map, hash-map) and MemoryStore* reference",
+   "evidence": "\"Maximum number of items: 1,000,000; Maximum total size: 100 MB\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "datastore-persistence-032",
+   "file": "references/datastore-persistence.md",
+   "quote": "a 32 KB value or queue item was accepted, 33 KB failed with `ItemValueSizeTooLarge`.",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.742 playtest, execute_luau Server, 2026-10-11",
+   "evidence": "As measured.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "datastore-persistence-033",
+   "file": "references/datastore-persistence.md",
+   "quote": "Memory | `64 KB + 1.2 KB × [number of users]` for the whole game; a playtest reported a quota of 65,536 bytes",
+   "status": "studio",
+   "kind": "number",
+   "source": "Roblox/creator-docs cloud-services/memory-stores (index, sorted-map, hash-map) and MemoryStore* reference; Studio 0.742 playtest, execute_luau Server, 2026-10-11",
+   "evidence": "Docs formula; playtest error quoted a quota of 65536 bytes.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "datastore-persistence-034",
+   "file": "references/datastore-persistence.md",
+   "quote": "Expiration | 0 to 3,888,000 seconds (45 days, also the default); outside that range: `InvalidExpirationTime`",
+   "status": "studio",
+   "kind": "number",
+   "source": "Roblox/creator-docs cloud-services/memory-stores (index, sorted-map, hash-map) and MemoryStore* reference; Studio 0.742 playtest, execute_luau Server, 2026-10-11",
+   "evidence": "Reference: maximum 45 days (3,888,000 s), default 45 days; playtest: \"expiration time must be between 0 and 3,888,000\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "datastore-persistence-035",
+   "file": "references/datastore-persistence.md",
+   "quote": "**Why to move off it** (it is a community module; \"deprecated\" here is this skill's advice, not a",
+   "status": "advice",
+   "kind": "negative",
+   "source": "",
+   "evidence": "",
+   "checked": ""
+  },
+  {
+   "id": "datastore-persistence-036",
+   "file": "references/datastore-persistence.md",
+   "quote": "Last commit to its repository: June 2023; it does not use DataStore versioning or metadata",
+   "status": "source",
+   "kind": "negative",
+   "source": "GitHub API repos/Kampfkarren/Roblox",
+   "evidence": "pushed_at 2023-06-27.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "false-sortedmap-1kb",
+   "file": "references/datastore-persistence.md",
+   "quote": "| `SortedMap` | 128 chars | 1 KB |",
+   "kind": "regression",
+   "status": "false",
+   "source": "",
+   "evidence": "Docs and measurement: 32 KB.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "false-queue-1kb",
+   "file": "references/datastore-persistence.md",
+   "quote": "| `Queue` | — | 1 KB per item |",
+   "kind": "regression",
+   "status": "false",
+   "source": "",
+   "evidence": "Measured: 32 KB accepted.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "false-memorystore-formula",
+   "file": "references/datastore-persistence.md",
+   "quote": "`1000 + 100 × numPlayers` requests/min",
+   "kind": "regression",
+   "status": "false",
+   "source": "",
+   "evidence": "Docs: 1000 + 120 x concurrent users request units, shared.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "false-memorystore-64mb",
+   "file": "references/datastore-persistence.md",
+   "quote": "64 MB per partition (per universe)",
+   "kind": "regression",
+   "status": "false",
+   "source": "",
+   "evidence": "Docs: 64 KB + 1.2 KB x users; playtest quota 65,536 bytes.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "false-memorystore-min-ttl",
+   "file": "references/datastore-persistence.md",
+   "quote": "| Min TTL | 10 seconds |",
+   "kind": "regression",
+   "status": "false",
+   "source": "",
+   "evidence": "Expiration accepted range 0 to 3,888,000.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "false-datastore2-berezaa",
+   "file": "references/datastore-persistence.md",
+   "quote": "### DataStore2 (Berezaa)",
+   "kind": "regression",
+   "status": "false",
+   "source": "",
+   "evidence": "Module by Kampfkarren; the method is berezaa's.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   }
  ]
 }
