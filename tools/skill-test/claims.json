@@ -3452,7 +3452,7 @@
    "id": "project-structure-001",
    "file": "references/project-structure.md",
    "quote": "`ModuleScript` | Where required | `ReplicatedStorage` (shared), `ServerScriptService` (server-only)",
-   "status": "unverified",
+   "status": "advice",
    "kind": "negative",
    "source": "",
    "evidence": "",
@@ -3462,57 +3462,37 @@
    "id": "project-structure-002",
    "file": "references/project-structure.md",
    "quote": "Server-only scripts. **Never replicated to clients.** Contains `Script` objects",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Roblox/creator-docs reference classes (ServerStorage, ServerScriptService, ReplicatedFirst, PlayerScripts)",
+   "evidence": "ServerScriptService: \"contents are never replicated to player clients\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "project-structure-003",
    "file": "references/project-structure.md",
    "quote": "and `ModuleScript` objects required only by server code.",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Roblox/creator-docs reference classes (ServerStorage, ServerScriptService, ReplicatedFirst, PlayerScripts)",
+   "evidence": "As above.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "project-structure-004",
    "file": "references/project-structure.md",
    "quote": "Server-only **assets and data**. Scripts do NOT run here, but server scripts",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "project-structure-005",
-   "file": "references/project-structure.md",
-   "quote": "The server **cannot** access this container. Scripts here persist across respawns.",
-   "status": "unverified",
-   "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "project-structure-006",
-   "file": "references/project-structure.md",
-   "quote": "and essential initialization. Content replicates only once (server → client).",
-   "status": "unverified",
-   "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Roblox/creator-docs reference classes (ServerStorage, ServerScriptService, ReplicatedFirst, PlayerScripts)",
+   "evidence": "ServerStorage: only accessible on the server; scripts do not run.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "project-structure-007",
    "file": "references/project-structure.md",
    "quote": "**Avoid circular dependencies** — if A requires B, B must not require A",
-   "status": "unverified",
+   "status": "advice",
    "kind": "negative",
    "source": "",
    "evidence": "",
@@ -3522,28 +3502,18 @@
    "id": "project-structure-008",
    "file": "references/project-structure.md",
    "quote": "Scripts in `ServerStorage` **do not run**. Only ModuleScripts there can be",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Roblox/creator-docs reference classes (ServerStorage, ServerScriptService, ReplicatedFirst, PlayerScripts)",
+   "evidence": "ServerStorage reference.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "project-structure-009",
    "file": "references/project-structure.md",
    "quote": "File-based project structure instead of Studio-only",
-   "status": "unverified",
+   "status": "advice",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "project-structure-010",
-   "file": "references/project-structure.md",
-   "quote": "Released: June 2026 (GA).",
-   "status": "unverified",
-   "kind": "number",
    "source": "",
    "evidence": "",
    "checked": ""
@@ -3552,131 +3522,131 @@
    "id": "project-structure-011",
    "file": "references/project-structure.md",
    "quote": "**Non-script files** | Syncs models, JSON, etc. | Scripts only (by design)",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "creator-docs scripting/sync.md; DevForum 4688454",
+   "evidence": "Script Sync synchronizes scripts and folders; non-script assets are left alone.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "project-structure-012",
    "file": "references/project-structure.md",
    "quote": "Released: June 11, 2026 (GA).",
-   "status": "unverified",
+   "status": "docs",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "DevForum topic 4678416 (Roblox Staff)",
+   "evidence": "IAS full release 2026-06-11.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "project-structure-013",
    "file": "references/project-structure.md",
    "quote": "**It does not deprecate `UserInputService` or `ContextActionService`.** Verified against the 0.740",
-   "status": "unverified",
+   "status": "dump",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "API dump 0.742",
+   "evidence": "No Deprecated tag on either service.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "project-structure-014",
    "file": "references/project-structure.md",
    "quote": "dump: neither service carries a `Deprecated` tag, and only a handful of individual members on them",
-   "status": "unverified",
+   "status": "dump",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "API dump 0.742",
+   "evidence": "As above.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "project-structure-015",
    "file": "references/project-structure.md",
    "quote": "are deprecated. An earlier version of this file said IAS \"replaces the legacy per-input-event",
-   "status": "unverified",
+   "status": "source",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "CHANGELOG 2.x",
+   "evidence": "History.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "project-structure-016",
    "file": "references/project-structure.md",
    "quote": "the Properties window. That is the only way to set it.",
-   "status": "unverified",
+   "status": "dump",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "API dump 0.742",
+   "evidence": "PlayerScriptsUseInputActionSystem NotScriptable.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "project-structure-017",
    "file": "references/project-structure.md",
    "quote": "⚠️ **No script can set or even read this property — it is `NotScriptable`.** That includes a",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "execute_luau + playtest Script, 2026-10-11",
+   "evidence": "\"not a valid member of Workspace\" from both.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "project-structure-018",
    "file": "references/project-structure.md",
    "quote": "plugin, the command bar, and MCP `execute_luau`. In Studio 0.741.19.7411056, reading it from",
-   "status": "unverified",
+   "status": "studio",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "execute_luau 2026-10-11",
+   "evidence": "Same failure on 0.742.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "project-structure-019",
    "file": "references/project-structure.md",
    "quote": "`execute_luau` fails with `PlayerScriptsUseInputActionSystem is not a valid member of Workspace",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "execute_luau 2026-10-11",
+   "evidence": "Exact message.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "project-structure-020",
    "file": "references/project-structure.md",
    "quote": "Two earlier versions of this file got it wrong: one wrote `= true` (a type error), and the fix for",
-   "status": "unverified",
+   "status": "source",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "CHANGELOG 2.12.0 / 2.14.0",
+   "evidence": "History.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "project-structure-021",
    "file": "references/project-structure.md",
    "quote": "the right type but still cannot run. If an agent needs it changed, ask the user to flip it in",
-   "status": "unverified",
+   "status": "dump",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "API dump 0.742",
+   "evidence": "NotScriptable.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "project-structure-022",
    "file": "references/project-structure.md",
    "quote": "**Binding display** | `InputAction.PreferredBinding` (read-only) + `InputActionLabel` | Shows the player the binding that matches their current device. Use these for rebinding UI — `GetInputBindings()` is `RobloxScriptSecurity` and **not callable from your code**",
-   "status": "unverified",
+   "status": "dump",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "API dump 0.742",
+   "evidence": "PreferredBinding ReadOnly; GetInputBindings RobloxScriptSecurity; InputActionLabel exists.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "project-structure-023",
    "file": "references/project-structure.md",
    "quote": "to work — IAS does not remove these APIs, but new code should prefer IAS",
-   "status": "unverified",
+   "status": "dump",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "API dump 0.742",
+   "evidence": "UIS/CAS present, not deprecated.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "security-hardening-004",
@@ -6246,6 +6216,86 @@
    "kind": "number",
    "source": "execute_luau Edit re-measurement 2026-10-11",
    "evidence": "As stated.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "project-structure-024",
+   "file": "references/project-structure.md",
+   "quote": "in a Studio 0.742 playtest; official `PlayerScripts` reference). Scripts here persist across respawns.",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.742 playtest, 2026-10-11",
+   "evidence": "As above.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "project-structure-025",
+   "file": "references/project-structure.md",
+   "quote": "Full release: 2026-06-17 (\"[Full Release] Studio Script Sync\", Roblox staff).",
+   "status": "docs",
+   "kind": "number",
+   "source": "DevForum topic 4688454 (Roblox Staff, 2026-06-17)",
+   "evidence": "\"Studio Script Sync is now fully released\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "project-structure-026",
+   "file": "references/project-structure.md",
+   "quote": "and essential initialization. Content replicates only once (server → client): a value the server added after the player joined",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.742 playtest, 2026-10-11; Roblox/creator-docs reference classes (ServerStorage, ServerScriptService, ReplicatedFirst, PlayerScripts)",
+   "evidence": "Late-added StringValue never reached the client.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "project-structure-027",
+   "file": "references/project-structure.md",
+   "quote": "never reached the client (Studio 0.742 playtest).",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.742 playtest, 2026-10-11",
+   "evidence": "As above.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "false-starterplayerscripts-server",
+   "file": "references/project-structure.md",
+   "quote": "The server **cannot** access this container. Scripts here persist across respawns.",
+   "kind": "regression",
+   "status": "false",
+   "source": "",
+   "evidence": "Server reads StarterPlayerScripts; only PlayerScripts is server-inaccessible.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "project-structure-028",
+   "file": "references/project-structure.md",
+   "quote": "\"[Studio Beta] Expanding the Character Controller Library\", 2026-09-10).",
+   "status": "docs",
+   "kind": "number",
+   "source": "DevForum topic 4863739 (2026-09-10)",
+   "evidence": "\"[Studio Beta] Expanding the Character Controller Library\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "project-structure-029",
+   "file": "references/project-structure.md",
+   "quote": "2026-07-09, and its official setup requires `PlayerScriptsUseInputActionSystem` to be enabled",
+   "status": "docs",
+   "kind": "number",
+   "source": "DevForum 4727993; creator-docs projects/server-authority",
+   "evidence": "Full release 2026-07-09; setup requires PlayerScriptsUseInputActionSystem.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "false-ias-upcoming-server-authority",
+   "file": "references/project-structure.md",
+   "quote": "IAS is a prerequisite for two major upcoming systems",
+   "kind": "regression",
+   "status": "false",
+   "source": "",
+   "evidence": "Server Authority fully released 2026-07-09.",
    "checked": "2026-10-11, engine 0.742.0.7421053"
   }
  ]

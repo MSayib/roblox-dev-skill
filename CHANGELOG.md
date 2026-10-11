@@ -175,6 +175,15 @@ against the 0.737–0.742 source tarballs, and the beta claims against the staff
   earlier call had created. The advice ("do not rely on Ctrl+Z") stays, now on that evidence.
 - "Destroying services crashes Studio" was untested here too; removed (the rule stays).
 
+### Fixed — found by verifying `project-structure.md`
+
+- **The server can read `StarterPlayerScripts`**; it is the per-player `PlayerScripts` copy it
+  cannot see (nil on the server in a playtest, as the official reference says).
+- **Server Authority is no longer "upcoming"** (full release 2026-07-09); the Character Controller
+  Library is still a Studio beta. Studio Script Sync's full release is dated (2026-06-17).
+- Measured: an object the server adds to `ReplicatedFirst` after a player joins never reaches that
+  client, which backs "replicates only once".
+
 ### Added — claims register
 
 - `tools/skill-test/claims.json` + `check_claims.py` + generated `docs/claims.md`: every

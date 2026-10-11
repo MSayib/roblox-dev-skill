@@ -16,12 +16,12 @@ Every factual claim a reader could act on wrongly, with how it was verified. **s
 | `references/monetization.md` | 0 | 1 | 0 | 0 | 0 | 17 | 1 |
 | `references/networking.md` | 0 | 0 | 0 | 0 | 0 | 16 | 0 |
 | `references/performance-optimization.md` | 28 | 16 | 3 | 6 | 1 | 0 | 6 |
-| `references/project-structure.md` | 0 | 0 | 0 | 0 | 0 | 23 | 0 |
+| `references/project-structure.md` | 6 | 9 | 6 | 2 | 3 | 0 | 2 |
 | `references/security-hardening.md` | 12 | 26 | 3 | 0 | 7 | 0 | 4 |
 | `references/studio-plugins-and-limits.md` | 16 | 1 | 1 | 1 | 9 | 0 | 0 |
 | `references/ui-systems.md` | 1 | 0 | 0 | 0 | 0 | 8 | 1 |
 | `references/worked-examples.md` | 17 | 4 | 4 | 1 | 19 | 0 | 1 |
-| **total** | **169** | **111** | **57** | **71** | **92** | **80** | **44** |
+| **total** | **175** | **120** | **63** | **73** | **95** | **57** | **46** |
 
 ## Verified claims
 
@@ -271,6 +271,23 @@ Every factual claim a reader could act on wrongly, with how it was verified. **s
 | `references/performance-optimization.md`: **Roblox targets 60 FPS** (one frame every 16.67ms) — monitor frame budget | docs | "By default, Roblox games target 60 FPS, which is one frame every 16.67 milliseconds". (creator-docs performance-optimization/index.md) |
 | `references/performance-optimization.md`: Legacy `BodyMover` classes are deprecated. Use modern constraint-based equivalents: | dump | BodyMover and every subclass tagged Deprecated; PreferredDescriptorName gives the replacements (RocketPropulsion -> LineForce). (API dump 0.742) |
 | `references/performance-optimization.md`: Legacy: Fixed physics stepping at 240 Hz for all assemblies. | docs | "By default, Roblox simulates physics at 240 Hz"; Fixed mode 240 Hz. (creator-docs physics/adaptive-timestepping.md) |
+| `references/project-structure.md`: Server-only scripts. **Never replicated to clients.** Contains `Script` objects | docs | ServerScriptService: "contents are never replicated to player clients". (Roblox/creator-docs reference classes (ServerStorage, ServerScriptService, ReplicatedFirst, PlayerScripts)) |
+| `references/project-structure.md`: and `ModuleScript` objects required only by server code. | docs | As above. (Roblox/creator-docs reference classes (ServerStorage, ServerScriptService, ReplicatedFirst, PlayerScripts)) |
+| `references/project-structure.md`: Server-only **assets and data**. Scripts do NOT run here, but server scripts | docs | ServerStorage: only accessible on the server; scripts do not run. (Roblox/creator-docs reference classes (ServerStorage, ServerScriptService, ReplicatedFirst, PlayerScripts)) |
+| `references/project-structure.md`: Scripts in `ServerStorage` **do not run**. Only ModuleScripts there can be | docs | ServerStorage reference. (Roblox/creator-docs reference classes (ServerStorage, ServerScriptService, ReplicatedFirst, PlayerScripts)) |
+| `references/project-structure.md`: **Non-script files** \| Syncs models, JSON, etc. \| Scripts only (by design) | docs | Script Sync synchronizes scripts and folders; non-script assets are left alone. (creator-docs scripting/sync.md; DevForum 4688454) |
+| `references/project-structure.md`: Released: June 11, 2026 (GA). | docs | IAS full release 2026-06-11. (DevForum topic 4678416 (Roblox Staff)) |
+| `references/project-structure.md`: **It does not deprecate `UserInputService` or `ContextActionService`.** Verified against the 0.740 | dump | No Deprecated tag on either service. (API dump 0.742) |
+| `references/project-structure.md`: dump: neither service carries a `Deprecated` tag, and only a handful of individual members on them | dump | As above. (API dump 0.742) |
+| `references/project-structure.md`: are deprecated. An earlier version of this file said IAS "replaces the legacy per-input-event | source | History. (CHANGELOG 2.x) |
+| `references/project-structure.md`: the Properties window. That is the only way to set it. | dump | PlayerScriptsUseInputActionSystem NotScriptable. (API dump 0.742) |
+| `references/project-structure.md`: ⚠️ **No script can set or even read this property — it is `NotScriptable`.** That includes a | studio | "not a valid member of Workspace" from both. (execute_luau + playtest Script, 2026-10-11) |
+| `references/project-structure.md`: plugin, the command bar, and MCP `execute_luau`. In Studio 0.741.19.7411056, reading it from | studio | Same failure on 0.742. (execute_luau 2026-10-11) |
+| `references/project-structure.md`: `execute_luau` fails with `PlayerScriptsUseInputActionSystem is not a valid member of Workspace | studio | Exact message. (execute_luau 2026-10-11) |
+| `references/project-structure.md`: Two earlier versions of this file got it wrong: one wrote `= true` (a type error), and the fix for | source | History. (CHANGELOG 2.12.0 / 2.14.0) |
+| `references/project-structure.md`: the right type but still cannot run. If an agent needs it changed, ask the user to flip it in | dump | NotScriptable. (API dump 0.742) |
+| `references/project-structure.md`: **Binding display** \| `InputAction.PreferredBinding` (read-only) + `InputActionLabel` \| Shows the player the binding that matches their current device. Use th | dump | PreferredBinding ReadOnly; GetInputBindings RobloxScriptSecurity; InputActionLabel exists. (API dump 0.742) |
+| `references/project-structure.md`: to work — IAS does not remove these APIs, but new code should prefer IAS | dump | UIS/CAS present, not deprecated. (API dump 0.742) |
 | `references/security-hardening.md`: **Decompile** any replicated `LocalScript` or `ModuleScript`, even if never run on client | docs | "Decompile any replicated LocalScript or any ModuleScript, even if they never run on the client". (Roblox/creator-docs scripting/security/security-tactics.md) |
 | `references/security-hardening.md`: **Warning**: NaN passes `typeof() == "number"` and silently fails **all** comparison | studio | 0/0: typeof number; <0, >0, ==self, <=100 all false; not (nan > 100) true. (Studio 0.742 playtest, execute_luau Server, 2026-10-11) |
 | `references/security-hardening.md`: NaN is uniquely dangerous: it is of type `"number"` but fails all standard comparisons. | studio | As above. (Studio 0.742 playtest, execute_luau Server, 2026-10-11) |
@@ -480,3 +497,11 @@ Every factual claim a reader could act on wrongly, with how it was verified. **s
 | `references/agent-safety.md`: Studio crashes; the place may be left mangled | false | Never tested; removed. |
 | `references/studio-plugins-and-limits.md`: bytes assigned, 200,000 rejected with "Provided string length (200000) is greater than or equal to | studio | As stated. (execute_luau Edit re-measurement 2026-10-11) |
 | `references/studio-plugins-and-limits.md`: max length (200000)"; `UpdateSourceAsync` stored 1 and 16 MiB intact (64 MiB not re-run). | studio | As stated. (execute_luau Edit re-measurement 2026-10-11) |
+| `references/project-structure.md`: in a Studio 0.742 playtest; official `PlayerScripts` reference). Scripts here persist across respawns. | studio | As above. (Studio 0.742 playtest, 2026-10-11) |
+| `references/project-structure.md`: Full release: 2026-06-17 ("[Full Release] Studio Script Sync", Roblox staff). | docs | "Studio Script Sync is now fully released". (DevForum topic 4688454 (Roblox Staff, 2026-06-17)) |
+| `references/project-structure.md`: and essential initialization. Content replicates only once (server → client): a value the server added after the player joined | studio | Late-added StringValue never reached the client. (Studio 0.742 playtest, 2026-10-11; Roblox/creator-docs reference classes (ServerStorage, ServerScriptService, ReplicatedFirst, PlayerScripts)) |
+| `references/project-structure.md`: never reached the client (Studio 0.742 playtest). | studio | As above. (Studio 0.742 playtest, 2026-10-11) |
+| `references/project-structure.md`: The server **cannot** access this container. Scripts here persist across respawns. | false | Server reads StarterPlayerScripts; only PlayerScripts is server-inaccessible. |
+| `references/project-structure.md`: "[Studio Beta] Expanding the Character Controller Library", 2026-09-10). | docs | "[Studio Beta] Expanding the Character Controller Library". (DevForum topic 4863739 (2026-09-10)) |
+| `references/project-structure.md`: 2026-07-09, and its official setup requires `PlayerScriptsUseInputActionSystem` to be enabled | docs | Full release 2026-07-09; setup requires PlayerScriptsUseInputActionSystem. (DevForum 4727993; creator-docs projects/server-authority) |
+| `references/project-structure.md`: IAS is a prerequisite for two major upcoming systems | false | Server Authority fully released 2026-07-09. |
