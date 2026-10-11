@@ -102,6 +102,21 @@ table re-run from playtest Scripts, and every dated platform change traced to a 
 - The `Local Safe` thread-safety row now matches the official table (other Actors may read);
   "a `--!native` client script gains nothing" now says only what the docs say (server-side).
 
+### Fixed — found by verifying `luau-fundamentals.md` claim by claim
+
+Every release-note row (0.736–0.742) was matched against the GitHub release text, every gate
+against the 0.737–0.742 source tarballs, and the beta claims against the staff posts.
+
+- **"Runtime heap limits" for type functions do not apply in Roblox.** The limit is
+  `DebugLuauTypeFunctionRuntimeHeapLimit`, default 0 and unset in Studio's flags. The
+  `pcall`/`xpcall` part is right for Luau 0.742 (`TypeFunctionRuntime.cpp` registers the base
+  library and removes only `gcinfo`, `getfenv`, `newproxy`, `setfenv`), but luau-lsp 1.69 still
+  rejects it; the text now says both.
+- **`DebugLuauUserDefinedClassesRuntime` is not new in 0.742**; it is in the 0.737 source and the
+  0.737 release notes.
+- "Team members without the beta cannot compile `if local`" is now tested: in a Studio 0.742
+  without the beta, a game Script and a plugin `loadstring` both fail to parse it.
+
 ### Added — claims register
 
 - `tools/skill-test/claims.json` + `check_claims.py` + generated `docs/claims.md`: every

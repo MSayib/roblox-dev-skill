@@ -1812,337 +1812,337 @@
    "id": "luau-fundamentals-001",
    "file": "references/luau-fundamentals.md",
    "quote": "Reference for AI coding skill — verified against official Roblox documentation and Luau language release specs (**v0.742**, released 2026-10-10; engine 0.742.0.7421053).",
-   "status": "unverified",
+   "status": "source",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "luau-lang/luau releases; clientsettings client-version",
+   "evidence": "Luau 0.742 published 2026-10-10; Studio 0.742.0.7421053 live.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-002",
    "file": "references/luau-fundamentals.md",
    "quote": "0.736 | Better generalization of lambdas defined in table literals; fewer internal errors on generics | Some previously-annotated tables may now infer correctly on their own",
-   "status": "unverified",
+   "status": "source",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "luau-lang/luau release 0.736 (GitHub releases API)",
+   "evidence": "\"better generalization of types for lambdas defined in table literals\", \"less ICE on generics\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-003",
    "file": "references/luau-fundamentals.md",
    "quote": "0.736 | Modules without a `return` can join cyclic groups; better cyclic-require errors | Cycle mistakes report more usefully",
-   "status": "unverified",
+   "status": "source",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "luau-lang/luau release 0.736 (GitHub releases API)",
+   "evidence": "\"modules without return make their way in cyclic groups\", \"better error messages for cyclic requires\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-004",
    "file": "references/luau-fundamentals.md",
    "quote": "0.737 | Type arguments are now typechecked in explicit instantiation | Code that passed a bad explicit type argument may now error — a **fix**, not a regression",
-   "status": "unverified",
+   "status": "source",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "luau-lang/luau release 0.737 (GitHub releases API)",
+   "evidence": "\"Fixed type arguments not being typechecked in explicit instantiation\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-005",
    "file": "references/luau-fundamentals.md",
    "quote": "0.737 | `keyof` produces unions in lexicographic order | `keyof` results are stable across platforms",
-   "status": "unverified",
+   "status": "source",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "luau-lang/luau release 0.737 (GitHub releases API)",
+   "evidence": "\"keyof now produces unions in lexicographic order\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-006",
    "file": "references/luau-fundamentals.md",
    "quote": "0.737 | Table indexers no longer leak their generics into unsealed tables passed as arguments | Fewer spurious inference results",
-   "status": "unverified",
+   "status": "source",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "luau-lang/luau release 0.737 (GitHub releases API)",
+   "evidence": "\"Table indexers no longer allow their generics to leak into unsealed tables passed as arguments.\"",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-007",
    "file": "references/luau-fundamentals.md",
    "quote": "0.737 | The require-cycle length limit was removed | Long cycles no longer hit an arbitrary cap (they are still bad design)",
-   "status": "unverified",
+   "status": "source",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "luau-lang/luau release 0.737 (GitHub releases API)",
+   "evidence": "\"Require cycle length limit has been removed\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-008",
    "file": "references/luau-fundamentals.md",
    "quote": "0.737 | Fixed upvalue handling in `repeat..until` loops using `continue` | A real miscompile; if you hit odd upvalue behaviour there, it was this",
-   "status": "unverified",
+   "status": "source",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "luau-lang/luau release 0.737 (GitHub releases API)",
+   "evidence": "\"Fixed handling of upvalues in repeat..until loops with continue\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-009",
    "file": "references/luau-fundamentals.md",
    "quote": "0.738 | Free types now generalize at the enclosing *function* scope, not the block | Fewer \"could not generalize\" false positives inside `if`/`for` blocks",
-   "status": "unverified",
+   "status": "source",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "luau-lang/luau release 0.738 (GitHub releases API)",
+   "evidence": "\"free types are associated with the enclosing function scope, not just the block scope\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-010",
    "file": "references/luau-fundamentals.md",
    "quote": "0.738 | Generic-to-`unknown` replacement narrowed to generics used exactly once in negative position | `local function get(model) model:Find(\"leg\") end` now infers `<T...>` instead of `unknown`",
-   "status": "unverified",
+   "status": "source",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "luau-lang/luau release 0.738 (GitHub releases API)",
+   "evidence": "Generic -> unknown only when it occurs exactly once in negative position; the get(model) example now <T...>.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-011",
    "file": "references/luau-fundamentals.md",
    "quote": "0.738 | Read-only table indexers infer better; integer types exposed to user-defined type functions | Inference fixes only",
-   "status": "unverified",
+   "status": "source",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "luau-lang/luau release 0.738 (GitHub releases API)",
+   "evidence": "\"Improve inference of read-only table indexers\"; \"Expose integer types to UDTFs\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-012",
    "file": "references/luau-fundamentals.md",
    "quote": "0.738 | Linter reports deprecation inside union/intersection types | `A | DeprecatedThing` now warns where it used to be silent",
-   "status": "unverified",
+   "status": "source",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "luau-lang/luau release 0.738 (GitHub releases API)",
+   "evidence": "\"The linter now properly reports deprecation warnings ... within intersection and union types.\"",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-013",
    "file": "references/luau-fundamentals.md",
    "quote": "0.738 | Bidirectional inference for table literals passed to `setmetatable` (`setmetatable({}, { test = nil })` against `setmetatable<{}, { test: DateTime? }>`) | Fewer annotations needed on metatable-based classes",
-   "status": "unverified",
+   "status": "source",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "luau-lang/luau release 0.738 (GitHub releases API)",
+   "evidence": "Bidirectional inference for table literals passed to setmetatable, with the same example.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-014",
    "file": "references/luau-fundamentals.md",
    "quote": "0.738 | Zero-trip-count loop unrolling is now free; SCCP pass improved; `luaV_equalval` `__eq` metatable fix | Internals",
-   "status": "unverified",
+   "status": "source",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "luau-lang/luau release 0.738 (GitHub releases API)",
+   "evidence": "Zero-trip-count unrolling, SCCP improvement, luaV_equalval __eq fix listed.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-015",
    "file": "references/luau-fundamentals.md",
    "quote": "**0.739** | **Generics are typechecked more strictly *inside* function bodies** | The one item here that can surface **new errors in code that used to pass**. `local function call<T>(fn: (T) -> T) fn(nil) end` was wrongly accepted and now errors. If `--!strict` starts complaining after a Studio update, check calls made *to* a generic parameter inside its own function body. It is a **fix**, not a regression — the old code was unsound",
-   "status": "unverified",
+   "status": "source",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "luau-lang/luau release 0.739 (GitHub releases API)",
+   "evidence": "\"Typecheck generics within function bodies more strictly\" with the call<T> example.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-016",
    "file": "references/luau-fundamentals.md",
    "quote": "**0.739** | Better error when indexing a value whose type was refined to `table` | Clearer diagnostic, same code",
-   "status": "unverified",
+   "status": "source",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "luau-lang/luau release 0.739 (GitHub releases API)",
+   "evidence": "\"Improve the error ... index from a type refined to table\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-017",
    "file": "references/luau-fundamentals.md",
    "quote": "**0.739** | VM: Luau→Luau metamethod calls inlined; table get/set slow paths faster; **metamethod lookup cache on frozen metatables** | Metatable-heavy code gets faster with no edit. `table.freeze` on a metatable now also buys cheaper metamethod dispatch — see `performance-optimization.md`",
-   "status": "unverified",
+   "status": "source",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "luau-lang/luau release 0.739 (GitHub releases API)",
+   "evidence": "Inline Luau-to-Luau metamethod calls; faster table get/set slow paths; metamethod lookup cache on frozen metatables.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-018",
    "file": "references/luau-fundamentals.md",
    "quote": "**0.739** | Fixed an integer overflow after `table.move` that caused an out-of-bounds access | A real memory-safety bug. Drop any workaround you had for odd `table.move` behaviour on large ranges",
-   "status": "unverified",
+   "status": "source",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "luau-lang/luau release 0.739 (GitHub releases API)",
+   "evidence": "\"Fixed integer overflow after table.move causing an OOB access.\"",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-019",
    "file": "references/luau-fundamentals.md",
    "quote": "**0.740** | Function normalization no longer uses argument types as return types — `local z: () -> () = x` where `x: (() -> string \\| number) & (() -> number \\| boolean)` used to be accepted and now errors | Like 0.739, a soundness **fix** that can surface new errors in code that used to pass, here around intersections of function types. Fix the annotation; do not loosen to `--!nonstrict`",
-   "status": "unverified",
+   "status": "source",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "luau-lang/luau release 0.740 (GitHub releases API)",
+   "evidence": "Function normalization fix with the same example.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-020",
    "file": "references/luau-fundamentals.md",
    "quote": "**0.740** | Fixed an internal error on exceptionally large types (\"Internal recursion counter limit exceeded in ReferenceCountInitializer\") | If huge generated types used to crash the type checker, this was it",
-   "status": "unverified",
+   "status": "source",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "luau-lang/luau release 0.740 (GitHub releases API)",
+   "evidence": "Internal recursion counter error fix, same message.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-021",
    "file": "references/luau-fundamentals.md",
    "quote": "**0.740** | VM: OOM during table re-hash or freeze no longer leaves the table in a bad state; A64 array-iteration fast path in `FORGLOOP`; faster `string.split`; x64 register-allocation spill fix | Internals, no edit. The `FORGLOOP` fast path is in native-code lowering, so it only touches `--!native` code compiled for ARM64 — not ordinary interpreted loops",
-   "status": "unverified",
+   "status": "source",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "luau-lang/luau release 0.740 (GitHub releases API)",
+   "evidence": "OOM during re-hash/freeze, A64 FORGLOOP fast path, string.split, x64 regalloc fix.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-022",
    "file": "references/luau-fundamentals.md",
    "quote": "**0.741** | Analysis: jump-to-definition now works on function **return** annotations; fixed a crash on a type assertion inside `typeof(...)` inside a type alias (`type T = typeof(x :: Foo)`) | If the type checker used to crash on that pattern, this was it",
-   "status": "unverified",
+   "status": "source",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "luau-lang/luau release 0.741 (GitHub releases API)",
+   "evidence": "Jump-to-definition on return annotations; crash on type assertion in typeof in a type alias.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-023",
    "file": "references/luau-fundamentals.md",
    "quote": "**0.741** | Compiler reuses a local's register after its last use; GC allocation-rate underflow fixed when the heap shrinks between cycles; NCG buffer range-check bug fixed | Internals, no edit. The buffer fix only touches `--!native` code that uses `buffer`",
-   "status": "unverified",
+   "status": "source",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "luau-lang/luau release 0.741 (GitHub releases API)",
+   "evidence": "Register reuse after last use; GC allocation rate underflow; NCG buffer range check fix.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-024",
    "file": "references/luau-fundamentals.md",
    "quote": "**0.742** | Analysis: better scope handling in the strict-mode checker, MLStruct-style unifier rewrite rules, a `~nil` refinement of blocked types that never simplified, grouped `error` calls in control-flow analysis, autocomplete for function statements | Inference fixes, no edit expected. The release notes do not call any of them a soundness change; if `--!strict` reports something new after a Studio update, these are where to look",
-   "status": "unverified",
+   "status": "source",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "luau-lang/luau release 0.742 (GitHub releases API)",
+   "evidence": "Strict-mode scope handling, MLStruct-style rewrite rules, ~nil refinement fix, grouped error calls.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-025",
    "file": "references/luau-fundamentals.md",
    "quote": "**0.742** | `string.gsub` is faster when the pattern has no special characters; compiler and NCG (`--!native`) correctness fixes, including constant propagation on tables with metamethods | No edit. Plain-text `gsub` calls get faster on their own",
-   "status": "unverified",
+   "status": "source",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "luau-lang/luau release 0.742 (GitHub releases API)",
+   "evidence": "Optimize string.gsub for patterns without special characters; constant propagation with metamethods; NCG fixes.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-026",
    "file": "references/luau-fundamentals.md",
    "quote": "**0.742** | `coroutine.finally` is no longer behind a `Debug` flag in the open-source VM | **Still not in Roblox.** See the table below: the gate was renamed, not removed, and `coroutine.finally` is `nil` in Studio 0.742",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "luau-lang/luau release 0.742 (GitHub releases API); execute_luau Edit",
+   "evidence": "Release: \"Stop gating coroutine.finally behind a debug flag\". Source 0.742: LuauCoroutineFinally gate; Studio 0.742: coroutine.finally is nil (2026-10-11).",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-027",
    "file": "references/luau-fundamentals.md",
    "quote": "Since **2026-10-06** this is a **Studio Beta Feature** (\"If Local/Const Bindings\", announced in",
-   "status": "unverified",
+   "status": "docs",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "DevForum topic 4918297 (Roblox Staff jjtangerine, 2026-10-06; post #41 Yuria_theWitch)",
+   "evidence": "Topic \"[Beta] if local Statements and Expressions\" created 2026-10-06 by Roblox Staff.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-028",
    "file": "references/luau-fundamentals.md",
    "quote": "**Studio betas are not enabled in published experiences** — stated by Roblox staff in the",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "DevForum topic 4918297 (Roblox Staff jjtangerine, 2026-10-06; post #41 Yuria_theWitch)",
+   "evidence": "#41: \"Studio Betas are not enabled in published experiences ... until it's fully released.\"",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-029",
    "file": "references/luau-fundamentals.md",
    "quote": "fully released\". Code using it runs in the opted-in developer's Studio and **fails to compile",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "DevForum topic 4918297 (Roblox Staff jjtangerine, 2026-10-06; post #41 Yuria_theWitch)",
+   "evidence": "As 028.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-030",
    "file": "references/luau-fundamentals.md",
    "quote": "for players**. Team members without the beta enabled cannot compile it either.",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Studio 0.742 without the beta, 2026-10-11",
+   "evidence": "A game Script and plugin loadstring with if local both failed: \"Expected identifier when parsing expression, got 'local'\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-031",
    "file": "references/luau-fundamentals.md",
    "quote": "Studio's published flags (checked 2026-10-07) set `FFlagLuauIfLocalBetaFeature = True` with",
-   "status": "unverified",
+   "status": "source",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "clientsettingscdn PCStudioApp (25,075 flags, 2026-10-11)",
+   "evidence": "FFlagLuauIfLocalBetaFeature=True, FIntLuauIfLocalBetaFeatureRolloutPercent=0 (re-read 2026-10-11).",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-032",
    "file": "references/luau-fundamentals.md",
    "quote": "gates in 0.742 are still `LuauExperimentalIfLocalSyntax` / `LuauExperimentalIfLocalAnalysis` (re-checked",
-   "status": "unverified",
+   "status": "source",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "luau-lang/luau source tarballs 0.737-0.742",
+   "evidence": "0.742 defines LuauExperimentalIfLocalSyntax / LuauExperimentalIfLocalAnalysis.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-033",
    "file": "references/luau-fundamentals.md",
    "quote": "2026-10-11, with the Studio beta flags unchanged).",
-   "status": "unverified",
+   "status": "source",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "clientsettingscdn PCStudioApp (25,075 flags, 2026-10-11)",
+   "evidence": "Beta flags unchanged on 2026-10-11.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-034",
    "file": "references/luau-fundamentals.md",
    "quote": "**Default: write the plain `local x = ...` / `if x then` form in game code.** Show `if local` only",
-   "status": "unverified",
+   "status": "advice",
    "kind": "negative",
    "source": "",
    "evidence": "",
@@ -2152,17 +2152,17 @@
    "id": "luau-fundamentals-035",
    "file": "references/luau-fundamentals.md",
    "quote": "Checked 2026-10-11 against the 0.742 source and Studio's published client settings",
-   "status": "unverified",
+   "status": "source",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "luau-lang/luau source tarballs 0.737-0.742; clientsettingscdn PCStudioApp (25,075 flags, 2026-10-11)",
+   "evidence": "Gates grepped in the 0.742 source; none set in Studio flags.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-036",
    "file": "references/luau-fundamentals.md",
    "quote": "Prototype | Gate in 0.742 | Notes",
-   "status": "unverified",
+   "status": "advice",
    "kind": "number",
    "source": "",
    "evidence": "",
@@ -2172,217 +2172,177 @@
    "id": "luau-fundamentals-037",
    "file": "references/luau-fundamentals.md",
    "quote": "**Exact tables by default** — `{ x: number }` rejects extra fields, `{ x: number, ... }` allows them (RFC luau-lang/rfcs#11), 0.740 | `DebugLuauParseExactTables`, `DebugLuauExactTableTypes` | The release note calls it \"an experimental feature\". Do not write `...` in a table type for Roblox",
-   "status": "unverified",
+   "status": "source",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "luau-fundamentals-038",
-   "file": "references/luau-fundamentals.md",
-   "quote": "**Classes** RFC prototype | `DebugLuauUserDefinedClasses`, `DebugLuauUserDefinedClassesRuntime` (new in 0.742)",
-   "status": "unverified",
-   "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "luau-lang/luau source tarballs 0.737-0.742; release 0.740",
+   "evidence": "DebugLuauParseExactTables / DebugLuauExactTableTypes in 0.742; exact tables announced in 0.740 (RFC #11).",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-039",
    "file": "references/luau-fundamentals.md",
    "quote": "**`coroutine.finally`** (RFC #187), 0.738 | `LuauCoroutineFinally`, `LuauCoroutineFinallyAnalysis` (renamed from `DebugLuauCoroutineFinally` in 0.742) | The 0.742 release note says \"stop gating behind a debug flag\"; the flag lost its `Debug` prefix but still defaults to off. **Tested in Studio 0.742: `coroutine.finally` is `nil`** from a game Script and from the command bar",
-   "status": "unverified",
+   "status": "source",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "luau-lang/luau source tarballs 0.737-0.742; releases 0.738, 0.742",
+   "evidence": "0.738 \"Prototype coroutine.finally\" (RFC #187); 0.738 source DebugLuauCoroutineFinally; 0.742 source LuauCoroutineFinally / LuauCoroutineFinallyAnalysis, no DebugLuauCoroutineFinally.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-040",
    "file": "references/luau-fundamentals.md",
    "quote": "Require top-level functions to be annotated, 0.738 | `DebugLuauWarnOnUnannotatedTopLevelFunctions` | A lint experiment",
-   "status": "unverified",
+   "status": "source",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "luau-lang/luau source tarballs 0.737-0.742; release 0.738",
+   "evidence": "DebugLuauWarnOnUnannotatedTopLevelFunctions first in the 0.738 source; release \"Prototype ... Requiring top-level functions to be annotated\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-041",
    "file": "references/luau-fundamentals.md",
    "quote": "An **`integer`** library (`integer.idiv` was fixed in 0.740) | `LuauIntegerLibrary` | Present in the open-source VM since at least 0.737, not enabled in Studio. Not a Roblox API",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "luau-lang/luau source tarballs 0.737-0.742; release 0.740; execute_luau",
+   "evidence": "LuauIntegerLibrary in the 0.737 and 0.742 sources; integer.idiv fix in 0.740; integer global nil in Studio 0.742.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-042",
    "file": "references/luau-fundamentals.md",
    "quote": "user they can — they look like shipped features in a release note and error in Studio. `if local`",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Studio 0.742",
+   "evidence": "if local fails to compile without the beta; coroutine.finally nil.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-043",
    "file": "references/luau-fundamentals.md",
    "quote": "shows the path: a flag lost its `Debug` prefix (0.740), then became a Studio beta (2026-10-06),",
-   "status": "unverified",
+   "status": "source",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "luau-lang/luau source tarballs 0.737-0.742; DevForum topic 4918297 (Roblox Staff jjtangerine, 2026-10-06; post #41 Yuria_theWitch)",
+   "evidence": "0.739 DebugLuauIfLocal*, 0.740 LuauExperimentalIfLocal*; Studio beta 2026-10-06.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-044",
    "file": "references/luau-fundamentals.md",
    "quote": "and only a full release makes it publishable. `coroutine.finally` took the first step in 0.742.",
-   "status": "unverified",
+   "status": "source",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "luau-lang/luau release 0.742 (GitHub releases API)",
+   "evidence": "Debug gate removed for coroutine.finally in 0.742; still nil in Studio.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-045",
    "file": "references/luau-fundamentals.md",
    "quote": "There is **NO new standard-library function usable in Roblox in 0.736–0.742**; if a user asks \"what new Luau methods",
-   "status": "unverified",
+   "status": "studio",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "execute_luau Edit 2026-10-11; releases 0.736-0.742",
+   "evidence": "coroutine.finally and integer are nil in Studio 0.742; release notes 0.736-0.742 list no other new stdlib function.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-046",
    "file": "references/luau-fundamentals.md",
    "quote": "flag-gated prototypes, and one Studio-only beta syntax.",
-   "status": "unverified",
+   "status": "source",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "releases 0.736-0.742",
+   "evidence": "Summary of the table above.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-047",
    "file": "references/luau-fundamentals.md",
    "quote": "`--!nonstrict` | Only checks explicitly annotated types (the default)",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Roblox/creator-docs luau/type-checking.md",
+   "evidence": "\"--!nonstrict — Only asserts variable types if they are explicitly annotated.\" Default mode per the GA post.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-048",
    "file": "references/luau-fundamentals.md",
    "quote": "**Put nothing else on a directive line.** `--!strict -- my comment` is not a strict script: the",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "luau-lsp 1.69 (New Solver)",
+   "evidence": "\"--!strict -- my comment\" -> CommentDirective \"extra symbols at the end of the line\" and the type error on line 2 unreported; the same file without the comment reports it.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-049",
    "file": "references/luau-fundamentals.md",
    "quote": "with luau-analyze 0.742: a type error in such a file goes unreported). Write the comment on the next",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "luau-lsp 1.69; luau-analyze 0.742 (2.16.0)",
+   "evidence": "As 048.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-050",
    "file": "references/luau-fundamentals.md",
    "quote": "The **New Type Solver** is the standard type engine for Luau (GA since November 2025):",
-   "status": "unverified",
+   "status": "docs",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "luau-fundamentals-051",
-   "file": "references/luau-fundamentals.md",
-   "quote": "Supports **user-defined type functions** (`type function`) with `pcall`/`xpcall` error handling and runtime heap limits",
-   "status": "unverified",
-   "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "DevForum topic 4084991",
+   "evidence": "General release 2025-11-20.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-052",
    "file": "references/luau-fundamentals.md",
    "quote": "Config: Studio → Workspace Properties → Scripting → `LuauTypeCheckMode` (Properties window only:",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Studio 0.742 playtest probe Script",
+   "evidence": "Workspace.LuauTypeCheckMode: even reading it from a Script fails (PluginOrOpenCloud).",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-053",
    "file": "references/luau-fundamentals.md",
    "quote": "a game Script cannot write it — \"lacking capability PluginOrOpenCloud\", tested in Studio 0.742)",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "luau-fundamentals-054",
-   "file": "references/luau-fundamentals.md",
-   "quote": "**Server-side only.** The official docs scope this to \"server-side scripts in your game\" — a",
-   "status": "unverified",
-   "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "luau-fundamentals-055",
-   "file": "references/luau-fundamentals.md",
-   "quote": "`--!native` LocalScript gains nothing from the comment. Only the script's *functions* are compiled;",
-   "status": "unverified",
-   "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Studio 0.742 playtest probe Script",
+   "evidence": "As 052.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-056",
    "file": "references/luau-fundamentals.md",
    "quote": "top-level code usually runs once and does not benefit.",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "creator-docs luau/native-code-gen.md",
+   "evidence": "As 069.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-057",
    "file": "references/luau-fundamentals.md",
    "quote": "In Luau 0.735+, the VM introduces `LOP_FASTPCALL`. The release note's exact claim is that",
-   "status": "unverified",
+   "status": "source",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "luau-lang/luau release 0.735 (GitHub releases API)",
+   "evidence": "\"Added new LOP_FASTPCALL instruction: pcall/xpcall overhead should be around two times lower.\"",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-058",
    "file": "references/luau-fundamentals.md",
    "quote": "Legacy (deprecated) | Modern | Notes",
-   "status": "unverified",
+   "status": "advice",
    "kind": "negative",
    "source": "",
    "evidence": "",
@@ -5592,41 +5552,41 @@
    "id": "luau-fundamentals-059",
    "file": "references/luau-fundamentals.md",
    "quote": "**Is it on in your place?** At general release (2025-11-20, DevForum topic 4084991) Roblox turned",
-   "status": "unverified",
+   "status": "docs",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "DevForum topic 4084991; clientsettingscdn PCStudioApp (25,075 flags, 2026-10-11)",
+   "evidence": "GA: default for nonstrict/nocheck, strict opt-in; DFFlagStudioLuauNewSolverOptOutPlacesWithStrictScripts=True.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-060",
    "file": "references/luau-fundamentals.md",
    "quote": "it on by default for **nonstrict and nocheck** scripts only; strict-mode users opt in. Studio",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "DevForum topic 4084991",
+   "evidence": "As 059.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-061",
    "file": "references/luau-fundamentals.md",
    "quote": "0.742 still publishes `DFFlagStudioLuauNewSolverOptOutPlacesWithStrictScripts = True`, so a place",
-   "status": "unverified",
+   "status": "source",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "clientsettingscdn PCStudioApp (25,075 flags, 2026-10-11)",
+   "evidence": "DFFlagStudioLuauNewSolverOptOutPlacesWithStrictScripts=True.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "luau-fundamentals-062",
    "file": "references/luau-fundamentals.md",
    "quote": "(Properties window, Scripting; `NotScriptable`). The features above need it, and this skill's",
-   "status": "unverified",
+   "status": "dump",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "API dump 0.742",
+   "evidence": "Workspace.UseNewLuauTypeSolver NotScriptable; static layer runs with LuauSolverV2=true.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "security-hardening-047",
@@ -5936,6 +5896,106 @@
    "status": "false",
    "source": "",
    "evidence": "Docs only describe server-side scripts; reworded to the source.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "luau-fundamentals-063",
+   "file": "references/luau-fundamentals.md",
+   "quote": "**Classes** RFC prototype | `DebugLuauUserDefinedClasses`, `DebugLuauUserDefinedClassesRuntime` (both in the source since at least 0.737)",
+   "status": "source",
+   "kind": "number",
+   "source": "luau-lang/luau source tarballs 0.737-0.742; release 0.737",
+   "evidence": "Both class flags defined in the 0.737 source and listed as required flags in the 0.737 release notes.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "luau-fundamentals-064",
+   "file": "references/luau-fundamentals.md",
+   "quote": "Supports **user-defined type functions** (`type function`). In Luau 0.742 their runtime has the",
+   "status": "source",
+   "kind": "number",
+   "source": "luau-0.742 Analysis/src/TypeFunctionRuntime.cpp",
+   "evidence": "Base library registered; unavailableGlobals = gcinfo, getfenv, newproxy, setfenv. luau-lsp 1.69 still rejects pcall (\"not supported in type functions\").",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "luau-fundamentals-065",
+   "file": "references/luau-fundamentals.md",
+   "quote": "base library, `pcall`/`xpcall` included; only `gcinfo`, `getfenv`, `newproxy` and `setfenv` are",
+   "status": "source",
+   "kind": "negative",
+   "source": "luau-0.742 TypeFunctionRuntime.cpp",
+   "evidence": "As 064.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "luau-fundamentals-066",
+   "file": "references/luau-fundamentals.md",
+   "quote": "removed (`TypeFunctionRuntime.cpp`). Older analyzers reject `pcall` there (luau-lsp 1.69: \"this",
+   "status": "studio",
+   "kind": "negative",
+   "source": "luau-lsp 1.69 analyze",
+   "evidence": "pcall inside a type function: \"this function is not supported in type functions\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "luau-fundamentals-067",
+   "file": "references/luau-fundamentals.md",
+   "quote": "function is not supported in type functions\")",
+   "status": "studio",
+   "kind": "negative",
+   "source": "luau-lsp 1.69 analyze",
+   "evidence": "As 066.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "luau-fundamentals-068",
+   "file": "references/luau-fundamentals.md",
+   "quote": "**Server-side only.** The official docs scope this to \"server-side scripts in your game\" and",
+   "status": "docs",
+   "kind": "negative",
+   "source": "creator-docs luau/native-code-gen.md",
+   "evidence": "As 054.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "luau-fundamentals-069",
+   "file": "references/luau-fundamentals.md",
+   "quote": "describe nothing for the client, so do not expect a gain from `--!native` in a LocalScript. Only the script's *functions* are compiled;",
+   "status": "docs",
+   "kind": "negative",
+   "source": "creator-docs luau/native-code-gen.md",
+   "evidence": "\"Only the script's functions are compiled natively\"; top-level scope does not benefit as much.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "false-classes-runtime-new-0742",
+   "file": "references/luau-fundamentals.md",
+   "quote": "`DebugLuauUserDefinedClassesRuntime` (new in 0.742)",
+   "kind": "regression",
+   "status": "false",
+   "source": "",
+   "evidence": "In the 0.737 source and 0.737 release notes.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "false-type-function-heap-limits",
+   "file": "references/luau-fundamentals.md",
+   "quote": "with `pcall`/`xpcall` error handling and runtime heap limits",
+   "kind": "regression",
+   "status": "false",
+   "source": "",
+   "evidence": "Heap limit is DebugLuauTypeFunctionRuntimeHeapLimit, default 0, unset in Studio.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "false-native-localscript-nothing",
+   "file": "references/luau-fundamentals.md",
+   "quote": "`--!native` LocalScript gains nothing from the comment",
+   "kind": "regression",
+   "status": "false",
+   "source": "",
+   "evidence": "Docs only describe server-side scripts.",
    "checked": "2026-10-11, engine 0.742.0.7421053"
   }
  ]

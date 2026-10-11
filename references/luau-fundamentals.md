@@ -110,7 +110,7 @@ flags each). None of the flags below is set there, and a Luau `FASTFLAGVARIABLE`
 | Prototype | Gate in 0.742 | Notes |
 |---|---|---|
 | **Exact tables by default** — `{ x: number }` rejects extra fields, `{ x: number, ... }` allows them (RFC luau-lang/rfcs#11), 0.740 | `DebugLuauParseExactTables`, `DebugLuauExactTableTypes` | The release note calls it "an experimental feature". Do not write `...` in a table type for Roblox |
-| **Classes** RFC prototype | `DebugLuauUserDefinedClasses`, `DebugLuauUserDefinedClassesRuntime` (new in 0.742) | |
+| **Classes** RFC prototype | `DebugLuauUserDefinedClasses`, `DebugLuauUserDefinedClassesRuntime` (both in the source since at least 0.737) | |
 | **`coroutine.finally`** (RFC #187), 0.738 | `LuauCoroutineFinally`, `LuauCoroutineFinallyAnalysis` (renamed from `DebugLuauCoroutineFinally` in 0.742) | The 0.742 release note says "stop gating behind a debug flag"; the flag lost its `Debug` prefix but still defaults to off. **Tested in Studio 0.742: `coroutine.finally` is `nil`** from a game Script and from the command bar |
 | Require top-level functions to be annotated, 0.738 | `DebugLuauWarnOnUnannotatedTopLevelFunctions` | A lint experiment |
 | An **`integer`** library (`integer.idiv` was fixed in 0.740) | `LuauIntegerLibrary` | Present in the open-source VM since at least 0.737, not enabled in Studio. Not a Roblox API |
@@ -163,7 +163,10 @@ local str: string = (value :: any) :: string  -- Type cast with ::
 
 The **New Type Solver** is the standard type engine for Luau (GA since November 2025):
 - Unlocks **built-in type functions** (`keyof`, `rawkeyof`, `setmetatable<T, M>`)
-- Supports **user-defined type functions** (`type function`) with `pcall`/`xpcall` error handling and runtime heap limits
+- Supports **user-defined type functions** (`type function`). In Luau 0.742 their runtime has the
+  base library, `pcall`/`xpcall` included; only `gcinfo`, `getfenv`, `newproxy` and `setfenv` are
+  removed (`TypeFunctionRuntime.cpp`). Older analyzers reject `pcall` there (luau-lsp 1.69: "this
+  function is not supported in type functions")
 - Relabels inferred generics cleanly (`T`, `U`, `V`, `W` instead of `a`, `b`, `c`)
 - Deep bidirectional control-flow narrowing and refined table indexer resolution
 - Config: Studio → Workspace Properties → Scripting → `LuauTypeCheckMode` (Properties window only:
@@ -310,8 +313,8 @@ local magnitude = vector.magnitude(v1)
 
 For compute-intensive algorithms (pathfinding, procedural generation, ray marching, heavy math), enable Luau Native Code Generation.
 
-> **Server-side only.** The official docs scope this to "server-side scripts in your game" — a
-> `--!native` LocalScript gains nothing from the comment. Only the script's *functions* are compiled;
+> **Server-side only.** The official docs scope this to "server-side scripts in your game" and
+> describe nothing for the client, so do not expect a gain from `--!native` in a LocalScript. Only the script's *functions* are compiled;
 > top-level code usually runs once and does not benefit.
 
 ```luau
