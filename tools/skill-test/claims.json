@@ -2832,7 +2832,7 @@
    "id": "networking-001",
    "file": "references/networking.md",
    "quote": "**Never trust the client** — always validate all data received from clients",
-   "status": "unverified",
+   "status": "advice",
    "kind": "negative",
    "source": "",
    "evidence": "",
@@ -2842,27 +2842,27 @@
    "id": "networking-002",
    "file": "references/networking.md",
    "quote": "**Does not yield** the firing script.",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Roblox/creator-docs RemoteEvent / UnreliableRemoteEvent / RemoteFunction reference; scripting/events/remote.md",
+   "evidence": "\"Scripts firing a RemoteEvent do not yield.\"",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "networking-003",
    "file": "references/networking.md",
    "quote": "fired it. This is engine-injected and **cannot be spoofed**. Never accept a",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Roblox/creator-docs RemoteEvent / UnreliableRemoteEvent / RemoteFunction reference; scripting/events/remote.md",
+   "evidence": "OnServerEvent receives the firing Player as its first argument, supplied by the engine.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "networking-004",
    "file": "references/networking.md",
    "quote": "**Never use `OnClientInvoke` for security-sensitive operations.**",
-   "status": "unverified",
+   "status": "advice",
    "kind": "negative",
    "source": "",
    "evidence": "",
@@ -2872,58 +2872,38 @@
    "id": "networking-005",
    "file": "references/networking.md",
    "quote": "If the client **throws an error**, the server throws too",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Roblox/creator-docs RemoteEvent / UnreliableRemoteEvent / RemoteFunction reference; scripting/events/remote.md",
+   "evidence": "\"If the client throws an error, the server throws the error too.\"",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "networking-006",
    "file": "references/networking.md",
    "quote": "If the client **disconnects**, `InvokeClient` throws an error",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Roblox/creator-docs RemoteEvent / UnreliableRemoteEvent / RemoteFunction reference; scripting/events/remote.md",
+   "evidence": "\"If the client disconnects while it's being invoked, InvokeClient() throws an error.\"",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "networking-007",
    "file": "references/networking.md",
    "quote": "If the client **never returns**, the server yields **forever**",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Roblox/creator-docs RemoteEvent / UnreliableRemoteEvent / RemoteFunction reference; scripting/events/remote.md",
+   "evidence": "\"If the client doesn't return a value, the server yields forever.\"",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "networking-008",
    "file": "references/networking.md",
    "quote": "whenever possible — it's async and doesn't have these risks.",
-   "status": "unverified",
+   "status": "advice",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "networking-009",
-   "file": "references/networking.md",
-   "quote": "**Payload limit: 1000 bytes** — events exceeding this are silently dropped",
-   "status": "unverified",
-   "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "networking-010",
-   "file": "references/networking.md",
-   "quote": "Same ~500 requests/sec client-to-server throttle as regular RemoteEvents",
-   "status": "unverified",
-   "kind": "number",
    "source": "",
    "evidence": "",
    "checked": ""
@@ -2932,57 +2912,47 @@
    "id": "networking-011",
    "file": "references/networking.md",
    "quote": "3. **Cyclic table references cause errors** — tables referencing themselves fail",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "execute_luau Edit 2026-10-11",
+   "evidence": "BindableEvent:Fire(cyclic) -> \"tables cannot be cyclic\"; metatables were stripped.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "networking-012",
    "file": "references/networking.md",
    "quote": "Message size | 1 KB",
-   "status": "unverified",
+   "status": "docs",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Roblox/creator-docs MessagingService.yaml",
+   "evidence": "1kB message size.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "networking-013",
    "file": "references/networking.md",
    "quote": "Subscribe requests per server | 240 per minute",
-   "status": "unverified",
+   "status": "docs",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "networking-014",
-   "file": "references/networking.md",
-   "quote": "RemoteEvent/UnreliableRemoteEvent share a **~500 requests/sec per client**",
-   "status": "unverified",
-   "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Roblox/creator-docs MessagingService.yaml",
+   "evidence": "\"Subscribe requests per game server: 240 requests per minute\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "networking-015",
    "file": "references/networking.md",
    "quote": "This limit is client-to-server (`FireServer`) only",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Roblox/creator-docs RemoteEvent / UnreliableRemoteEvent / RemoteFunction reference; scripting/events/remote.md",
+   "evidence": "\"rate limits when sent from the client to the server with FireServer\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "networking-016",
    "file": "references/networking.md",
    "quote": "create remotes, never the client.",
-   "status": "unverified",
+   "status": "advice",
    "kind": "negative",
    "source": "",
    "evidence": "",
@@ -6296,6 +6266,56 @@
    "status": "false",
    "source": "",
    "evidence": "Server Authority fully released 2026-07-09.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "networking-014",
+   "file": "references/networking.md",
+   "quote": "**Payload limit: 1000 bytes** — larger events are dropped (in Studio, the Output says by how",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs RemoteEvent / UnreliableRemoteEvent / RemoteFunction reference; scripting/events/remote.md",
+   "evidence": "\"Events with payloads larger than 1000 bytes are dropped ... in Studio, a log message\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "networking-017",
+   "file": "references/networking.md",
+   "quote": "A ~500 requests/sec per-client throttle on `FireServer`, like `RemoteEvent` but counted",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs RemoteEvent / UnreliableRemoteEvent / RemoteFunction reference; scripting/events/remote.md",
+   "evidence": "\"approximately 500 requests per second, per client ... shared among all remote events of the same type\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "networking-018",
+   "file": "references/networking.md",
+   "quote": "`RemoteEvent` and `UnreliableRemoteEvent` each have a **~500 requests/sec per client** limit,",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs RemoteEvent / UnreliableRemoteEvent / RemoteFunction reference; scripting/events/remote.md",
+   "evidence": "As above.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "false-unreliable-silent",
+   "file": "references/networking.md",
+   "quote": "events exceeding this are silently dropped",
+   "kind": "regression",
+   "status": "false",
+   "source": "",
+   "evidence": "Docs: Studio logs the overflow.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "false-unreliable-same-throttle",
+   "file": "references/networking.md",
+   "quote": "Same ~500 requests/sec client-to-server throttle as regular RemoteEvents",
+   "kind": "regression",
+   "status": "false",
+   "source": "",
+   "evidence": "Counted per type; excess handling differs.",
    "checked": "2026-10-11, engine 0.742.0.7421053"
   }
  ]

@@ -14,14 +14,14 @@ Every factual claim a reader could act on wrongly, with how it was verified. **s
 | `references/luau-fundamentals.md` | 11 | 10 | 1 | 40 | 3 | 0 | 3 |
 | `references/mcp-integration.md` | 31 | 12 | 2 | 2 | 6 | 0 | 4 |
 | `references/monetization.md` | 0 | 1 | 0 | 0 | 0 | 17 | 1 |
-| `references/networking.md` | 0 | 0 | 0 | 0 | 0 | 16 | 0 |
+| `references/networking.md` | 1 | 11 | 0 | 0 | 4 | 0 | 2 |
 | `references/performance-optimization.md` | 28 | 16 | 3 | 6 | 1 | 0 | 6 |
 | `references/project-structure.md` | 6 | 9 | 6 | 2 | 3 | 0 | 2 |
 | `references/security-hardening.md` | 12 | 26 | 3 | 0 | 7 | 0 | 4 |
 | `references/studio-plugins-and-limits.md` | 16 | 1 | 1 | 1 | 9 | 0 | 0 |
 | `references/ui-systems.md` | 1 | 0 | 0 | 0 | 0 | 8 | 1 |
 | `references/worked-examples.md` | 17 | 4 | 4 | 1 | 19 | 0 | 1 |
-| **total** | **175** | **120** | **63** | **73** | **95** | **57** | **46** |
+| **total** | **176** | **131** | **63** | **73** | **99** | **41** | **48** |
 
 ## Verified claims
 
@@ -226,6 +226,15 @@ Every factual claim a reader could act on wrongly, with how it was verified. **s
 | `references/mcp-integration.md`: `upload_image` uploads a local image file \| It uploads a **batch from HTTP(S) URLs** and returns an imagePath→assetId map. Local files go through `store_image` | docs | Schemas of upload_image and store_image. (MCP tool schemas of this session (Studio 0.742)) |
 | `references/mcp-integration.md`: `http_get` fetches any URL from Studio \| **Allowlisted** to Roblox docs domains, and the URL must end in `.md` or be `llms.txt`. `llms-full.txt` and `openapi.j | studio | Allowlist enforced; llms-full.txt/openapi.json rejected. (execute_luau / multi_edit runs, 2026-10-11) |
 | `references/mcp-integration.md`: `set_active_studio` is a tool \| Does not exist. Targeting is per call via `studio_id`. (Corrected in v2.7.0, kept here as a guard.) \| Official docs | studio | No such tool; every call takes studio_id. (MCP tool schemas of this session (Studio 0.742); Roblox/creator-docs studio/mcp.md (read 2026-10-11)) |
+| `references/networking.md`: **Does not yield** the firing script. | docs | "Scripts firing a RemoteEvent do not yield." (Roblox/creator-docs RemoteEvent / UnreliableRemoteEvent / RemoteFunction reference; scripting/events/remote.md) |
+| `references/networking.md`: fired it. This is engine-injected and **cannot be spoofed**. Never accept a | docs | OnServerEvent receives the firing Player as its first argument, supplied by the engine. (Roblox/creator-docs RemoteEvent / UnreliableRemoteEvent / RemoteFunction reference; scripting/events/remote.md) |
+| `references/networking.md`: If the client **throws an error**, the server throws too | docs | "If the client throws an error, the server throws the error too." (Roblox/creator-docs RemoteEvent / UnreliableRemoteEvent / RemoteFunction reference; scripting/events/remote.md) |
+| `references/networking.md`: If the client **disconnects**, `InvokeClient` throws an error | docs | "If the client disconnects while it's being invoked, InvokeClient() throws an error." (Roblox/creator-docs RemoteEvent / UnreliableRemoteEvent / RemoteFunction reference; scripting/events/remote.md) |
+| `references/networking.md`: If the client **never returns**, the server yields **forever** | docs | "If the client doesn't return a value, the server yields forever." (Roblox/creator-docs RemoteEvent / UnreliableRemoteEvent / RemoteFunction reference; scripting/events/remote.md) |
+| `references/networking.md`: 3. **Cyclic table references cause errors** — tables referencing themselves fail | studio | BindableEvent:Fire(cyclic) -> "tables cannot be cyclic"; metatables were stripped. (execute_luau Edit 2026-10-11) |
+| `references/networking.md`: Message size \| 1 KB | docs | 1kB message size. (Roblox/creator-docs MessagingService.yaml) |
+| `references/networking.md`: Subscribe requests per server \| 240 per minute | docs | "Subscribe requests per game server: 240 requests per minute". (Roblox/creator-docs MessagingService.yaml) |
+| `references/networking.md`: This limit is client-to-server (`FireServer`) only | docs | "rate limits when sent from the client to the server with FireServer". (Roblox/creator-docs RemoteEvent / UnreliableRemoteEvent / RemoteFunction reference; scripting/events/remote.md) |
 | `references/performance-optimization.md`: Properties window or a plugin — it needs the `PluginOrOpenCloud` capability, so a game Script can | studio | Fidelity writes from a game Script failed with PluginOrOpenCloud; plugin-level loop succeeded (run_plugin_cases). (Studio 0.742 playtest probe Scripts (SkillTestClaimProbe, SkillTestFrameProbe), 2026-10-11) |
 | `references/performance-optimization.md`: need the `PluginOrOpenCloud` capability, which an ordinary Script does not hold. See §3. | studio | Writes failed with "lacking capability PluginOrOpenCloud". (Studio 0.742 playtest probe Scripts (SkillTestClaimProbe, SkillTestFrameProbe), 2026-10-11) |
 | `references/performance-optimization.md`: `Precise` \| Highest \| Only when pixel-perfect collision is required | docs | Precise collision has the highest cost; docs advise reducing precise fidelity. "Only when pixel-perfect" is the skill's guidance on top. (Roblox/creator-docs performance-optimization/improve.md) |
@@ -505,3 +514,8 @@ Every factual claim a reader could act on wrongly, with how it was verified. **s
 | `references/project-structure.md`: "[Studio Beta] Expanding the Character Controller Library", 2026-09-10). | docs | "[Studio Beta] Expanding the Character Controller Library". (DevForum topic 4863739 (2026-09-10)) |
 | `references/project-structure.md`: 2026-07-09, and its official setup requires `PlayerScriptsUseInputActionSystem` to be enabled | docs | Full release 2026-07-09; setup requires PlayerScriptsUseInputActionSystem. (DevForum 4727993; creator-docs projects/server-authority) |
 | `references/project-structure.md`: IAS is a prerequisite for two major upcoming systems | false | Server Authority fully released 2026-07-09. |
+| `references/networking.md`: **Payload limit: 1000 bytes** — larger events are dropped (in Studio, the Output says by how | docs | "Events with payloads larger than 1000 bytes are dropped ... in Studio, a log message". (Roblox/creator-docs RemoteEvent / UnreliableRemoteEvent / RemoteFunction reference; scripting/events/remote.md) |
+| `references/networking.md`: A ~500 requests/sec per-client throttle on `FireServer`, like `RemoteEvent` but counted | docs | "approximately 500 requests per second, per client ... shared among all remote events of the same type". (Roblox/creator-docs RemoteEvent / UnreliableRemoteEvent / RemoteFunction reference; scripting/events/remote.md) |
+| `references/networking.md`: `RemoteEvent` and `UnreliableRemoteEvent` each have a **~500 requests/sec per client** limit, | docs | As above. (Roblox/creator-docs RemoteEvent / UnreliableRemoteEvent / RemoteFunction reference; scripting/events/remote.md) |
+| `references/networking.md`: events exceeding this are silently dropped | false | Docs: Studio logs the overflow. |
+| `references/networking.md`: Same ~500 requests/sec client-to-server throttle as regular RemoteEvents | false | Counted per type; excess handling differs. |

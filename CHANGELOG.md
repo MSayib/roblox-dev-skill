@@ -184,6 +184,14 @@ against the 0.737–0.742 source tarballs, and the beta claims against the staff
 - Measured: an object the server adds to `ReplicatedFirst` after a player joins never reaches that
   client, which backs "replicates only once".
 
+### Fixed — found by verifying `networking.md`
+
+- `UnreliableRemoteEvent` payloads over 1000 bytes are dropped but **not silently** (Studio logs the
+  overflow), and its ~500/s throttle is counted separately from `RemoteEvent`'s; excess unreliable
+  events are dropped while excess `RemoteEvent`s are processed later, in order.
+- Measured: `BindableEvent:Fire` with a cyclic table errors ("tables cannot be cyclic") and strips
+  metatables. The MessagingService limits table matches the official reference.
+
 ### Added — claims register
 
 - `tools/skill-test/claims.json` + `check_claims.py` + generated `docs/claims.md`: every
