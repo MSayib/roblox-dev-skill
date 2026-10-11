@@ -120,14 +120,21 @@ end)
 2. multi_edit                            → write the script (Edit datamodel, one script per call)
 3. get_console_output                    → catch load/syntax errors BEFORE playing
 4. start_stop_play                       → begin playtest
-5. execute_luau (datamodel_type: Server) → fire the remote with junk and assert it is rejected
-6. get_console_output                     → no errors, and no coin awarded
-7. start_stop_play                        → stop
+5. execute_luau (datamodel_type: Client) → FireServer the remote with junk
+6. execute_luau (datamodel_type: Server) → assert every coin still exists, unclaimed
+7. execute_luau (Client), then (Server)  → one valid claim: that coin is gone, the others remain
+8. get_console_output                    → no errors from CoinService
+9. start_stop_play                       → stop
 ```
 
 Step 5 is the one agents skip. Proving the happy path works is half a test; the handler exists to
-reject the unhappy path. Fire `NaN`, a `Part` from outside `coinFolder`, and 50 calls in a loop, and
-assert the count did not move.
+reject the unhappy path. Fire it **from the Client datamodel**: a server cannot raise its own
+`OnServerEvent`, so junk "fired" from a Server `execute_luau` tests nothing. Send `0/0` (NaN), a
+string, `nil`, a table, a `Part` from outside `coinFolder`, and 50 calls in a loop at a coin out of
+reach. Assert on what the server can see: `coinValues` is a local, so check that no coin was
+destroyed or marked `Claimed`, then that one valid claim does remove its coin. (Run exactly this way
+in Studio 0.742, 2026-10-11: all junk rejected, the valid claim accepted, a second claim of the same
+coin rejected, no errors.)
 
 ---
 
@@ -243,6 +250,7 @@ inventing a plausible member name.
 **Verification:** `execute_luau` the one-liner before building on it.
 
 ```luau
+--@skilltest: placeholder
 print(pcall(function() return (game:GetService("<Service>") :: any)["<Member>"] end))
 ```
 
@@ -277,6 +285,285 @@ comply.
 **Verification:** there is no playtest here. The deliverable is that the user understands the
 trade-off they are choosing. If they went ahead, the code comment should say what is trusted and
 why, so the next reader is not misled.
+
+---
+
+## 6. Grant a developer product purchase
+
+**Trigger:** "sell coins / a potion / a boost for Robux", "my ProcessReceipt", "players paid but got
+nothing", "players got the item twice".
+
+**Not this:**
+- A **game pass** (bought once, owned forever): check `UserOwnsGamePassAsync`, no receipt involved →
+  `monetization.md`
+- Player-to-player Robux → the Transfers API in `monetization.md`
+- An in-game currency purchase that costs no Robux → example 1 (a server-validated remote)
+
+**Routing:** `monetization.md` + `datastore-persistence.md`.
+
+**Sequence:**
+
+1. **One script owns `ProcessReceipt`.** Setting it from a second script silently replaces the
+   first.
+2. **A handler returns `true` only once the item is really granted.** Roblox's own sample checks
+   only that the handler did not *error* (`if success then`), although the warning under it says
+   the handler must return `true`. Check both: `ok and granted == true`.
+3. **Make it idempotent on `PurchaseId`.** `ProcessReceipt` runs again for every *unresolved*
+   purchase each time the player joins, and a purchase only counts as resolved once
+   `PurchaseGranted` is returned **and** recorded on Roblox's side. A server that stops between
+   granting and that record will see the same receipt again. Record the `PurchaseId` and the grant
+   in one `UpdateAsync`, so a repeat delivery is answered without granting twice.
+4. **Return `NotProcessedYet` whenever you are unsure.** The purchase stays unresolved and is
+   retried when the player next joins; it is never refunded or dropped by that answer.
+
+```luau
+--!strict
+--@skilltest: provides ReceiptHandler
+-- ModuleScript "ReceiptHandler" in ServerScriptService
+local DataStoreService = game:GetService("DataStoreService")
+local Players = game:GetService("Players")
+
+local purchaseHistory = DataStoreService:GetDataStore("PurchaseHistory_v1")
+
+local ReceiptHandler = {}
+
+-- productId -> grant function. Return true ONLY once the item is really granted.
+-- It runs inside an UpdateAsync callback, so it must not yield.
+ReceiptHandler.handlers = {} :: { [number]: (player: Player) -> boolean }
+
+function ReceiptHandler.process(receiptInfo: { [string]: any }): Enum.ProductPurchaseDecision
+	local purchaseId = tostring(receiptInfo.PurchaseId)
+	local ok, recorded = pcall(function()
+		return purchaseHistory:UpdateAsync(purchaseId, function(alreadyGranted: boolean?): boolean?
+			if alreadyGranted then
+				return true -- delivered again after an earlier grant: do not grant twice
+			end
+			local player = Players:GetPlayerByUserId(receiptInfo.PlayerId)
+			local handler = ReceiptHandler.handlers[receiptInfo.ProductId]
+			if not (player and handler and handler(player) == true) then
+				return nil -- cancel the write: the purchase stays unresolved and is retried
+			end
+			return true
+		end)
+	end)
+	if ok and recorded == true then
+		return Enum.ProductPurchaseDecision.PurchaseGranted
+	end
+	if not ok then
+		warn(`[ReceiptHandler] {purchaseId}: {recorded}`)
+	end
+	return Enum.ProductPurchaseDecision.NotProcessedYet
+end
+
+return ReceiptHandler
+```
+
+```luau
+--!strict
+--@skilltest: requires ReceiptHandler
+-- ServerScriptService/Receipts.server.luau: the ONLY script that sets ProcessReceipt
+local MarketplaceService = game:GetService("MarketplaceService")
+local ServerScriptService = game:GetService("ServerScriptService")
+
+local ReceiptHandler = require(ServerScriptService:WaitForChild("ReceiptHandler") :: ModuleScript)
+
+local COINS_100 = 111111111 -- your developer product ID
+
+ReceiptHandler.handlers[COINS_100] = function(player: Player): boolean
+	local leaderstats = player:FindFirstChild("leaderstats")
+	local coins = leaderstats and leaderstats:FindFirstChild("Coins")
+	if coins and coins:IsA("IntValue") then
+		coins.Value += 100
+		return true
+	end
+	return false -- not ready (no leaderstats yet): leave the purchase unresolved
+end
+
+MarketplaceService.ProcessReceipt = ReceiptHandler.process
+```
+
+**Verification:** test the logic directly; you do not need a real purchase. In a playtest,
+`execute_luau` (Server) can `require` the module (it gets its own copy, so register a test handler
+on that copy) and call `process` with a fake receipt whose `PlayerId` is the test player:
+
+| Call | Expected |
+|---|---|
+| New `PurchaseId`, handler returns `true` | `PurchaseGranted`, handler ran once |
+| The **same** `PurchaseId` again | `PurchaseGranted`, handler did **not** run again |
+| Handler returns `false` | `NotProcessedYet` |
+| Unknown `ProductId` | `NotProcessedYet` |
+| `PlayerId` of someone not in the server | `NotProcessedYet` |
+
+(Run exactly this way in Studio 0.742, 2026-10-11, against a real DataStore: all five matched.) Use
+`PurchaseId`s with a `test-` prefix so they cannot collide with real purchases.
+
+---
+
+## 7. Change the shape of saved player data
+
+**Trigger:** "rename a saved field", "add a field to existing saves", "change how inventory is
+stored", "old players lost their data after my update".
+
+**Not this:**
+- A brand-new game with no saved data yet: just change the default
+- Moving from DataStore2 or ProfileService to ProfileStore → `datastore-persistence.md` /
+  `legacy-migration.md`
+- Wiping progress on purpose (a season reset): that is a product decision; say so, do not
+  "migrate" it
+
+**Routing:** `datastore-persistence.md`.
+
+**Sequence:**
+
+1. **Keep the DataStore name.** A new name is a new, empty store: every player starts over.
+2. **Version the data and migrate on load.** Store a `version` field; data saved before versioning
+   existed counts as version 1. Each migration step upgrades exactly one version.
+3. **Never edit a migration that has shipped**; add the next step. Old saves still pass through it.
+4. **Refuse data from the future.** During a rolling update an older server can load a save that a
+   newer server already upgraded. It must not "fix" it down or save over it: reject the load.
+5. **A failed read is not an empty save.** Never fall back to defaults when `GetAsync` errors, or
+   the next save overwrites the player's real data (see `project-structure.md`, PlayerDataService).
+
+```luau
+--!strict
+--@skilltest: provides PlayerDataSchema
+-- ModuleScript "PlayerDataSchema" in ServerScriptService
+export type PlayerData = {
+	version: number,
+	coins: number,
+	gems: number,
+	inventory: { [string]: number }, -- item name -> count
+}
+
+local CURRENT_VERSION = 3
+
+-- migrations[n] upgrades a version-n table to version n + 1.
+local migrations: { [number]: (data: { [string]: any }) -> () } = {
+	[1] = function(data) -- v1 -> v2: the field "Coins" was renamed "coins"
+		data.coins = data.Coins or 0
+		data.Coins = nil
+	end,
+	[2] = function(data) -- v2 -> v3: inventory went from a list to a count map; gems added
+		local counts: { [string]: number } = {}
+		for _, item in data.inventory or {} do
+			counts[item] = (counts[item] or 0) + 1
+		end
+		data.inventory = counts
+		data.gems = data.gems or 0
+	end,
+}
+
+local PlayerDataSchema = {}
+
+function PlayerDataSchema.default(): PlayerData
+	return { version = CURRENT_VERSION, coins = 0, gems = 0, inventory = {} }
+end
+
+-- Errors if the save is newer than this server understands.
+function PlayerDataSchema.migrate(stored: { [string]: any }): PlayerData
+	local data = table.clone(stored)
+	local version = data.version or 1
+	if version > CURRENT_VERSION then
+		error(`save is version {version}; this server only knows up to {CURRENT_VERSION}`)
+	end
+	while version < CURRENT_VERSION do
+		migrations[version](data)
+		version += 1
+	end
+	data.version = CURRENT_VERSION
+	return data :: any
+end
+
+return PlayerDataSchema
+```
+
+```luau
+--!strict
+--@skilltest: requires PlayerDataSchema
+-- Inside your load function (server)
+local DataStoreService = game:GetService("DataStoreService")
+local ServerScriptService = game:GetService("ServerScriptService")
+
+local PlayerDataSchema = require(ServerScriptService:WaitForChild("PlayerDataSchema") :: ModuleScript)
+local store = DataStoreService:GetDataStore("PlayerData") -- the SAME name as before
+
+local function load(player: Player)
+	local ok, stored = pcall(function()
+		return store:GetAsync(`Player_{player.UserId}`)
+	end)
+	if not ok then
+		player:Kick("Your data could not be loaded. Please rejoin.") -- never default on failure
+		return nil
+	end
+	if stored == nil then
+		return PlayerDataSchema.default() -- a genuinely new player
+	end
+	local migrated, result = pcall(PlayerDataSchema.migrate, stored)
+	if not migrated then
+		player:Kick("This server is out of date. Please rejoin.") -- a newer save; do not touch it
+		return nil
+	end
+	return result
+end
+```
+
+**Verification:** run the module against saves of every version before shipping. `execute_luau`
+can `require` it and assert: a v1 save `{ Coins = 5, inventory = { "Sword", "Sword", "Shield" } }`
+becomes `{ version = 3, coins = 5, gems = 0, inventory = { Sword = 2, Shield = 1 } }` with no
+`Coins` key; a v3 save comes back unchanged; a v4 save errors. Then round-trip one save through a
+throwaway store name (not the live one) with `SetAsync`, `GetAsync` and `migrate`. (Run exactly this
+way in Studio 0.742, 2026-10-11: all four matched.)
+
+---
+
+## 8. Open a menu from an Input Action
+
+**Trigger:** "press B to open the shop", "a gamepad button that toggles the inventory", "make my
+menu work on console and mobile".
+
+**Not this:**
+- What happens when the player *buys* from that menu → example 1 or example 6; the toggle itself
+  never needs the server
+- Rebinding UI: `GetInputBindings()` is `RobloxScriptSecurity`; use `PreferredBinding` +
+  `InputActionLabel` (`project-structure.md`)
+- Turning IAS on for the default character controls: `PlayerScriptsUseInputActionSystem` is a
+  Properties-window setting no script can touch
+
+**Routing:** `project-structure.md` (IAS) + `ui-systems.md`.
+
+**Sequence:**
+
+1. **Build the action at edit time** (IAS is declarative): under `ReplicatedStorage/Inputs/
+   PlayContext` (an `InputContext`), add an `InputAction` named `ToggleShop` (`Type = Bool`) with
+   one `InputBinding` per device family: `KeyCode = B` for keyboard, `KeyCode = ButtonY` for
+   gamepad, and for touch an `InputBinding` whose `UIButton` points at an on-screen button.
+2. **Listen to the action, not the key.** One `Pressed` handler covers every device.
+3. **The toggle is client-only.** Opening a menu changes nothing anyone else can see.
+
+```luau
+--!strict
+--@skilltest: client
+-- StarterPlayerScripts/ShopToggle.client.luau
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local playerGui = Players.LocalPlayer:WaitForChild("PlayerGui")
+local shopGui = playerGui:WaitForChild("ShopGui") :: ScreenGui
+local inputs = ReplicatedStorage:WaitForChild("Inputs")
+local toggleShop = inputs:WaitForChild("PlayContext"):WaitForChild("ToggleShop") :: InputAction
+
+shopGui.Enabled = false
+toggleShop.Pressed:Connect(function()
+	shopGui.Enabled = not shopGui.Enabled
+end)
+```
+
+**Verification:** in a playtest, press the real key with MCP `user_keyboard_input` (focus the game
+view first) and read `shopGui.Enabled` from `execute_luau` (Client) after each press: `false`, then
+`true`, then `false`. (Run exactly this way in Studio 0.742, 2026-10-11, with the hierarchy above
+and `PlayerScriptsUseInputActionSystem` left at its default.) If nothing toggles, check that the
+`InputContext` is `Enabled` and that a higher-`Priority` context with `Sink` is not consuming the
+key.
 
 ---
 

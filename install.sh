@@ -432,6 +432,8 @@ install_payload() {
         [ -f "$src/$f" ] && cp "$src/$f" "$new/"
     done
     cp -R "$src/references" "$new/references"
+    # docs/ holds the pages README.md links to (absent in versions before 2.16.0)
+    [ -d "$src/docs" ] && cp -R "$src/docs" "$new/docs"
     printf 'managed-by=%s install.sh\nversion=%s\ninstalled=%s\n' "$REPO_NAME" "$version" "$STAMP" > "$new/$MARKER"
     # swap in place: links point at $PAYLOAD, so they follow the new content automatically
     [ -e "$PAYLOAD" ] && mv "$PAYLOAD" "$old"

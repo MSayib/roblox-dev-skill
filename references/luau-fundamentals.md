@@ -75,6 +75,7 @@ DevForum topic 4918297 by Roblox staff). It declares a variable inside an `if` /
 scoped to that branch, with the type narrowed to non-nil:
 
 ```lua
+--@skilltest: beta-syntax
 if local character = player.Character then
 	-- character: Model (non-nil) here
 end
@@ -129,12 +130,18 @@ flag-gated prototypes, and one Studio-only beta syntax.
 
 ### Inference Modes
 Set on the **first line** of any Script/LocalScript/ModuleScript:
-```luau
---!strict    -- Asserts ALL types (inferred + explicit). Mandatory for new code.
---!nonstrict -- Only checks explicitly annotated types (default)
---!nocheck   -- Disables type checking entirely
---!native    -- Compiles script to native machine code for maximum execution speed
-```
+| Directive | Effect |
+|---|---|
+| `--!strict` | Checks ALL types (inferred and explicit). Mandatory for new code |
+| `--!nonstrict` | Only checks explicitly annotated types (the default) |
+| `--!nocheck` | Disables type checking entirely |
+| `--!native` | Compiles the script to native code (can sit on the line after the mode directive) |
+
+**Put nothing else on a directive line.** `--!strict -- my comment` is not a strict script: the
+analyzer reports "Comment directive with the type checking mode has extra symbols at the end of the
+line" and **ignores the directive**, so the file is checked in the default nonstrict mode (verified
+with luau-analyze 0.742: a type error in such a file goes unreported). Write the comment on the next
+line.
 
 ### Core Types
 ```luau
@@ -435,7 +442,9 @@ local escaped = `Literal \`backtick\` and \{braces\}`
 Iterate directly over tables without `pairs()`/`ipairs()`:
 ```luau
 --!strict
-local inventory = { Sword = 1, Shield = 2, Potion = 5 }
+-- A table literal with named keys is a sealed record type; under --!strict, iterating it errors
+-- with "Cannot iterate over a table without indexer". Annotate it as a map to iterate it.
+local inventory: { [string]: number } = { Sword = 1, Shield = 2, Potion = 5 }
 for item, count in inventory do
 	print(`{item}: {count}`)
 end

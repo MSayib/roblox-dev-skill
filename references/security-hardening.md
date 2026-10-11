@@ -95,7 +95,7 @@ end
 local function isInRange(player: Player, targetPos: Vector3, maxDist: number): boolean
     local character = player.Character
     local rootPart = character and character:FindFirstChild("HumanoidRootPart")
-    if not rootPart then return false end
+    if not (rootPart and rootPart:IsA("BasePart")) then return false end
     return (rootPart.Position - targetPos).Magnitude <= maxDist
 end
 ```

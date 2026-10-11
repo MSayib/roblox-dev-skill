@@ -35,7 +35,7 @@ jobs:
         run: python3 tests/lint/check_sources.py
 
       - name: ShellCheck
-        run: shellcheck --version && shellcheck -s bash -S warning install.sh tools/robloxdocs/*.sh tests/install/*.sh
+        run: shellcheck --version && shellcheck -s bash -S warning install.sh tools/robloxdocs/*.sh tests/install/*.sh tests/e2e/*.sh
 
       - name: PSScriptAnalyzer — Windows PowerShell 5.1 and PowerShell 7 syntax, plus errors
         shell: pwsh
@@ -74,6 +74,24 @@ jobs:
           PYTHONIOENCODING: cp1252
         run: python3 tools/robloxdocs/roblox-api-monitor.py --refs references --audit strict
 
+  static:
+    name: Every Luau example under --!strict (luau-lsp)
+    runs-on: ubuntu-latest
+    env:
+      LUAU_LSP_VERSION: "1.69.0"
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install luau-lsp
+        run: |
+          curl -fsSL -o "$RUNNER_TEMP/luau-lsp.zip" "https://github.com/JohnnyMorganz/luau-lsp/releases/download/$LUAU_LSP_VERSION/luau-lsp-linux-x86_64.zip"
+          unzip -q "$RUNNER_TEMP/luau-lsp.zip" -d "$RUNNER_TEMP/luau-lsp"
+          chmod +x "$RUNNER_TEMP/luau-lsp/luau-lsp"
+      - name: Type-check and lint every block (New Type Solver, current Roblox definitions)
+        run: |
+          OUT="$RUNNER_TEMP/blocks"
+          python3 tools/skill-test/extract_blocks.py "$OUT"
+          python3 tools/skill-test/run_static.py "$OUT" --strict --luau-lsp "$RUNNER_TEMP/luau-lsp/luau-lsp"
+
   unix:
     name: install.sh — ${{ matrix.name }}
     strategy:
@@ -87,6 +105,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Functional suite
         run: ${{ matrix.bash }} tests/install/test_unix.sh
+      - name: End-to-end install, validate, uninstall
+        run: ${{ matrix.bash }} tests/e2e/test_install_e2e.sh
       - name: The README one-liner, downloading this commit from GitHub
         if: env.SAME_REPO == 'true'
         run: |

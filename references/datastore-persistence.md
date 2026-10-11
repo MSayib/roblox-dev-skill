@@ -64,12 +64,14 @@ end
 ### UpdateAsync — Atomic Read-Modify-Write
 ```luau
 --!strict
+type PlayerData = { coins: number, level: number }
+
 local success, updatedValue = pcall(function()
-    return playerStore:UpdateAsync("User_1234", function(currentData)
+    return playerStore:UpdateAsync("User_1234", function(currentData: PlayerData?): PlayerData
         -- The callback must NOT yield (no task.wait, etc.)
-        currentData = currentData or { coins = 0, level = 1 }
-        currentData.coins += 10
-        return currentData
+        local data: PlayerData = currentData or { coins = 0, level = 1 }
+        data.coins += 10
+        return data
     end)
 end)
 ```
@@ -364,9 +366,11 @@ player data management. It wraps `DataStoreService` with critical safeguards.
 ### Basic Usage Pattern
 ```luau
 --!strict
+--@skilltest: requires ProfileStore
 -- ServerScriptService/PlayerDataManager.server.luau
-local ProfileStore = require(game.ServerStorage.ProfileStore)
+local ServerStorage = game:GetService("ServerStorage")
 local Players = game:GetService("Players")
+local ProfileStore = require(ServerStorage:WaitForChild("ProfileStore") :: ModuleScript)
 
 local DATA_TEMPLATE = {
     coins = 0,
@@ -470,7 +474,7 @@ local function migrateFromDataStore2(player: Player, profile: any)
     if profile.Data.migrated then return end
 
     -- Attempt to read from old DataStore2
-    local DataStore2 = require(game.ServerStorage.DataStore2) -- legacy module
+    local DataStore2 = require(game:GetService("ServerStorage"):WaitForChild("DataStore2") :: ModuleScript) -- legacy module
     local oldStore = DataStore2("PlayerSave", player)
     local oldData = oldStore:Get(nil)
 

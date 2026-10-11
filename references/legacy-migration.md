@@ -42,15 +42,29 @@ The globals use a legacy scheduler with throttling. The `task` library is the
 standard replacement (available since 2021).
 
 ```luau
--- ❌ Legacy                        -- ✅ Modern
-spawn(function()                    task.spawn(function()
-    wait(2)                             task.wait(2)
-    print("Hello")                      print("Hello")
-end)                                end)
+--@skilltest: legacy
+-- ❌ Legacy: throttled scheduler, deprecated globals
+spawn(function()
+    wait(2)
+    print("Hello")
+end)
 
-delay(5, function()                 task.delay(5, function()
-    print("Delayed")                    print("Delayed")
-end)                                end)
+delay(5, function()
+    print("Delayed")
+end)
+```
+
+```luau
+--!strict
+-- ✅ Modern: the task library
+task.spawn(function()
+    task.wait(2)
+    print("Hello")
+end)
+
+task.delay(5, function()
+    print("Delayed")
+end)
 ```
 
 **Full `task` API:** `task.spawn`, `task.defer`, `task.delay`, `task.wait`,
@@ -66,11 +80,20 @@ local elapsed = task.wait(1) -- e.g. 1.0003
 Setting `Parent` triggers replication and `ChildAdded`. Set it **last**.
 
 ```luau
--- ❌ Legacy (parent first)         -- ✅ Modern (parent last)
-local part = Instance.new("Part")   local part = Instance.new("Part")
-part.Parent = workspace             part.Size = Vector3.new(4, 1, 4)
-part.Size = Vector3.new(4, 1, 4)   part.Anchored = true
-part.Anchored = true                part.Parent = workspace
+-- ❌ Legacy (parent first): every property set after this replicates separately
+local part = Instance.new("Part")
+part.Parent = workspace
+part.Size = Vector3.new(4, 1, 4)
+part.Anchored = true
+```
+
+```luau
+--!strict
+-- ✅ Modern (parent last): configure, then parent once
+local part = Instance.new("Part")
+part.Size = Vector3.new(4, 1, 4)
+part.Anchored = true
+part.Parent = workspace
 ```
 
 ### 3. camelCase → PascalCase API Methods
@@ -94,8 +117,11 @@ Both casings work, but PascalCase is the documented standard.
 
 ```luau
 --!strict
+--@skilltest: requires ProfileStore
 -- Conceptual migration loader (server-side)
-local ProfileStore = require(game.ServerScriptService.ProfileStore)
+local ServerStorage = game:GetService("ServerStorage")
+local Players = game:GetService("Players")
+local ProfileStore = require(ServerStorage:WaitForChild("ProfileStore") :: ModuleScript)
 local DataStoreService = game:GetService("DataStoreService")
 local legacyStore = DataStoreService:GetDataStore("PlayerData")
 
@@ -104,9 +130,14 @@ local DEFAULT_DATA: PlayerData = { Coins = 0, Inventory = {}, Migrated = false }
 local playerStore = ProfileStore.New("PlayerProfiles", DEFAULT_DATA)
 
 local function loadPlayer(player: Player)
-    local profile = playerStore:StartSessionAsync(
-        `Player_{player.UserId}`, { Cancel = player.AncestryChanged }
-    )
+    local profile = playerStore:StartSessionAsync(`Player_{player.UserId}`, {
+        -- Cancel is a FUNCTION ProfileStore polls, returning true once the session is no longer
+        -- needed (official signature: Cancel: fn() -> (boolean)?). Passing a signal such as
+        -- player.AncestryChanged is wrong.
+        Cancel = function()
+            return player:IsDescendantOf(Players) == false
+        end,
+    })
     if not profile then
         player:Kick("Data failed to load. Please rejoin.")
         return

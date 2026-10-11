@@ -1,0 +1,11 @@
+{
+  "className": "Model",
+  "children": [
+    {
+      "name": "HumanoidRootPart",
+      "className": "Part",
+      "properties": { "Anchored": true, "Size": [2, 2, 1] }
+    },
+    { "name": "Humanoid", "className": "Humanoid" }
+  ]
+}

@@ -83,15 +83,26 @@ local function processReceipt(receiptInfo: { [string]: any }): Enum.ProductPurch
         return Enum.ProductPurchaseDecision.NotProcessedYet
     end
 
-    local success = pcall(handler, player)
-    if success then
+    -- pcall's first value only says the handler did not ERROR. A handler that returns false
+    -- ("not granted yet") must not be answered with PurchaseGranted, or the player pays for nothing.
+    local ok, granted = pcall(handler, player)
+    if ok and granted == true then
         return Enum.ProductPurchaseDecision.PurchaseGranted
+    end
+    if not ok then
+        warn("Receipt handler errored:", granted)
     end
     return Enum.ProductPurchaseDecision.NotProcessedYet
 end
 
 MarketplaceService.ProcessReceipt = processReceipt
 ```
+
+> **This handler is not yet idempotent.** `ProcessReceipt` runs again for every unresolved purchase
+> when the player joins, so a receipt you already granted can arrive again (a server that stopped
+> after granting, before Roblox recorded the result). Record each `PurchaseId` together with the
+> grant: see `worked-examples.md` §6 for the `UpdateAsync` pattern, tested in Studio 0.742. Roblox's
+> own sample checks only `if success then`, although its warning says a handler must return `true`.
 
 ### 5. Subscriptions (Recurring In-Experience)
 

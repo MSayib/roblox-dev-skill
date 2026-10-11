@@ -218,11 +218,11 @@ export type PlayerData = {
 	Inventory: { string },
 }
 
-local DEFAULT_DATA: PlayerData = table.freeze({
-	Coins = 0,
-	Level = 1,
-	Inventory = {},
-})
+-- A fresh table per player. Do NOT table.clone() one shared default: clone is shallow, so every
+-- new player would share the same Inventory table (an item given to one shows up for all).
+local function defaultData(): PlayerData
+	return { Coins = 0, Level = 1, Inventory = {} }
+end
 
 function PlayerDataService.Init()
 	Players.PlayerAdded:Connect(function(player: Player)
@@ -232,6 +232,13 @@ function PlayerDataService.Init()
 	Players.PlayerRemoving:Connect(function(player: Player)
 		PlayerDataService.saveData(player)
 	end)
+
+	-- On shutdown PlayerRemoving may not get to finish; save everyone still in the session.
+	game:BindToClose(function()
+		for _, player in Players:GetPlayers() do
+			PlayerDataService.saveData(player)
+		end
+	end)
 end
 
 function PlayerDataService.loadData(player: Player)
@@ -239,11 +246,14 @@ function PlayerDataService.loadData(player: Player)
 		return playerDataStore:GetAsync(`Player_{player.UserId}`)
 	end)
 
-	if success and data then
-		sessionData[player.UserId] = data :: PlayerData
-	else
-		sessionData[player.UserId] = table.clone(DEFAULT_DATA)
+	if not success then
+		-- Never fall back to defaults on a FAILED read: saveData would later overwrite the
+		-- player's real save with them. Leave no session, so nothing is saved.
+		warn(`[PlayerDataService] load failed for {player.UserId}: {data}`)
+		player:Kick("Your data could not be loaded. Please rejoin.")
+		return
 	end
+	sessionData[player.UserId] = if data then data :: PlayerData else defaultData()
 end
 
 function PlayerDataService.saveData(player: Player)
@@ -252,9 +262,12 @@ function PlayerDataService.saveData(player: Player)
 		return
 	end
 
-	pcall(function()
+	local ok, err = pcall(function()
 		playerDataStore:SetAsync(`Player_{player.UserId}`, data)
 	end)
+	if not ok then
+		warn(`[PlayerDataService] save failed for {player.UserId}: {err}`)
+	end
 
 	sessionData[player.UserId] = nil
 end
@@ -289,13 +302,13 @@ function InputController.Init()
 end
 
 function InputController.onInteract()
-	local interactEvent = ReplicatedStorage:FindFirstChild("Remotes")
-		and ReplicatedStorage.Remotes:FindFirstChild("Interact")
-	if not interactEvent then
+	local remotes = ReplicatedStorage:FindFirstChild("Remotes")
+	local interactEvent = remotes and remotes:FindFirstChild("Interact")
+	if not (interactEvent and interactEvent:IsA("RemoteEvent")) then
 		return
 	end
 
-	(interactEvent :: RemoteEvent):FireServer()
+	interactEvent:FireServer()
 end
 
 return InputController
@@ -316,7 +329,8 @@ end
 -- Require and initialize all services
 for _, module in Services:GetChildren() do
 	if module:IsA("ModuleScript") then
-		local service = require(module)
+		-- Type the contract every service module follows; Init is optional.
+		local service = require(module) :: { Init: (() -> ())? }
 		if service.Init then
 			service.Init()
 		end
@@ -612,6 +626,7 @@ ReplicatedStorage/
 ```luau
 --!strict
 -- StarterPlayerScripts/Controllers/SprintController.client.luau
+--@skilltest: client
 -- Assumes the hierarchy above was created in Studio (the documented workflow).
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 

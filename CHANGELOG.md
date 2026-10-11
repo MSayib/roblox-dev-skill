@@ -11,6 +11,107 @@ reference content was verified against at that time.
 
 ---
 
+## 2.16.0 — Oct 11, 2026
+
+**Every code example tested: type-checked under `--!strict`, then run in a real Studio place.** No
+engine change (still 0.742.0.7421053 / Luau 0.742). The skill's 130 Luau blocks were checked by
+two new layers, and the worked examples' own verification steps were executed as written. Eleven
+defects were found and fixed; several had shipped since the initial release. Every item below was
+reproduced before it was fixed and re-run after.
+
+### Fixed — examples that could not run or did the wrong thing
+
+- **`ui-systems.md` shop controller could not compile.** A line starting with `(` after
+  `entry.Visible = true` is "Ambiguous syntax" in Luau; the Roblox compiler rejected the whole
+  LocalScript (seen in Studio). Rewritten with locals.
+- **`project-structure.md` PlayerDataService leaked data between players and could wipe saves.**
+  `table.clone(DEFAULT_DATA)` is shallow, so every new player shared one `Inventory` table
+  (reproduced: an item given to player A appeared for player B and in the default). Worse, a
+  *failed* `GetAsync` fell back to defaults, which the next save wrote over the player's real data.
+  Now a fresh default per player, a kick instead of defaults on a failed read, a warning on a failed
+  save, and `BindToClose`.
+- **`performance-optimization.md` object pool leaked every object.** `npcPool:acquire(npcPool)` and
+  `npcPool:release(npcPool, npc)` passed `self` twice, so `release` received the pool as the item
+  (reproduced: `available` fell from 10 to 4 in six cycles). Rewritten with correct calls and
+  New-Solver types (`setmetatable<...>`).
+- **`monetization.md` charged players for items it did not give.** `local success = pcall(handler,
+  player)` ignored the handler's `false`, so a failed grant returned `PurchaseGranted`. Now
+  `ok and granted == true`, with an idempotency note. Roblox's own sample has the same `if success`
+  check.
+- **`legacy-migration.md` passed a signal where ProfileStore expects a function**
+  (`Cancel = player.AncestryChanged`; the official signature is `Cancel: fn() -> (boolean)?`).
+- **`luau-fundamentals.md` taught a directive form that switches strict mode off.**
+  `--!strict    -- comment` is ignored with "Comment directive ... has extra symbols at the end of
+  the line" (verified with luau-analyze 0.742: a type error in such a file goes unreported). Now a
+  table, and an explicit warning.
+- **`luau-fundamentals.md` generalized-iteration example errored under `--!strict`** ("Cannot iterate
+  over a table without indexer"). The table is now annotated as a map.
+- **`performance-optimization.md` Parallel Luau example failed outside an Actor**
+  ("Scripts that connect in parallel must be rooted under an Actor", seen in Studio), showed
+  `ConnectParallel` under a `task.desynchronize` heading, and said an `Actor` inherits from
+  `DataModel` (it is `Actor` → `Model` → `PVInstance` → `Instance`).
+- **`studio-plugins-and-limits.md` ignored `TryBeginRecording` returning `nil`.** It does return
+  `nil` inside MCP `execute_luau` (tested), and `FinishRecording(nil)` then errors.
+- **`worked-examples.md` §1 verification could not work.** It said to fire the remote from a
+  *Server* `execute_luau`; a server cannot raise its own `OnServerEvent`. Now fired from the Client
+  datamodel, asserting on what the server can observe. Run as written: all junk rejected, the valid
+  claim accepted, a repeat claim rejected.
+- **Strict type errors** in `security-hardening.md` (`Position` on an `Instance`),
+  `project-structure.md` (calling into an untyped `require`, `ReplicatedStorage.Remotes`), and
+  `game.ServerStorage` / `game.ServerScriptService` instead of `GetService` in four places.
+
+### Added
+
+- **Runtime fidelity path.** A game Script cannot write `CollisionFidelity`, but
+  `AssetService:CreateMeshPartAsync(meshContent, { CollisionFidelity = ..., RenderFidelity = ... })`
+  + `MeshPart:ApplyMesh` changes it at runtime (tested from a plain Script; large meshes are
+  rejected).
+- **Worked examples 6–8**, each run in Studio: granting a developer product idempotently
+  (`ReceiptHandler`, five receipt cases against a real DataStore), migrating saved data by version
+  (`PlayerDataSchema`, v1→v3, future versions refused, a DataStore round trip), and opening a menu
+  from an Input Action (a real `B` key press via MCP `user_keyboard_input`).
+- **`tools/skill-test/`**: `extract_blocks.py`, `run_static.py` (luau-lsp, New Type Solver, every
+  block in strict mode, game-Script definitions, plugin definitions for plugin blocks) and a Studio
+  runtime harness synced by Rojo on port 34871 (each block as its own `Script`, `LocalScript`, or
+  inside an `Actor`; fixtures for the remotes, GUIs and modules the examples need; the official
+  ProfileStore fetched at build time). Result: 136 blocks, 0 unexplained static findings; 73 server
+  and 9 client cases, 0 runtime errors, 0 infinite yields. See `docs/testing.md`.
+- **Audit:** bare member names in prose (`` `Class` (`MemberA`, `MemberB`) ``) are now resolved
+  against their class; security-level labels in that position are not mistaken for members.
+- **`tests/e2e/`**: `test_install_e2e.sh` installs into a throwaway home, validates the payload,
+  proves Claude Code lists the skill at startup (with a negative control) and uninstalls cleanly;
+  `run_evals.py` runs evals headless through `claude -p` with no MCP servers and read-only tools.
+  CI runs the static layer and the install E2E.
+- **Evals 52 → 58** for the defects above.
+
+### Changed
+
+- **Skill description rewritten, and measured.** It told agents to route monetization, UI, audio
+  and VFX to "their respective skills in the suite", which this repository does not ship, and gave
+  no reason to open the skill for a question the model thinks it knows. Measured with
+  `tests/e2e/run_evals.py` on 13 evals through Claude Code (Opus 5.5, no MCP, read-only tools):
+  the old description triggered the skill on **2 of 11** Roblox prompts, the new one on **10 of
+  11**; both negative prompts (Redis Lua, a WoW addon) stayed untriggered. Without the skill, two
+  answers quoted a wrong error message ("lacking capability Plugin") and one presented an untested
+  workaround as working; with it, every triggered answer met its eval's notes. The one prompt still
+  answered without the skill (#56, the `--!strict -- comment` directive) was answered correctly.
+  Adding "Luau type errors and --!strict" to the description did not change that, so it was not
+  kept.
+- **README cut to an overview** (what it is, quick install, what's inside, how it stays correct);
+  the details moved to `docs/installation.md`, `docs/robloxdocs.md`, `docs/how-it-works.md` and
+  `docs/testing.md`, which the installer now ships with the skill.
+- The maintainer's Claude Code link was named `roblox-dev`, which the spec rejects; renamed to
+  `roblox-dev-skill`.
+
+### Roadmap closed
+
+All three open items shipped: wider worked examples (§6–8), a real parser for the examples (the
+luau-lsp layer, which type-checks every block instead of matching it with regular expressions), and
+bare member names in prose. The weekly ingest stays a routine, not a roadmap item. The README no
+longer carries a roadmap.
+
+---
+
 ## 2.15.0 — Oct 11, 2026
 
 **Engine 0.742.0.7421053 / Luau 0.742, with every developer-visible change run in Studio, and a

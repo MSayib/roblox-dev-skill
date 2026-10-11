@@ -40,6 +40,7 @@ Prefer `UpdateSourceAsync` for programmatic edits regardless of size — it also
 avoids clobbering a script the user currently has open in the editor:
 
 ```lua
+--@skilltest: plugin
 local ScriptEditorService = game:GetService("ScriptEditorService")
 
 ScriptEditorService:UpdateSourceAsync(target, function(oldSource)
@@ -155,9 +156,17 @@ Studio must be restarted to pick up a newly added plugin file.
 Patterns worth copying for any plugin that mutates a user's place:
 
 ```lua
+--@skilltest: plugin
 local ChangeHistoryService = game:GetService("ChangeHistoryService")
 
 local recording = ChangeHistoryService:TryBeginRecording("Replace asset IDs")
+if not recording then
+    -- nil means another recording is already open (TryBeginRecording returns string?).
+    -- This is real: inside MCP execute_luau it returns nil, because the call already runs
+    -- inside a recording (Studio 0.742); FinishRecording(nil) would then error.
+    warn("[Plugin] another change is being recorded; try again")
+    return
+end
 local ok, err = pcall(applyChanges)
 if ok then
     ChangeHistoryService:FinishRecording(recording, Enum.FinishRecordingOperation.Commit)

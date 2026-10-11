@@ -419,8 +419,9 @@ createRemote("UnreliableRemoteEvent", "MousePosition", unreliableFolder)
 
 **❌ Using string-based remote names with `FindFirstChild` everywhere:**
 ```luau
+--@skilltest: antipattern
 -- Old pattern: fragile, no type safety
-local event = game.ReplicatedStorage:FindFirstChild("SomeEvent")
+local event = game:GetService("ReplicatedStorage"):FindFirstChild("SomeEvent")
 if event then event:FireServer(...) end
 ```
 
