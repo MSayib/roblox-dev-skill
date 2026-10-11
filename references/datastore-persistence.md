@@ -40,6 +40,7 @@ local playerStore = DataStoreService:GetDataStore("PlayerData")
 ## Core CRUD Operations
 
 ### GetAsync — Read
+<!-- skilltest: prelude datastore; expect call-succeeded -->
 ```luau
 --!strict
 local success, value = pcall(function()
@@ -51,6 +52,7 @@ end
 ```
 
 ### SetAsync — Write (simple)
+<!-- skilltest: prelude datastore; expect call-succeeded -->
 ```luau
 --!strict
 local success, err = pcall(function()
@@ -62,6 +64,7 @@ end
 ```
 
 ### UpdateAsync — Atomic Read-Modify-Write
+<!-- skilltest: prelude datastore; expect update-async-increments -->
 ```luau
 --!strict
 type PlayerData = { coins: number, level: number }
@@ -77,6 +80,7 @@ end)
 ```
 
 ### RemoveAsync — Delete
+<!-- skilltest: prelude datastore; expect call-succeeded -->
 ```luau
 --!strict
 local success, oldValue = pcall(function()
@@ -85,6 +89,7 @@ end)
 ```
 
 ### IncrementAsync — Atomic Integer Increment
+<!-- skilltest: prelude datastore; expect call-succeeded -->
 ```luau
 --!strict
 local success, newValue = pcall(function()
@@ -429,6 +434,7 @@ Players.PlayerRemoving:Connect(onPlayerRemoving)
 6. **Use `UpdateAsync` for player data** — atomic, prevents overwrites
 7. **Bind to close** — always save on `game:BindToClose` with a timeout
 
+<!-- skilltest: prelude save-on-leave -->
 ```luau
 --!strict
 game:BindToClose(function()
@@ -467,6 +473,7 @@ DataStore2 was an early community wrapper that introduced:
 3. On subsequent loads, check if ProfileStore data exists; if not, fall back to DataStore2
 4. Once all active players have been migrated, remove DataStore2 code
 
+<!-- skilltest: requires DataStore2; expect datastore2-migrates -->
 ```luau
 --!strict
 -- Simplified migration check (server-side)

@@ -144,6 +144,7 @@ with luau-analyze 0.742: a type error in such a file goes unreported). Write the
 line.
 
 ### Core Types
+<!-- skilltest: prelude some-function -->
 ```luau
 --!strict
 local name: string = "Player1"                -- Primitives: string, number, boolean, nil
@@ -349,6 +350,7 @@ Official Roblox Lua Style Guide (https://roblox.github.io/lua-style-guide/):
 | **UPPER_SNAKE_CASE** | Constants | `MAX_HEALTH`, `DEFAULT_SPEED` |
 
 **Acronym rule:** Do NOT capitalize full acronyms — treat them as words:
+<!-- skilltest: prelude json-response; expect json-decode -->
 ```luau
 --!strict
 -- CORRECT: JsonTable, HttpResponse, XmlParser
@@ -394,6 +396,7 @@ operations without agonizing over the call cost, but do not treat `pcall` in a h
 zero-cost, and do not quote a bigger number: `performance-optimization.md` carries the same
 correction.
 
+<!-- skilltest: prelude datastore; expect call-succeeded -->
 ```luau
 --!strict
 local success, result = pcall(function()
@@ -459,6 +462,7 @@ end
 
 ## Table Methods & Immutability
 
+<!-- skilltest: prelude original-table; expect table-library -->
 ```luau
 --!strict
 -- table.find: returns index or nil

@@ -127,6 +127,7 @@ Higher fidelity = more memory and computation.
 > `CollisionFidelity` and `MeshPart.RenderFidelity` kept the new value. Check the value on a real
 > part after setting it.
 
+<!-- skilltest: prelude decorative-meshpart; expect fidelity-set -->
 ```luau
 --!strict
 --@skilltest: plugin
@@ -530,6 +531,7 @@ return ObjectPool
 
 Usage for NPC pooling:
 
+<!-- skilltest: expect pool-returns-to-ten -->
 ```luau
 --!strict
 --@skilltest: requires ObjectPool NPCTemplate

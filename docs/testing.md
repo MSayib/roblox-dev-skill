@@ -28,8 +28,11 @@ look complete) against what a **game Script** may touch; blocks marked `plugin` 
 plugin-level definitions instead.
 
 A block that uses names from the reader's own project (`playerStore`, `screenGui`, …) is a
-**fragment**: it still gets every other check, and an error on a line that uses one of those names
-is treated as a knock-on effect.
+**fragment**. A **prelude** supplies those names (see [Preludes and expectations](#preludes-and-expectations)),
+and the block is analysed together with it, so the reader's names have real types. A fragment
+without a prelude still gets every other check, and an error on a line that uses one of its
+unknown names is treated as a knock-on effect; `run_static.py` reports how many are left
+(`with unresolved names`).
 
 ## Runtime in Studio
 
@@ -43,8 +46,21 @@ rojo serve default.project.json --port 34871
 ```
 
 Then in Studio: connect the Rojo plugin to port 34871, start a playtest, and read the console.
-`SkillTestHarness` prints one line per failing case and ends with
-`[SKILLTEST] DONE server cases=N ok=N runtime-error=0`.
+`SkillTestHarness` (server) and `SkillTestClientHarness` (client) print one line per failing case
+and end with
+
+```
+[SKILLTEST] DONE server cases=N ok=N runtime-error=0 infinite-yield=0 late=0 expect-pass=E expect-fail=0
+[SKILLTEST] DONE client cases=N ok=N runtime-error=0 infinite-yield=0 late=0 expect-pass=E expect-fail=0
+```
+
+A case fails on a runtime error, on an expectation that did not pass, or on an `Infinite yield`
+whose child never arrived (the block never ran to its end). A yield whose child arrived later
+(a ScreenGui after a slow first spawn) is counted as `late`, not as a failure.
+
+Plugin-level blocks cannot run as a game Script. With Studio in Edit mode, run
+`tools/skill-test/studio/run_plugin_cases.luau` through MCP `execute_luau` (or the command bar);
+it returns `[SKILLTEST] DONE plugin cases=N ok=N expect-pass=E expect-fail=0`.
 
 - Each server block becomes its own `Script` (game-Script identity, so security and capability
   gates apply; MCP `execute_luau` runs at plugin level and would hide them). Client blocks become
@@ -59,15 +75,42 @@ Then in Studio: connect the Rojo plugin to port 34871, start a playtest, and rea
   to the end and is not tested.
 
 Blocks that must not run (they ban, prompt a purchase, or teleport), and blocks that only show a
-legacy or beta form, are skipped with a reason recorded in `generated/SkillTestSuite.luau`.
+legacy, anti-pattern or beta form, are skipped with a reason recorded in
+`generated/SkillTestSuite.luau`.
+
+## Preludes and expectations
+
+A **prelude** (`tools/skill-test/preludes/<name>.luau`) is placed before a block and declares the
+names a reader would already have: `screenGui` in their PlayerGui, `playerStore`, a `player` from
+`PlayerAdded`. An **expectation** (`tools/skill-test/expect/<name>.luau`) is placed after it and
+asserts what the example must do, with `__skilltest.check(label, ok)` and
+`__skilltest.eq(label, actual, expected)`: the pool is back to 10 after acquire/release, two new
+players do not share an Inventory, a receipt is granted once, a v1 save migrates to v3. An
+expectation sees the block's top-level locals; when the block is a module, its final
+`return X` becomes `local skilltestModule = X` (a function wrapper would make `export type`
+illegal). `compose.py` builds the combined source, which both the static and the Studio layer use.
+
+A prelude may declare its own directives: `prelude <dependency>`, `client`, `plugin`, or
+`varargs <expr>` (the block is called with those values, for a block that starts
+`local player: Player = ...`). A prelude lifts the `project-tree` and `placeholder` skips, because
+it builds what they refer to.
 
 The worked examples' own **Verification** sections were also executed as written, through MCP
 (`execute_luau` on the Server and Client datamodels, `user_keyboard_input` for real key presses).
 
 ## Directives
 
-A block can declare what it is with a comment. They are deliberately few, and each one is visible
-to the reader for a reason:
+A block can declare what it is with a comment inside it, or with an HTML comment on the line
+directly above its fence, which the rendered page does not show and a reader does not copy with
+the code (items separated by `;`):
+
+```markdown
+<!-- skilltest: prelude screen-gui; expect per-corner-radius -->
+```
+
+Use the HTML form for anything that only concerns the tests (`prelude`, `expect`, `requires`,
+`provides`); keep the in-block form for what also tells the reader something (`legacy`,
+`plugin`, `client`).
 
 | Directive | Meaning |
 |---|---|
@@ -79,6 +122,8 @@ to the reader for a reason:
 | `--@skilltest: actor` | Must run inside an `Actor` (Parallel Luau) |
 | `--@skilltest: project-tree` | Uses instances from the reader's place (`workspace.SomeNPC`) |
 | `--@skilltest: placeholder` | Contains `<placeholders>` to fill in |
+| `--@skilltest: prelude A B` | Supply the reader's names from `preludes/A.luau`, `preludes/B.luau` |
+| `--@skilltest: expect A` | Assert behaviour with `expect/A.luau` after the block |
 | `--@skilltest: requires X` | Needs module `X`, which the test project provides |
 | `--@skilltest: provides X` | This block is module `X` for other blocks |
 | `--@skilltest: fragment` / `skip <why>` | Not a complete program / do not run |

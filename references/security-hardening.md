@@ -48,6 +48,7 @@ Every piece of data from a client must pass multiple validation layers.
 
 ### Type Checking with typeof()
 
+<!-- skilltest: prelude remote-event -->
 ```luau
 --!strict
 local function validateType(value: unknown, expectedType: string): boolean
@@ -102,6 +103,7 @@ end
 
 ### Cooldown Enforcement
 
+<!-- skilltest: expect cooldown -->
 ```luau
 --!strict
 local COOLDOWN_SECONDS = 1.5
@@ -109,10 +111,10 @@ local lastActionTime: { [Player]: number } = {}
 
 local function isOnCooldown(player: Player): boolean
     local last = lastActionTime[player]
-    if last and (time() - last) < COOLDOWN_SECONDS then
+    if last and (os.clock() - last) < COOLDOWN_SECONDS then
         return true
     end
-    lastActionTime[player] = time()
+    lastActionTime[player] = os.clock() -- real elapsed time; see the token bucket note below
     return false
 end
 ```
@@ -295,8 +297,15 @@ end)
 
 ### Token Bucket Pattern
 
-From the official docs — a token bucket allows short bursts but prevents sustained spam:
+From the official docs (*Client-server boundary*), a token bucket allows short bursts but prevents
+sustained spam. One change from that sample: it measures time with `os.clock()`, not `time()`.
+`time()` is game time, which falls behind real time while the server is busy: in a Studio test
+(0.742) a `task.wait(0.7)` early in a busy server took 3.2 s by `os.clock()` while `time()`
+advanced 0.44 s, so the sample's bucket refilled less than a quarter as fast as players were
+sending, and refused them. `os.clock()` is real elapsed time that system clock changes do not move
+(official `os.clock` reference).
 
+<!-- skilltest: provides TokenBucket; expect token-bucket -->
 ```luau
 --!strict
 -- ModuleScript in ServerScriptService
@@ -321,7 +330,7 @@ function TokenBucketModule.new(capacity: number, windowSeconds: number): TokenBu
 end
 
 function TokenBucketModule.allow(self: TokenBucket, userId: number): boolean
-    local now = time()
+    local now = os.clock() -- real time; time() lags behind it under server load
     local b = self.buckets[userId]
     if not b then
         b = { tokens = self.capacity, last = now }
@@ -345,6 +354,7 @@ return TokenBucketModule
 
 Always clean up on `PlayerRemoving` to prevent memory leaks:
 
+<!-- skilltest: prelude players rate-limiter -->
 ```luau
 --!strict
 Players.PlayerRemoving:Connect(function(player: Player)
@@ -461,6 +471,7 @@ security risks, as they can contain malicious scripts called backdoors."*
 
 This example demonstrates a fully validated weapon-fire handler combining all patterns:
 
+<!-- skilltest: requires TokenBucket -->
 ```luau
 --!strict
 -- Server Script in ServerScriptService

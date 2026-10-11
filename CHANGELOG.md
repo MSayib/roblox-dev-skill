@@ -11,6 +11,63 @@ reference content was verified against at that time.
 
 ---
 
+## Unreleased
+
+**Fragments run, and the important examples assert what they do.** No engine change (0.742.0.7421053
+/ Luau 0.742). Every result below is from Studio 0.742 in the owner's test place through Rojo on
+port 34871, with all layers re-run after the last edit.
+
+### Fixed — found by running the 48 fragments for the first time
+
+- **`monetization.md` subscription handler used an event that does not exist.**
+  `MarketplaceService.SubscriptionStatusChanged` is not a member (API dump 0.742; the
+  `MarketplaceService.UserSubscriptionStatusChanged` that does exist is RobloxScriptSecurity). The
+  event a game Script receives is `Players.UserSubscriptionStatusChanged(user, subscriptionId)`,
+  which carries no status, so the example now re-reads it with `GetUserSubscriptionStatusAsync`
+  and changes nothing when that check fails. Added when it fires (official `Players` reference).
+  The API audit did not flag this; the strict type check of the fragment with its prelude did.
+- **`security-hardening.md` rate limiting measured time with `time()`.** `time()` is game time,
+  which falls behind real time while the server is busy: twice, a `task.wait(0.7)` early in a busy
+  server took 3.0–3.2 s by `os.clock()` while `time()` advanced 0.36–0.44 s, so the token bucket
+  (the official *Client-server boundary* sample uses `time()` too) refused a player sending at the
+  allowed rate. The token bucket and the cooldown example now use `os.clock()` (official reference:
+  real elapsed time, unaffected by system clock changes). The note says where this departs from
+  the official sample.
+- **`legacy-migration.md` used the deprecated `PlayerOwnsAsset`.** Now `PlayerOwnsAssetAsync`.
+- **`ui-systems.md` ScreenGui example failed `--!strict`.** `player.PlayerGui` is a child, not a
+  property; now `player:WaitForChild("PlayerGui")`.
+
+### Added — tests
+
+- **Preludes** (`tools/skill-test/preludes/`, 26) supply the reader's names, declared with an HTML
+  comment above the fence that the rendered page does not show. Fragments with unresolved names:
+  48 → 1 (the `if local` beta-syntax block, which cannot run in a game). Skipped cases 54 → 9
+  (beta syntax, legacy, anti-pattern, placeholder, and four that ban, teleport or prompt a purchase).
+- **Expectations** (`tools/skill-test/expect/`, 22 files on 27 blocks) assert behaviour, not just "no error": the pool
+  is back to 10 and a double release is ignored; two new players do not share an Inventory; a
+  receipt is granted once and stays retryable when not ready; v1 and v2 saves migrate to v3 and a
+  v4 save is refused; the token bucket allows 10, refuses the 11th and refills; table library
+  results; the DataStore2 migration merges once; UI properties (UIShadow, per-corner UICorner,
+  tween end state, disconnected connections); plugin-level `UpdateSourceAsync` and the
+  CollisionFidelity loop.
+- **Harness**: a client reporter next to the server one, expectation results, `Infinite yield`
+  detection that tells a child that never arrived from one that arrived late, and a plugin-level
+  runner (`run_plugin_cases.luau`) for blocks a game Script cannot run.
+- Results, Studio 0.742: server 97/97 cases, 20/20 expectations; client 27/27, 5/5; plugin 3/3,
+  2/2; 0 runtime errors, 0 infinite yields. Static: 136 blocks, 0 unexplained findings. API audit:
+  0 defects.
+
+### Fixed — test tooling
+
+- The directive parser let `\s+` cross a line end, so a value-less directive (`client`) swallowed
+  the next line. A prelude's dependency was lost this way; in-block `plugin`/`client` directives
+  had carried the following comment as their value.
+- Expectation results no longer live in attributes on the case script: in a playtest they were
+  written, then found cleared on the original scripts after the run (a clone of the same script
+  kept them; cause not established). They go to `shared.SkillTestResults`.
+
+---
+
 ## 2.16.0 — Oct 11, 2026
 
 **Every code example tested: type-checked under `--!strict`, then run in a real Studio place.** No

@@ -358,6 +358,7 @@ end
 return ReceiptHandler
 ```
 
+<!-- skilltest: expect receipt-idempotent -->
 ```luau
 --!strict
 --@skilltest: requires ReceiptHandler
@@ -424,6 +425,7 @@ stored", "old players lost their data after my update".
 5. **A failed read is not an empty save.** Never fall back to defaults when `GetAsync` errors, or
    the next save overwrites the player's real data (see `project-structure.md`, PlayerDataService).
 
+<!-- skilltest: expect schema-migrates -->
 ```luau
 --!strict
 --@skilltest: provides PlayerDataSchema
@@ -477,6 +479,7 @@ end
 return PlayerDataSchema
 ```
 
+<!-- skilltest: expect load-new-player -->
 ```luau
 --!strict
 --@skilltest: requires PlayerDataSchema

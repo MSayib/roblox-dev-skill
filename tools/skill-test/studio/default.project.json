@@ -22,6 +22,9 @@
       },
       "PlayerDataSchema": {
         "$path": "generated/modules/PlayerDataSchema.luau"
+      },
+      "TokenBucket": {
+        "$path": "generated/modules/TokenBucket.luau"
       }
     },
     "ServerStorage": {
@@ -40,6 +43,12 @@
       },
       "ProfileStore": {
         "$path": "generated/modules/ProfileStore.luau"
+      },
+      "DataStore2": {
+        "$path": "fixtures/DataStore2.luau"
+      },
+      "SkillTestPluginCases": {
+        "$path": "generated/PluginCases.luau"
       }
     },
     "StarterPlayer": {
@@ -48,6 +57,9 @@
         "$className": "StarterPlayerScripts",
         "SkillTestClient": {
           "$path": "generated/client"
+        },
+        "SkillTestClientHarness": {
+          "$path": "ClientHarness.client.luau"
         }
       }
     },
@@ -110,6 +122,18 @@
             }
           }
         }
+      },
+      "SkillTestHarnessCore": {
+        "$path": "HarnessCore.luau"
+      },
+      "SomeEvent": {
+        "$className": "RemoteEvent"
+      },
+      "FireWeapon": {
+        "$className": "RemoteEvent"
+      },
+      "Modules": {
+        "$path": "fixtures/Modules"
       }
     },
     "Workspace": {

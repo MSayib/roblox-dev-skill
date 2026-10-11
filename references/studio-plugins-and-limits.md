@@ -39,6 +39,7 @@ first and last characters); 64 MiB completed in 0.48 s.
 Prefer `UpdateSourceAsync` for programmatic edits regardless of size — it also
 avoids clobbering a script the user currently has open in the editor:
 
+<!-- skilltest: prelude script-target; expect source-updated -->
 ```lua
 --@skilltest: plugin
 local ScriptEditorService = game:GetService("ScriptEditorService")
@@ -155,6 +156,7 @@ Studio must be restarted to pick up a newly added plugin file.
 
 Patterns worth copying for any plugin that mutates a user's place:
 
+<!-- skilltest: prelude apply-changes -->
 ```lua
 --@skilltest: plugin
 local ChangeHistoryService = game:GetService("ChangeHistoryService")

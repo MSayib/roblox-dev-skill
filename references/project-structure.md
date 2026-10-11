@@ -201,6 +201,7 @@ A common pattern for organizing game logic:
 
 ### Server Service Example
 
+<!-- skilltest: expect inventory-not-shared -->
 ```luau
 --!strict
 -- ServerScriptService/Services/PlayerDataService.luau
@@ -652,6 +653,7 @@ end)
 If you must build IAS instances from a script, the same classes apply — but note the property
 names, because every one of these was wrong in an earlier version of this file:
 
+<!-- skilltest: prelude play-context; expect input-action-built -->
 ```luau
 --!strict
 local action = Instance.new("InputAction")
@@ -715,6 +717,7 @@ Legacy pattern used IntValue, StringValue, BoolValue objects for state.
 Modern code should use ModuleScripts with tables or RemoteEvents for
 client-server communication.
 
+<!-- skilltest: prelude replicated-storage; requires GameConfig; project-tree; expect game-config -->
 ```luau
 --!strict
 -- LEGACY: Value objects for configuration
@@ -731,6 +734,7 @@ local maxHealth = GameConfig.MAX_HEALTH  -- 100
 Legacy code sometimes used `require(assetId)` to load ModuleScripts by their
 asset ID. This is fragile and hard to maintain.
 
+<!-- skilltest: prelude replicated-storage; requires MyModule; project-tree; expect module-required -->
 ```luau
 --!strict
 -- LEGACY (avoid)

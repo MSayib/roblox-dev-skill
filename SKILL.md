@@ -308,6 +308,7 @@ These rules apply to ALL generated Roblox/Luau code. They are non-negotiable.
   - UI → `StarterGui`
 
 ### 5. Error Handling
+<!-- skilltest: prelude datastore; expect call-succeeded -->
 ```lua
 local success, result = pcall(function()
     return DataStoreService:GetDataStore("PlayerData"):GetAsync(key)

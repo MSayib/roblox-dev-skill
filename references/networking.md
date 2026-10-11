@@ -426,6 +426,7 @@ if event then event:FireServer(...) end
 ```
 
 **✅ Modern: `WaitForChild` with type assertion:**
+<!-- skilltest: client; prelude replicated-storage -->
 ```luau
 --!strict
 local event = ReplicatedStorage:WaitForChild("SomeEvent") :: RemoteEvent
@@ -433,6 +434,7 @@ event:FireServer(...)
 ```
 
 **❌ Using `OnClientInvoke` for server→client security checks:**
+<!-- skilltest: prelude remote-function-client -->
 ```luau
 -- DANGEROUS: Client controls the return value, can lie or hang
 remoteFunc.OnClientInvoke = function()

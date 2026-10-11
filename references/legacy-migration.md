@@ -440,11 +440,12 @@ each row is checkable with `jq` against `~/RobloxDocs/RobloxAPI/dumps/`.
 Inventory privacy enforcement changed the behavior of `PlayerOwnsAsset` and
 inventory web APIs. Player inventory is now private by default.
 
+<!-- skilltest: prelude ownership-ids -->
 ```lua
 -- ⚠️ This may now return false even if the player owns the asset
--- due to privacy settings
+-- due to privacy settings. (PlayerOwnsAsset, without Async, is deprecated.)
 local success, owns = pcall(function()
-    return MarketplaceService:PlayerOwnsAsset(player, assetId)
+    return MarketplaceService:PlayerOwnsAssetAsync(player, assetId)
 end)
 
 -- ✅ For GamePass checks, use this instead (unaffected):
@@ -492,6 +493,7 @@ Modified return behavior. Check current documentation for updated return values.
 - **Hub → Sub-game architectures** — Teleported players may have different IDs
 
 ### New Engine Primitives
+<!-- skilltest: prelude user-ids -->
 ```lua
 --!strict
 -- NEW: User data type (available now for early testing)

@@ -128,19 +128,34 @@ end
 ```
 
 **Server-side — Handle subscription state changes:**
+<!-- skilltest: prelude subscription-id -->
 ```lua
-MarketplaceService.SubscriptionStatusChanged:Connect(function(player, subscriptionId, newStatus)
-    if subscriptionId == SUBSCRIPTION_ID then
-        if newStatus.IsSubscribed then
-            -- Grant perks
-        else
-            -- Revoke perks
-        end
+--!strict
+-- The event is on Players (MarketplaceService has no SubscriptionStatusChanged) and carries no
+-- status, so read it again. Only server scripts receive it.
+local MarketplaceService = game:GetService("MarketplaceService")
+local Players = game:GetService("Players")
+
+Players.UserSubscriptionStatusChanged:Connect(function(player: Player, subscriptionId: string)
+    if subscriptionId ~= SUBSCRIPTION_ID then
+        return
+    end
+    local ok, status = pcall(function()
+        return MarketplaceService:GetUserSubscriptionStatusAsync(player, subscriptionId)
+    end)
+    if not ok then
+        return -- the check failed: change nothing, check again later
+    end
+    if status.IsSubscribed then
+        -- Grant perks
+    else
+        -- Revoke perks
     end
 end)
 ```
 
 **Client-side — Prompt purchase:**
+<!-- skilltest: prelude subscription-id -->
 ```lua
 local MarketplaceService = game:GetService("MarketplaceService")
 local Players = game:GetService("Players")
@@ -151,6 +166,9 @@ MarketplaceService:PromptSubscriptionPurchase(player, SUBSCRIPTION_ID)
 
 **Key facts:**
 - Subscriptions are managed in the Creator Dashboard
+- `Players.UserSubscriptionStatusChanged` fires only after the server re-checks, which it does when
+  the purchase modal closes. A player who subscribed outside the experience must still be prompted
+  (the prompt says they are already subscribed) before the event fires
 - Revenue split: same as other in-experience purchases
 - Players can cancel anytime; access continues until the billing period ends
 - Use `GetUserSubscriptionDetailsAsync` for plan details (price, period)
