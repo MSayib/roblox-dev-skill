@@ -2689,70 +2689,60 @@
    "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
-   "id": "monetization-002",
-   "file": "references/monetization.md",
-   "quote": "Roblox monetization (as of August 2026) consists of:",
-   "status": "unverified",
-   "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
    "id": "monetization-003",
    "file": "references/monetization.md",
    "quote": "**This handler is not yet idempotent.** `ProcessReceipt` runs again for every unresolved purchase",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Roblox/creator-docs MarketplaceService.yaml",
+   "evidence": "ProcessReceipt is called for unresolved purchases when the user joins.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "monetization-004",
    "file": "references/monetization.md",
    "quote": "grant: see `worked-examples.md` §6 for the `UpdateAsync` pattern, tested in Studio 0.742. Roblox's",
-   "status": "unverified",
+   "status": "studio",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "expect/receipt-idempotent",
+   "evidence": "5/5 PASS 2026-10-11.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "monetization-005",
    "file": "references/monetization.md",
    "quote": "own sample checks only `if success then`, although its warning says a handler must return `true`.",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "creator-docs developer-products.md",
+   "evidence": "pcall(handler) then if success then; warning must return true.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "monetization-006",
    "file": "references/monetization.md",
    "quote": "**Added May 2026** — Official replacement for cross-game donation patterns.",
-   "status": "unverified",
+   "status": "docs",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "DevForum topic 4618396 (Roblox, 2026-05-04) and its FAQ update",
+   "evidence": "Transfers API introduced 2026-05-04.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "monetization-007",
    "file": "references/monetization.md",
    "quote": "Call `PromptRobuxTransferAsync` **server-side only**",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Roblox/creator-docs MarketplaceService.yaml",
+   "evidence": "\"This is a server-only method and must be called from a Script with RunContext Server\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "monetization-008",
    "file": "references/monetization.md",
    "quote": "Never promise direct Robux payouts as rewards",
-   "status": "unverified",
+   "status": "advice",
    "kind": "negative",
    "source": "",
    "evidence": "",
@@ -2762,71 +2752,21 @@
    "id": "monetization-009",
    "file": "references/monetization.md",
    "quote": "Only return `Enum.ReceiptDecision.Processed` after successfully logging",
-   "status": "unverified",
+   "status": "docs",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "monetization-010",
-   "file": "references/monetization.md",
-   "quote": "Launched April 30, 2026 — replaces old Roblox Premium.",
-   "status": "unverified",
-   "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "monetization-011",
-   "file": "references/monetization.md",
-   "quote": "Updated May 19, 2026",
-   "status": "unverified",
-   "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "monetization-012",
-   "file": "references/monetization.md",
-   "quote": "**Forfeited**: If game is permanently removed for Community Standards violations",
-   "status": "unverified",
-   "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "monetization-013",
-   "file": "references/monetization.md",
-   "quote": "Launched H1 2026",
-   "status": "unverified",
-   "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Roblox/creator-docs MarketplaceService.yaml",
+   "evidence": "BindReceiptHandler: Processed means benefits granted; NotProcessedYet redelivers.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "monetization-014",
    "file": "references/monetization.md",
    "quote": "**Discontinued May 29, 2026**",
-   "status": "unverified",
+   "status": "docs",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "monetization-015",
-   "file": "references/monetization.md",
-   "quote": "**Why removed**: Developer products and passes were \"never originally designed for",
-   "status": "unverified",
-   "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "DevForum topic 4618396 (Roblox, 2026-05-04) and its FAQ update",
+   "evidence": "\"discontinue cross-game sales of developer products and passes on May 29\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "networking-001",
@@ -5922,31 +5862,31 @@
    "id": "monetization-017",
    "file": "references/monetization.md",
    "quote": "(2026-10-11) calls `ProcessReceipt` \"legacy\" and documents",
-   "status": "unverified",
+   "status": "docs",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Roblox/creator-docs MarketplaceService.yaml",
+   "evidence": "BindReceiptHandler: \"alternative to the legacy ProcessReceipt callback\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "monetization-018",
    "file": "references/monetization.md",
    "quote": "least 0.733 (`Security: None`), and a game Script registered both forms in Studio 0.742 without",
-   "status": "unverified",
+   "status": "studio",
    "kind": "number",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "local dumps 0.733-0.742; Studio 0.742 playtest Script",
+   "evidence": "BindReceiptHandler present since 0.733; filtered and catch-all registration OK.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "monetization-019",
    "file": "references/monetization.md",
    "quote": "error; a full purchase through it was not run here. The idempotency rule is the same: record the",
-   "status": "unverified",
+   "status": "studio",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Studio 0.742 playtest Script",
+   "evidence": "As stated.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "datastore-persistence-028",
@@ -6316,6 +6256,156 @@
    "status": "false",
    "source": "",
    "evidence": "Counted per type; excess handling differs.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "monetization-015",
+   "file": "references/monetization.md",
+   "quote": "Roblox monetization (checked 2026-10-11) consists of:",
+   "status": "advice",
+   "kind": "number",
+   "source": "",
+   "evidence": "",
+   "checked": ""
+  },
+  {
+   "id": "monetization-016",
+   "file": "references/monetization.md",
+   "quote": "Daily / monthly limit | 500 Robux per day, 1,000 per month. Asked whether this would scale by age or verification, Roblox said it is \"intentionally starting with this limit\" (staff FAQ, May 2026). No higher tier is documented",
+   "status": "docs",
+   "kind": "number",
+   "source": "DevForum topic 4618396 (Roblox, 2026-05-04) and its FAQ update",
+   "evidence": "FAQ: \"Transfers API limits (500 Robux/day, 1000/month) ... intentionally starting with this limit\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "monetization-020",
+   "file": "references/monetization.md",
+   "quote": "Rolled out April 30, 2026 (\"Introducing Roblox Plus\", Roblox staff, 2026-04-10). It does not",
+   "status": "docs",
+   "kind": "negative",
+   "source": "DevForum topic 4567894 \"Introducing Roblox Plus\" (Roblox Staff, 2026-04-10; update 2026-04-30)",
+   "evidence": "Update 2026-04-30: \"Roblox Plus is rolling out now\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "monetization-021",
+   "file": "references/monetization.md",
+   "quote": "Rollout began May 19, 2026 (\"Alternate Publishing Requirements for Roblox Kids and Select\",",
+   "status": "docs",
+   "kind": "number",
+   "source": "DevForum topic 4630944 (Roblox Staff, 2026-05-11)",
+   "evidence": "\"On May 19, our new publishing requirements will begin rolling out.\"",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "monetization-022",
+   "file": "references/monetization.md",
+   "quote": "Roblox staff, 2026-05-11).",
+   "status": "docs",
+   "kind": "number",
+   "source": "DevForum topic 4630944 (Roblox Staff, 2026-05-11)",
+   "evidence": "As above.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "monetization-023",
+   "file": "references/monetization.md",
+   "quote": "or 90 days after payment if it never does",
+   "status": "docs",
+   "kind": "negative",
+   "source": "DevForum topic 4630944 (Roblox Staff, 2026-05-11)",
+   "evidence": "As above.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "monetization-024",
+   "file": "references/monetization.md",
+   "quote": "**Forfeited** only if the game is permanently removed for severe Community Standards violations",
+   "status": "docs",
+   "kind": "negative",
+   "source": "DevForum topic 4630944 (Roblox Staff, 2026-05-11)",
+   "evidence": "\"The only exception is if your game is permanently removed ... severe Community Standards violations\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "monetization-025",
+   "file": "references/monetization.md",
+   "quote": "Announced 2026-06-15 (\"Managed Pricing: One System for Better Pricing and Earnings Growth\",",
+   "status": "docs",
+   "kind": "number",
+   "source": "DevForum topic 4684738 (Roblox Staff, 2026-06-15); creator-docs managed-pricing.md, price-optimization.md",
+   "evidence": "Announcement date and pages.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "monetization-026",
+   "file": "references/monetization.md",
+   "quote": "**Why removed**: in Roblox's words, developer products and passes \"were never designed for",
+   "status": "docs",
+   "kind": "negative",
+   "source": "DevForum topic 4618396 (Roblox, 2026-05-04) and its FAQ update",
+   "evidence": "\"these tools were never designed for peer-to-peer Robux transfers\"; \"protect players from fraud and exploitation\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "monetization-027",
+   "file": "references/monetization.md",
+   "quote": "(staff post, 2026-05-04).",
+   "status": "docs",
+   "kind": "number",
+   "source": "DevForum topic 4618396",
+   "evidence": "Post dated 2026-05-04.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "false-plus-replaces-premium",
+   "file": "references/monetization.md",
+   "quote": "replaces old Roblox Premium",
+   "kind": "regression",
+   "status": "false",
+   "source": "",
+   "evidence": "Plus announcement: Premium still grants marketplace access.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "false-publish-refund-60",
+   "file": "references/monetization.md",
+   "quote": "After 60+ days of maintained engagement",
+   "kind": "regression",
+   "status": "false",
+   "source": "",
+   "evidence": "Refunded 90 days after eligibility (or payment).",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "false-quote-originally",
+   "file": "references/monetization.md",
+   "quote": "\"never originally designed for",
+   "kind": "regression",
+   "status": "false",
+   "source": "",
+   "evidence": "Actual wording: \"were never designed for\".",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "false-transfer-age-both",
+   "file": "references/monetization.md",
+   "quote": "Both users must complete Roblox age check",
+   "kind": "regression",
+   "status": "false",
+   "source": "",
+   "evidence": "Under-18 users need parental approval per transfer.",
+   "checked": "2026-10-11, engine 0.742.0.7421053"
+  },
+  {
+   "id": "false-transfer-2sv",
+   "file": "references/monetization.md",
+   "quote": "| Daily limit (with 2SV) | 5,000 Robux/day |",
+   "kind": "regression",
+   "status": "false",
+   "source": "",
+   "evidence": "No source; staff FAQ gives 500/day, 1,000/month.",
    "checked": "2026-10-11, engine 0.742.0.7421053"
   }
  ]

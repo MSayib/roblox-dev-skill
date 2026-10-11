@@ -17,7 +17,7 @@
 
 ## Overview
 
-Roblox monetization (as of August 2026) consists of:
+Roblox monetization (checked 2026-10-11) consists of:
 1. **Game Passes** — One-time purchases granting permanent perks
 2. **Developer Products** — Repeatable purchases (consumables)
 3. **Transfers API** — Player-to-player Robux transfers (NEW, replaces cross-game sales)
@@ -202,14 +202,9 @@ MarketplaceService:PromptSubscriptionPurchase(player, SUBSCRIPTION_ID)
 |-------------|--------|
 | Sender | Must have active **Roblox Plus** subscription |
 | Recipient | No subscription required |
-| Age | Both users must complete Roblox age check |
-| Under 18 | Linked parental account with approval |
-| Under 16 | Parental approval required in most regions |
-| Per-transaction | 10–500 Robux |
-| Daily limit (no 2SV) | 500 Robux/day |
-| Monthly limit (no 2SV) | 1,000 Robux/month |
-| Daily limit (with 2SV) | 5,000 Robux/day |
-| Monthly limit (with 2SV) | 10,000 Robux/month |
+| Age | Sender and recipient: 18+ must be age checked; under 18 need a linked parental account and parental approval for **each** transfer |
+| Per-transaction | 10–500 Robux (official *Robux transfers* page) |
+| Daily / monthly limit | 500 Robux per day, 1,000 per month. Asked whether this would scale by age or verification, Roblox said it is "intentionally starting with this limit" (staff FAQ, May 2026). No higher tier is documented |
 | Reversibility | All transfers are **FINAL** |
 
 ### API Reference
@@ -286,7 +281,9 @@ end
 
 ## Roblox Plus Subscription
 
-> Launched April 30, 2026 — replaces old Roblox Premium.
+> Rolled out April 30, 2026 ("Introducing Roblox Plus", Roblox staff, 2026-04-10). It does not
+> replace Premium: the announcement says an existing Premium subscription still grants avatar
+> marketplace access.
 
 - Required for SENDING Robux via Transfers API
 - Includes: free private servers, purchase discounts, Robux transfers
@@ -297,18 +294,21 @@ end
 
 ## Publishing Requirements
 
-> Updated May 19, 2026
+> Rollout began May 19, 2026 ("Alternate Publishing Requirements for Roblox Kids and Select",
+> Roblox staff, 2026-05-11).
 
-- **Publishing fee**: 1,000 Robux one-time per game for "All Ages" publishing
-- **Alternative**: Active Roblox Plus subscription (no per-game fee)
-- **Refundable**: After 60+ days of maintained engagement without moderation actions
-- **Forfeited**: If game is permanently removed for Community Standards violations
+- **Publishing fee**: a one-time, refundable 1,000 Robux per game to publish to all ages
+- **Alternative**: an active Plus or Premium subscription (no per-game fee)
+- **Refunded** automatically 90 days after the game becomes eligible for Kids or Select accounts,
+  or 90 days after payment if it never does
+- **Forfeited** only if the game is permanently removed for severe Community Standards violations
 
 ---
 
 ## Managed Pricing
 
-> Launched H1 2026
+> Announced 2026-06-15 ("Managed Pricing: One System for Better Pricing and Earnings Growth",
+> Roblox staff); official *Managed pricing* and *Price optimization* pages.
 
 - Unifies Regional Pricing + Price Optimization into single automated workflow
 - Runs pricing tests at least every 90 days
@@ -364,8 +364,9 @@ Previously, developers could sell Game Passes and Developer Products from other
 experiences inside their own game. This was commonly used for "PLS DONATE" style
 donation games.
 
-**Why removed**: Developer products and passes were "never originally designed for
-peer-to-peer Robux transfers" — the pattern was exploited for fraud.
+**Why removed**: in Roblox's words, developer products and passes "were never designed for
+peer-to-peer Robux transfers", and the change protects players "from fraud and exploitation"
+(staff post, 2026-05-04).
 
 **Migration path**: Use the Transfers API (see above).
 

@@ -192,6 +192,24 @@ against the 0.737–0.742 source tarballs, and the beta claims against the staff
 - Measured: `BindableEvent:Fire` with a cyclic table errors ("tables cannot be cyclic") and strips
   metatables. The MessagingService limits table matches the official reference.
 
+### Fixed — found by verifying `monetization.md` claim by claim
+
+Every dated statement traced to its Roblox staff post or official page.
+
+- **Robux transfer limits for 2-step verification (5,000/day, 10,000/month) and an "under 16" rule
+  had no source.** Roblox's FAQ gives 500 per day and 1,000 per month and says it is "intentionally
+  starting with this limit"; the unsourced rows are gone. The age rule is now the official one:
+  18+ must be age checked; under 18 needs a linked parent and approval for every transfer, sender
+  and recipient alike.
+- **Roblox Plus does not replace Premium** (the announcement says Premium still grants marketplace
+  access); the rollout date is 2026-04-30.
+- **The publishing fee is refunded 90 days after the game becomes eligible** (or 90 days after
+  payment), not "after 60+ days of maintained engagement"; it is forfeited only on permanent
+  removal for severe violations; Plus or Premium waives it.
+- The quoted reason for ending cross-game sales now quotes Roblox exactly ("were never designed
+  for"; the old text added "originally" inside the quote). Managed Pricing is dated (2026-06-15)
+  and its 60,000-transaction and 90-day figures match the official pages.
+
 ### Added — claims register
 
 - `tools/skill-test/claims.json` + `check_claims.py` + generated `docs/claims.md`: every

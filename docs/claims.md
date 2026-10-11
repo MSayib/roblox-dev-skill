@@ -13,7 +13,7 @@ Every factual claim a reader could act on wrongly, with how it was verified. **s
 | `references/legacy-migration.md` | 20 | 22 | 41 | 6 | 3 | 0 | 13 |
 | `references/luau-fundamentals.md` | 11 | 10 | 1 | 40 | 3 | 0 | 3 |
 | `references/mcp-integration.md` | 31 | 12 | 2 | 2 | 6 | 0 | 4 |
-| `references/monetization.md` | 0 | 1 | 0 | 0 | 0 | 17 | 1 |
+| `references/monetization.md` | 3 | 17 | 0 | 0 | 2 | 0 | 6 |
 | `references/networking.md` | 1 | 11 | 0 | 0 | 4 | 0 | 2 |
 | `references/performance-optimization.md` | 28 | 16 | 3 | 6 | 1 | 0 | 6 |
 | `references/project-structure.md` | 6 | 9 | 6 | 2 | 3 | 0 | 2 |
@@ -21,7 +21,7 @@ Every factual claim a reader could act on wrongly, with how it was verified. **s
 | `references/studio-plugins-and-limits.md` | 16 | 1 | 1 | 1 | 9 | 0 | 0 |
 | `references/ui-systems.md` | 1 | 0 | 0 | 0 | 0 | 8 | 1 |
 | `references/worked-examples.md` | 17 | 4 | 4 | 1 | 19 | 0 | 1 |
-| **total** | **176** | **131** | **63** | **73** | **99** | **41** | **48** |
+| **total** | **179** | **147** | **63** | **73** | **101** | **24** | **53** |
 
 ## Verified claims
 
@@ -226,6 +226,13 @@ Every factual claim a reader could act on wrongly, with how it was verified. **s
 | `references/mcp-integration.md`: `upload_image` uploads a local image file \| It uploads a **batch from HTTP(S) URLs** and returns an imagePath→assetId map. Local files go through `store_image` | docs | Schemas of upload_image and store_image. (MCP tool schemas of this session (Studio 0.742)) |
 | `references/mcp-integration.md`: `http_get` fetches any URL from Studio \| **Allowlisted** to Roblox docs domains, and the URL must end in `.md` or be `llms.txt`. `llms-full.txt` and `openapi.j | studio | Allowlist enforced; llms-full.txt/openapi.json rejected. (execute_luau / multi_edit runs, 2026-10-11) |
 | `references/mcp-integration.md`: `set_active_studio` is a tool \| Does not exist. Targeting is per call via `studio_id`. (Corrected in v2.7.0, kept here as a guard.) \| Official docs | studio | No such tool; every call takes studio_id. (MCP tool schemas of this session (Studio 0.742); Roblox/creator-docs studio/mcp.md (read 2026-10-11)) |
+| `references/monetization.md`: **This handler is not yet idempotent.** `ProcessReceipt` runs again for every unresolved purchase | docs | ProcessReceipt is called for unresolved purchases when the user joins. (Roblox/creator-docs MarketplaceService.yaml) |
+| `references/monetization.md`: grant: see `worked-examples.md` §6 for the `UpdateAsync` pattern, tested in Studio 0.742. Roblox's | studio | 5/5 PASS 2026-10-11. (expect/receipt-idempotent) |
+| `references/monetization.md`: own sample checks only `if success then`, although its warning says a handler must return `true`. | docs | pcall(handler) then if success then; warning must return true. (creator-docs developer-products.md) |
+| `references/monetization.md`: **Added May 2026** — Official replacement for cross-game donation patterns. | docs | Transfers API introduced 2026-05-04. (DevForum topic 4618396 (Roblox, 2026-05-04) and its FAQ update) |
+| `references/monetization.md`: Call `PromptRobuxTransferAsync` **server-side only** | docs | "This is a server-only method and must be called from a Script with RunContext Server". (Roblox/creator-docs MarketplaceService.yaml) |
+| `references/monetization.md`: Only return `Enum.ReceiptDecision.Processed` after successfully logging | docs | BindReceiptHandler: Processed means benefits granted; NotProcessedYet redelivers. (Roblox/creator-docs MarketplaceService.yaml) |
+| `references/monetization.md`: **Discontinued May 29, 2026** | docs | "discontinue cross-game sales of developer products and passes on May 29". (DevForum topic 4618396 (Roblox, 2026-05-04) and its FAQ update) |
 | `references/networking.md`: **Does not yield** the firing script. | docs | "Scripts firing a RemoteEvent do not yield." (Roblox/creator-docs RemoteEvent / UnreliableRemoteEvent / RemoteFunction reference; scripting/events/remote.md) |
 | `references/networking.md`: fired it. This is engine-injected and **cannot be spoofed**. Never accept a | docs | OnServerEvent receives the firing Player as its first argument, supplied by the engine. (Roblox/creator-docs RemoteEvent / UnreliableRemoteEvent / RemoteFunction reference; scripting/events/remote.md) |
 | `references/networking.md`: If the client **throws an error**, the server throws too | docs | "If the client throws an error, the server throws the error too." (Roblox/creator-docs RemoteEvent / UnreliableRemoteEvent / RemoteFunction reference; scripting/events/remote.md) |
@@ -484,6 +491,9 @@ Every factual claim a reader could act on wrongly, with how it was verified. **s
 | `references/security-hardening.md`: available as a client beta** (official docs, re-read 2026-10-11), and the whole system is **off by | docs | "Script capabilities are experimental and available as a client beta." (Roblox/creator-docs scripting/capabilities.md (read 2026-10-11)) |
 | `references/security-hardening.md`: ### Server Authority (Client Beta — Updated April 2026) | false | Full release 2026-07-09 (DevForum 4727993). |
 | `references/security-hardening.md`: The most reliable solution for preventing physics and movement exploits | false | Quote not found in the current official pages. |
+| `references/monetization.md`: (2026-10-11) calls `ProcessReceipt` "legacy" and documents | docs | BindReceiptHandler: "alternative to the legacy ProcessReceipt callback". (Roblox/creator-docs MarketplaceService.yaml) |
+| `references/monetization.md`: least 0.733 (`Security: None`), and a game Script registered both forms in Studio 0.742 without | studio | BindReceiptHandler present since 0.733; filtered and catch-all registration OK. (local dumps 0.733-0.742; Studio 0.742 playtest Script) |
+| `references/monetization.md`: error; a full purchase through it was not run here. The idempotency rule is the same: record the | studio | As stated. (Studio 0.742 playtest Script) |
 | `references/datastore-persistence.md`: `SortedMap` \| 128 chars (sort key 128 chars) \| 32 KB \| Leaderboards, matchmaking queues | studio | Docs: key 128 chars, value 32 KB, sort key 128 chars. 32 KB accepted, 33 KB ItemValueSizeTooLarge. (Roblox/creator-docs cloud-services/memory-stores (index, sorted-map, hash-map) and MemoryStore* reference; Studio 0.742 playtest, execute_luau Server, 2026-10-11) |
 | `references/datastore-persistence.md`: `Queue` \| — \| 32 KB per item (measured: not stated on the official page) \| Job queues, event pipelines | studio | 32 KB item accepted, 33 KB ItemValueSizeTooLarge; size not stated on the page. (Studio 0.742 playtest, execute_luau Server, 2026-10-11) |
 | `references/datastore-persistence.md`: A single sorted map or queue holds at most 1,000,000 items and 100 MB. Measured in Studio 0.742: | docs | "Maximum number of items: 1,000,000; Maximum total size: 100 MB". (Roblox/creator-docs cloud-services/memory-stores (index, sorted-map, hash-map) and MemoryStore* reference) |
@@ -519,3 +529,17 @@ Every factual claim a reader could act on wrongly, with how it was verified. **s
 | `references/networking.md`: `RemoteEvent` and `UnreliableRemoteEvent` each have a **~500 requests/sec per client** limit, | docs | As above. (Roblox/creator-docs RemoteEvent / UnreliableRemoteEvent / RemoteFunction reference; scripting/events/remote.md) |
 | `references/networking.md`: events exceeding this are silently dropped | false | Docs: Studio logs the overflow. |
 | `references/networking.md`: Same ~500 requests/sec client-to-server throttle as regular RemoteEvents | false | Counted per type; excess handling differs. |
+| `references/monetization.md`: Daily / monthly limit \| 500 Robux per day, 1,000 per month. Asked whether this would scale by age or verification, Roblox said it is "intentionally starting wi | docs | FAQ: "Transfers API limits (500 Robux/day, 1000/month) ... intentionally starting with this limit". (DevForum topic 4618396 (Roblox, 2026-05-04) and its FAQ update) |
+| `references/monetization.md`: Rolled out April 30, 2026 ("Introducing Roblox Plus", Roblox staff, 2026-04-10). It does not | docs | Update 2026-04-30: "Roblox Plus is rolling out now". (DevForum topic 4567894 "Introducing Roblox Plus" (Roblox Staff, 2026-04-10; update 2026-04-30)) |
+| `references/monetization.md`: Rollout began May 19, 2026 ("Alternate Publishing Requirements for Roblox Kids and Select", | docs | "On May 19, our new publishing requirements will begin rolling out." (DevForum topic 4630944 (Roblox Staff, 2026-05-11)) |
+| `references/monetization.md`: Roblox staff, 2026-05-11). | docs | As above. (DevForum topic 4630944 (Roblox Staff, 2026-05-11)) |
+| `references/monetization.md`: or 90 days after payment if it never does | docs | As above. (DevForum topic 4630944 (Roblox Staff, 2026-05-11)) |
+| `references/monetization.md`: **Forfeited** only if the game is permanently removed for severe Community Standards violations | docs | "The only exception is if your game is permanently removed ... severe Community Standards violations". (DevForum topic 4630944 (Roblox Staff, 2026-05-11)) |
+| `references/monetization.md`: Announced 2026-06-15 ("Managed Pricing: One System for Better Pricing and Earnings Growth", | docs | Announcement date and pages. (DevForum topic 4684738 (Roblox Staff, 2026-06-15); creator-docs managed-pricing.md, price-optimization.md) |
+| `references/monetization.md`: **Why removed**: in Roblox's words, developer products and passes "were never designed for | docs | "these tools were never designed for peer-to-peer Robux transfers"; "protect players from fraud and exploitation". (DevForum topic 4618396 (Roblox, 2026-05-04) and its FAQ update) |
+| `references/monetization.md`: (staff post, 2026-05-04). | docs | Post dated 2026-05-04. (DevForum topic 4618396) |
+| `references/monetization.md`: replaces old Roblox Premium | false | Plus announcement: Premium still grants marketplace access. |
+| `references/monetization.md`: After 60+ days of maintained engagement | false | Refunded 90 days after eligibility (or payment). |
+| `references/monetization.md`: "never originally designed for | false | Actual wording: "were never designed for". |
+| `references/monetization.md`: Both users must complete Roblox age check | false | Under-18 users need parental approval per transfer. |
+| `references/monetization.md`: \| Daily limit (with 2SV) \| 5,000 Robux/day \| | false | No source; staff FAQ gives 500/day, 1,000/month. |
