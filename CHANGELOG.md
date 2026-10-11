@@ -167,6 +167,14 @@ against the 0.737–0.742 source tarballs, and the beta claims against the staff
 - Measured: an `OrderedDataStore` rejects `1.5` and `"7"` with error 103 and accepts negative
   integers. ProfileStore's 300 s auto-save is settable with `ProfileStore.SetConstant`.
 
+### Fixed — found by verifying `agent-safety.md`
+
+- **Undo was described from history, not measured.** In Studio 0.742 every `execute_luau` call
+  leaves an undo waypoint (`Assistant N`; `ChangeHistoryService:Undo()` removed a Part the previous
+  call created), while a `multi_edit` did not leave its own: one Undo after it removed the script an
+  earlier call had created. The advice ("do not rely on Ctrl+Z") stays, now on that evidence.
+- "Destroying services crashes Studio" was untested here too; removed (the rule stays).
+
 ### Added — claims register
 
 - `tools/skill-test/claims.json` + `check_claims.py` + generated `docs/claims.md`: every

@@ -7,7 +7,7 @@ Every factual claim a reader could act on wrongly, with how it was verified. **s
 | File | studio | docs | dump | source | advice | unverified | false |
 |---|---|---|---|---|---|---|---|
 | `SKILL.md` | 20 | 3 | 2 | 11 | 17 | 0 | 3 |
-| `references/agent-safety.md` | 0 | 0 | 0 | 0 | 0 | 26 | 0 |
+| `references/agent-safety.md` | 7 | 3 | 0 | 0 | 18 | 0 | 2 |
 | `references/datastore-persistence.md` | 6 | 13 | 0 | 4 | 9 | 0 | 6 |
 | `references/file-formats-and-assets.md` | 0 | 0 | 0 | 0 | 0 | 16 | 0 |
 | `references/legacy-migration.md` | 20 | 22 | 41 | 6 | 3 | 0 | 13 |
@@ -21,7 +21,7 @@ Every factual claim a reader could act on wrongly, with how it was verified. **s
 | `references/studio-plugins-and-limits.md` | 1 | 0 | 0 | 0 | 0 | 25 | 0 |
 | `references/ui-systems.md` | 1 | 0 | 0 | 0 | 0 | 8 | 1 |
 | `references/worked-examples.md` | 17 | 4 | 4 | 1 | 19 | 0 | 1 |
-| **total** | **147** | **107** | **56** | **70** | **65** | **131** | **42** |
+| **total** | **154** | **110** | **56** | **70** | **83** | **105** | **44** |
 
 ## Verified claims
 
@@ -61,6 +61,11 @@ Every factual claim a reader could act on wrongly, with how it was verified. **s
 | `SKILL.md`: **`/roblox-update` is NOT a registered slash command.** Earlier versions of this file presented it | source | No roblox-update command in ~/.claude/commands (2026-10-11); the repo ships no commands/ directory. (ls ~/.claude/commands; repo tree) |
 | `SKILL.md`: as one; it has never been installed in `~/.claude/commands/` or shipped by a plugin, so typing it | source | No roblox-update command in ~/.claude/commands (2026-10-11); the repo ships no commands/ directory. (ls ~/.claude/commands; repo tree) |
 | `SKILL.md`: `name` field above, and stricter agents skip a skill whose folder does not. | docs | Spec: the skill directory name must match the name field; skills-ref validate rejects a mismatch (2.16.0). (agentskills specification (skills-ref)) |
+| `references/agent-safety.md`: your open Roblox places. Make sure to only connect clients you trust."* | docs | Quoted verbatim. (creator-docs studio/mcp.md) |
+| `references/agent-safety.md`: Local filesystem, narrowly \| `store_image` reads a local absolute path (≤5 MB, png/jpg/jpeg) | docs | Absolute local path, png/jpg/jpeg, max 5MB. (store_image schema) |
+| `references/agent-safety.md`: **`execute_luau` runs at plugin / command-bar privilege.** It is not sandboxed game code. It | studio | execute_luau wrote PluginOrOpenCloud properties a game Script cannot. (run_plugin_cases.luau, 2026-10-11) |
+| `references/agent-safety.md`: one call* — all edits apply or none do. That is the only atomicity you get; nothing spans two | studio | A call with one non-matching edit applied nothing. (multi_edit run 2026-10-11) |
+| `references/agent-safety.md`: `multi_edit` matches `old_string` verbatim and simply fails otherwise. | studio | Non-matching old_string -> error. (multi_edit run 2026-10-11) |
 | `references/datastore-persistence.md`: **Critical rule:** DataStoreService is **server-side only**. Attempting to access | docs | "Attempting client-side access in a LocalScript causes an error." (creator-docs cloud-services/data-stores/index.md) |
 | `references/datastore-persistence.md`: it from a `LocalScript` throws an error. All DataStore calls must live in `Script` | docs | As above. (creator-docs cloud-services/data-stores/index.md) |
 | `references/datastore-persistence.md`: **Budget cost** \| Write limit only \| Both read AND write limits | docs | UpdateAsync is listed under both the Read and the Write throughput limits; SetAsync only under Write. (Roblox/creator-docs cloud-services/data-stores/error-codes-and-limits.md) |
@@ -450,3 +455,10 @@ Every factual claim a reader could act on wrongly, with how it was verified. **s
 | `references/datastore-persistence.md`: 64 MB per partition (per universe) | false | Docs: 64 KB + 1.2 KB x users; playtest quota 65,536 bytes. |
 | `references/datastore-persistence.md`: \| Min TTL \| 10 seconds \| | false | Expiration accepted range 0 to 3,888,000. |
 | `references/datastore-persistence.md`: ### DataStore2 (Berezaa) | false | Module by Kampfkarren; the method is berezaa's. |
+| `references/agent-safety.md`: **Primary source (re-verified 2026-10-11):** https://create.roblox.com/docs/studio/mcp | docs | Re-read 2026-10-11. (create.roblox.com/docs/studio/mcp (creator-docs studio/mcp.md)) |
+| `references/agent-safety.md`: **Do not rely on Ctrl+Z.** Undo behaviour is not documented. Measured in Studio 0.742 | studio | execute_luau waypoints "Assistant N"; Undo removed a created Part. (execute_luau / multi_edit + ChangeHistoryService:Undo() in Studio 0.742 Edit, 2026-10-11) |
+| `references/agent-safety.md`: (2026-10-11): each `execute_luau` call runs inside its own recording and leaves an undo | studio | As above. (execute_luau / multi_edit + ChangeHistoryService:Undo() in Studio 0.742 Edit, 2026-10-11) |
+| `references/agent-safety.md`: waypoint named `Assistant N` (`ChangeHistoryService:Undo()` removed a Part the previous call | studio | Waypoint names Assistant 16 / Assistant 18 observed. (execute_luau / multi_edit + ChangeHistoryService:Undo() in Studio 0.742 Edit, 2026-10-11) |
+| `references/agent-safety.md`: **not** leave its own waypoint: one Undo after it removed the script that an earlier | studio | One Undo after a multi_edit removed the script created by the preceding execute_luau call. (execute_luau / multi_edit + ChangeHistoryService:Undo() in Studio 0.742 Edit, 2026-10-11) |
+| `references/agent-safety.md`: command-bar-level changes historically do not | false | Measured: execute_luau calls leave undo waypoints. |
+| `references/agent-safety.md`: Studio crashes; the place may be left mangled | false | Never tested; removed. |
