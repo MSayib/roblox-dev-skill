@@ -93,7 +93,7 @@ verified ([testing.md](testing.md), [claims.md](claims.md)).
 | Worked examples (build / debug / migrate / verify / refuse / sell / migrate data / bind input) | ✅ **every Verification section run in Studio 0.742**; receipts and migrations asserted on each test run | `worked-examples.md` |
 | Performance (Parallel Luau, **RunService pipeline**, plugin-only fidelity/LOD/streaming settings) | ✅ claims checked 2026-10-11 (0.742, tested in Studio) | `performance-optimization.md` |
 | MCP integration (26 documented tools / 30 observed) | ✅ **re-verified 2026-10-11** against the official docs page + live schemas | `mcp-integration.md` |
-| UI (**UIFlexItem**, **StyleSheet/StyleRule**, StyleQuery, UIShadow, per-corner UICorner) | ✅ claims checked 2026-10-11 | `ui-systems.md` |
+| UI (**UIFlexItem**, **StyleSheet/StyleRule**, StyleQuery, UIShadow, per-corner UICorner) | ✅ claims checked 2026-10-14 | `ui-systems.md` |
 | Legacy migration (RunService events, **0.742 additions**, per-release API tables) | ✅ claims checked 2026-10-11 against dumps 0.723–0.742 | `legacy-migration.md` |
 | Studio plugins, `Script.Source` limits, engine limits | ✅ measured Aug 2026, source limits re-measured 2026-10-11 | `studio-plugins-and-limits.md` |
 | Monetization (Transfers, **Subscriptions**) | ✅ claims checked 2026-10-11 | `monetization.md` |

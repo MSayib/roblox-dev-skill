@@ -4169,6 +4169,56 @@
    "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
+   "id": "ui-systems-016",
+   "file": "references/ui-systems.md",
+   "quote": "**Upgraded UIShadows (Studio beta, documented 2026-10-13):** the UI guide (*Appearance",
+   "status": "docs",
+   "kind": "positive",
+   "source": "Roblox/creator-docs ui/appearance-modifiers.md#shadow (commit 2026-10-13)",
+   "evidence": "BetaAlert betaName=\"Upgraded UIShadows\" (File > Beta Features); Mode Shape/Text follows text glyphs of TextLabel/TextButton/TextBox; Inset; ShowBehindParent; \"insert a UIGradient as a child of the UIShadow\". No DevForum announcement found 2026-10-14 (staff jaydubs808 in topic 4896854, 2026-09-30: \"Yes we're working on it\").",
+   "checked": "2026-10-14, engine 0.742.0.7421053"
+  },
+  {
+   "id": "ui-systems-017",
+   "file": "references/ui-systems.md",
+   "quote": "The three properties are in the 0.742 API dump. In Studio 0.742 a plugin, a server `Script` and a",
+   "status": "studio",
+   "kind": "positive",
+   "source": "API dump 0.742 UIShadow",
+   "evidence": "API dump 0.742: Inset (bool, false), Mode (ApplyShadowMode, Shape), ShowBehindParent (bool, true); enum ApplyShadowMode {Shape=0, Text=1}. Studio 0.742.0.7421053 on 2026-10-14: execute_luau in Edit read those defaults and set/read back Mode=Text, Inset=true, ShowBehindParent=false and parented a UIGradient to the UIShadow; a playtest server Script and StarterPlayerScripts LocalScript printed Mode=ok Inset=ok SBP=ok Gradient=ok. Rendering was not inspected.",
+   "checked": "2026-10-14, engine 0.742.0.7421053"
+  },
+  {
+   "id": "ui-systems-020",
+   "file": "references/ui-systems.md",
+   "quote": "child without error — so a write succeeding does **not** tell you the beta is on; whether they",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.742.0.7421053 probe 2026-10-14",
+   "evidence": "Writes succeeded from plugin, server Script and LocalScript; the beta toggle state of that Studio was not read, so success is not evidence the beta is enabled (the property writes are not gated by script context).",
+   "checked": "2026-10-14, engine 0.742.0.7421053"
+  },
+  {
+   "id": "ui-systems-018",
+   "file": "references/ui-systems.md",
+   "quote": "render without the beta or in a published game was not checked, and the class reference still",
+   "status": "docs",
+   "kind": "negative",
+   "source": "Roblox/creator-docs reference/engine/classes/UIShadow.yaml",
+   "evidence": "Rendering not inspected and no published-game test (2026-10-14). Class reference UIShadow.yaml limitations still say no text, no inset, no UIGradient; Inset/Mode/ShowBehindParent absent from it (checked 2026-10-14).",
+   "checked": "2026-10-14, engine 0.742.0.7421053"
+  },
+  {
+   "id": "ui-systems-019",
+   "file": "references/ui-systems.md",
+   "quote": "- Does **not** work with `Path2D` (the beta does not change this).",
+   "status": "docs",
+   "kind": "negative",
+   "source": "Roblox/creator-docs ui/appearance-modifiers.md#shadow (commit 2026-10-13)",
+   "evidence": "Guide (beta-era text): \"UIShadow doesn't support Path2D or textures.\" Class reference: \"UIShadow does not support Path2D.\"",
+   "checked": "2026-10-14, engine 0.742.0.7421053"
+  },
+  {
    "id": "ui-systems-007",
    "file": "references/ui-systems.md",
    "quote": "`StyleQuery.IsActive` (read-only `boolean`) — `true` when all conditions match.",
