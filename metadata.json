@@ -1,13 +1,21 @@
 {
   "skill_name": "roblox-dev-skill",
-  "version": "2.17.0",
-  "last_updated": "2026-10-11T23:30:00+07:00",
-  "last_updated_by": "claude-code (owner plan \"tanpa gap\", Stage 1: run the fragments, assert behaviour, register and verify every claim)",
+  "version": "2.17.1",
+  "last_updated": "2026-10-14T12:00:00+07:00",
+  "last_updated_by": "claude-code (weekly update check: no engine change; creator-docs 2026-10-13 UIShadow beta ingested and probed in Studio)",
   "update_source": "luau-lang/luau GitHub releases API (0.742) and 0.742 source tarball; clientsettings client-version (WindowsStudio64, MacStudio, WindowsPlayer, MacPlayer); clientsettingscdn PCStudioApp/MacStudioApp/PCDesktopClient flags; roblox-api-monitor 0.741->0.742 dump diff; Roblox/creator-docs engine reference YAML; live Roblox Studio 0.742.0.7421053 via MCP (playtest Scripts + execute_luau)",
   "engine_version_at_update": "0.742.0.7421053",
   "luau_version_at_update": "0.742",
   "update_interval_days": 7,
   "update_history": [
+    {
+      "date": "2026-10-14T12:00:00+07:00",
+      "version": "2.17.1",
+      "changes": "No engine change: WindowsStudio64/MacStudio still 0.742.0.7421053, Luau latest release 0.742 (WindowsPlayer/MacPlayer already 0.743.0.7431129; no 0.743 API dump published, so nothing to ingest). Roblox/creator-docs commit of 2026-10-13: ui-systems.md UIShadow section now covers the 'Upgraded UIShadows' Studio beta (Mode = ApplyShadowMode Shape/Text, Inset, ShowBehindParent, UIGradient child), with the old limits kept as 'without the beta'. Claims ui-systems-016..020 added (657 total, 0 unverified). Other doc changes in that commit (EditableImage/EditableMesh enable steps, CompressorSoundEffect gain range, Character Controller Library Input.Mode, dashboard navigation) touch nothing the skill states.",
+      "engine_version": "0.742.0.7421053",
+      "decision_by": "user (sayib) -- 2026-10-14 'cek update dan perbarui'",
+      "verified_by": "clientsettings client-version (4 binary types); luau-lang/luau releases API; roblox-api-monitor (up to date); Roblox/creator-docs commits since 2026-10-11 and UIShadow.yaml/appearance-modifiers.md; API dump 0.742 UIShadow + ApplyShadowMode; Studio 0.742.0.7421053 via MCP: execute_luau (Edit) and a playtest server Script + LocalScript set/read Mode, Inset, ShowBehindParent and a UIGradient child without error (rendering not inspected); check_claims --strict, check_sources, api-monitor --audit strict passed"
+    },
     {
       "date": "2026-10-11T23:30:00+07:00",
       "version": "2.17.0",

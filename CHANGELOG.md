@@ -11,6 +11,24 @@ reference content was verified against at that time.
 
 ---
 
+## 2.17.1 — Oct 14, 2026
+
+**Weekly update check: no engine change; the UIShadow beta documented.** Studio is still
+0.742.0.7421053 and the latest Luau release is 0.742 (the Player is already 0.743.0.7431129, but no
+0.743 API dump is published yet, so there is nothing to ingest).
+
+### Changed
+
+- **`ui-systems.md` UIShadow** now covers the *Upgraded UIShadows* Studio beta that the UI guide
+  documented on 2026-10-13: `Mode` (`Enum.ApplyShadowMode.Shape`/`Text`, text shadows follow the
+  glyphs), `Inset`, `ShowBehindParent`, and a `UIGradient` child. The old limits stay, labelled
+  "without the beta"; `Path2D` is still unsupported. In Studio 0.742 a plugin, a playtest server
+  `Script` and a `LocalScript` each set and read back all three properties and the gradient child
+  without error, so a successful write is not evidence the beta is on; rendering and published
+  games were not checked. Claims register: 657 (189 Studio, 0 unverified).
+
+---
+
 ## 2.17.0 — Oct 11, 2026
 
 **Every claim checked, the fragments run, and the important examples assert what they do.** No

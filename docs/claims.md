@@ -19,9 +19,9 @@ Every factual claim a reader could act on wrongly, with how it was verified. **s
 | `references/project-structure.md` | 6 | 9 | 6 | 2 | 3 | 0 | 2 |
 | `references/security-hardening.md` | 12 | 26 | 3 | 0 | 7 | 0 | 4 |
 | `references/studio-plugins-and-limits.md` | 16 | 1 | 1 | 1 | 9 | 0 | 0 |
-| `references/ui-systems.md` | 2 | 9 | 1 | 0 | 2 | 0 | 2 |
+| `references/ui-systems.md` | 4 | 12 | 1 | 0 | 2 | 0 | 2 |
 | `references/worked-examples.md` | 17 | 4 | 4 | 1 | 19 | 0 | 1 |
-| **total** | **187** | **165** | **64** | **74** | **104** | **0** | **58** |
+| **total** | **189** | **168** | **64** | **74** | **104** | **0** | **58** |
 
 ## Verified claims
 
@@ -363,6 +363,11 @@ Every factual claim a reader could act on wrongly, with how it was verified. **s
 | `references/ui-systems.md`: `ZIndex` \| `number` \| Render order among sibling `UIShadow` instances (negative values only) | docs | "Since all shadows are rendered below the parent instance, ZIndex can only be negative." (Roblox/creator-docs UIShadow.yaml) |
 | `references/ui-systems.md`: Does **not** render text-shaped shadows — only the rectangular bounding box. | docs | "renders a shadow of the object's rectangular bounding area, not of the text". (Roblox/creator-docs UIShadow.yaml) |
 | `references/ui-systems.md`: Cannot apply `UIGradient` to a `UIShadow`. | docs | "You cannot apply textures or UIGradients to a UIShadow." (Roblox/creator-docs UIShadow.yaml) |
+| `references/ui-systems.md`: **Upgraded UIShadows (Studio beta, documented 2026-10-13):** the UI guide (*Appearance | docs | BetaAlert betaName="Upgraded UIShadows" (File > Beta Features); Mode Shape/Text follows text glyphs of TextLabel/TextButton/TextBox; Inset; ShowBehindParent; "insert a UIGradient as a child of the UIShadow". No DevForum announcement found 2026-10-14 (staff jaydubs808 in topic 4896854, 2026-09-30: "Yes we're working on it"). (Roblox/creator-docs ui/appearance-modifiers.md#shadow (commit 2026-10-13)) |
+| `references/ui-systems.md`: The three properties are in the 0.742 API dump. In Studio 0.742 a plugin, a server `Script` and a | studio | API dump 0.742: Inset (bool, false), Mode (ApplyShadowMode, Shape), ShowBehindParent (bool, true); enum ApplyShadowMode {Shape=0, Text=1}. Studio 0.742.0.7421053 on 2026-10-14: execute_luau in Edit read those defaults and set/read back Mode=Text, Inset=true, ShowBehindParent=false and parented a UIGradient to the UIShadow; a playtest server Script and StarterPlayerScripts LocalScript printed Mode=ok Inset=ok SBP=ok Gradient=ok. Rendering was not inspected. (API dump 0.742 UIShadow) |
+| `references/ui-systems.md`: child without error — so a write succeeding does **not** tell you the beta is on; whether they | studio | Writes succeeded from plugin, server Script and LocalScript; the beta toggle state of that Studio was not read, so success is not evidence the beta is enabled (the property writes are not gated by script context). (Studio 0.742.0.7421053 probe 2026-10-14) |
+| `references/ui-systems.md`: render without the beta or in a published game was not checked, and the class reference still | docs | Rendering not inspected and no published-game test (2026-10-14). Class reference UIShadow.yaml limitations still say no text, no inset, no UIGradient; Inset/Mode/ShowBehindParent absent from it (checked 2026-10-14). (Roblox/creator-docs reference/engine/classes/UIShadow.yaml) |
+| `references/ui-systems.md`: - Does **not** work with `Path2D` (the beta does not change this). | docs | Guide (beta-era text): "UIShadow doesn't support Path2D or textures." Class reference: "UIShadow does not support Path2D." (Roblox/creator-docs ui/appearance-modifiers.md#shadow (commit 2026-10-13)) |
 | `references/ui-systems.md`: `StyleQuery.IsActive` (read-only `boolean`) — `true` when all conditions match. | dump | StyleQuery.IsActive tags ReadOnly. (API dump 0.742) |
 | `references/worked-examples.md`: reject the unhappy path. Fire it **from the Client datamodel**: a server cannot raise its own | studio | Server cannot raise its own OnServerEvent; fired from the Client datamodel (2.16.0). (metadata.json 2.16.0 verified_by (worked-example verifications run in Studio 0.742)) |
 | `references/worked-examples.md`: string, `nil`, a table, a `Part` from outside `coinFolder`, and 50 calls in a loop at a coin out of | studio | Junk payloads run as listed (2.16.0). (metadata.json 2.16.0 verified_by (worked-example verifications run in Studio 0.742)) |

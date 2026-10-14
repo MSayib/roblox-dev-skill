@@ -386,17 +386,31 @@ replacing image-based shadow workarounds. Add as a child of any `GuiObject`.
 | `Spread` | `UDim2` | Expands or shrinks the shadow relative to the parent size |
 | `ZIndex` | `number` | Render order among sibling `UIShadow` instances (negative values only) |
 | `Enabled` | `boolean` | Toggle shadow visibility (default `true`) |
+| `Mode` | `Enum.ApplyShadowMode` | `Shape` (default) or `Text` — *Upgraded UIShadows beta* |
+| `Inset` | `boolean` | Shadow inside the parent instead of behind (default `false`) — *beta* |
+| `ShowBehindParent` | `boolean` | `false` masks the shadow behind a transparent parent (default `true`) — *beta* |
 
 **Key behaviors:**
 - Automatically respects `UICorner` rounding on the parent.
 - Rotates with the parent's `Rotation` property.
 - Multiple `UIShadow` children are supported; order via `ZIndex`.
 
-**Limitations:**
+**Upgraded UIShadows (Studio beta, documented 2026-10-13):** the UI guide (*Appearance
+modifiers → Shadow*) now describes text shadows (`Mode = Enum.ApplyShadowMode.Text` follows the
+glyphs of a `TextLabel`, `TextButton` or `TextBox`), inset shadows, `ShowBehindParent`, and a
+`UIGradient` child that colors the shadow — behind **File ⟩ Beta Features ⟩ Upgraded UIShadows**.
+The three properties are in the 0.742 API dump. In Studio 0.742 a plugin, a server `Script` and a
+`LocalScript` each set and read back `Mode = Text`, `Inset`, `ShowBehindParent` and a `UIGradient`
+child without error — so a write succeeding does **not** tell you the beta is on; whether they
+render without the beta or in a published game was not checked, and the class reference still
+lists the old limits. Treat them like any Studio beta: do not rely on them in a published game
+until the beta is released.
+
+**Limitations (without the beta):**
 - Does **not** render text-shaped shadows — only the rectangular bounding box.
 - Does **not** support inset shadows.
 - Cannot apply `UIGradient` to a `UIShadow`.
-- Does **not** work with `Path2D`.
+- Does **not** work with `Path2D` (the beta does not change this).
 
 <!-- skilltest: prelude screen-gui; expect ui-shadow -->
 ```luau
