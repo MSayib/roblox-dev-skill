@@ -172,12 +172,16 @@ error, list what your host actually exposes instead of trusting this table.
 - Runs at **plugin / command-bar privilege**, not game privilege — it can reach
   `PluginSecurity` members that a Script cannot.
 - **That privilege does not reach `NotScriptable` properties.** These are Properties-window-only
-  settings such as `PlayerScriptsUseInputActionSystem`, `SandboxedInstanceMode`, `EnableSLIMAvatars`,
-  `PlayerCharacterDestroyBehavior` and `UseInputSink` on Workspace. No Luau can read or write them, so
-  an agent should ask the user to change them in Studio rather than retry. Measured in Studio
-  0.741.19.7411056: reading any of them from `execute_luau` fails with
-  `<Name> is not a valid member of Workspace "Workspace"`. That message reads like a typo, and it is
-  not one. Check the member's `Tags` in `~/RobloxDocs/RobloxAPI/classes/<Class>.json`.
+  settings such as `SandboxedInstanceMode`, `EnableSLIMAvatars`, `PlayerCharacterDestroyBehavior`
+  and `UseInputSink` on Workspace. No Luau can read or write them, so an agent should ask the user
+  to change them in Studio rather than retry. Measured in Studio 0.741.19.7411056: reading any of
+  them from `execute_luau` fails with `<Name> is not a valid member of Workspace "Workspace"`. That
+  message reads like a typo, and it is not one. Check the member's `Tags` in
+  `~/RobloxDocs/RobloxAPI/classes/<Class>.json`.
+- **Nor does it reach `RobloxScriptSecurity`.** `PlayerScriptsUseInputActionSystem` was in the list
+  above until 0.742; since 0.743 it is `RobloxScriptSecurity`, and `execute_luau` reading it fails
+  with `The current thread cannot read 'PlayerScriptsUseInputActionSystem' (lacking capability
+  RobloxScript)` (Studio 0.743.0.7431133). It is still a Properties-window setting.
 - In `Edit` it operates on the saved place. In `Client` / `Server` it operates on the live
   playtest DataModel, which only exists while a playtest is running.
 - **It does return values.** Earlier versions of this file claimed MCP tools could not return

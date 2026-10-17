@@ -84,17 +84,17 @@ verified ([testing.md](testing.md), [claims.md](claims.md)).
 
 | Topic | Status | Reference File |
 |-------|--------|---------------|
-| Luau language (strict mode, types, generics, `if local` beta) | ✅ **Luau 0.742**, claims checked 2026-10-11 | `luau-fundamentals.md` |
-| Project architecture (services, Rojo, IAS, Script Sync) | ✅ claims checked 2026-10-11 | `project-structure.md` |
+| Luau language (strict mode, types, generics, `if local` beta) | ✅ **Luau 0.743**, claims checked 2026-10-17 | `luau-fundamentals.md` |
+| Project architecture (services, Rojo, IAS, Script Sync) | ✅ claims checked 2026-10-17 (IAS setting re-tested in 0.743) | `project-structure.md` |
 | DataStore + ProfileStore + **MemoryStoreService** | ✅ claims checked 2026-10-11 (limits measured) | `datastore-persistence.md` |
 | Client-Server networking + BindableEvent caveats | ✅ claims checked 2026-10-11 | `networking.md` |
 | Security — player→server (BanAsync, server authority, exploits, script capabilities) | ✅ claims checked 2026-10-11 | `security-hardening.md` |
 | Safety — agent→Studio (destructive MCP ops, injection from place content) | ✅ claims checked 2026-10-11 (undo measured) | `agent-safety.md` |
 | Worked examples (build / debug / migrate / verify / refuse / sell / migrate data / bind input) | ✅ **every Verification section run in Studio 0.742**; receipts and migrations asserted on each test run | `worked-examples.md` |
 | Performance (Parallel Luau, **RunService pipeline**, plugin-only fidelity/LOD/streaming settings) | ✅ claims checked 2026-10-11 (0.742, tested in Studio) | `performance-optimization.md` |
-| MCP integration (26 documented tools / 30 observed) | ✅ **re-verified 2026-10-11** against the official docs page + live schemas | `mcp-integration.md` |
-| UI (**UIFlexItem**, **StyleSheet/StyleRule**, StyleQuery, UIShadow, per-corner UICorner) | ✅ claims checked 2026-10-14 | `ui-systems.md` |
-| Legacy migration (RunService events, **0.742 additions**, per-release API tables) | ✅ claims checked 2026-10-11 against dumps 0.723–0.742 | `legacy-migration.md` |
+| MCP integration (26 documented tools / 30 observed) | ✅ **re-verified 2026-10-11** against the official docs page + live schemas; privilege notes re-tested 2026-10-17 | `mcp-integration.md` |
+| UI (**UIFlexItem**, **StyleSheet/StyleRule**, StyleQuery, UIShadow, UIGradient beta, per-corner UICorner) | ✅ claims checked 2026-10-17 | `ui-systems.md` |
+| Legacy migration (RunService events, **0.743 additions**, per-release API tables) | ✅ claims checked 2026-10-17 against dumps 0.723–0.743 (0.743 rows tested in Studio) | `legacy-migration.md` |
 | Studio plugins, `Script.Source` limits, engine limits | ✅ measured Aug 2026, source limits re-measured 2026-10-11 | `studio-plugins-and-limits.md` |
-| Monetization (Transfers, **Subscriptions**) | ✅ claims checked 2026-10-11 | `monetization.md` |
+| Monetization (Transfers, **Subscriptions**) | ✅ claims checked 2026-10-17 | `monetization.md` |
 | File formats (**ZSTD/LZ4**, **MeshContent**, importing) | ✅ claims checked 2026-10-11 | `file-formats-and-assets.md` |

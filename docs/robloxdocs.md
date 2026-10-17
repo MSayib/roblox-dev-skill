@@ -9,9 +9,9 @@ The skill integrates with a **local API reference hub** for token-efficient look
 ├── RobloxAPI/
 │   ├── dumps/                         # Full-API-Dump.json per version
 │   │   └── latest.json → (symlink)
-│   ├── classes/                       # one JSON per class (940 on 0.742, ~2 KB median)
-│   ├── enums/                         # one JSON per enum (648 on 0.742)
-│   ├── services/                      # service classes (263 on 0.742)
+│   ├── classes/                       # one JSON per class (943 on 0.743, ~2 KB median)
+│   ├── enums/                         # one JSON per enum (651 on 0.743)
+│   ├── services/                      # service classes (264 on 0.743)
 │   ├── deprecated/                    # 48 deprecated class JSONs
 │   ├── class-index.json               # Lightweight index for quick lookup
 │   ├── enum-index.json

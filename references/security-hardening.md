@@ -245,7 +245,8 @@ Enable it in Studio, not from code: set `Workspace.AuthorityMode` to `Server` in
 window, which also sets the other requirements the official page lists
 (`NextGenerationReplication`, `PlayerScriptsUseInputActionSystem`, `SignalBehavior = Deferred`,
 `UseFixedSimulation`, `StreamingEnabled`). `AuthorityMode` is `RobloxScriptSecurity` and the
-others are `NotScriptable` or plugin-only (dump 0.742), so a script cannot switch a place over.
+others are `NotScriptable`, `RobloxScriptSecurity` (`PlayerScriptsUseInputActionSystem` since 0.743)
+or plugin-only (dump 0.743), so a script cannot switch a place over.
 
 Heuristic checks (rubber-banding, speed checks, below) still work without it; Server Authority
 removes the class of exploits they guess at, such as speed hacks, at the engine level.

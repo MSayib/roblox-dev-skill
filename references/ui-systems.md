@@ -402,8 +402,9 @@ glyphs of a `TextLabel`, `TextButton` or `TextBox`), inset shadows, `ShowBehindP
 The three properties are in the 0.742 API dump. In Studio 0.742 a plugin, a server `Script` and a
 `LocalScript` each set and read back `Mode = Text`, `Inset`, `ShowBehindParent` and a `UIGradient`
 child without error — so a write succeeding does **not** tell you the beta is on; whether they
-render without the beta or in a published game was not checked, and the class reference still
-lists the old limits. Treat them like any Studio beta: do not rely on them in a published game
+render without the beta or in a published game was not checked. Since 2026-10-15 the `UIShadow`
+class reference documents them too (without a beta notice), and its only remaining limits are
+`Path2D` and textures; the UI guide still marks them as the beta. Treat them like any Studio beta: do not rely on them in a published game
 until the beta is released.
 
 **Limitations (without the beta):**
@@ -455,6 +456,17 @@ shadowImage.Parent = card  -- layered behind content
 
 -- NEW approach: one line of UIShadow (shown above)
 ```
+
+### UIGradient shapes — the Upgraded UIGradients beta (October 2026)
+
+Since 2026-10-15 the UI guide (*Appearance modifiers → Gradient*) documents `UIGradient.Type`
+(`Enum.GradientType.Linear` / `Radial` / `Elliptical` / `Conical`), `Scale` and `TileMode`
+(`Enum.GradientTileMode.Clamp` / `Repeat` / `Mirror`), each behind **File ⟩ Beta Features ⟩
+Upgraded UIGradients**. All three are `NotBrowsable` in the 0.743 API dump (hidden from the
+Properties window). In Studio 0.743 a `LocalScript` set and read back `Type = Elliptical`,
+`Scale` and `TileMode = Mirror` without error, so a successful write does **not** mean the beta is
+on, and rendering was not checked. As with the UIShadow beta: build on the default linear gradient
+for a published game, and use these only while experimenting in Studio until the beta is released.
 
 ---
 

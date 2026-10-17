@@ -8,7 +8,7 @@ description: >
   and anti-exploit, deprecated APIs, Rojo, and the Roblox Studio MCP tools (execute_luau,
   multi_edit, script_read). It holds facts that general knowledge gets wrong (which properties a
   game Script may set, features that exist but are not enabled, Studio betas that cannot be
-  published, engine and Luau changes up to 0.742) and worked examples tested in Studio, so consult
+  published, engine and Luau changes up to 0.743) and worked examples tested in Studio, so consult
   it before answering from memory. Not for Lua outside Roblox (Redis, OpenResty, WoW addons, LOVE)
   or for other game engines.
 ---
@@ -19,10 +19,10 @@ Expert development companion for building Roblox experiences with Luau. Grounded
 official Roblox documentation (https://create.roblox.com/docs), the Luau language spec
 (https://luau.org), and the Roblox Lua Style Guide (https://roblox.github.io/lua-style-guide/).
 
-> **Engine**: Roblox Studio **0.742.0.7421053** with **Luau 0.742** (released 2026-10-10) —
-> dump downloaded, re-split, and diffed against 0.741 on **2026-10-11**, with every
-> developer-visible change run in Studio 0.742. 940 classes / 648 enums; locally, 263 class files
-> named `*Service` (343 classes carry the `Service` tag) and 48 deprecated classes (477 members).
+> **Engine**: Roblox Studio **0.743.0.7431133** with **Luau 0.743** (released 2026-10-16) —
+> dump downloaded, re-split, and diffed against 0.742 on **2026-10-17**, with every
+> developer-visible change run in Studio 0.743. 943 classes / 651 enums; locally, 264 class files
+> named `*Service` (344 classes carry the `Service` tag) and 48 deprecated classes (573 members).
 >
 > Roblox ships roughly weekly, so this line is stale by design — never quote it as today's version.
 > Re-derive it instead:
@@ -160,10 +160,10 @@ Documentation Lookup workflow below.
 **Always check local files first** — they are pre-split, far cheaper to read than the full dump, and
 require no network. If `~/RobloxDocs/RobloxAPI/` exists, use it.
 
-**How much cheaper, re-measured 2026-10-11 on 0.742.0.7421053** (an earlier "845× smaller" figure
+**How much cheaper, re-measured 2026-10-17 on 0.743.0.7431133** (an earlier "845× smaller" figure
 was not reproducible from any measurement, so here are the real numbers and the command that
-produced them): the full dump is **8,438,918 bytes**; the 940 split class files run **101 B min,
-2,050 B median, 4,784 B mean, 104,956 B max**. So a typical class lookup reads about **0.02%** of
+produced them): the full dump is **8,562,360 bytes**; the 943 split class files run **101 B min,
+2,043 B median, 4,842 B mean, 105,165 B max**. So a typical class lookup reads about **0.02%** of
 the dump, and even the largest class reads under **1.3%** of it. Re-measure with:
 
 ```bash
@@ -177,7 +177,7 @@ print('dump', os.path.getsize(os.path.realpath(d+'/dumps/latest.json')), 'B | n'
 ```
 
 ```bash
-# Look up a specific class (~2 KB median vs the 8.4 MB full dump — see measurement above)
+# Look up a specific class (~2 KB median vs the 8.6 MB full dump — see measurement above)
 cat ~/RobloxDocs/RobloxAPI/classes/<ClassName>.json
 
 # Query a specific property/method (jq if installed; the python3 form works everywhere)
@@ -201,8 +201,8 @@ grep -l '"<PropertyName>"' ~/RobloxDocs/RobloxAPI/classes/*.json
 ```bash
 # Check when local data was last updated
 cat ~/RobloxDocs/RobloxAPI/.current-version
-# → {"version":"0.742.0.7421053","platform":"MacStudio","platformVersion":"0.742.0.7421053",
-#    "winHash":"version-9b554450a0fc4e65","updatedAt":"2026-10-11T07:35:36Z","checkedAt":"2026-10-11T07:35:36Z"}
+# → {"version":"0.743.0.7431133","platform":"MacStudio","platformVersion":"0.743.0.7431133",
+#    "winHash":"version-4f087c32742644ab","updatedAt":"2026-10-17T07:50:06Z","checkedAt":"2026-10-17T07:50:06Z"}
 ```
 
 > **Read whichever timestamp is present: `updatedAt` OR `checkedAt`.** `updatedAt` is when a dump
