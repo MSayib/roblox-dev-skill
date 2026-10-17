@@ -51,9 +51,10 @@ surface. The tools below belong to **Roblox's own MCP server, built into Studio*
 only tells you how to use them well. Official reference:
 https://create.roblox.com/docs/studio/mcp
 
-The docs page lists **26 tools**; the build observed 2026-10-11 (Studio 0.742) exposed **30**:
-those plus `generate_texture`, `segment_mesh`, `list_plugin_guis` and `capture_plugin_gui`,
-undocumented. Detect what your host actually exposes rather than trusting this table.
+The docs page lists **26 tools**. The build observed 2026-10-17 (Studio 0.743) exposed **28**:
+those plus the undocumented `generate_texture` and `segment_mesh`. `list_plugin_guis` and
+`capture_plugin_gui`, seen on 2026-10-11 (Studio 0.742), were gone. Detect what your host actually
+exposes rather than trusting this table.
 
 | Tool | Purpose |
 |------|---------|
@@ -74,13 +75,13 @@ undocumented. Detect what your host actually exposes rather than trusting this t
 | `store_image` | **Local** png/jpg ≤5 MB → `IMAGEID_` URI for other tools |
 | `upload_image` | Batch upload from **HTTP(S) URLs** → imagePath→assetId map |
 | `generate_mesh` / `generate_procedural_model` | Generate 3D content |
-| `generate_material` / `generate_texture` | Generate materials and textures |
-| `segment_mesh` | Segment a mesh into parts |
+| `generate_material` | Generate a `MaterialVariant`; returns the base material + variant name |
+| `generate_texture` | Re-texture an **existing** MeshPart/Model — **replaces the source in place** (duplicate it first) |
+| `segment_mesh` | Split an existing mesh into ≤5 named parts; inserts a new Model next to the source |
 | `wait_job_finished` | Await a background `jobId` (from a tool's own `async: true`) |
 | `http_get` | Fetch Roblox docs **from an allowlist**; URL must end `.md` or be `llms.txt` |
 | `skill` | Roblox's first-party `rbx-*` references (debug, perf, scene analysis, …) |
 | `list_roblox_studios` | Enumerate connected Studio instances (name + place ID) |
-| `list_plugin_guis` / `capture_plugin_gui` | List plugin widgets (hidden ones too); screenshot a **visible** one |
 
 > **Every call takes a `studio_id`.** There is no "set active studio" tool — call
 > `list_roblox_studios` first and pass the id you want on each subsequent call. Several Studio

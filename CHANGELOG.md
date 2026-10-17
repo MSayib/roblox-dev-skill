@@ -11,6 +11,39 @@ reference content was verified against at that time.
 
 ---
 
+## 2.18.1 — Oct 17, 2026
+
+**A second pass after 2.18.0: the MCP surface and `docs/`.** No engine change (0.743.0.7431133 /
+Luau 0.743). Claims register 704 → 713 (0 unverified, 66 regression guards). Audit 0 defects,
+installer suite 48/48.
+
+### Fixed
+
+- **The MCP tool count was wrong for 0.743.** SKILL.md and `mcp-integration.md` said the build
+  exposes 30 tools. In Studio 0.743 it exposes **28**: `list_plugin_guis` and
+  `capture_plugin_gui` are gone. The docs page (26 tools) has not changed since 2026-08-21. Both
+  files now say so, and the old count is a regression guard.
+- **`generate_texture` is destructive and was described as "generates a texture".** Its live
+  schema says it re-textures an existing MeshPart or Model and **replaces the source in place**,
+  using the current selection when no `instance_path` is given. `mcp-integration.md`, the SKILL.md
+  table and `agent-safety.md` now say this, and say to duplicate the source first.
+  `segment_mesh` is described from its schema too: up to 5 parts, new Model next to the source.
+- **`docs/` had not been checked against anything.** The claims register covers only SKILL.md and
+  `references/`. A pass by hand found:
+  - `robloxdocs.md` said SKILL.md re-measures the dump "with `stat -L`". It uses Python's
+    `os.path.realpath` and warns against `stat`. Its 0.741 sizes were also out of date.
+  - `how-it-works.md` listed the installed payload incompletely and labelled itself "README.md".
+    It also said every prose statement is in the register.
+  - The RobloxDocs README said bash, curl or wget are required. Python 3.6+ is, and curl is only
+    a TLS fallback.
+
+  Installer options, URLs, the MCP setup steps and the archived `studio-rust-mcp-server` were
+  confirmed as written.
+- **`roblox-api-monitor.py --audit` with no value crashed with an `IndexError`.** It, `--refs` and
+  `--keep` now exit with "needs a value".
+
+---
+
 ## 2.18.0 — Oct 17, 2026
 
 **Engine 0.743.0.7431133 / Luau 0.743, with every developer-visible change run in Studio 0.743.**
