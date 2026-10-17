@@ -1,6 +1,6 @@
 {
   "skill_name": "roblox-dev-skill",
-  "version": "2.16.0",
+  "version": "2.18.0",
   "evals": [
     {
       "id": 1,
@@ -316,7 +316,7 @@
       "expected_references": [
         "project-structure.md"
       ],
-      "notes": "workspace.PlayerScriptsUseInputActionSystem is NotScriptable: NO script can read or set it -- not a game Script, a plugin, the command bar, or MCP execute_luau (Studio 0.741 reports 'is not a valid member of Workspace'). Correct answer says it cannot be done from a script and tells the user to set it to Enabled in Workspace's Properties window; its type is Enum.RolloutState, not a boolean. FAILS if it writes `= true` OR `= Enum.RolloutState.Enabled` as working code -- the second was this skill's own 2.12.0 'fix', still unrunnable."
+      "notes": "NO script can read or set workspace.PlayerScriptsUseInputActionSystem -- not a game Script, a plugin, the command bar, or MCP execute_luau. It was NotScriptable until 0.742 ('is not a valid member of Workspace'); since 0.743 it is RobloxScriptSecurity and all of them get 'lacking capability RobloxScript' (Studio 0.743). Correct answer says it cannot be done from a script and tells the user to set it to Enabled in Workspace's Properties window; its type is Enum.RolloutState, not a boolean. FAILS if it writes `= true` OR `= Enum.RolloutState.Enabled` as working code -- the second was this skill's own 2.12.0 'fix', still unrunnable."
     },
     {
       "id": 39,
@@ -504,6 +504,52 @@
         "performance-optimization.md"
       ],
       "notes": "ConnectParallel and task.desynchronize only work in a Script that is a descendant of an Actor; in ServerScriptService it errors 'Scripts that connect in parallel must be rooted under an Actor' (Studio 0.742). Correct answer moves the Script under an Actor (one per independent unit) and keeps DataModel writes after task.synchronize(). FAILS if it presents the snippet as working where it is."
+    },
+    {
+      "id": 59,
+      "prompt": "Engine 0.743 added MarketplaceService:GetPassOwnershipAsync. Rewrite my VIP check to use it instead of UserOwnsGamePassAsync.",
+      "should_trigger": true,
+      "expected_references": [
+        "monetization.md",
+        "legacy-migration.md"
+      ],
+      "notes": "GetPassOwnershipAsync(player: Player, gamePassId) is in the 0.743 dump but a server Script gets 'MarketplaceService:GetPassOwnershipAsync() is not enabled' (Studio 0.743); there is no docs page, so the returned dictionary's fields are unknown. Correct answer keeps UserOwnsGamePassAsync(player.UserId, passId) in a pcall and says why. FAILS if it presents GetPassOwnershipAsync code as working or invents fields of its result."
+    },
+    {
+      "id": 60,
+      "prompt": "Luau 0.743 says locals no longer count toward the 200-local limit after their last use. My generated config module has about 230 top-level locals and fails with 'Out of local registers'. Is updating Studio enough?",
+      "should_trigger": true,
+      "expected_references": [
+        "luau-fundamentals.md"
+      ],
+      "notes": "No. The compiler change is gated (LuauBytecodeSlotAlloc, default off, not in Studio's published flags), and in Studio 0.743 a Script with 210 sequential locals, each used only on the next line, still fails with 'Out of local registers when trying to allocate v200: exceeded limit 200'. Correct answer restructures: put the values in a table, or scope groups of locals in do ... end blocks (210 locals inside do blocks compiled), or split the module. FAILS if it says the 0.743 update fixes it."
+    },
+    {
+      "id": 61,
+      "prompt": "Sweep my sword hitbox with workspace:Shapecast(hitboxPart, direction, params, swordTip.CFrame, Vector3.new(2, 2, 6)) using the new override parameters",
+      "should_trigger": true,
+      "expected_references": [
+        "legacy-migration.md"
+      ],
+      "notes": "The cframeOverride and sizeOverride parameters are documented on the WorldRoot page but passing either errors 'Shapecast cframeOverride and sizeOverride are not enabled yet!' (Studio 0.743). Correct answer uses workspace:Blockcast(cframe, size, direction, params) (or Spherecast), or moves/sizes the hitbox part before a plain Shapecast. FAILS if it presents the override call as working."
+    },
+    {
+      "id": 62,
+      "prompt": "0.743 changed BaseScript.RunContext to Security None. From my server Script, set another Script's RunContext to Client at runtime.",
+      "should_trigger": true,
+      "expected_references": [
+        "legacy-migration.md"
+      ],
+      "notes": "The write also gained the PluginOrOpenCloud capability, which a game Script does not hold: it fails with \"The current thread cannot write 'RunContext' (lacking capability PluginOrOpenCloud)\" (Studio 0.743). Reading RunContext works, and execute_luau / a plugin can write it. Correct answer: set RunContext in the Properties window (or use a LocalScript / a Script with RunContext set at edit time). FAILS if it treats Security None as script-writable."
+    },
+    {
+      "id": 63,
+      "prompt": "In my LocalScript, list which GUI objects in my HUD ScreenGui are under the mouse using GetGuiObjectsAtPosition",
+      "should_trigger": true,
+      "expected_references": [
+        "legacy-migration.md"
+      ],
+      "notes": "Over-correction guard. LayerCollector:GetGuiObjectsAtPosition became Security None in 0.743 and works from a LocalScript: screenGui:GetGuiObjectsAtPosition(x, y) returned only that ScreenGui's objects, PlayerGui:GetGuiObjectsAtPosition returns all ScreenGuis' (Studio 0.743). Correct answer calls it on the ScreenGui with mouse coordinates (UserInputService:GetMouseLocation, mind the GUI inset) after the GUI has rendered. FAILS if it refuses it as RobloxScriptSecurity or plugin-only."
     }
   ]
 }

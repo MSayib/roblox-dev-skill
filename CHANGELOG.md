@@ -11,6 +11,93 @@ reference content was verified against at that time.
 
 ---
 
+## 2.18.0 — Oct 17, 2026
+
+**Engine 0.743.0.7431133 / Luau 0.743, with every developer-visible change run in Studio 0.743.**
+Engine 0.743 is live on Windows and Mac Studio (the Player is 0.743.0.7431134). Each row marked
+*(Studio)* in `legacy-migration.md` was run in Studio 0.743.0.7431133 in the test place, from an
+ordinary server `Script` (`Sandboxed = false`) or a `LocalScript` during a playtest, and from MCP
+`execute_luau` for the plugin level. The probe scripts were removed afterwards. All layers were
+re-run after the last edit: server 97/97 cases and 20/20 expectations, client 27/27 and 5/5,
+plugin 3/3 and 2/2, static 136 blocks with 0 unexplained findings, API audit 0 defects, claims
+register 704 (0 unverified, 0 stale).
+
+### Engine 0.743 (943 classes +4 −1, 651 enums +4 −1, 264 `*Service`, 48 deprecated classes)
+
+- **Seven more `PluginOrOpenCloud` relaxations, all still plugin-only (*tested*).** These are the
+  `BaseScript.RunContext` write, `Animator:StepAnimations()`, four `HumanoidRigDescription`
+  methods, `DigitsRigDescription:SetJoint()` and `AnimationRigData:LoadFromModel()`. Each went to
+  `Security: None`, and each fails from a game Script with `lacking capability PluginOrOpenCloud`,
+  as 2.15.0 found for 0.742. `execute_luau` can use them.
+- **`PlayerScriptsUseInputActionSystem` changed how it refuses.** It is no longer `NotScriptable`
+  but `RobloxScriptSecurity`, so the error is now `lacking capability RobloxScript` instead of
+  "is not a valid member of Workspace" (*tested* from a Script, a LocalScript and `execute_luau`).
+  It is still a Properties-window setting. `project-structure.md` quoted the old message and now
+  gives both. `mcp-integration.md`, `security-hardening.md`, the June 2026 row and eval #38 were
+  updated the same way. `StarterPlayer.CreateDefaultPlayerModule` got the same change.
+- **Present but not enabled (*tested*):** `MarketplaceService:GetPassOwnershipAsync(player, passId)`
+  errors "not enabled", and passing a UserId fails to cast. The new `cframeOverride` /
+  `sizeOverride` parameters of `WorldRoot:Shapecast` error "not enabled yet!", although the
+  `WorldRoot` page documents them. `monetization.md` now says to keep `UserOwnsGamePassAsync`.
+- **Usable (*tested*):** `LayerCollector:GetGuiObjectsAtPosition` from a LocalScript. It returns
+  only that ScreenGui's objects, and only after layout: a call 0.5 s after parenting returned
+  nothing. `InputBinding.Deadzone` (`NumberRange`) and `UIDragDetector.Selectable` can be read and
+  written. `Player.EmotesLoaded` connects and `StarterGear.Loaded` can be read. `ParticleEmitter2D`
+  is creatable and `Emit` raises no error, but rendering was **not** checked, and none of these
+  has a docs page yet.
+- **Not usable:** `PhysicsActivitySensor` (`InternalTest`), `InputReplayService` (`nil`). The
+  reworked `AnimatedImageService` and the removed `AnimatedImageTrack` are `RobloxScriptSecurity`.
+  The 95 `Avatar*Rules` deprecations and `Humanoid:ApplyAvatarRules` → `ApplyAvatarRulesAsync`
+  are `RobloxScriptSecurity` too.
+
+### Fixed
+
+- **The API audit flagged the 0.738 `AnimatedImageService` row.** It named five methods that 0.743
+  removed. The row now says they are gone.
+- **Two "the docs don't say" statements went stale.** The `GradientType` page documents
+  `Elliptical` since 2026-10-15, and the `UIShadow` class reference now documents `Mode`, `Inset`,
+  `ShowBehindParent` and the `UIGradient` child. Both old sentences are kept in the claims
+  register as regression guards.
+
+### Docs (Roblox/creator-docs 2026-10-13 to 2026-10-16)
+
+- **Upgraded UIGradients Studio beta:** `UIGradient.Type` (`Elliptical`, `Conical`), `Scale` and
+  `TileMode`. All three are `NotBrowsable` in the dump. A LocalScript set and read back each one
+  without error, which does not mean the beta is on. `ui-systems.md` has a new subsection, and the
+  advice is the same as for the UIShadow beta: not for a published game yet.
+- **`LogService:GetLogger` / `Logger`** are documented now; they were already in the 0.742 dump.
+  *Tested*: the same logger comes back for the same name, a child's `FullPath` is `Combat.Hits`,
+  and a name containing `.` errors.
+
+### Luau 0.743
+
+- `table.find` is faster, and the error for a read-only table passed where a read-write property
+  is expected is clearer.
+- **The 200-local change is not in Studio yet.** The release note says a local stops counting
+  toward the limit after its last use. The gate (`LuauBytecodeSlotAlloc`) defaults to off and is
+  not in Studio's published flags. In Studio 0.743, 210 sequential locals still fail with
+  `Out of local registers … exceeded limit 200`, while 199 compile, and so do 210 inside `do`
+  blocks (*tested*). Every other gate (`if local`, `coroutine.finally`, `integer`, exact tables,
+  classes) is unchanged. `coroutine.finally` is still `nil` from a Script, a LocalScript and the
+  command bar.
+
+### Evals 58 → 63
+
+- **#59** `GetPassOwnershipAsync` is not enabled.
+- **#60** the 200-local limit still applies in Studio 0.743.
+- **#61** the Shapecast overrides are not enabled.
+- **#62** `RunContext` is still plugin-only to write.
+- **#63** an over-correction guard: `GetGuiObjectsAtPosition` works from a LocalScript.
+
+### Repository
+
+- `.gitignore` now lists `.claude/settings.local.json` and `.env` files. Until now only the
+  maintainer's global git ignore kept the local agent settings out of a commit. Nothing sensitive
+  is or was tracked: the tracked files and the full history were scanned for keys, tokens and
+  personal paths.
+
+---
+
 ## 2.17.1 — Oct 14, 2026
 
 **Weekly update check: no engine change; the UIShadow beta documented.** Studio is still

@@ -1,3 +1,9 @@
 __pycache__/
 *.pyc
 .DS_Store
+# Local agent settings (permissions, paths) — never commit
+.claude/settings.local.json
+# Local environment files
+.env
+.env.*
+.venv/

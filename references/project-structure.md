@@ -587,10 +587,12 @@ input events everywhere.
 Select **Workspace** in the Explorer and set **`PlayerScriptsUseInputActionSystem`** to `Enabled` in
 the Properties window. That is the only way to set it.
 
-> ⚠️ **No script can set or even read this property — it is `NotScriptable`.** That includes a
-> plugin, the command bar, and MCP `execute_luau`. In Studio 0.741.19.7411056, reading it from
-> `execute_luau` fails with `PlayerScriptsUseInputActionSystem is not a valid member of Workspace
-> "Workspace"`. Its type is `Enum.RolloutState` (`Default` / `Disabled` / `Enabled`), not a boolean.
+> ⚠️ **No script can set or even read this property.** That includes a plugin, the command bar,
+> and MCP `execute_luau`. Until 0.742 it was `NotScriptable` and reading it failed with
+> `PlayerScriptsUseInputActionSystem is not a valid member of Workspace "Workspace"`. Since 0.743 it
+> is `RobloxScriptSecurity`, and in Studio 0.743.0.7431133 a Script, a LocalScript and
+> `execute_luau` each fail with `The current thread cannot read 'PlayerScriptsUseInputActionSystem'
+> (lacking capability RobloxScript)`. Either way the answer is the same. Its type is `Enum.RolloutState` (`Default` / `Disabled` / `Enabled`), not a boolean.
 > Two earlier versions of this file got it wrong: one wrote `= true` (a type error), and the fix for
 > that wrote `workspace.PlayerScriptsUseInputActionSystem = Enum.RolloutState.Enabled` — which has
 > the right type but still cannot run. If an agent needs it changed, ask the user to flip it in

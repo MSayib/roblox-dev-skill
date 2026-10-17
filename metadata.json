@@ -1,13 +1,21 @@
 {
   "skill_name": "roblox-dev-skill",
-  "version": "2.17.1",
-  "last_updated": "2026-10-14T12:00:00+07:00",
-  "last_updated_by": "claude-code (weekly update check: no engine change; creator-docs 2026-10-13 UIShadow beta ingested and probed in Studio)",
-  "update_source": "luau-lang/luau GitHub releases API (0.742) and 0.742 source tarball; clientsettings client-version (WindowsStudio64, MacStudio, WindowsPlayer, MacPlayer); clientsettingscdn PCStudioApp/MacStudioApp/PCDesktopClient flags; roblox-api-monitor 0.741->0.742 dump diff; Roblox/creator-docs engine reference YAML; live Roblox Studio 0.742.0.7421053 via MCP (playtest Scripts + execute_luau)",
-  "engine_version_at_update": "0.742.0.7421053",
-  "luau_version_at_update": "0.742",
+  "version": "2.18.0",
+  "last_updated": "2026-10-17T15:00:00+07:00",
+  "last_updated_by": "claude-code (weekly update check: engine 0.743 / Luau 0.743 ingested, every developer-visible change probed in Studio 0.743)",
+  "update_source": "luau-lang/luau GitHub releases API (0.743) and 0.742/0.743 source tarballs (flag diff); clientsettings client-version (WindowsStudio64, MacStudio, WindowsPlayer, MacPlayer); clientsettingscdn PCStudioApp/MacStudioApp/PCDesktopClient flags; roblox-api-monitor 0.742->0.743 dump diff; Roblox/creator-docs commits 2026-10-13..16 (engine reference YAML, UI guide); live Roblox Studio 0.743.0.7431133 via MCP (playtest Scripts + execute_luau) and the Rojo 34871 harness",
+  "engine_version_at_update": "0.743.0.7431133",
+  "luau_version_at_update": "0.743",
   "update_interval_days": 7,
   "update_history": [
+    {
+      "date": "2026-10-17T15:00:00+07:00",
+      "version": "2.18.0",
+      "changes": "Engine 0.743.0.7431133 (WindowsStudio64/MacStudio; Player 0.743.0.7431134) + Luau 0.743 (2026-10-16). legacy-migration.md: new 0.743 section (943 classes +4 -1, 651 enums +4 -1); seven more Security None + PluginOrOpenCloud members (RunContext write, StepAnimations, HumanoidRigDescription x4, DigitsRigDescription.SetJoint, AnimationRigData.LoadFromModel) still plugin-only; PlayerScriptsUseInputActionSystem / CreateDefaultPlayerModule now RobloxScriptSecurity (error text changed; project-structure.md, mcp-integration.md, security-hardening.md updated); GetPassOwnershipAsync and Shapecast cframeOverride/sizeOverride present but not enabled (monetization.md note); LayerCollector:GetGuiObjectsAtPosition usable from a LocalScript; InputBinding.Deadzone, UIDragDetector.Selectable, Player.EmotesLoaded, StarterGear.Loaded, ParticleEmitter2D probed; AnimatedImageService reworked, AnimatedImageTrack removed (audit DEFECT on the 0.738 row fixed); Avatar*Rules deprecations. Docs: Logger/GetLogger, GradientType.Elliptical and the Upgraded UIGradients beta (new ui-systems.md subsection), UIShadow class reference now documents the beta features. luau-fundamentals.md: 0.743 rows; the 200-local change is not active in Studio. Claims 657 -> 704 (0 unverified, 62 false); evals 58 -> 63. .gitignore: .claude/settings.local.json and .env files.",
+      "engine_version": "0.743.0.7431133",
+      "decision_by": "user (sayib) -- 2026-10-17 'cek update' then 'benar semua kita kerjakan seperti yang sudah sebelumnya'",
+      "verified_by": "Studio 0.743.0.7431133 (place MieGede NewWorld 118652544255235) via MCP: execute_luau (Edit, plugin level) and playtest probe Scripts/LocalScripts (removed afterwards, 0 left); Rojo 34871 harness: server 97/97 cases, 20/20 expectations, client 27/27, 5/5, plugin 3/3, 2/2; run_static --strict 136 blocks 0 unexplained; audit-skill-examples 0 defects; check_claims --strict 704 claims, 0 stale, 0 uncovered; luau 0.742/0.743 source flag diff; clientsettingscdn flags; creator-docs commits 2026-10-13..16"
+    },
     {
       "date": "2026-10-14T12:00:00+07:00",
       "version": "2.17.1",
