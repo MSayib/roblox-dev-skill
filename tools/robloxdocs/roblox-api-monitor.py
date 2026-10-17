@@ -67,20 +67,26 @@ def parse_args(argv, cfg):
              refs=os.environ.get("ROBLOX_SKILL_REFS") or cfg.get("SKILL_REFS") or "",
              audit=os.environ.get("ROBLOX_AUDIT_MODE") or cfg.get("AUDIT_MODE") or "warn")
     i = 0
+
+    def value(flag):
+        if i + 1 >= len(argv):
+            sys.exit(f"{flag} needs a value (try --help)")
+        return argv[i + 1]
+
     while i < len(argv):
         a = argv[i]
         if a == "--force":
             o["force"] = True
         elif a == "--refs":
-            i += 1; o["refs"] = argv[i]
+            o["refs"] = value(a); i += 1
         elif a == "--audit":
-            i += 1; o["audit"] = argv[i]
+            o["audit"] = value(a); i += 1
         elif a == "--strict-audit":
             o["audit"] = "strict"
         elif a == "--no-audit":
             o["audit"] = "off"
         elif a == "--keep":
-            i += 1; o["keep"] = argv[i]
+            o["keep"] = value(a); i += 1
         elif a in ("-h", "--help"):
             emit(__doc__); sys.exit(0)
         else:

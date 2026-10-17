@@ -93,7 +93,9 @@ Not "mention afterwards" — ask, and wait.
 - **Any write to the `Server` datamodel that touches persistence** — DataStore, MemoryStore,
   Open Cloud. This is live player data.
 - **Any account-level or quota-consuming action**: `insert_asset`, `upload_image`, and the
-  `generate_*` tools.
+  `generate_*` tools. `generate_texture` is also destructive: its schema says it **replaces the
+  source MeshPart or Model in place**, and with no `instance_path` it acts on whatever is
+  selected. Name the target, and duplicate it first unless the user says the original can go.
 - **Mutating a place you did not open**, or a second Studio window you were not asked about.
 - **Anything you cannot describe how to undo.** If you cannot state the reversal, you do not yet
   understand the operation well enough to run it.

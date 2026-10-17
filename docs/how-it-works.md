@@ -9,7 +9,7 @@ roblox-dev-skill/
 ├── SKILL.md                          # Main skill file (router + standards + workflows)
 ├── metadata.json                     # Knowledge update tracking (timestamps, versions)
 ├── CHANGELOG.md                      # Full version history
-├── README.md                         # This file
+├── README.md                         # Overview; links to docs/
 ├── install.sh                        # Installer: macOS, Linux, WSL, Git Bash (bash 3.2+)
 ├── install.ps1                       # Installer: Windows PowerShell 5.1+ / PowerShell 7
 ├── install.cmd                       # Installer: Windows CMD (launches install.ps1)
@@ -36,8 +36,10 @@ roblox-dev-skill/
     └── skill-test/                   # Static + Studio runtime tests for every example (docs/testing.md)
 ```
 
-The installed skill contains only `SKILL.md`, `metadata.json`, `references/` and the license/docs —
-`evals/`, `tools/` and the installers stay in the repository.
+The installer copies `SKILL.md`, `metadata.json`, `LICENSE`, `README.md`, `CHANGELOG.md`,
+`references/` and `docs/` (and keeps its own `install.sh` next to the payload); `evals/` and `tools/`
+stay in the repository. A manual `git clone` or a link to a checkout gives the agent the whole
+repository instead, which works the same but is larger.
 
 
 ## Auto-Trigger
@@ -79,8 +81,9 @@ ending in `.md`, and every call takes a `studio_id` that nothing will double-che
 
 Each row says when that file's content was last verified — not that it is current today. Since
 2.16.0 every code example in every file is also type-checked and run in Studio on each release,
-and since 2.17.0 every high-risk statement in the prose is in a claims register with how it was
-verified ([testing.md](testing.md), [claims.md](claims.md)).
+and since 2.17.0 every high-risk statement in the prose of `SKILL.md` and `references/` is in a
+claims register with how it was verified ([testing.md](testing.md), [claims.md](claims.md)). The
+pages in `docs/` and the README are not in the register; they were checked by hand on 2026-10-17.
 
 | Topic | Status | Reference File |
 |-------|--------|---------------|
@@ -92,7 +95,7 @@ verified ([testing.md](testing.md), [claims.md](claims.md)).
 | Safety — agent→Studio (destructive MCP ops, injection from place content) | ✅ claims checked 2026-10-11 (undo measured) | `agent-safety.md` |
 | Worked examples (build / debug / migrate / verify / refuse / sell / migrate data / bind input) | ✅ **every Verification section run in Studio 0.742**; receipts and migrations asserted on each test run | `worked-examples.md` |
 | Performance (Parallel Luau, **RunService pipeline**, plugin-only fidelity/LOD/streaming settings) | ✅ claims checked 2026-10-11 (0.742, tested in Studio) | `performance-optimization.md` |
-| MCP integration (26 documented tools / 30 observed) | ✅ **re-verified 2026-10-11** against the official docs page + live schemas; privilege notes re-tested 2026-10-17 | `mcp-integration.md` |
+| MCP integration (26 documented tools / 28 observed) | ✅ **re-verified 2026-10-17** against the official docs page + live schemas (Studio 0.743) | `mcp-integration.md` |
 | UI (**UIFlexItem**, **StyleSheet/StyleRule**, StyleQuery, UIShadow, UIGradient beta, per-corner UICorner) | ✅ claims checked 2026-10-17 | `ui-systems.md` |
 | Legacy migration (RunService events, **0.743 additions**, per-release API tables) | ✅ claims checked 2026-10-17 against dumps 0.723–0.743 (0.743 rows tested in Studio) | `legacy-migration.md` |
 | Studio plugins, `Script.Source` limits, engine limits | ✅ measured Aug 2026, source limits re-measured 2026-10-11 | `studio-plugins-and-limits.md` |

@@ -2339,16 +2339,6 @@
    "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
-   "id": "mcp-integration-016",
-   "file": "references/mcp-integration.md",
-   "quote": "which are present but undocumented. Tool sets move; when a call fails with an unknown-tool",
-   "status": "studio",
-   "kind": "negative",
-   "source": "MCP tool schemas of this session (Studio 0.742); Roblox/creator-docs studio/mcp.md (read 2026-10-11)",
-   "evidence": "The four are connected and absent from the page.",
-   "checked": "2026-10-11, engine 0.742.0.7421053"
-  },
-  {
    "id": "mcp-integration-017",
    "file": "references/mcp-integration.md",
    "quote": "error, list what your host actually exposes instead of trusting this table.",
@@ -4712,11 +4702,11 @@
    "id": "SKILL-054",
    "file": "SKILL.md",
    "quote": "The docs page lists **26 tools**; the build observed 2026-10-11 (Studio 0.742) exposed **30**:",
-   "status": "studio",
-   "kind": "number",
+   "status": "false",
+   "kind": "regression",
    "source": "create.roblox.com/docs/studio/mcp.md via http_get; MCP tools of this session (Studio 0.742, place MieGede NewWorld)",
-   "evidence": "Docs page tool rows counted 2026-10-11: 26. Connected build: 30 (adds generate_texture, segment_mesh, list_plugin_guis, capture_plugin_gui).",
-   "checked": "2026-10-11, engine 0.742.0.7421053"
+   "evidence": "Outdated 2026-10-17: the connected build (Studio 0.743) exposes 28 tools; list_plugin_guis and capture_plugin_gui are absent (not in the MCP tool list, not found by tool search).",
+   "checked": "2026-10-17, engine 0.743.0.7431133"
   },
   {
    "id": "SKILL-055",
@@ -5662,31 +5652,31 @@
    "id": "mcp-integration-055",
    "file": "references/mcp-integration.md",
    "quote": "**Counts, stated precisely.** The official docs page lists **26 tools** (recounted 2026-10-11).",
-   "status": "studio",
-   "kind": "number",
+   "status": "false",
+   "kind": "regression",
    "source": "Roblox/creator-docs studio/mcp.md (read 2026-10-11); MCP tool schemas of this session (Studio 0.742)",
-   "evidence": "26 documented tool rows; 30 connected.",
-   "checked": "2026-10-11, engine 0.742.0.7421053"
+   "evidence": "Outdated 2026-10-17: the connected build (Studio 0.743) exposes 28 tools; list_plugin_guis and capture_plugin_gui are absent (not in the MCP tool list, not found by tool search).",
+   "checked": "2026-10-17, engine 0.743.0.7431133"
   },
   {
    "id": "mcp-integration-056",
    "file": "references/mcp-integration.md",
    "quote": "The build observed on 2026-10-11 (Studio 0.742) exposes **30**: those 26 plus `generate_texture`,",
-   "status": "studio",
-   "kind": "number",
+   "status": "false",
+   "kind": "regression",
    "source": "MCP tool schemas of this session (Studio 0.742)",
-   "evidence": "30 connected tools.",
-   "checked": "2026-10-11, engine 0.742.0.7421053"
+   "evidence": "Outdated 2026-10-17: the connected build (Studio 0.743) exposes 28 tools; list_plugin_guis and capture_plugin_gui are absent (not in the MCP tool list, not found by tool search).",
+   "checked": "2026-10-17, engine 0.743.0.7431133"
   },
   {
    "id": "mcp-integration-057",
    "file": "references/mcp-integration.md",
    "quote": "`list_plugin_guis` / `capture_plugin_gui` | Lists plugin widgets with a `pluginGuiId` (hidden ones too), and screenshots a **visible** one by that id. Undocumented; from the live schema (2026-10-11).",
-   "status": "docs",
-   "kind": "number",
+   "status": "false",
+   "kind": "regression",
    "source": "MCP tool schemas of this session (Studio 0.742)",
-   "evidence": "Schema: lists widgets incl. hidden; capture needs a visible widget.",
-   "checked": "2026-10-11, engine 0.742.0.7421053"
+   "evidence": "Outdated 2026-10-17: the connected build (Studio 0.743) exposes 28 tools; list_plugin_guis and capture_plugin_gui are absent (not in the MCP tool list, not found by tool search).",
+   "checked": "2026-10-17, engine 0.743.0.7431133"
   },
   {
    "id": "mcp-integration-058",
@@ -5726,16 +5716,6 @@
    "kind": "number",
    "source": "Roblox/creator-docs studio/mcp.md (read 2026-10-11)",
    "evidence": "Re-read the official page 2026-10-11.",
-   "checked": "2026-10-11, engine 0.742.0.7421053"
-  },
-  {
-   "id": "mcp-integration-062",
-   "file": "references/mcp-integration.md",
-   "quote": "**First-party skills exposed by the `skill` tool (unchanged from 2026-09-25 to 2026-10-11):**",
-   "status": "studio",
-   "kind": "number",
-   "source": "MCP tool schemas of this session (Studio 0.742)",
-   "evidence": "skill tool lists the same seven rbx-* skills on 2026-10-11.",
    "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
@@ -7044,6 +7024,116 @@
    "quote": "for a published game, and use these only while experimenting in Studio until the beta is released.",
    "status": "advice",
    "kind": "negative",
+   "source": "",
+   "evidence": "",
+   "checked": "2026-10-17, engine 0.743.0.7431133"
+  },
+  {
+   "id": "SKILL-062",
+   "file": "SKILL.md",
+   "quote": "The docs page lists **26 tools**. The build observed 2026-10-17 (Studio 0.743) exposed **28**:",
+   "status": "studio",
+   "kind": "number",
+   "source": "Roblox/creator-docs content/en-us/studio/mcp.md (read 2026-10-17; last commit 2026-08-21); MCP tool list of this session (Studio 0.743.0.7431133, Studio MCP Proxy), 2026-10-17",
+   "evidence": "26 tool names on the docs page; 28 connected tools: the 26 documented plus generate_texture and segment_mesh; list_plugin_guis and capture_plugin_gui absent (tool search for them found nothing).",
+   "checked": "2026-10-17, engine 0.743.0.7431133"
+  },
+  {
+   "id": "SKILL-063",
+   "file": "SKILL.md",
+   "quote": "`capture_plugin_gui`, seen on 2026-10-11 (Studio 0.742), were gone. Detect what your host actually",
+   "status": "studio",
+   "kind": "number",
+   "source": "MCP tool list of this session (Studio 0.743.0.7431133, Studio MCP Proxy), 2026-10-17",
+   "evidence": "Both were in the 2026-10-11 session (Studio 0.742); absent on 2026-10-17.",
+   "checked": "2026-10-17, engine 0.743.0.7431133"
+  },
+  {
+   "id": "mcp-integration-062",
+   "file": "references/mcp-integration.md",
+   "quote": "**Counts, stated precisely.** The official docs page lists **26 tools** (recounted 2026-10-17;",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs content/en-us/studio/mcp.md (read 2026-10-17; last commit 2026-08-21)",
+   "evidence": "26 tool names on the page, recounted 2026-10-17.",
+   "checked": "2026-10-17, engine 0.743.0.7431133"
+  },
+  {
+   "id": "mcp-integration-069",
+   "file": "references/mcp-integration.md",
+   "quote": "the page last changed 2026-08-21). The build observed on 2026-10-17 (Studio 0.743) exposes **28**:",
+   "status": "studio",
+   "kind": "number",
+   "source": "Roblox/creator-docs content/en-us/studio/mcp.md (read 2026-10-17; last commit 2026-08-21); MCP tool list of this session (Studio 0.743.0.7431133, Studio MCP Proxy), 2026-10-17",
+   "evidence": "Commit history of mcp.md: latest 2026-08-21. 28 connected tools: the 26 documented plus generate_texture and segment_mesh; list_plugin_guis and capture_plugin_gui absent (tool search for them found nothing).",
+   "checked": "2026-10-17, engine 0.743.0.7431133"
+  },
+  {
+   "id": "mcp-integration-070",
+   "file": "references/mcp-integration.md",
+   "quote": "2026-10-11 (Studio 0.742) it also exposed `list_plugin_guis` and `capture_plugin_gui`; on",
+   "status": "studio",
+   "kind": "number",
+   "source": "MCP tool list of this session (Studio 0.743.0.7431133, Studio MCP Proxy), 2026-10-17; 2026-10-11 session (Studio 0.742)",
+   "evidence": "Present on 2026-10-11, absent on 2026-10-17.",
+   "checked": "2026-10-17, engine 0.743.0.7431133"
+  },
+  {
+   "id": "mcp-integration-071",
+   "file": "references/mcp-integration.md",
+   "quote": "2026-10-17 both were gone. Tool sets move; when a call fails with an unknown-tool error, list what",
+   "status": "studio",
+   "kind": "negative",
+   "source": "MCP tool list of this session (Studio 0.743.0.7431133, Studio MCP Proxy), 2026-10-17",
+   "evidence": "28 connected tools: the 26 documented plus generate_texture and segment_mesh; list_plugin_guis and capture_plugin_gui absent (tool search for them found nothing).",
+   "checked": "2026-10-17, engine 0.743.0.7431133"
+  },
+  {
+   "id": "mcp-integration-072",
+   "file": "references/mcp-integration.md",
+   "quote": "`list_plugin_guis` / `capture_plugin_gui` | **Not in the 2026-10-17 build (Studio 0.743).** On 2026-10-11 they listed plugin widgets with a `pluginGuiId` (hidden ones too) and screenshotted a **visible** one by that id. Undocumented; do not plan on them",
+   "status": "studio",
+   "kind": "number",
+   "source": "MCP tool list of this session (Studio 0.743.0.7431133, Studio MCP Proxy), 2026-10-17",
+   "evidence": "Absent from the 2026-10-17 tool list; behaviour text is from the 2026-10-11 schema.",
+   "checked": "2026-10-17, engine 0.743.0.7431133"
+  },
+  {
+   "id": "mcp-integration-073",
+   "file": "references/mcp-integration.md",
+   "quote": "**First-party skills exposed by the `skill` tool (unchanged from 2026-09-25 to 2026-10-17):**",
+   "status": "studio",
+   "kind": "number",
+   "source": "skill tool schema, 2026-10-17",
+   "evidence": "available_skills: rbx-create-skill, rbx-debug, rbx-device-simulator-lua, rbx-docs-search, rbx-perf-profiling, rbx-scene-analysis, rbx-unit-test (same 7).",
+   "checked": "2026-10-17, engine 0.743.0.7431133"
+  },
+  {
+   "id": "mcp-integration-074",
+   "file": "references/mcp-integration.md",
+   "quote": "`generate_texture` | **Re-textures an existing** MeshPart or Model from `textPrompt` (optional `hintImage`; `model` `Fast` or `Quality`, where `Quality` supports only a single MeshPart), and **replaces the source in place**. Targets `instance_path`, or the current Studio selection when it is omitted. Duplicate the source first if the user may want the original",
+   "status": "docs",
+   "kind": "negative",
+   "source": "generate_texture live schema, 2026-10-17",
+   "evidence": "\"Re-textures an existing mesh using AI ... Requires a source MeshPart or Model. Replaces the source in place.\" Params textPrompt, hintImage, model Fast|Quality (Quality: single-MeshPart source only), instance_path (else current selection). Not run.",
+   "checked": "2026-10-17, engine 0.743.0.7431133"
+  },
+  {
+   "id": "mcp-integration-075",
+   "file": "references/mcp-integration.md",
+   "quote": "without a release note (`list_plugin_guis` / `capture_plugin_gui` did, between 2026-10-11 and",
+   "status": "studio",
+   "kind": "number",
+   "source": "MCP tool list of this session (Studio 0.743.0.7431133, Studio MCP Proxy), 2026-10-17",
+   "evidence": "Present 2026-10-11, absent 2026-10-17; no release note found.",
+   "checked": "2026-10-17, engine 0.743.0.7431133"
+  },
+  {
+   "id": "mcp-integration-076",
+   "file": "references/mcp-integration.md",
+   "quote": "2026-10-17). Descriptions are from the live schemas of 2026-10-17; neither was run.",
+   "status": "advice",
+   "kind": "number",
    "source": "",
    "evidence": "",
    "checked": "2026-10-17, engine 0.743.0.7431133"

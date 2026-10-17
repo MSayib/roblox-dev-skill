@@ -20,7 +20,7 @@ ordinary server `Script` (`Sandboxed = false`) or a `LocalScript` during a playt
 `execute_luau` for the plugin level. The probe scripts were removed afterwards. All layers were
 re-run after the last edit: server 97/97 cases and 20/20 expectations, client 27/27 and 5/5,
 plugin 3/3 and 2/2, static 136 blocks with 0 unexplained findings, API audit 0 defects, claims
-register 704 (0 unverified, 0 stale).
+register 713 (0 unverified, 0 stale).
 
 ### Engine 0.743 (943 classes +4 −1, 651 enums +4 −1, 264 `*Service`, 48 deprecated classes)
 
@@ -88,6 +88,31 @@ register 704 (0 unverified, 0 stale).
 - **#61** the Shapecast overrides are not enabled.
 - **#62** `RunContext` is still plugin-only to write.
 - **#63** an over-correction guard: `GetGuiObjectsAtPosition` works from a LocalScript.
+
+### Fixed — found by re-checking the MCP surface and `docs/`
+
+- **The MCP tool count was wrong for 0.743.** SKILL.md and `mcp-integration.md` said the build
+  exposes 30 tools. In Studio 0.743 it exposes **28**: `list_plugin_guis` and
+  `capture_plugin_gui` are gone. The docs page (26 tools) has not changed since 2026-08-21. Both
+  files now say so, and the old count is a regression guard.
+- **`generate_texture` is destructive and was described as "generates a texture".** Its live
+  schema says it re-textures an existing MeshPart or Model and **replaces the source in place**,
+  using the current selection when no `instance_path` is given. `mcp-integration.md`, the SKILL.md
+  table and `agent-safety.md` now say this, and say to duplicate the source first.
+  `segment_mesh` is described from its schema too: up to 5 parts, new Model next to the source.
+- **`docs/` had not been checked against anything.** The claims register covers only SKILL.md and
+  `references/`. A pass by hand found:
+  - `robloxdocs.md` said SKILL.md re-measures the dump "with `stat -L`". It uses Python's
+    `os.path.realpath` and warns against `stat`. Its 0.741 sizes were also out of date.
+  - `how-it-works.md` listed the installed payload incompletely and labelled itself "README.md".
+    It also said every prose statement is in the register.
+  - The RobloxDocs README said bash, curl or wget are required. Python 3.6+ is, and curl is only
+    a TLS fallback.
+
+  Installer options, URLs, the MCP setup steps and the archived `studio-rust-mcp-server` were
+  confirmed as written.
+- **`roblox-api-monitor.py --audit` with no value crashed with an `IndexError`.** It, `--refs` and
+  `--keep` now exit with "needs a value".
 
 ### Repository
 
