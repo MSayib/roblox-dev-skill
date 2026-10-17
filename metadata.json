@@ -1,13 +1,21 @@
 {
   "skill_name": "roblox-dev-skill",
-  "version": "2.18.0",
-  "last_updated": "2026-10-17T15:00:00+07:00",
-  "last_updated_by": "claude-code (weekly update check: engine 0.743 / Luau 0.743 ingested, every developer-visible change probed in Studio 0.743)",
+  "version": "2.18.1",
+  "last_updated": "2026-10-17T16:00:00+07:00",
+  "last_updated_by": "claude-code (second pass: MCP tool surface in Studio 0.743, docs/ checked by hand)",
   "update_source": "luau-lang/luau GitHub releases API (0.743) and 0.742/0.743 source tarballs (flag diff); clientsettings client-version (WindowsStudio64, MacStudio, WindowsPlayer, MacPlayer); clientsettingscdn PCStudioApp/MacStudioApp/PCDesktopClient flags; roblox-api-monitor 0.742->0.743 dump diff; Roblox/creator-docs commits 2026-10-13..16 (engine reference YAML, UI guide); live Roblox Studio 0.743.0.7431133 via MCP (playtest Scripts + execute_luau) and the Rojo 34871 harness",
   "engine_version_at_update": "0.743.0.7431133",
   "luau_version_at_update": "0.743",
   "update_interval_days": 7,
   "update_history": [
+    {
+      "date": "2026-10-17T16:00:00+07:00",
+      "version": "2.18.1",
+      "changes": "No engine change (0.743.0.7431133 / Luau 0.743). MCP build in Studio 0.743 exposes 28 tools (list_plugin_guis and capture_plugin_gui gone; docs page 26, unchanged since 2026-08-21): SKILL.md and mcp-integration.md corrected, old count kept as regression claims. generate_texture re-textures and replaces its source in place (live schema): mcp-integration, SKILL and agent-safety updated, segment_mesh described from its schema. docs/ (outside the claims register) checked by hand: robloxdocs.md stat -L claim and 0.741 sizes, how-it-works payload list / self-label / coverage scope, RobloxDocs README requirements. roblox-api-monitor: --audit/--refs/--keep without a value exit with a message instead of IndexError. Claims 704 -> 713 (0 unverified, 66 false).",
+      "engine_version": "0.743.0.7431133",
+      "decision_by": "user (sayib) -- 2026-10-17 'Cek apakah masih ada dokumen yang menyesatkan dan belum terbukti?' and 'cek juga folder docs'",
+      "verified_by": "MCP tool list + live schemas of the session (Studio 0.743.0.7431133); Roblox/creator-docs studio/mcp.md and its commit history; install.sh/install.ps1 option and payload grep; URL checks (create.roblox.com docs .md, robloxapi.github.io/ref, studio-rust-mcp-server archived via GitHub API); check_claims --strict 713/0 unverified; audit-skill-examples 0 defects (repo and refreshed ~/RobloxDocs copy); check_sources passed; test_unix.sh 48/48; skills-ref validate"
+    },
     {
       "date": "2026-10-17T15:00:00+07:00",
       "version": "2.18.0",

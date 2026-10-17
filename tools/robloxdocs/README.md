@@ -23,7 +23,8 @@ The skill reads these files to answer API questions from ~2 KB of local JSON ins
     └── audit-skill-examples.py # checks the skill's code examples against the dump
 ```
 
-Requires **bash 3.2+, curl or wget, and python3**. No jq, zsh or bc.
+Requires **Python 3.6+**. No jq, zsh or bc. bash is only needed for the `.sh` shim, and `curl`
+only as a fallback when Python has no usable TLS certificates.
 
 ## Refresh to the newest engine version
 

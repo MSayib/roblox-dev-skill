@@ -28,12 +28,13 @@ The skill integrates with a **local API reference hub** for token-efficient look
 └── README.md
 ```
 
-**Why?** Re-measured 2026-10-01 on 0.741.19.7411056: the full dump is **8,356,896 bytes**, while the
-931 split class files are **101 B min / 2,054 B median / 4,782 B mean / 104,956 B max**. A typical
+**Why?** Re-measured 2026-10-17 on 0.743.0.7431133: the full dump is **8,562,360 bytes**, while the
+943 split class files are **101 B min / 2,043 B median / 4,842 B mean / 105,165 B max**. A typical
 class lookup therefore reads about **0.02%** of the dump. (An earlier README claimed "845× smaller"
 from a "~10KB" class file; neither number is reproducible — the median class file is ~2 KB.
-`SKILL.md` carries the command that re-measures both, including the `stat -L` needed to follow the
-`latest.json` symlink instead of measuring the link itself.)
+`SKILL.md` carries the command that re-measures both. It is a portable `python3` one-liner that
+follows the `latest.json` symlink with `os.path.realpath`; `stat` is avoided because `stat -f`
+means different things on macOS and Linux.)
 
 ## Setting up and refreshing RobloxDocs
 
@@ -47,6 +48,7 @@ python "%USERPROFILE%\RobloxDocs\scripts\roblox-api-monitor.py"    # Windows wit
 
 It checks the current Studio version, downloads the dump only when it changed, validates it before
 it replaces anything, diffs it member-by-member against the previous one, re-splits it, and audits
-the skill's code examples against it. It needs **Python 3.6+** and nothing else — no `jq`, no zsh.
+the skill's code examples against it. It needs **Python 3.6+** — no `jq`, no zsh. `curl` is used only as a fallback when Python has no
+usable TLS certificates, and bash only to run the `.sh` shim.
 Roblox ships roughly weekly; the skill tells you when the local dump looks stale and never refreshes
 on its own.

@@ -123,10 +123,12 @@ and re-check the JSON syntax. Any client that supports `stdio` works.
 
 ## Tool Reference
 
-**Counts, stated precisely.** The official docs page lists **26 tools** (recounted 2026-10-11).
-The build observed on 2026-10-11 (Studio 0.742) exposes **30**: those 26 plus `generate_texture`,
-`segment_mesh`, `list_plugin_guis` and `capture_plugin_gui`, which are present but undocumented. Tool sets move; when a call fails with an unknown-tool
-error, list what your host actually exposes instead of trusting this table.
+**Counts, stated precisely.** The official docs page lists **26 tools** (recounted 2026-10-17;
+the page last changed 2026-08-21). The build observed on 2026-10-17 (Studio 0.743) exposes **28**:
+those 26 plus `generate_texture` and `segment_mesh`, which are present but undocumented. On
+2026-10-11 (Studio 0.742) it also exposed `list_plugin_guis` and `capture_plugin_gui`; on
+2026-10-17 both were gone. Tool sets move; when a call fails with an unknown-tool error, list what
+your host actually exposes instead of trusting this table.
 
 ### Scripts
 
@@ -210,7 +212,7 @@ nested.
 | `start_stop_play` | Starts or stops playtesting. |
 | `get_console_output` | Reads the Studio output log. |
 | `screen_capture` | Captures the viewport and returns image data; optionally takes a custom camera position and look-at target. |
-| `list_plugin_guis` / `capture_plugin_gui` | Lists plugin widgets with a `pluginGuiId` (hidden ones too), and screenshots a **visible** one by that id. Undocumented; from the live schema (2026-10-11). |
+| `list_plugin_guis` / `capture_plugin_gui` | **Not in the 2026-10-17 build (Studio 0.743).** On 2026-10-11 they listed plugin widgets with a `pluginGuiId` (hidden ones too) and screenshotted a **visible** one by that id. Undocumented; do not plan on them |
 
 ### Player input simulation
 
@@ -257,7 +259,7 @@ non-Roblox URL, use the host's own fetch tool or `curl`.
 Using `query` is the token-efficient path: it returns only matching sections with context rather
 than the whole page.
 
-**First-party skills exposed by the `skill` tool (unchanged from 2026-09-25 to 2026-10-11):**
+**First-party skills exposed by the `skill` tool (unchanged from 2026-09-25 to 2026-10-17):**
 `rbx-create-skill`, `rbx-debug`, `rbx-device-simulator-lua`, `rbx-docs-search`,
 `rbx-perf-profiling`, `rbx-scene-analysis`, `rbx-unit-test`. These are Roblox's, shipped inside
 Studio, and they are **narrower and more current than this skill on their specific topics** —
@@ -275,11 +277,12 @@ repository's references for architecture, security, and Luau standards, which th
 
 | Tool | What it does |
 |---|---|
-| `generate_texture` | Generates a texture (companion to `generate_material` / `generate_mesh`). |
-| `segment_mesh` | Segments a mesh into parts. |
+| `generate_texture` | **Re-textures an existing** MeshPart or Model from `textPrompt` (optional `hintImage`; `model` `Fast` or `Quality`, where `Quality` supports only a single MeshPart), and **replaces the source in place**. Targets `instance_path`, or the current Studio selection when it is omitted. Duplicate the source first if the user may want the original |
+| `segment_mesh` | Splits an existing MeshPart or Model into up to **5** named `parts` and inserts the result as a **new Model next to the source** (the source stays). Same `instance_path` / selection fallback |
 
 > Treat these two as unsupported: they are not on the docs page, so they may change or vanish
-> without a release note.
+> without a release note (`list_plugin_guis` / `capture_plugin_gui` did, between 2026-10-11 and
+> 2026-10-17). Descriptions are from the live schemas of 2026-10-17; neither was run.
 
 ### Known tool defect
 
