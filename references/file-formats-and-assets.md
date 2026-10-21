@@ -127,6 +127,17 @@ The **Universal Importer** handles all third-party 3D asset imports.
 | `.gltf` / `.glb` | Same features as FBX. Open standard format. glTF text + separate files, glb single binary. **Recommended for complex assets.** |
 | `.obj` | Static geometry only. No rigging/animation/hierarchy. Best for simple static meshes. |
 
+**glTF imports with a different hierarchy than FBX** (Importer page, 2026-10-21), so code that
+walks an imported model must not assume one shape:
+
+| | `.fbx` | `.gltf` / `.glb` |
+|---|---|---|
+| Mesh | a `MeshPart` directly inside the top-level `Model` | a `Model` inside the top-level `Model`, holding **one `MeshPart` per glTF primitive** |
+| Cage meshes | a `WrapLayer` inside the `MeshPart` | the `WrapLayer`, plus an extra `Model` per inner and outer cage node (safe to delete) |
+
+When a glTF node and its mesh share a name (`Cover`), one of them gets a `_Node` suffix
+(`Cover_Node`). Find parts with `FindFirstChild(name, true)` or by class, not by a fixed path.
+
 ### Import Images
 
 | Format | Notes |
@@ -228,9 +239,16 @@ new names:
 | Legacy Name | New Name | Parent Class |
 |-------------|----------|-------------|
 | `MeshId` | `MeshContent` | `MeshPart` |
-| `SoundId` | `AudioContent` | `Sound` / `AudioPlayer` |
+| `SoundId` (`Sound`), `Asset` (`AudioPlayer`) | `AudioContent` | `Sound` / `AudioPlayer` |
 | `AnimationId` | `AnimationContent` | `Animation` |
 | `TextureID` / `Texture` | `TextureContent` | `Decal` / `MeshPart` |
+
+The two names are one value: in Studio 0.743.0.7431133 (from `execute_luau`), writing
+`Sound.AudioContent` changed `SoundId` and the reverse, and writing `AudioPlayer.AudioContent`
+changed `AudioPlayer.Asset`. **`AudioPlayer` has no `SoundId`** (indexing it errors "is not a
+valid member"); an earlier version of this table listed `SoundId` for both classes. Both
+`AudioContent` properties carry the `Hidden` tag in the 0.743 dump, which keeps them out of the
+Properties window.
 
 **Important for asset scanning:** which name a file stores is not documented, so check both.
 Measured on `Starship.rbxl` (saved by Studio 2026-08-09): its PROP chunks use the **legacy** names

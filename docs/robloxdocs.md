@@ -28,7 +28,7 @@ The skill integrates with a **local API reference hub** for token-efficient look
 └── README.md
 ```
 
-**Why?** Re-measured 2026-10-17 on 0.743.0.7431133: the full dump is **8,562,360 bytes**, while the
+**Why?** Re-measured 2026-10-17 on 0.743.0.7431133 (identical after a re-download on 2026-10-21): the full dump is **8,562,360 bytes**, while the
 943 split class files are **101 B min / 2,043 B median / 4,842 B mean / 105,165 B max**. A typical
 class lookup therefore reads about **0.02%** of the dump. (An earlier README claimed "845× smaller"
 from a "~10KB" class file; neither number is reproducible — the median class file is ~2 KB.

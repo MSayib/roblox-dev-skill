@@ -594,6 +594,31 @@ plugin-only). A Script may read it.
 **Script considerations**: With streaming enabled, instances may not exist when scripts
 run. Use `WaitForChild()` or `ModelStreamingMode.Atomic` for critical models.
 
+### Load (join) times
+
+From the official *Identify* and *Improve* performance pages (both rewritten 2026-10-17). A join
+runs in this order: `ReplicatedFirst` replicates (a custom loading screen appears); then the rest
+of the data model, including all of `ReplicatedStorage` and `Workspace` (with streaming, only
+the area near the spawn point); then the avatar loads. Load time ends when the loading screen
+disappears and the world renders.
+
+- **What makes it slow:** streaming off; bulk in `ReplicatedStorage`, which replicates to every
+  client before they can play whether they need it or not; heavy `ReplicatedFirst` content;
+  calling `ContentProvider:PreloadAsync()` on more than the loading screen, menu icons and spawn
+  area need (never the whole `Workspace`), or waiting on `ContentProvider.RequestQueueSize`;
+  heavy synchronous work in `LocalScript`s that run during the join.
+- **What to do:** enable streaming (default for new places; re-test scripts that read
+  `Workspace` on join); keep in `ReplicatedStorage` only what clients need at join and move the
+  rest to `ServerStorage`; keep `ReplicatedFirst` to the loading screen; preload only what must
+  not pop in, and offer a **Skip Loading** button for long preloads; defer work for UI and areas
+  the player has not reached.
+- **Measure it with a stopwatch, before and after each change.** There is no built-in tool. A
+  `ReplicatedFirst` script timing until `game.Loaded` misses the server connection and the
+  avatar load. Studio Settings → Network → **Print Join Size Breakdown** prints the top 20
+  instances by size at playtest start (in Studio 0.743 the Output shows `Top 20 Instances by
+  Size`, `Transmission Size By Type` and `Total Transmitted Join Bytes`). A load time far above what the place's size suggests
+  can mean a free model whose script generates thousands of instances.
+
 ---
 
 ## 10. MicroProfiler Usage
@@ -614,6 +639,12 @@ bottlenecks. It shows per-frame timing of engine subsystems.
 | `ShadowMapSystem`             | Shadow mapping cost                    |
 | `updateInvalidatedFastClusters`| Avatar instantiation/modification      |
 | `ProcessPackets`               | Incoming network packet processing     |
+
+For every scope, not just these, the MicroProfiler tag table now links LibMP's
+[`ALL-SCOPES.md`](https://github.com/Roblox/libmp/blob/main/docs/ALL-SCOPES.md) (2026-10-20).
+Read it as raw text (`https://raw.githubusercontent.com/Roblox/libmp/main/docs/ALL-SCOPES.md`)
+with curl or the host's fetch tool. MCP `http_get` accepts the `github.com/…/blob/…` URL, but on
+2026-10-21 it returned GitHub's HTML page (about 1 MB in 7 lines), not the markdown.
 
 **Custom profiling in scripts:**
 

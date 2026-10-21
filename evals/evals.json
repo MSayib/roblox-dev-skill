@@ -1,6 +1,6 @@
 {
   "skill_name": "roblox-dev-skill",
-  "version": "2.18.0",
+  "version": "2.18.2",
   "evals": [
     {
       "id": 1,
@@ -550,6 +550,52 @@
         "legacy-migration.md"
       ],
       "notes": "Over-correction guard. LayerCollector:GetGuiObjectsAtPosition became Security None in 0.743 and works from a LocalScript: screenGui:GetGuiObjectsAtPosition(x, y) returned only that ScreenGui's objects, PlayerGui:GetGuiObjectsAtPosition returns all ScreenGuis' (Studio 0.743). Correct answer calls it on the ScreenGui with mouse coordinates (UserInputService:GetMouseLocation, mind the GUI inset) after the GUI has rendered. FAILS if it refuses it as RobloxScriptSecurity or plugin-only."
+    },
+    {
+      "id": 64,
+      "prompt": "The Roblox coroutine docs page now documents coroutine.finally. Use it in my server Script to clean up when a worker coroutine finishes or errors.",
+      "should_trigger": true,
+      "expected_references": [
+        "luau-fundamentals.md"
+      ],
+      "notes": "The coroutine reference page has described coroutine.finally since 2026-10-20, but it is nil in Studio 0.743 from a Script, a LocalScript and the command bar (tested 2026-10-21) and its gate is not in Studio's published flags. Correct answer says it is documented but not enabled, and gives a working alternative (pcall/xpcall inside the coroutine, or a wrapper that runs cleanup after the body). FAILS if it presents coroutine.finally code as working because the docs page exists."
+    },
+    {
+      "id": 65,
+      "prompt": "Write a server-side admin command system for my Roblox game: admins type ';kick PlayerName' or ';ban PlayerName' in chat and the server parses Player.Chatted.",
+      "should_trigger": true,
+      "expected_references": [
+        "networking.md",
+        "security-hardening.md"
+      ],
+      "notes": "Platform-integrated chat (opt-in now, required from May 2027 per the docs) stops code reading chat text; with it enabled in Studio 0.743, Player.Chatted did not fire at all and TextChatMessage.Text read \"\" (tested 2026-10-21), while TextChatCommand.Triggered still received the full line. Correct answer builds the commands on TextChatCommand (PrimaryAlias, Triggered on the server), checks TextSource.UserId against a server-side admin list, and mentions why Player.Chatted is a dead end. FAILS if it builds on Player.Chatted / MessageReceived text without the warning."
+    },
+    {
+      "id": 66,
+      "prompt": "Add a device trust check to my anti-cheat: kick players whose Player.DeviceTrustLevel is None.",
+      "should_trigger": true,
+      "expected_references": [
+        "security-hardening.md"
+      ],
+      "notes": "Enum.PlayerDeviceTrustLevel and PlayerDeviceTrustDecision are documented (2026-10-21), but Player.DeviceTrustLevel is in neither the 0.743 nor the 0.744 API dump and Enum.PlayerDeviceTrustLevel errors in Studio 0.743 (tested). Correct answer says the property is documented but not in the engine yet, so the code cannot run, and that the level describes the device, not the player (every player starts at Pending). FAILS if it writes the check as working code."
+    },
+    {
+      "id": 67,
+      "prompt": "With the Input Action System, bind MouseWheel to a Direction1D action and zoom my camera one step per wheel notch.",
+      "should_trigger": true,
+      "expected_references": [
+        "project-structure.md"
+      ],
+      "notes": "Under IAS the MouseWheel value is a velocity in scroll units per second (KeyCode docs 2026-10-21): one simulated notch read about 15 for about 0.066 s, then 0 (Studio 0.743). Correct answer uses the sign (or integrates value * dt) to step the zoom, not the raw magnitude per StateChanged. FAILS if it adds the raw value as 'notches'."
+    },
+    {
+      "id": 68,
+      "prompt": "My R6 game should let R15 avatars join. How do I turn on the R6 to R15 adapter with Workspace.AvatarUnificationMode?",
+      "should_trigger": true,
+      "expected_references": [
+        "legacy-migration.md"
+      ],
+      "notes": "The R6 to R15 Adapter page was deleted (2026-10-16) and every Enum.AvatarUnificationMode item is deprecated with 'no longer has an effect; R6 avatars always load as R6 rigs' (2026-10-20). Correct answer says the adapter no longer does anything, so there is nothing to enable, and points at the Avatar Settings rig type instead. FAILS if it gives steps to enable AvatarUnificationMode as if it worked."
     }
   ]
 }

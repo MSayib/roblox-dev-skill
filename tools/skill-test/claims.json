@@ -5,7 +5,8 @@
   "CallingService:CreateCall": "the row documents its rename to CreateCallAsync in 0.739",
   "GeometryService:CreateSolidPrimitive": "the row documents its removal",
   "Player.PlayerScripts": "a path to a child the engine creates, not a member",
-  "Player.PlayerGui": "a path to a child the engine creates, not a member"
+  "Player.PlayerGui": "a path to a child the engine creates, not a member",
+  "Player.DeviceTrustLevel": "documented 2026-10-21 but in neither the 0.743 nor the 0.744 dump; the text says it does not exist yet"
  },
  "claims": [
   {
@@ -7031,12 +7032,12 @@
   {
    "id": "SKILL-062",
    "file": "SKILL.md",
-   "quote": "The docs page lists **26 tools**. The build observed 2026-10-17 (Studio 0.743) exposed **28**:",
+   "quote": "The docs page lists **26 tools**. The build observed 2026-10-17 and 2026-10-21 (Studio 0.743) exposed **28**:",
    "status": "studio",
    "kind": "number",
    "source": "Roblox/creator-docs content/en-us/studio/mcp.md (read 2026-10-17; last commit 2026-08-21); MCP tool list of this session (Studio 0.743.0.7431133, Studio MCP Proxy), 2026-10-17",
-   "evidence": "26 tool names on the docs page; 28 connected tools: the 26 documented plus generate_texture and segment_mesh; list_plugin_guis and capture_plugin_gui absent (tool search for them found nothing).",
-   "checked": "2026-10-17, engine 0.743.0.7431133"
+   "evidence": "26 tool names on the docs page; 28 connected tools: the 26 documented plus generate_texture and segment_mesh; list_plugin_guis and capture_plugin_gui absent (tool search for them found nothing). MCP tool list of this session re-read 2026-10-21 (Studio 0.743.0.7431133): the same 28 tools; creator-docs mcp.md last commit still aa6c8e18 2026-08-21",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
   },
   {
    "id": "SKILL-063",
@@ -7061,12 +7062,12 @@
   {
    "id": "mcp-integration-069",
    "file": "references/mcp-integration.md",
-   "quote": "the page last changed 2026-08-21). The build observed on 2026-10-17 (Studio 0.743) exposes **28**:",
+   "quote": "2026-10-17 and again on 2026-10-21 (Studio 0.743.0.7431133) exposes **28**: those 26 plus",
    "status": "studio",
    "kind": "number",
    "source": "Roblox/creator-docs content/en-us/studio/mcp.md (read 2026-10-17; last commit 2026-08-21); MCP tool list of this session (Studio 0.743.0.7431133, Studio MCP Proxy), 2026-10-17",
-   "evidence": "Commit history of mcp.md: latest 2026-08-21. 28 connected tools: the 26 documented plus generate_texture and segment_mesh; list_plugin_guis and capture_plugin_gui absent (tool search for them found nothing).",
-   "checked": "2026-10-17, engine 0.743.0.7431133"
+   "evidence": "Commit history of mcp.md: latest 2026-08-21. 28 connected tools: the 26 documented plus generate_texture and segment_mesh; list_plugin_guis and capture_plugin_gui absent (tool search for them found nothing). Same 28 tools and identical schemas on 2026-10-21 (Studio 0.743.0.7431133)",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
   },
   {
    "id": "mcp-integration-070",
@@ -7101,12 +7102,12 @@
   {
    "id": "mcp-integration-073",
    "file": "references/mcp-integration.md",
-   "quote": "**First-party skills exposed by the `skill` tool (unchanged from 2026-09-25 to 2026-10-17):**",
+   "quote": "**First-party skills exposed by the `skill` tool (unchanged from 2026-09-25 to 2026-10-21):**",
    "status": "studio",
    "kind": "number",
    "source": "skill tool schema, 2026-10-17",
-   "evidence": "available_skills: rbx-create-skill, rbx-debug, rbx-device-simulator-lua, rbx-docs-search, rbx-perf-profiling, rbx-scene-analysis, rbx-unit-test (same 7).",
-   "checked": "2026-10-17, engine 0.743.0.7431133"
+   "evidence": "available_skills: rbx-create-skill, rbx-debug, rbx-device-simulator-lua, rbx-docs-search, rbx-perf-profiling, rbx-scene-analysis, rbx-unit-test (same 7). skill tool schema 2026-10-21 lists the same 7 rbx-* skills",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
   },
   {
    "id": "mcp-integration-074",
@@ -7131,12 +7132,612 @@
   {
    "id": "mcp-integration-076",
    "file": "references/mcp-integration.md",
-   "quote": "2026-10-17). Descriptions are from the live schemas of 2026-10-17; neither was run.",
+   "quote": "2026-10-17). Descriptions are from the live schemas of 2026-10-17 (unchanged 2026-10-21);",
    "status": "advice",
    "kind": "number",
    "source": "",
-   "evidence": "",
-   "checked": "2026-10-17, engine 0.743.0.7431133"
+   "evidence": "generate_texture / segment_mesh schemas re-read 2026-10-21, unchanged",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "SKILL-064",
+   "file": "SKILL.md",
+   "quote": "(measured 2026-10-21); read LibMP files from `raw.githubusercontent.com` with curl instead.",
+   "status": "studio",
+   "kind": "number",
+   "source": "MCP http_get, Studio 0.743.0.7431133, test place 118652544255235, 2026-10-21",
+   "evidence": "http_get(github.com/Roblox/libmp/blob/main/docs/ALL-SCOPES.md, query) returned 1,072,839 chars of GitHub HTML/react JSON in 7 lines; raw.githubusercontent.com URL returns the markdown (curl 200)",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "file-formats-and-assets-023",
+   "file": "references/file-formats-and-assets.md",
+   "quote": "**glTF imports with a different hierarchy than FBX** (Importer page, 2026-10-21), so code that",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs 65621e8c 2026-10-21 content/en-us/studio/importer.md",
+   "evidence": "New \"glTF import hierarchy\" table",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "file-formats-and-assets-024",
+   "file": "references/file-formats-and-assets.md",
+   "quote": "walks an imported model must not assume one shape:",
+   "status": "docs",
+   "kind": "negative",
+   "source": "Roblox/creator-docs 65621e8c importer.md",
+   "evidence": "FBX: MeshPart directly in Model; glTF: Model per mesh with one MeshPart per primitive, extra cage Models, _Node suffix",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "legacy-migration-136",
+   "file": "references/legacy-migration.md",
+   "quote": "From the Roblox/creator-docs commits of 2026-10-16 to 2026-10-21, re-checked against the 0.743",
+   "status": "source",
+   "kind": "number",
+   "source": "Roblox/creator-docs commits 710b20a5, 58f787e9, 70a0110f, f77a7480, 74006430, 3e54c1d7, 8ebfd797, d99df2ea, 65621e8c",
+   "evidence": "The nine commits between 2026-10-16 and 2026-10-21",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "legacy-migration-137",
+   "file": "references/legacy-migration.md",
+   "quote": "dump and, where marked *(Studio)*, run in Studio 0.743.0.7431133 on 2026-10-21.",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.743.0.7431133, test place 118652544255235, 2026-10-21",
+   "evidence": "Probes run in a playtest and via execute_luau; Studio version() 0.743.0.7431133",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "legacy-migration-138",
+   "file": "references/legacy-migration.md",
+   "quote": "**Platform-integrated chat** (new page, 2026-10-20): an opt-in `TextChatService.PlatformIntegratedChat` mode (`RobloxScriptSecurity`: a Properties-window setting no script can read), **required for all games from May 2027**, in which code cannot read chat text | With it enabled, `TextChatMessage.Text` / `PrefixText` read `\"\"`, `Player.Chatted` did not fire, `TextChannel:SendAsync()` returned `nil`, and `TextChatCommand.Triggered` still got the full line *(Studio)*. Move chat commands to `TextChatCommand` and custom chat UI to `TextChannelWindow`; see `networking.md`",
+   "status": "studio",
+   "kind": "negative",
+   "source": "playtest with TextChatService.PlatformIntegratedChat set to Enabled in Properties by the owner; probe Script + LocalScript, message typed via MCP user_keyboard_input; Studio 0.743.0.7431133, test place 118652544255235, 2026-10-21; platform-integrated-chat.md (3e54c1d7/8ebfd797/65621e8c)",
+   "evidence": "Enabled: MessageReceived Text=\"\" PrefixText=\"\" with deprecation warnings; Player.Chatted never fired (attribute stayed nil); SendAsync returned nil with warning; TextChatCommand.Triggered got \"/probecmd alpha beta\". Disabled baseline: all carried the text. Read from Script/LocalScript/execute_luau: lacking capability RobloxScript. May 2027 requirement is in the page alert",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "legacy-migration-139",
+   "file": "references/legacy-migration.md",
+   "quote": "**`Workspace.AvatarUnificationMode` no longer has an effect**: every `Enum.AvatarUnificationMode` item is deprecated with \"R6 avatars always load as R6 rigs\" (2026-10-20), and the *R6 to R15 Adapter* page was deleted (2026-10-16) | Nothing to set, and no adapter parts to code around: drop handling for the adapter's invisible R6 proxy parts and its `CollisionHead`. In the 0.743 and 0.744 dumps the property is still there, `NotScriptable` and without a `Deprecated` tag; a Script reading it gets \"is not a valid member of Workspace\" *(Studio)*",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Roblox/creator-docs 74006430 AvatarUnificationMode.yaml, 58f787e9 deleted characters/r6-to-r15-adapter.md; dumps 0.743/0.744; Studio 0.743.0.7431133, test place 118652544255235, 2026-10-21",
+   "evidence": "Every item deprecation_message \"no longer has an effect; R6 avatars always load as R6 rigs\"; dump tags [NotScriptable] in both; Script read: \"AvatarUnificationMode is not a valid member of Workspace\"",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "legacy-migration-140",
+   "file": "references/legacy-migration.md",
+   "quote": "`coroutine.finally` is documented on the `coroutine` page (2026-10-20) | **Still `nil`** in Studio 0.743 from a Script and a LocalScript *(Studio)*. See `luau-fundamentals.md`",
+   "status": "studio",
+   "kind": "number",
+   "source": "Roblox/creator-docs 74006430 libraries/coroutine.yaml; Studio 0.743.0.7431133, test place 118652544255235, 2026-10-21",
+   "evidence": "coroutine.finally is nil from a server Script, a LocalScript and execute_luau (Edit)",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "legacy-migration-141",
+   "file": "references/legacy-migration.md",
+   "quote": "`Enum.PlayerDeviceTrustLevel` / `PlayerDeviceTrustDecision` documented (2026-10-21), for a `Player.DeviceTrustLevel` property | **Does not exist in the engine yet:** neither enum nor the property is in the 0.743 or 0.744 dump, and `Enum.PlayerDeviceTrustLevel` errors *(Studio)*. See `security-hardening.md`",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Roblox/creator-docs 65621e8c enums PlayerDeviceTrustLevel.yaml / PlayerDeviceTrustDecision.yaml; dumps 0.743.0.7431133 and 0.744.0.7441077 (setup.rbxcdn.com version-7aaa6838d36c4448); Studio 0.743.0.7431133, test place 118652544255235, 2026-10-21",
+   "evidence": "No Player.DeviceTrustLevel and no PlayerDeviceTrust* enums in either dump; pcall(Enum.PlayerDeviceTrustLevel) false",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "legacy-migration-142",
+   "file": "references/legacy-migration.md",
+   "quote": "`AnalyticsService:LogJourneyEvent` **removed from the docs** (2026-10-21) | Still in the 0.743 and 0.744 dumps (`Security: None`), and a Script can still index it *(Studio)*. With no page describing it, do not add new uses",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Roblox/creator-docs 65621e8c AnalyticsService.yaml (method removed); dumps 0.743/0.744; Studio 0.743.0.7431133, test place 118652544255235, 2026-10-21",
+   "evidence": "Dump: LogJourneyEvent Security None, Basic capability; server Script indexing it returned a function",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "legacy-migration-143",
+   "file": "references/legacy-migration.md",
+   "quote": "`Player:Kick()` from the server: a custom message over **500 bytes** is discarded and the default notice shown | Keep kick reasons short (*docs*; see `security-hardening.md`)",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs 65621e8c Player.yaml Kick",
+   "evidence": "\"the custom message can be at most 500 bytes long ... discarded and the user sees the default notice\"",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "legacy-migration-144",
+   "file": "references/legacy-migration.md",
+   "quote": "`KeyCode.MouseWheel` / `TrackpadPinch` / `TouchPinch` (`Direction1D`) and `MouseDelta` / `TouchDelta` / `TrackpadPan` (`Direction2D`) report **velocities per second** under the Input Action System | One simulated wheel notch read about `15` for about 0.066 s *(Studio)*. See `project-structure.md`",
+   "status": "studio",
+   "kind": "number",
+   "source": "Roblox/creator-docs 65621e8c KeyCode.yaml; Studio 0.743.0.7431133, test place 118652544255235, 2026-10-21",
+   "evidence": "LocalScript InputAction Direction1D + InputBinding KeyCode=MouseWheel; MCP user_mouse_input scrollUp/scrollUp/scrollDown -> StateChanged 14.804, 0 (+0.064 s), 14.993, 0 (+0.067 s), -14.998, 0",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "legacy-migration-145",
+   "file": "references/legacy-migration.md",
+   "quote": "`AssetService:CreateAssetAsync` accepts `Enum.AssetType.Audio` with an `AudioTextToSpeech` root, for reusable text-to-speech assets; `BadgeService:GetBadgeInfoAsync` documents `AwardCount`, `PastDayAwardCount` and `Rarity`; `AudioFader.Volume` range is 0–10 (was documented 0–3); `TextChannelWindow.FontFace` / `UseDefaultFont` documented | *Docs only*, not run here (the first uploads an asset). `FontFace` and `UseDefaultFont` were set from a LocalScript *(Studio)*",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Roblox/creator-docs 65621e8c AssetService.yaml, 710b20a5 BadgeService.yaml, 74006430 AudioFader.yaml and TextChannelWindow.yaml; Studio 0.743.0.7431133, test place 118652544255235, 2026-10-21",
+   "evidence": "Docs text only for the first three (CreateAssetAsync not run: it uploads); TextChannelWindow UseDefaultFont=false and FontFace=Arcade set from a LocalScript, read back PressStart2P family",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "luau-fundamentals-072",
+   "file": "references/luau-fundamentals.md",
+   "quote": "re-checked 2026-10-21 (~25,500 flags each). None of the flags below is set there, and a Luau `FASTFLAGVARIABLE` defaults to **off**:",
+   "status": "source",
+   "kind": "number",
+   "source": "clientsettingscdn PCStudioApp (25,533 flags) and MacStudioApp (25,493 flags), 2026-10-21",
+   "evidence": "No key containing ExactTable, UserDefinedClasses, CoroutineFinally, UnannotatedTopLevel, IntegerLibrary, BytecodeSlotAlloc or ExperimentalIfLocal",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "mcp-integration-077",
+   "file": "references/mcp-integration.md",
+   "quote": "the page last changed 2026-08-21, still its latest commit on 2026-10-21). The build observed on",
+   "status": "source",
+   "kind": "number",
+   "source": "GitHub API commits?path=content/en-us/studio/mcp.md, 2026-10-21",
+   "evidence": "Latest commit aa6c8e18 2026-08-21",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "mcp-integration-078",
+   "file": "references/mcp-integration.md",
+   "quote": "unchanged between the two dates. On 2026-10-11 (Studio 0.742) it also exposed",
+   "status": "studio",
+   "kind": "number",
+   "source": "MCP tool schemas of this session, Studio 0.743.0.7431133, test place 118652544255235, 2026-10-21",
+   "evidence": "All 28 schemas loaded and compared with this file: no difference",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "mcp-integration-079",
+   "file": "references/mcp-integration.md",
+   "quote": "2026-10-21, `http_get` on `https://github.com/Roblox/libmp/blob/main/docs/ALL-SCOPES.md` with a",
+   "status": "studio",
+   "kind": "number",
+   "source": "MCP http_get, Studio 0.743.0.7431133, test place 118652544255235, 2026-10-21",
+   "evidence": "Allowlist accepted the github.com/Roblox/libmp blob URL; result 1,072,839 chars, 7 lines of HTML",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "mcp-integration-080",
+   "file": "references/mcp-integration.md",
+   "quote": "`query` returned GitHub's page markup, about 1 MB in 7 lines, so the one \"matching section\" was",
+   "status": "studio",
+   "kind": "number",
+   "source": "MCP http_get, Studio 0.743.0.7431133, test place 118652544255235, 2026-10-21",
+   "evidence": "query \"updateInvalidatedFastClusters\" returned \"Found 1 match(es)\" with the embedded react JSON line",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "mcp-integration-081",
+   "file": "references/mcp-integration.md",
+   "quote": "(that host is not on the allowlist), or use `skill(\"rbx-perf-profiling\")`.",
+   "status": "docs",
+   "kind": "negative",
+   "source": "http_get live schema allowlist (2026-10-21)",
+   "evidence": "raw.githubusercontent.com is not among the allowed URL patterns; skill tool lists rbx-perf-profiling",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "mcp-integration-082",
+   "file": "references/mcp-integration.md",
+   "quote": "neither was run. The Studio **Texture Generator** page (rewritten 2026-10-16, extended",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs 58f787e9 (2026-10-16) and 74006430 (2026-10-20) studio/texture-generator.md",
+   "evidence": "Page rewritten, then \"Compare generation modes\" added",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "mcp-integration-083",
+   "file": "references/mcp-integration.md",
+   "quote": "2026-10-20) describes the same two modes for the Studio tool: `Fast` gives 1K diffuse",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs 74006430 texture-generator.md",
+   "evidence": "\"Quality mode's 4K PBR textures ... Fast mode's 1K diffuse textures\"; \"press Ctrl/Cmd + Z to undo\"",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "monetization-032",
+   "file": "references/monetization.md",
+   "quote": "(2026-10-20), a Plus subscriber gets your paid private servers at no cost, and you earn **up to",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs 8ebfd797 / 65621e8c production/monetization/private-servers.md",
+   "evidence": "Alert: Plus subscribers get paid private servers at no cost; \"You still earn up to 100 Robux per subscriber each month based on the time they spend\"; price change cancels active subscriptions",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "networking-019",
+   "file": "references/networking.md",
+   "quote": "(page added 2026-10-20) · [TextChannelWindow](https://create.roblox.com/docs/reference/engine/classes/TextChannelWindow) ·",
+   "status": "source",
+   "kind": "number",
+   "source": "Roblox/creator-docs 3e54c1d7 2026-10-20",
+   "evidence": "content/en-us/chat/platform-integrated-chat.md added (+205)",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "networking-020",
+   "file": "references/networking.md",
+   "quote": "renders chat, and **your code can no longer read what players type**. The docs page says it",
+   "status": "studio",
+   "kind": "negative",
+   "source": "playtest with TextChatService.PlatformIntegratedChat set to Enabled in Properties by the owner; probe Script + LocalScript, message typed via MCP user_keyboard_input; Studio 0.743.0.7431133, test place 118652544255235, 2026-10-21",
+   "evidence": "Text and PrefixText read \"\" ; Player.Chatted did not fire",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "networking-021",
+   "file": "references/networking.md",
+   "quote": "becomes **required for all games starting in May 2027**, when the APIs below are deprecated. So",
+   "status": "docs",
+   "kind": "negative",
+   "source": "Roblox/creator-docs platform-integrated-chat.md",
+   "evidence": "\"Starting in May 2027, platform-integrated chat will be required for all games. The unsupported APIs will be deprecated\"",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "networking-022",
+   "file": "references/networking.md",
+   "quote": "(`Enum.RolloutState`). It is `RobloxScriptSecurity`: in Studio 0.743.0.7431133 a Script, a",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.743.0.7431133, test place 118652544255235, 2026-10-21",
+   "evidence": "pcall read from server Script and LocalScript: \"The current thread cannot read 'PlatformIntegratedChat' (lacking capability RobloxScript)\"; same from execute_luau Edit",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "networking-023",
+   "file": "references/networking.md",
+   "quote": "LocalScript and MCP `execute_luau` each fail to read it with `The current thread cannot read",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.743.0.7431133, test place 118652544255235, 2026-10-21",
+   "evidence": "Same error text from all three contexts",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "networking-024",
+   "file": "references/networking.md",
+   "quote": "**What changes with it `Enabled`**, measured in Studio 0.743.0.7431133 on 2026-10-21 with a",
+   "status": "studio",
+   "kind": "number",
+   "source": "playtest with TextChatService.PlatformIntegratedChat set to Enabled in Properties by the owner; probe Script + LocalScript, message typed via MCP user_keyboard_input; Studio 0.743.0.7431133, test place 118652544255235, 2026-10-21",
+   "evidence": "See legacy-migration-138",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "networking-025",
+   "file": "references/networking.md",
+   "quote": "`TextChatService.MessageReceived` → `TextChatMessage.Text` / `.PrefixText` | the text | fires, but both are `\"\"`, and each read logs `TextChatMessage.Text is deprecated when PlatformIntegratedChat is Enabled. Please use TextChannelWindow to build your custom chat UI.`",
+   "status": "studio",
+   "kind": "negative",
+   "source": "playtest with TextChatService.PlatformIntegratedChat set to Enabled in Properties by the owner; probe Script + LocalScript, message typed via MCP user_keyboard_input; Studio 0.743.0.7431133, test place 118652544255235, 2026-10-21",
+   "evidence": "MessageReceived: text=\"\" prefix=\"\"; LogService: \"TextChatMessage.Text is deprecated when PlatformIntegratedChat is Enabled. Please use TextChannelWindow to build your custom chat UI.\" and the same for PrefixText",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "networking-026",
+   "file": "references/networking.md",
+   "quote": "`TextChannel:SendAsync()` | sends; returns the `TextChatMessage` | returns `nil`, delivers nothing, and warns `TextChannel:SendAsync() is deprecated when PlatformIntegratedChat is Enabled`",
+   "status": "studio",
+   "kind": "negative",
+   "source": "playtest with TextChatService.PlatformIntegratedChat set to Enabled in Properties by the owner; probe Script + LocalScript, message typed via MCP user_keyboard_input; Studio 0.743.0.7431133, test place 118652544255235, 2026-10-21",
+   "evidence": "Disabled: SendAsync returned a TextChatMessage with Text \"probe via SendAsync\" and Chatted fired; Enabled: pcall ok, result nil, no MessageReceived, warning \"TextChannel:SendAsync() is deprecated when PlatformIntegratedChat is Enabled. Please use TextChannelWindow to build your custom chat UI.\"",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "networking-027",
+   "file": "references/networking.md",
+   "quote": "say the Global channel cannot be a custom window's target. `ChatWindowConfiguration` settings do",
+   "status": "docs",
+   "kind": "negative",
+   "source": "Roblox/creator-docs platform-integrated-chat.md, TextChannelWindow.yaml",
+   "evidence": "\"The Global channel isn't available as a target for a custom window\"; \"Properties set on ChatWindowConfiguration do not apply to this window\"",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "networking-028",
+   "file": "references/networking.md",
+   "quote": "not apply to it: set `UseDefaultFont = false` and then `FontFace`. Tested 2026-10-21 from a",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.743.0.7431133, test place 118652544255235, 2026-10-21; harness case networking__L486 (client 28/28)",
+   "evidence": "TextChannelWindow Target=RBXGeneral, UseDefaultFont=false, FontFace Arcade -> PressStart2P family",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "networking-029",
+   "file": "references/networking.md",
+   "quote": "**`ChatWindowConfiguration.TextChannelDisplayMode`** (show a custom channel only in its own",
+   "status": "docs",
+   "kind": "negative",
+   "source": "Roblox/creator-docs platform-integrated-chat.md",
+   "evidence": "\"Show a custom channel only in its own window\" section",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "networking-030",
+   "file": "references/networking.md",
+   "quote": "window) is set in Studio. A LocalScript can read it, and writing fails with `lacking capability",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.743.0.7431133, test place 118652544255235, 2026-10-21",
+   "evidence": "LocalScript read Enum.TextChannelDisplayMode.AllTextChannels; write failed \"lacking capability PluginOrOpenCloud\"",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "networking-031",
+   "file": "references/networking.md",
+   "quote": "PluginOrOpenCloud` (tested 2026-10-21).",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.743.0.7431133, test place 118652544255235, 2026-10-21",
+   "evidence": "See networking-030",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "networking-032",
+   "file": "references/networking.md",
+   "quote": "limit of at least 1 minute, moderation). A game that needs `PrefixText` chat tags should not",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs platform-integrated-chat.md FAQ",
+   "evidence": "In-world text: no two-way communication, rate limiting of at least 1 minute, moderation",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "networking-033",
+   "file": "references/networking.md",
+   "quote": "enable the mode yet, because prefixes are not supported.",
+   "status": "docs",
+   "kind": "negative",
+   "source": "Roblox/creator-docs platform-integrated-chat.md",
+   "evidence": "PrefixText: \"Not supported. If your game requires prefixes, don't enable platform-integrated chat yet.\"",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "performance-optimization-061",
+   "file": "references/performance-optimization.md",
+   "quote": "From the official *Identify* and *Improve* performance pages (both rewritten 2026-10-17). A join",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs 70a0110f 2026-10-17 performance-optimization/identify.md and improve.md",
+   "evidence": "Join order list in identify.md \"Load times\"",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "performance-optimization-062",
+   "file": "references/performance-optimization.md",
+   "quote": "of the data model, including all of `ReplicatedStorage` and `Workspace` (with streaming, only",
+   "status": "docs",
+   "kind": "negative",
+   "source": "Roblox/creator-docs 70a0110f identify.md",
+   "evidence": "\"The rest of the data model replicates, including everything in ReplicatedStorage and Workspace\"",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "performance-optimization-063",
+   "file": "references/performance-optimization.md",
+   "quote": "area need (never the whole `Workspace`), or waiting on `ContentProvider.RequestQueueSize`;",
+   "status": "docs",
+   "kind": "negative",
+   "source": "Roblox/creator-docs 70a0110f improve.md",
+   "evidence": "\"An example of a bad practice is loading the entire Workspace\"; RequestQueueSize \"unreliable\"",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "performance-optimization-064",
+   "file": "references/performance-optimization.md",
+   "quote": "`Workspace` on join); keep in `ReplicatedStorage` only what clients need at join and move the",
+   "status": "docs",
+   "kind": "negative",
+   "source": "Roblox/creator-docs 70a0110f improve.md",
+   "evidence": "Mitigation: enable streaming (default for new places), keep ReplicatedStorage lean, move assets to ServerStorage",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "performance-optimization-065",
+   "file": "references/performance-optimization.md",
+   "quote": "rest to `ServerStorage`; keep `ReplicatedFirst` to the loading screen; preload only what must",
+   "status": "docs",
+   "kind": "negative",
+   "source": "Roblox/creator-docs 70a0110f improve.md",
+   "evidence": "Keep ReplicatedFirst lean; only preload necessary assets; Skip Loading button",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "performance-optimization-066",
+   "file": "references/performance-optimization.md",
+   "quote": "instances by size at playtest start (in Studio 0.743 the Output shows `Top 20 Instances by",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.743.0.7431133 console output of a playtest, 2026-10-21",
+   "evidence": "Output contained \"Top 20 Instances by Size:\", \"Transmission Size By Type (% of Instance Data):\" and \"Total Transmitted Join Bytes (Instance + Terrain) : 32427\"",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "performance-optimization-067",
+   "file": "references/performance-optimization.md",
+   "quote": "[`ALL-SCOPES.md`](https://github.com/Roblox/libmp/blob/main/docs/ALL-SCOPES.md) (2026-10-20).",
+   "status": "source",
+   "kind": "number",
+   "source": "Roblox/creator-docs 74006430 performance-optimization/microprofiler/tag-table.md; curl 2026-10-21",
+   "evidence": "Link added; github.com URL 200, raw file begins \"# Complete MicroProfiler Scope Reference\"",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "performance-optimization-068",
+   "file": "references/performance-optimization.md",
+   "quote": "2026-10-21 it returned GitHub's HTML page (about 1 MB in 7 lines), not the markdown.",
+   "status": "studio",
+   "kind": "number",
+   "source": "MCP http_get, Studio 0.743.0.7431133, test place 118652544255235, 2026-10-21",
+   "evidence": "See mcp-integration-079",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "project-structure-032",
+   "file": "references/project-structure.md",
+   "quote": "**The delta key codes report a velocity, not a delta.** Per the `KeyCode` reference (2026-10-21),",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs 65621e8c enums/KeyCode.yaml",
+   "evidence": "MouseWheel/TrackpadPinch: scroll units per second under Direction1D; MouseDelta/TouchDelta/TrackpadPan: pixels per second under Direction2D; TouchPinch: pixels per second under Direction1D",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "project-structure-033",
+   "file": "references/project-structure.md",
+   "quote": "0.743.0.7431133 with a `Direction1D` action bound to `MouseWheel`: one simulated wheel notch",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.743.0.7431133, test place 118652544255235, 2026-10-21",
+   "evidence": "See legacy-migration-144",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "project-structure-034",
+   "file": "references/project-structure.md",
+   "quote": "(MCP `user_mouse_input`) set the state to about `15` for about 0.066 s, then back to `0`; scrolling",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.743.0.7431133, test place 118652544255235, 2026-10-21",
+   "evidence": "14.804 / 14.993 / -14.998, each back to 0 after 0.064-0.067 s",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "security-hardening-057",
+   "file": "references/security-hardening.md",
+   "quote": "**A `Player:Kick()` message sent from the server is capped at 500 bytes.** Per the `Player`",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs 65621e8c Player.yaml",
+   "evidence": "Kick: at most 500 bytes from the server; measured in bytes, not characters",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "security-hardening-058",
+   "file": "references/security-hardening.md",
+   "quote": "reference (2026-10-21), a longer message is discarded and the player sees the default notice.",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs 65621e8c Player.yaml",
+   "evidence": "\"If the message is longer, it's discarded and the user sees the default notice message instead\"",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "security-hardening-059",
+   "file": "references/security-hardening.md",
+   "quote": "**Device trust is documented but not in the engine yet.** Since 2026-10-21 the docs have",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs 65621e8c enums PlayerDeviceTrustLevel.yaml / PlayerDeviceTrustDecision.yaml",
+   "evidence": "Both added 2026-10-21; items Pending, Unknown, None, Standard, Full",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "security-hardening-060",
+   "file": "references/security-hardening.md",
+   "quote": "property **does not exist yet**: it is in neither the 0.743 nor the 0.744 API dump, and in Studio 0.743.0.7431133",
+   "status": "dump",
+   "kind": "negative",
+   "source": "0.743.0.7431133 and 0.744.0.7441077 Full API Dumps, 2026-10-21",
+   "evidence": "No DeviceTrustLevel member on Player; no PlayerDeviceTrust* enum",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "security-hardening-061",
+   "file": "references/security-hardening.md",
+   "quote": "`Enum.PlayerDeviceTrustLevel` raises an error (tested). Do not write anti-cheat code against",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.743.0.7431133, test place 118652544255235, 2026-10-21",
+   "evidence": "execute_luau: pcall(function() return Enum.PlayerDeviceTrustLevel end) -> false",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "security-hardening-062",
+   "file": "references/security-hardening.md",
+   "quote": "under platform-integrated chat**, which the docs make mandatory from May 2027. In a test with",
+   "status": "studio",
+   "kind": "number",
+   "source": "playtest with TextChatService.PlatformIntegratedChat set to Enabled in Properties by the owner; probe Script + LocalScript, message typed via MCP user_keyboard_input; Studio 0.743.0.7431133, test place 118652544255235, 2026-10-21",
+   "evidence": "Player.Chatted did not fire for a typed message or for SendAsync while Enabled",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "false-audioplayer-soundid",
+   "file": "references/file-formats-and-assets.md",
+   "quote": "| `SoundId` | `AudioContent` | `Sound` / `AudioPlayer` |",
+   "kind": "regression",
+   "status": "false",
+   "source": "API dump 0.743.0.7431133; execute_luau, Studio 0.743.0.7431133, 2026-10-21",
+   "evidence": "AudioPlayer has Asset (and deprecated AssetId), no SoundId: indexing it errors \"SoundId is not a valid member of AudioPlayer\"; AudioPlayer.AudioContent writes Asset.",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "file-formats-and-assets-026",
+   "file": "references/file-formats-and-assets.md",
+   "quote": "The two names are one value: in Studio 0.743.0.7431133 (from `execute_luau`), writing",
+   "status": "studio",
+   "kind": "number",
+   "source": "execute_luau, Studio 0.743.0.7431133, 2026-10-21; API dump 0.743.0.7431133",
+   "evidence": "Sound.AudioContent=Content.fromUri(1234567) -> SoundId rbxassetid://1234567; SoundId=7654321 -> AudioContent.Uri rbxassetid://7654321; AudioPlayer.AudioContent=1111 -> Asset rbxassetid://1111",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "file-formats-and-assets-027",
+   "file": "references/file-formats-and-assets.md",
+   "quote": "changed `AudioPlayer.Asset`. **`AudioPlayer` has no `SoundId`** (indexing it errors \"is not a",
+   "status": "studio",
+   "kind": "negative",
+   "source": "execute_luau, Studio 0.743.0.7431133, 2026-10-21; API dump 0.743.0.7431133",
+   "evidence": "AudioPlayer.SoundId -> \"SoundId is not a valid member of AudioPlayer\"",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "file-formats-and-assets-028",
+   "file": "references/file-formats-and-assets.md",
+   "quote": "`AudioContent` properties carry the `Hidden` tag in the 0.743 dump, which keeps them out of the",
+   "status": "dump",
+   "kind": "number",
+   "source": "API dump 0.743.0.7431133",
+   "evidence": "Sound.AudioContent and AudioPlayer.AudioContent Tags [Hidden]; both lose Hidden in the 0.744 dump",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "SKILL-065",
+   "file": "SKILL.md",
+   "quote": "Re-downloaded and re-audited on 2026-10-21, still the live Studio build that day, with the",
+   "status": "source",
+   "kind": "number",
+   "source": "roblox-api-monitor.py --force, 2026-10-21T13:33Z; clientsettings MacStudio/WindowsStudio64 0.743.0.7431133",
+   "evidence": ".current-version updatedAt 2026-10-21T13:33:12Z, version 0.743.0.7431133; strict audit 0 defects",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
+  },
+  {
+   "id": "SKILL-066",
+   "file": "SKILL.md",
+   "quote": "official docs checked through 2026-10-21.",
+   "status": "source",
+   "kind": "number",
+   "source": "Roblox/creator-docs commits API since=2026-10-16, read 2026-10-21",
+   "evidence": "Last commit reviewed 65621e8c 2026-10-21T10:11:38Z",
+   "checked": "2026-10-21, engine 0.743.0.7431133"
   }
  ]
 }

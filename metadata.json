@@ -1,13 +1,21 @@
 {
   "skill_name": "roblox-dev-skill",
-  "version": "2.18.1",
-  "last_updated": "2026-10-17T16:00:00+07:00",
-  "last_updated_by": "claude-code (second pass: MCP tool surface in Studio 0.743, docs/ checked by hand)",
-  "update_source": "luau-lang/luau GitHub releases API (0.743) and 0.742/0.743 source tarballs (flag diff); clientsettings client-version (WindowsStudio64, MacStudio, WindowsPlayer, MacPlayer); clientsettingscdn PCStudioApp/MacStudioApp/PCDesktopClient flags; roblox-api-monitor 0.742->0.743 dump diff; Roblox/creator-docs commits 2026-10-13..16 (engine reference YAML, UI guide); live Roblox Studio 0.743.0.7431133 via MCP (playtest Scripts + execute_luau) and the Rojo 34871 harness",
+  "version": "2.18.2",
+  "last_updated": "2026-10-21T21:30:00+07:00",
+  "last_updated_by": "claude-code (weekly cycle: creator-docs 2026-10-16..21 ingest; Studio 0.744 hidden, not live)",
+  "update_source": "clientsettings client-version (WindowsStudio64, MacStudio, WindowsPlayer, MacPlayer); setup.rbxcdn.com DeployHistory and the hidden 0.744.0.7441077 Full-API-Dump (version-7aaa6838d36c4448, diff only); luau-lang/luau releases + commits since 0.743; clientsettingscdn PCStudioApp/MacStudioApp flags; roblox-api-monitor --force (0.743 re-download, split, strict audit); Roblox/creator-docs commits 2026-10-16..21 (710b20a5 to 65621e8c); live Roblox Studio 0.743.0.7431133 via MCP (playtest probe Scripts/LocalScripts, execute_luau, user_keyboard_input, user_mouse_input, http_get) and the Rojo 34871 harness",
   "engine_version_at_update": "0.743.0.7431133",
   "luau_version_at_update": "0.743",
   "update_interval_days": 7,
   "update_history": [
+    {
+      "date": "2026-10-21T21:30:00+07:00",
+      "version": "2.18.2",
+      "changes": "No engine change (0.743.0.7431133 / Luau 0.743; Studio 0.744.0.7441077 deployed hidden, not live, 0.744 not ingested). creator-docs 2026-10-16..21: platform-integrated chat (networking.md new section, required May 2027 per docs; with it Enabled Text/PrefixText read '', Player.Chatted did not fire, SendAsync returned nil, TextChatCommand.Triggered kept the full line; TextChatCommand + TextChannelWindow examples), coroutine.finally documented but nil, Player.DeviceTrustLevel/PlayerDeviceTrust* documented but absent from 0.743 and 0.744 dumps, AvatarUnificationMode no longer has an effect, IAS delta KeyCodes are velocities (MouseWheel ~15 per notch), BasePart.CenterOfMass local, LogJourneyEvent removed from docs, Kick 500-byte cap, Roblox Plus private-server earnings, glTF import hierarchy, join-time guidance, LibMP ALL-SCOPES; MCP unchanged (28 tools), http_get on a github.com blob URL returns HTML. FIXED: AudioPlayer has no SoundId (legacy name Asset). Claims 713 -> 773 (0 unverified, 67 false); evals 63 -> 68.",
+      "engine_version": "0.743.0.7431133",
+      "decision_by": "user (sayib) -- 2026-10-21 'mari update skill kita ... jangan ada false positive atau false negative ... redump lagi'; chose docs first and wait for Studio 0.744; then 'oke gapapa naikkan aja' (release without 0.744)",
+      "verified_by": "Studio 0.743.0.7431133 (place MieGede NewWorld 118652544255235) via MCP: probe Script + LocalScript (removed afterwards, 0 left), PlatformIntegratedChat toggled by the owner in Properties, typed chat via user_keyboard_input, wheel via user_mouse_input, execute_luau (Edit); Rojo 34871 harness: server 98/98 cases, 20/20 expectations, client 28/28, 5/5, plugin 3/3, 2/2; run_static --strict 138 blocks 0 unexplained; audit-skill-examples 0 defects; check_claims --strict 773 claims, 0 stale, 0 uncovered; check_sources passed; test_unix.sh 48/48; roblox-api-monitor --force strict audit 0 defects"
+    },
     {
       "date": "2026-10-17T16:00:00+07:00",
       "version": "2.18.1",

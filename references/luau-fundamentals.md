@@ -66,7 +66,7 @@ how you write Luau for Roblox; it is here so nobody mistakes an internal change 
 | **0.741** | Compiler reuses a local's register after its last use; GC allocation-rate underflow fixed when the heap shrinks between cycles; NCG buffer range-check bug fixed | Internals, no edit. The buffer fix only touches `--!native` code that uses `buffer` |
 | **0.742** | Analysis: better scope handling in the strict-mode checker, MLStruct-style unifier rewrite rules, a `~nil` refinement of blocked types that never simplified, grouped `error` calls in control-flow analysis, autocomplete for function statements | Inference fixes, no edit expected. The release notes do not call any of them a soundness change; if `--!strict` reports something new after a Studio update, these are where to look |
 | **0.742** | `string.gsub` is faster when the pattern has no special characters; compiler and NCG (`--!native`) correctness fixes, including constant propagation on tables with metamethods | No edit. Plain-text `gsub` calls get faster on their own |
-| **0.742** | `coroutine.finally` is no longer behind a `Debug` flag in the open-source VM | **Still not in Roblox.** See the table below: the gate was renamed, not removed, and `coroutine.finally` is `nil` in Studio 0.742 |
+| **0.742** | `coroutine.finally` is no longer behind a `Debug` flag in the open-source VM | **Still not in Roblox.** See the table below: the gate was renamed, not removed, and `coroutine.finally` is `nil` in Studio 0.742 and 0.743. The `coroutine` page on create.roblox.com has documented it since 2026-10-20; that does not make it callable |
 | **0.743** | `table.find` is faster, most on small arrays and when the value has no `__eq` metamethod; clearer analysis error when a read-only table (e.g. one passed through `table.freeze`) is given to a parameter whose type needs a read-write property; type-only cyclic modules with a conditional early return fixed | No edit. The new message names the read-only property instead of printing two identical-looking types |
 | **0.743** | Compiler: a local no longer counts toward the **200-local limit** after its last use, even in the same block; at debug level 2 constant locals are no longer kept | **Not in Studio yet.** The gate (`LuauBytecodeSlotAlloc`) defaults to off and is not in Studio's published flags. In Studio 0.743.0.7431133 a Script with 210 sequential locals, each used only on the next line, still fails with `Out of local registers when trying to allocate v200: exceeded limit 200`. 199 such locals compile, and so do 210 inside their own `do ... end` blocks. Scope locals in `do` blocks or split the function; do not rely on the release note |
 
@@ -106,14 +106,14 @@ disappearing because the syntax is on for everyone — not a release note that m
 ### Other experimental features — NOT usable in Roblox
 
 Checked 2026-10-17 against the 0.743 source and Studio's published client settings
-(`clientsettingscdn.roblox.com/v2/settings/application/PCStudioApp` and `MacStudioApp`, ~25,300
-flags each). None of the flags below is set there, and a Luau `FASTFLAGVARIABLE` defaults to **off**:
+(`clientsettingscdn.roblox.com/v2/settings/application/PCStudioApp` and `MacStudioApp`), and
+re-checked 2026-10-21 (~25,500 flags each). None of the flags below is set there, and a Luau `FASTFLAGVARIABLE` defaults to **off**:
 
 | Prototype | Gate in 0.743 | Notes |
 |---|---|---|
 | **Exact tables by default** — `{ x: number }` rejects extra fields, `{ x: number, ... }` allows them (RFC luau-lang/rfcs#11), 0.740 | `DebugLuauParseExactTables`, `DebugLuauExactTableTypes` | The release note calls it "an experimental feature". Do not write `...` in a table type for Roblox |
 | **Classes** RFC prototype | `DebugLuauUserDefinedClasses`, `DebugLuauUserDefinedClassesRuntime` (both in the source since at least 0.737) | |
-| **`coroutine.finally`** (RFC #187), 0.738 | `LuauCoroutineFinally`, `LuauCoroutineFinallyAnalysis` (renamed from `DebugLuauCoroutineFinally` in 0.742) | The 0.742 release note says "stop gating behind a debug flag"; the flag lost its `Debug` prefix but still defaults to off (unchanged in 0.743). **Tested in Studio 0.742 and 0.743: `coroutine.finally` is `nil`** from a game Script and from the command bar |
+| **`coroutine.finally`** (RFC #187), 0.738 | `LuauCoroutineFinally`, `LuauCoroutineFinallyAnalysis` (renamed from `DebugLuauCoroutineFinally` in 0.742) | The 0.742 release note says "stop gating behind a debug flag"; the flag lost its `Debug` prefix but still defaults to off (unchanged in 0.743). **Tested in Studio 0.742 and 0.743: `coroutine.finally` is `nil`** from a game Script and from the command bar, and on 2026-10-21 from a LocalScript too. **The official `coroutine` reference page has described it since 2026-10-20** (callbacks get `"finished"`, `"error"` or `"cancelled"`, run LIFO). The page is ahead of the engine: do not write it into game code until Studio returns a function for it |
 | Require top-level functions to be annotated, 0.738 | `DebugLuauWarnOnUnannotatedTopLevelFunctions` | A lint experiment |
 | An **`integer`** library (`integer.idiv` was fixed in 0.740) | `LuauIntegerLibrary` | Present in the open-source VM since at least 0.737, not enabled in Studio. Not a Roblox API |
 

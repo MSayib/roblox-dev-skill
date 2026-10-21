@@ -612,6 +612,15 @@ the Properties window. That is the only way to set it.
 `Enum.InputActionType` items are **`Bool`** (default — press/release), `Direction1D`,
 `Direction2D`, `Direction3D`, `ViewportPosition`. **There is no `Button` item.**
 
+**The delta key codes report a velocity, not a delta.** Per the `KeyCode` reference (2026-10-21),
+`MouseWheel`, `TrackpadPinch` and `TouchPinch` give a `Direction1D` value, and `MouseDelta`,
+`TouchDelta` and `TrackpadPan` give a `Direction2D` value, all **per second** (scroll units per
+second for the wheel and trackpad pinch, pixels per second for the others). Measured in Studio
+0.743.0.7431133 with a `Direction1D` action bound to `MouseWheel`: one simulated wheel notch
+(MCP `user_mouse_input`) set the state to about `15` for about 0.066 s, then back to `0`; scrolling
+down gave about `-15`. To count notches, integrate the value over time or read the sign; do not
+add the raw value once per `StateChanged`.
+
 ### Recommended structure (edit time)
 
 IAS is designed to be arranged at edit time, not built at runtime:

@@ -294,6 +294,10 @@ end
 
 - Required for SENDING Robux via Transfers API
 - Includes: free private servers, purchase discounts, Robux transfers
+- **Paid private servers still pay you for Plus subscribers.** Per the private-servers page
+  (2026-10-20), a Plus subscriber gets your paid private servers at no cost, and you earn **up to
+  100 Robux per subscriber each month**, based on the time they spend in them. The docs' own
+  warning still applies: changing the private server price cancels every active subscription.
 - NOT the same as "Roblox+" third-party browser extension
 - Players can also send Robux directly through the platform (not just in-game)
 
