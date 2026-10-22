@@ -112,32 +112,32 @@
   {
    "id": "SKILL-003",
    "file": "SKILL.md",
-   "quote": "published, engine and Luau changes up to 0.743) and worked examples tested in Studio, so consult",
+   "quote": "published, engine changes up to 0.744 and Luau up to 0.743) and worked examples tested in Studio, so consult",
    "status": "source",
    "kind": "number",
-   "source": "clientsettings client-version 2026-10-17; roblox-api-monitor download + split of the 0.743 dump",
-   "evidence": "Studio 0.743.0.7431133 and Luau 0.743 ingested 2026-10-17.",
-   "checked": "2026-10-17, engine 0.743.0.7431133"
+   "source": "clientsettings; luau-lang releases",
+   "evidence": "Studio 0.744.0.7441077 ingested 2026-10-22; latest Luau release 0.743",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
   },
   {
    "id": "SKILL-004",
    "file": "SKILL.md",
-   "quote": "**Engine**: Roblox Studio **0.743.0.7431133** with **Luau 0.743** (released 2026-10-16) —",
+   "quote": "**Engine**: Roblox Studio **0.744.0.7441077** with **Luau 0.743** (released 2026-10-16; no 0.744",
    "status": "source",
    "kind": "number",
    "source": "clientsettings client-version; luau-lang/luau releases API",
-   "evidence": "WindowsStudio64/MacStudio 0.743.0.7431133; Luau 0.743 published 2026-10-16.",
-   "checked": "2026-10-17, engine 0.743.0.7431133"
+   "evidence": "WindowsStudio64/MacStudio 0.744.0.7441077 on 2026-10-22; latest Luau release 0.743 (2026-10-16)",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
   },
   {
    "id": "SKILL-005",
    "file": "SKILL.md",
-   "quote": "dump downloaded, re-split, and diffed against 0.742 on **2026-10-17**, with every",
+   "quote": "release yet) — dump downloaded, re-split, and diffed against 0.743 on **2026-10-22**, with every",
    "status": "source",
    "kind": "number",
-   "source": "roblox-api-monitor.sh 2026-10-17",
-   "evidence": "Downloaded, validated, diffed 0.742->0.743 (237 changes, 152 developer-visible) and split on 2026-10-17.",
-   "checked": "2026-10-17, engine 0.743.0.7431133"
+   "source": "roblox-api-monitor.py 2026-10-22T08:20Z",
+   "evidence": "Downloaded, validated, diffed 0.743->0.744 (291 changes, 147 developer-visible), split, strict audit 0 defects",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
   },
   {
    "id": "SKILL-008",
@@ -1682,12 +1682,12 @@
   {
    "id": "luau-fundamentals-001",
    "file": "references/luau-fundamentals.md",
-   "quote": "Reference for AI coding skill — verified against official Roblox documentation and Luau language release specs (**v0.743**, released 2026-10-16; engine 0.743.0.7431133).",
+   "quote": "Reference for AI coding skill — verified against official Roblox documentation and Luau language release specs (**v0.743**, released 2026-10-16; engine 0.744.0.7441077, re-tested 2026-10-22; no Luau 0.744 release yet).",
    "status": "source",
    "kind": "number",
-   "source": "luau-lang/luau releases API; clientsettings client-version",
-   "evidence": "Luau 0.743 published 2026-10-16T20:48:51Z; WindowsStudio64/MacStudio 0.743.0.7431133 (2026-10-17).",
-   "checked": "2026-10-17, engine 0.743.0.7431133"
+   "source": "luau-lang/luau releases API; Studio 0.744.0.7441077, test place 118652544255235, 2026-10-22",
+   "evidence": "Latest release 0.743; engine-level rows re-run in Studio 0.744",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
   },
   {
    "id": "luau-fundamentals-002",
@@ -3222,12 +3222,12 @@
   {
    "id": "performance-optimization-044",
    "file": "references/performance-optimization.md",
-   "quote": "Studio 0.742 a game Script writing it fails with \"lacking capability PluginOrOpenCloud\" (the dump's",
+   "quote": "Studio 0.742 (and again in 0.744.0.7441077) a game Script writing it fails with \"lacking capability PluginOrOpenCloud\" (the dump's",
    "status": "studio",
    "kind": "negative",
-   "source": "Studio 0.742 playtest probe Scripts (SkillTestClaimProbe, SkillTestFrameProbe), 2026-10-11; creator-docs workspace/streaming/index.md",
-   "evidence": "Docs: \"non-scriptable and must be set on the Workspace object in Studio\". Script write of StreamingEnabled failed (PluginOrOpenCloud); dump 0.742 Write None + cap.",
-   "checked": "2026-10-11, engine 0.742.0.7421053"
+   "source": "Studio 0.744.0.7441077, test place 118652544255235, 2026-10-22",
+   "evidence": "Server Script: workspace.StreamingEnabled = ... -> \"The current thread cannot write 'StreamingEnabled' (lacking capability PluginOrOpenCloud)\"",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
   },
   {
    "id": "performance-optimization-045",
@@ -4682,22 +4682,22 @@
   {
    "id": "SKILL-052",
    "file": "SKILL.md",
-   "quote": "developer-visible change run in Studio 0.743. 943 classes / 651 enums; locally, 264 class files",
+   "quote": "developer-visible change run in Studio 0.744. 947 classes / 652 enums; locally, 266 class files",
    "status": "dump",
    "kind": "number",
-   "source": "API dump 0.743.0.7431133; Studio 0.743 probes",
-   "evidence": "943 classes, 651 enums, 264 *Service class files; developer-visible rows probed in Studio 0.743 (see legacy-migration 0.743 section).",
-   "checked": "2026-10-17, engine 0.743.0.7431133"
+   "source": "API dump 0.744.0.7441077; Studio 0.744 probes",
+   "evidence": "947 classes, 652 enums, 266 *Service class files; developer-visible rows probed (legacy-migration 0.744 section)",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
   },
   {
    "id": "SKILL-053",
    "file": "SKILL.md",
-   "quote": "named `*Service` (344 classes carry the `Service` tag) and 48 deprecated classes (573 members).",
+   "quote": "named `*Service` (346 classes carry the `Service` tag) and 48 deprecated classes (574 members).",
    "status": "dump",
    "kind": "negative",
-   "source": "API dump 0.743.0.7431133",
-   "evidence": "344 classes tagged Service; 48 classes and 573 members tagged Deprecated.",
-   "checked": "2026-10-17, engine 0.743.0.7431133"
+   "source": "API dump 0.744.0.7441077",
+   "evidence": "346 classes tagged Service; 48 deprecated classes, 574 deprecated members (+Lighting.Technology)",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
   },
   {
    "id": "SKILL-054",
@@ -4782,22 +4782,22 @@
   {
    "id": "SKILL-059",
    "file": "SKILL.md",
-   "quote": "**How much cheaper, re-measured 2026-10-17 on 0.743.0.7431133**",
+   "quote": "**How much cheaper, re-measured 2026-10-22 on 0.744.0.7441077**",
    "status": "studio",
    "kind": "number",
-   "source": "python3 size measurement, 2026-10-17",
-   "evidence": "Command in SKILL.md run on 0.743: dump 8562360 B; 943 class files min 101 median 2043 mean 4842 max 105165.",
-   "checked": "2026-10-17, engine 0.743.0.7431133"
+   "source": "Command in SKILL.md run 2026-10-22",
+   "evidence": "dump 8637337 B; 947 class files min 101 median 2059 mean 4863 max 105173",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
   },
   {
    "id": "SKILL-060",
    "file": "SKILL.md",
-   "quote": "produced them): the full dump is **8,562,360 bytes**; the 943 split class files run **101 B min,",
+   "quote": "produced them): the full dump is **8,637,337 bytes**; the 947 split class files run **101 B min,",
    "status": "studio",
    "kind": "number",
-   "source": "python3 size measurement, 2026-10-17",
-   "evidence": "dump 8562360 B | n 943 min 101 median 2043 mean 4842 max 105165.",
-   "checked": "2026-10-17, engine 0.743.0.7431133"
+   "source": "Command in SKILL.md run 2026-10-22",
+   "evidence": "Same measurement; median/dump 0.024%, max/dump 1.22%",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
   },
   {
    "id": "SKILL-061",
@@ -6762,12 +6762,12 @@
   {
    "id": "legacy-migration-130",
    "file": "references/legacy-migration.md",
-   "quote": "95 `Avatar*Rules` properties (`AvatarBodyRules.CustomHeadId`, `AvatarAnimationRules.CustomRunAnimationId`, …) and `Humanoid:ApplyAvatarRules` **deprecated** (→ the new `*Override` properties and `ApplyAvatarRulesAsync`); `Enum.AvatarSettings*` items deprecated | Nothing to migrate: all of them, old and new, are `RobloxScriptSecurity` (*dump only*). Avatar settings stay in the Studio **Avatar Settings** window",
-   "status": "dump",
+   "quote": "Nothing to migrate: in 0.743 all of them, old and new, are `RobloxScriptSecurity` (*dump only*). **0.744 opened the new `*Override` properties and `ApplyAvatarRulesAsync` to scripts**, with no effect observed; see the 0.744 section.",
+   "status": "studio",
    "kind": "negative",
-   "source": "API dumps 0.742.0.7421053 and 0.743.0.7431133 (diff-api-dumps.py)",
-   "evidence": "95 Deprecated members across Avatar*Rules, all RobloxScriptSecurity read/write; new *Override members RobloxScriptSecurity; Humanoid.ApplyAvatarRules Deprecated -> ApplyAvatarRulesAsync (both RobloxScriptSecurity).",
-   "checked": "2026-10-17, engine 0.743.0.7431133"
+   "source": "API dumps 0.743/0.744; Studio 0.744.0.7441077, test place 118652544255235, 2026-10-22",
+   "evidence": "0.743: RobloxScriptSecurity; 0.744: None + AvatarAppearance; Script wrote AvatarBodyRules props, ApplyAvatarRulesAsync(R6 rules) returned, RigType stayed R15",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
   },
   {
    "id": "legacy-migration-131",
@@ -6832,12 +6832,12 @@
   {
    "id": "luau-fundamentals-071",
    "file": "references/luau-fundamentals.md",
-   "quote": "**0.743** | Compiler: a local no longer counts toward the **200-local limit** after its last use, even in the same block; at debug level 2 constant locals are no longer kept | **Not in Studio yet.** The gate (`LuauBytecodeSlotAlloc`) defaults to off and is not in Studio's published flags. In Studio 0.743.0.7431133 a Script with 210 sequential locals, each used only on the next line, still fails with `Out of local registers when trying to allocate v200: exceeded limit 200`. 199 such locals compile, and so do 210 inside their own `do ... end` blocks. Scope locals in `do` blocks or split the function; do not rely on the release note",
+   "quote": "**Active in Studio 0.744, not in 0.743.**",
    "status": "studio",
    "kind": "negative",
-   "source": "luau-lang/luau 0.743 source + release notes; clientsettingscdn PCStudioApp/MacStudioApp; Studio 0.743.0.7431133 server Scripts",
-   "evidence": "LuauBytecodeSlotAlloc default off, not in Studio flags. 210 sequential locals (os.clock()+i, used once next line): 'Out of local registers when trying to allocate v200: exceeded limit 200'; 199: ran; 210 in do-blocks: ran.",
-   "checked": "2026-10-17, engine 0.743.0.7431133"
+   "source": "Studio 0.743.0.7431133 (2026-10-17) and Studio 0.744.0.7441077, test place 118652544255235, 2026-10-22",
+   "evidence": "0.743: 210 sequential locals failed \"Out of local registers ... exceeded limit 200\"; 0.744: Scripts with 210 and 300 sequential locals ran; 210 simultaneously-live locals still fail (loadstring and Script)",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
   },
   {
    "id": "mcp-integration-063",
@@ -6892,12 +6892,12 @@
   {
    "id": "mcp-integration-068",
    "file": "references/mcp-integration.md",
-   "quote": "RobloxScript)` (Studio 0.743.0.7431133). It is still a Properties-window setting.",
+   "quote": "RobloxScript)` (Studio 0.743.0.7431133; same in 0.744.0.7441077). It is still a Properties-window setting.",
    "status": "studio",
    "kind": "number",
-   "source": "playtest Script/LocalScript + execute_luau, Studio 0.743.0.7431133 (place 118652544255235), 2026-10-17",
-   "evidence": "Same.",
-   "checked": "2026-10-17, engine 0.743.0.7431133"
+   "source": "Studio 0.744.0.7441077, test place 118652544255235, 2026-10-22",
+   "evidence": "execute_luau Edit 0.744: \"The current thread cannot read 'PlayerScriptsUseInputActionSystem' (lacking capability RobloxScript)\"",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
   },
   {
    "id": "monetization-029",
@@ -6912,12 +6912,12 @@
   {
    "id": "monetization-030",
    "file": "references/monetization.md",
-   "quote": "In Studio 0.743.0.7431133 a server Script calling it gets",
+   "quote": "In Studio 0.743.0.7431133, and again in 0.744.0.7441077, a server Script calling it gets",
    "status": "studio",
    "kind": "number",
-   "source": "playtest Script/LocalScript + execute_luau, Studio 0.743.0.7431133 (place 118652544255235), 2026-10-17",
-   "evidence": "Server Script in playtest.",
-   "checked": "2026-10-17, engine 0.743.0.7431133"
+   "source": "Studio 0.744.0.7441077, test place 118652544255235, 2026-10-22",
+   "evidence": "Server Script 0.744: \"MarketplaceService:GetPassOwnershipAsync() is not enabled\"",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
   },
   {
    "id": "monetization-031",
@@ -6932,12 +6932,12 @@
   {
    "id": "project-structure-030",
    "file": "references/project-structure.md",
-   "quote": "is `RobloxScriptSecurity`, and in Studio 0.743.0.7431133 a Script, a LocalScript and",
+   "quote": "is `RobloxScriptSecurity`, and in Studio 0.743.0.7431133 (re-tested in 0.744.0.7441077) a Script, a LocalScript and",
    "status": "studio",
    "kind": "number",
-   "source": "playtest Script/LocalScript + execute_luau, Studio 0.743.0.7431133 (place 118652544255235), 2026-10-17",
-   "evidence": "Read from Script, LocalScript and execute_luau fails 'lacking capability RobloxScript'.",
-   "checked": "2026-10-17, engine 0.743.0.7431133"
+   "source": "Studio 0.744.0.7441077, test place 118652544255235, 2026-10-22",
+   "evidence": "0.744: Script, LocalScript and execute_luau each \"lacking capability RobloxScript\"",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
   },
   {
    "id": "project-structure-031",
@@ -7032,12 +7032,12 @@
   {
    "id": "SKILL-062",
    "file": "SKILL.md",
-   "quote": "The docs page lists **26 tools**. The build observed 2026-10-17 and 2026-10-21 (Studio 0.743) exposed **28**:",
+   "quote": "The docs page lists **26 tools**. The build observed 2026-10-17, 2026-10-21 (Studio 0.743) and 2026-10-22 (Studio 0.744) exposed **28**:",
    "status": "studio",
    "kind": "number",
-   "source": "Roblox/creator-docs content/en-us/studio/mcp.md (read 2026-10-17; last commit 2026-08-21); MCP tool list of this session (Studio 0.743.0.7431133, Studio MCP Proxy), 2026-10-17",
-   "evidence": "26 tool names on the docs page; 28 connected tools: the 26 documented plus generate_texture and segment_mesh; list_plugin_guis and capture_plugin_gui absent (tool search for them found nothing). MCP tool list of this session re-read 2026-10-21 (Studio 0.743.0.7431133): the same 28 tools; creator-docs mcp.md last commit still aa6c8e18 2026-08-21",
-   "checked": "2026-10-21, engine 0.743.0.7431133"
+   "source": "MCP tool list of this session re-read 2026-10-22 (Studio 0.744.0.7441077, StudioMCP 2026-10-20)",
+   "evidence": "Same 28 tools and schemas; mcp.md latest commit aa6c8e18 2026-08-21",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
   },
   {
    "id": "SKILL-063",
@@ -7062,12 +7062,12 @@
   {
    "id": "mcp-integration-069",
    "file": "references/mcp-integration.md",
-   "quote": "2026-10-17 and again on 2026-10-21 (Studio 0.743.0.7431133) exposes **28**: those 26 plus",
+   "quote": "2026-10-17 and again on 2026-10-21 (Studio 0.743.0.7431133) and 2026-10-22 (Studio 0.744.0.7441077,",
    "status": "studio",
    "kind": "number",
-   "source": "Roblox/creator-docs content/en-us/studio/mcp.md (read 2026-10-17; last commit 2026-08-21); MCP tool list of this session (Studio 0.743.0.7431133, Studio MCP Proxy), 2026-10-17",
-   "evidence": "Commit history of mcp.md: latest 2026-08-21. 28 connected tools: the 26 documented plus generate_texture and segment_mesh; list_plugin_guis and capture_plugin_gui absent (tool search for them found nothing). Same 28 tools and identical schemas on 2026-10-21 (Studio 0.743.0.7431133)",
-   "checked": "2026-10-21, engine 0.743.0.7431133"
+   "source": "MCP tool list 2026-10-22",
+   "evidence": "Same 28 tools",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
   },
   {
    "id": "mcp-integration-070",
@@ -7102,12 +7102,12 @@
   {
    "id": "mcp-integration-073",
    "file": "references/mcp-integration.md",
-   "quote": "**First-party skills exposed by the `skill` tool (unchanged from 2026-09-25 to 2026-10-21):**",
+   "quote": "**First-party skills exposed by the `skill` tool (unchanged from 2026-09-25 to 2026-10-22):**",
    "status": "studio",
    "kind": "number",
-   "source": "skill tool schema, 2026-10-17",
-   "evidence": "available_skills: rbx-create-skill, rbx-debug, rbx-device-simulator-lua, rbx-docs-search, rbx-perf-profiling, rbx-scene-analysis, rbx-unit-test (same 7). skill tool schema 2026-10-21 lists the same 7 rbx-* skills",
-   "checked": "2026-10-21, engine 0.743.0.7431133"
+   "source": "skill tool schema 2026-10-22",
+   "evidence": "Same 7 rbx-* skills",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
   },
   {
    "id": "mcp-integration-074",
@@ -7132,12 +7132,12 @@
   {
    "id": "mcp-integration-076",
    "file": "references/mcp-integration.md",
-   "quote": "2026-10-17). Descriptions are from the live schemas of 2026-10-17 (unchanged 2026-10-21);",
-   "status": "advice",
+   "quote": "2026-10-17). Descriptions are from the live schemas of 2026-10-17 (unchanged 2026-10-21 and 2026-10-22);",
+   "status": "studio",
    "kind": "number",
-   "source": "",
-   "evidence": "generate_texture / segment_mesh schemas re-read 2026-10-21, unchanged",
-   "checked": "2026-10-21, engine 0.743.0.7431133"
+   "source": "generate_texture / segment_mesh schemas 2026-10-22",
+   "evidence": "Unchanged",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
   },
   {
    "id": "SKILL-064",
@@ -7272,32 +7272,32 @@
   {
    "id": "luau-fundamentals-072",
    "file": "references/luau-fundamentals.md",
-   "quote": "re-checked 2026-10-21 (~25,500 flags each). None of the flags below is set there, and a Luau `FASTFLAGVARIABLE` defaults to **off**:",
+   "quote": "re-checked 2026-10-21 and 2026-10-22 (Studio 0.744; ~25,600 flags each). None of the flags below is set there, and a Luau `FASTFLAGVARIABLE` defaults to **off**:",
    "status": "source",
    "kind": "number",
-   "source": "clientsettingscdn PCStudioApp (25,533 flags) and MacStudioApp (25,493 flags), 2026-10-21",
-   "evidence": "No key containing ExactTable, UserDefinedClasses, CoroutineFinally, UnannotatedTopLevel, IntegerLibrary, BytecodeSlotAlloc or ExperimentalIfLocal",
-   "checked": "2026-10-21, engine 0.743.0.7431133"
+   "source": "clientsettingscdn PCStudioApp (25,628) / MacStudioApp (25,590), 2026-10-22",
+   "evidence": "No ExactTable/UserDefinedClasses/CoroutineFinally/IntegerLibrary/BytecodeSlotAlloc/ExperimentalIfLocal key; IfLocal beta flags unchanged",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
   },
   {
    "id": "mcp-integration-077",
    "file": "references/mcp-integration.md",
-   "quote": "the page last changed 2026-08-21, still its latest commit on 2026-10-21). The build observed on",
+   "quote": "the page last changed 2026-08-21, still its latest commit on 2026-10-22). The build observed on",
    "status": "source",
    "kind": "number",
-   "source": "GitHub API commits?path=content/en-us/studio/mcp.md, 2026-10-21",
-   "evidence": "Latest commit aa6c8e18 2026-08-21",
-   "checked": "2026-10-21, engine 0.743.0.7431133"
+   "source": "GitHub API commits?path=studio/mcp.md, 2026-10-22",
+   "evidence": "Latest aa6c8e18 2026-08-21",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
   },
   {
    "id": "mcp-integration-078",
    "file": "references/mcp-integration.md",
-   "quote": "unchanged between the two dates. On 2026-10-11 (Studio 0.742) it also exposed",
+   "quote": "dates. On 2026-10-11 (Studio 0.742) it also exposed",
    "status": "studio",
    "kind": "number",
-   "source": "MCP tool schemas of this session, Studio 0.743.0.7431133, test place 118652544255235, 2026-10-21",
-   "evidence": "All 28 schemas loaded and compared with this file: no difference",
-   "checked": "2026-10-21, engine 0.743.0.7431133"
+   "source": "MCP tool schemas 2026-10-17/21/22",
+   "evidence": "No difference across the three dates",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
   },
   {
    "id": "mcp-integration-079",
@@ -7720,24 +7720,284 @@
    "checked": "2026-10-21, engine 0.743.0.7431133"
   },
   {
-   "id": "SKILL-065",
-   "file": "SKILL.md",
-   "quote": "Re-downloaded and re-audited on 2026-10-21, still the live Studio build that day, with the",
-   "status": "source",
-   "kind": "number",
-   "source": "roblox-api-monitor.py --force, 2026-10-21T13:33Z; clientsettings MacStudio/WindowsStudio64 0.743.0.7431133",
-   "evidence": ".current-version updatedAt 2026-10-21T13:33:12Z, version 0.743.0.7431133; strict audit 0 defects",
-   "checked": "2026-10-21, engine 0.743.0.7431133"
-  },
-  {
    "id": "SKILL-066",
    "file": "SKILL.md",
-   "quote": "official docs checked through 2026-10-21.",
+   "quote": "The official docs were checked through 2026-10-22.",
    "status": "source",
    "kind": "number",
-   "source": "Roblox/creator-docs commits API since=2026-10-16, read 2026-10-21",
-   "evidence": "Last commit reviewed 65621e8c 2026-10-21T10:11:38Z",
-   "checked": "2026-10-21, engine 0.743.0.7431133"
+   "source": "Roblox/creator-docs commits API since 2026-10-21T10:12Z, read 2026-10-22",
+   "evidence": "No commits after 65621e8c; engine reference STUDIO_VERSION still 0.743.0.7431133",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
+  },
+  {
+   "id": "false-200-locals-not-in-studio",
+   "file": "references/luau-fundamentals.md",
+   "quote": "**Not in Studio yet.** The gate (`LuauBytecodeSlotAlloc`) defaults to off and is not in Studio's published flags.",
+   "kind": "regression",
+   "status": "false",
+   "source": "Studio 0.744.0.7441077, test place 118652544255235, 2026-10-22",
+   "evidence": "Outdated by Studio 0.744: Scripts with 210 and 300 sequential single-use locals ran; only simultaneously-live locals still hit the limit.",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
+  },
+  {
+   "id": "file-formats-and-assets-029",
+   "file": "references/file-formats-and-assets.md",
+   "quote": "Properties window; 0.744 removed it. In Studio 0.744.0.7441077, writing `Sound.AudioContent`",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.744.0.7441077, test place 118652544255235, 2026-10-22 (probe Script/LocalScript removed afterwards; execute_luau Edit); dump 0.744",
+   "evidence": "Sound/AudioPlayer.AudioContent lost Hidden in 0.744; execute_luau Sound.AudioContent=rbxassetid://1 -> SoundId rbxassetid://1",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
+  },
+  {
+   "id": "legacy-migration-146",
+   "file": "references/legacy-migration.md",
+   "quote": "Derived by diffing the **0.743 and 0.744 Full API Dumps locally** with",
+   "status": "dump",
+   "kind": "number",
+   "source": "roblox-api-monitor 0.743->0.744 diff (~/RobloxDocs/RobloxAPI/diffs/0.743.0.7431133-to-0.744.0.7441077.json)",
+   "evidence": "291 changes, 147 developer-visible",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
+  },
+  {
+   "id": "legacy-migration-147",
+   "file": "references/legacy-migration.md",
+   "quote": "`tools/robloxdocs/diff-api-dumps.py`, 2026-10-22. **947 classes (+4), 652 enums (+1), 266",
+   "status": "dump",
+   "kind": "number",
+   "source": "API dump 0.744.0.7441077",
+   "evidence": "947 classes (+AppHandle, CloudClientService, ParticipantHandle, TestCoordinatorService), 652 enums (+AudioSortType)",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
+  },
+  {
+   "id": "legacy-migration-148",
+   "file": "references/legacy-migration.md",
+   "quote": "classes named `*Service` (346 tagged `Service`), 48 deprecated classes (574 members).** Luau has",
+   "status": "dump",
+   "kind": "negative",
+   "source": "API dump 0.744.0.7441077",
+   "evidence": "266 *Service class files, 346 tagged Service, 48 deprecated classes, 574 deprecated members",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
+  },
+  {
+   "id": "legacy-migration-149",
+   "file": "references/legacy-migration.md",
+   "quote": "no 0.744 release yet (latest 0.743). Every row marked *(Studio)* was run in Studio 0.744.0.7441077",
+   "status": "source",
+   "kind": "number",
+   "source": "luau-lang/luau releases API 2026-10-22; Studio 0.744.0.7441077, test place 118652544255235, 2026-10-22 (probe Script/LocalScript removed afterwards; execute_luau Edit)",
+   "evidence": "Latest release 0.743; probes ran in 0.744.0.7441077",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
+  },
+  {
+   "id": "legacy-migration-150",
+   "file": "references/legacy-migration.md",
+   "quote": "plugin level; the probe scripts were removed. The engine reference on create.roblox.com still",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.744.0.7441077, test place 118652544255235, 2026-10-22 (probe Script/LocalScript removed afterwards; execute_luau Edit)",
+   "evidence": "All SkillProbe744*/SkillRecheck744*/SkillLocals* instances destroyed, 0 left",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
+  },
+  {
+   "id": "legacy-migration-151",
+   "file": "references/legacy-migration.md",
+   "quote": "reads 0.743 (`STUDIO_VERSION`), so **none of the new members below has a docs page yet**.",
+   "status": "source",
+   "kind": "number",
+   "source": "Roblox/creator-docs content/en-us/reference/engine/STUDIO_VERSION, 2026-10-22",
+   "evidence": "Reads 0.743.0.7431133; no commits since 65621e8c",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
+  },
+  {
+   "id": "legacy-migration-152",
+   "file": "references/legacy-migration.md",
+   "quote": "The two new easing styles are rejected by everything that takes an easing style, and the",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.744.0.7441077, test place 118652544255235, 2026-10-22 (probe Script/LocalScript removed afterwards; execute_luau Edit)",
+   "evidence": "TweenInfo.new / GetValue errors; UIPageLayout keeps Back",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
+  },
+  {
+   "id": "legacy-migration-153",
+   "file": "references/legacy-migration.md",
+   "quote": "avatar-rules APIs a Script can now call ran without error and changed nothing visible.",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.744.0.7441077, test place 118652544255235, 2026-10-22 (probe Script/LocalScript removed afterwards; execute_luau Edit)",
+   "evidence": "ApplyAvatarRulesAsync and LoadCharacterWithAvatarRulesAsync with R6 rules returned; RigType stayed R15",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
+  },
+  {
+   "id": "legacy-migration-154",
+   "file": "references/legacy-migration.md",
+   "quote": "`Enum.EasingStyle` +`Bezier` (11), +`Spring` (12) | **Not usable.** `TweenInfo.new(0.5, Enum.EasingStyle.Spring)` and `TweenService:GetValue(0.5, Enum.EasingStyle.Spring, …)` both error `… does not support Enum.EasingStyle.Spring or Enum.EasingStyle.Bezier`, from a Script and a LocalScript. Setting `UIPageLayout.EasingStyle = Enum.EasingStyle.Spring` raises no error but reads back `Back`, the default *(Studio)*. Keep the existing styles",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.744.0.7441077, test place 118652544255235, 2026-10-22 (probe Script/LocalScript removed afterwards; execute_luau Edit)",
+   "evidence": "Script and LocalScript: TweenInfo.new(0.5, Spring/Bezier) -> \"TweenInfo.new does not support Enum.EasingStyle.Spring or Enum.EasingStyle.Bezier\"; GetValue -> \"TweenService:GetValue does not support ...\"; UIPageLayout.EasingStyle = Spring/Bezier read back Enum.EasingStyle.Back; enum values 11/12",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
+  },
+  {
+   "id": "legacy-migration-155",
+   "file": "references/legacy-migration.md",
+   "quote": "~60 `Avatar*Rules` properties (`AvatarBodyRules.AvatarType` / `HeadOverride` / `ScaleMode`, `AvatarAccessoryRules.LimitBounds`, `AvatarAnimationRules.*Override`, `AvatarClothingRules.*`, `AvatarCollis",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.744.0.7441077, test place 118652544255235, 2026-10-22 (probe Script/LocalScript removed afterwards; execute_luau Edit); dump 0.744",
+   "evidence": "Script: AvatarRules+AvatarBodyRules created, AvatarType=R6, HeadOverride=123, LimitBounds 4,4,4, PlaceAvatarRules read nil then set; ApplyAvatarRulesAsync(rules) ok, RigType R15; LoadCharacterWithAvatarRulesAsync(rules) ok, R15, no Torso; table arg -> \"Unable to cast value to Object\"; AvatarAbilityRules new -> lacking capability RobloxScript; AvatarRules.AvatarType is Deprecated (-> AvatarBodyRules.AvatarType) and stays RobloxScriptSecurity (dump 0.744)",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
+  },
+  {
+   "id": "legacy-migration-156",
+   "file": "references/legacy-migration.md",
+   "quote": "`RunService:IsEdit()` (`PluginSecurity` → `None`) and `RunService.RunState` read (`PluginSecurity` → `None`), both + `PluginOrOpenCloud` | **Still plugin-only.** A Script and a LocalScript each fail `lacking capability PluginOrOpenCloud`; `execute_luau` gets `true` and `Enum.RunState.Stopped` *(Studio)*. In game code use `RunService:IsStudio()`",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.744.0.7441077, test place 118652544255235, 2026-10-22 (probe Script/LocalScript removed afterwards; execute_luau Edit)",
+   "evidence": "Script/LocalScript: \"cannot call 'IsEdit' (lacking capability PluginOrOpenCloud)\", \"cannot read 'RunState' (lacking capability PluginOrOpenCloud)\"; execute_luau: true, Enum.RunState.Stopped",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
+  },
+  {
+   "id": "legacy-migration-157",
+   "file": "references/legacy-migration.md",
+   "quote": "**`Lighting.Technology` deprecated** → `LightingStyle` | Nothing to migrate in game code: `Technology` is `RobloxScriptSecurity` (a Script and `execute_luau` both fail to read it, `lacking capability RobloxScript`), and `LightingStyle` reads `Realistic` *(Studio)*. Set lighting in the Properties window; `LightingStyle` is plugin-only to write (see the 0.740 row)",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.744.0.7441077, test place 118652544255235, 2026-10-22 (probe Script/LocalScript removed afterwards; execute_luau Edit); dump 0.744",
+   "evidence": "Technology tagged Deprecated (PreferredDescriptorName LightingStyle); Script and execute_luau read fail lacking capability RobloxScript; LightingStyle reads Realistic",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
+  },
+  {
+   "id": "legacy-migration-158",
+   "file": "references/legacy-migration.md",
+   "quote": "`+CollectionService:GetCollections(instance)` → `Array` | **Returns `{}`** for a part with two tags, for a character and for `workspace`, from a Script and a LocalScript *(Studio)*. It is not a tag lookup: keep `GetTags` / `GetTagged`",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.744.0.7441077, test place 118652544255235, 2026-10-22 (probe Script/LocalScript removed afterwards; execute_luau Edit)",
+   "evidence": "GetCollections(part tagged ProbeTagA,ProbeTagB) -> 0 items (GetTags returned both); character 0; workspace 0 (Script, LocalScript, execute_luau)",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
+  },
+  {
+   "id": "legacy-migration-159",
+   "file": "references/legacy-migration.md",
+   "quote": "`AnimationPlayer`: `NotCreatable` removed, `Hidden` dropped from `AnimationContent` / `Enabled` | **Still not usable:** every member is `RobloxScriptSecurity`, and `Instance.new(\"AnimationPlayer\")` now fails `lacking capability RobloxScript` from a Script and from `execute_luau` *(Studio)*",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.744.0.7441077, test place 118652544255235, 2026-10-22 (probe Script/LocalScript removed afterwards; execute_luau Edit); dump 0.744",
+   "evidence": "Instance.new(\"AnimationPlayer\") -> \"cannot create 'AnimationPlayer' (lacking capability RobloxScript)\" from Script and execute_luau; all members RobloxScriptSecurity",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
+  },
+  {
+   "id": "legacy-migration-160",
+   "file": "references/legacy-migration.md",
+   "quote": "`Sound.AudioContent`, `AudioPlayer.AudioContent`: `Hidden` removed | Now shown in the Properties window; scripts could already use them (`file-formats-and-assets.md`)",
+   "status": "dump",
+   "kind": "negative",
+   "source": "API dump 0.744.0.7441077",
+   "evidence": "Hidden tag removed from Sound.AudioContent and AudioPlayer.AudioContent",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
+  },
+  {
+   "id": "legacy-migration-161",
+   "file": "references/legacy-migration.md",
+   "quote": "`Studio.PluginDebuggingEnabled`: `PluginSecurity` → `RobloxScriptSecurity` | A plugin can no longer read it: `execute_luau` fails `lacking capability RobloxScript` *(Studio)*",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.744.0.7441077, test place 118652544255235, 2026-10-22 (probe Script/LocalScript removed afterwards; execute_luau Edit)",
+   "evidence": "execute_luau settings().Studio.PluginDebuggingEnabled -> lacking capability RobloxScript",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
+  },
+  {
+   "id": "legacy-migration-162",
+   "file": "references/legacy-migration.md",
+   "quote": "`+ScriptDocument:IsReadOnly()` / `GetReadOnlyReasons()` / `AddReadOnlyReasonsAsync()` / `RemoveReadOnlyReasonsAsync()` (`PluginSecurity`); `+WrapLayer.RotateScaleDeformationMap` / `ScaleOnlyDeformationMap` / `TargetShaping` (read `None`, write `PluginSecurity`) | Plugin APIs (*dump only*): a `ScriptDocument` exists only for a script open in the editor, so they were not run",
+   "status": "dump",
+   "kind": "negative",
+   "source": "API dump 0.744.0.7441077",
+   "evidence": "ScriptDocument members PluginSecurity; WrapLayer read None / write PluginSecurity",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
+  },
+  {
+   "id": "legacy-migration-163",
+   "file": "references/legacy-migration.md",
+   "quote": "New `TestCoordinatorService`, `CloudClientService`, `AppHandle`, `ParticipantHandle`; `+RealtimeMedia.Disconnected` / `IsConnectionWeak`, `+VideoCaptureService:SetMockInputAsync` / `ClearMockInput` (`InternalTest`); `+ControlState:HasField` (`NotBrowsable`) | Not usable: `GetService(\"TestCoordinatorService\")` and `GetService(\"CloudClientService\")` return `nil` *(Studio)*; the rest need `InternalTest` (*dump only*)",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.744.0.7441077, test place 118652544255235, 2026-10-22 (probe Script/LocalScript removed afterwards; execute_luau Edit); dump 0.744",
+   "evidence": "GetService(\"TestCoordinatorService\") and GetService(\"CloudClientService\") -> nil; RealtimeMedia/VideoCaptureService members need InternalTest",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
+  },
+  {
+   "id": "legacy-migration-164",
+   "file": "references/legacy-migration.md",
+   "quote": "Roblox-internal (*dump only*): `TextChatService.CoreMessageReceived` / `ChatIsLoaded`, `*HandleAdornment.DoubleSided` (`Hidden`), `InputAction` / `InputBinding` / `InputContext.Editor` (`NotScriptable`), `SoundService` detached-playback members, `ExperienceService:IsInExperience`, `LinkingService` / `NotificationService` / `ProjectService` / `CallingService` additions, `Enum.FriendsCallingEndReason` +`NoReason` | Ignore for game code: all `RobloxScriptSecurity` or higher",
+   "status": "dump",
+   "kind": "negative",
+   "source": "roblox-api-monitor 0.743->0.744 diff (~/RobloxDocs/RobloxAPI/diffs/0.743.0.7431133-to-0.744.0.7441077.json)",
+   "evidence": "All listed members RobloxScriptSecurity or higher, or NotScriptable/Hidden",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
+  },
+  {
+   "id": "mcp-integration-084",
+   "file": "references/mcp-integration.md",
+   "quote": "`StudioMCP` binary of 2026-10-20) exposes **28**: those 26 plus `generate_texture` and",
+   "status": "studio",
+   "kind": "number",
+   "source": "MCP tool list 2026-10-22; ls -la StudioMCP",
+   "evidence": "StudioMCP 5,959,632 B dated 2026-10-20; 28 tools",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
+  },
+  {
+   "id": "networking-034",
+   "file": "references/networking.md",
+   "quote": "0.744.0.7441077. Ask the user to flip it.",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.744.0.7441077, test place 118652544255235, 2026-10-22 (probe Script/LocalScript removed afterwards; execute_luau Edit)",
+   "evidence": "execute_luau Edit 0.744: PlatformIntegratedChat read -> lacking capability RobloxScript",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
+  },
+  {
+   "id": "ui-systems-029",
+   "file": "references/ui-systems.md",
+   "quote": "**`Enum.EasingStyle.Spring` and `Bezier` exist but cannot be used.** Engine 0.744 added both",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.744.0.7441077, test place 118652544255235, 2026-10-22 (probe Script/LocalScript removed afterwards; execute_luau Edit)",
+   "evidence": "Enum.EasingStyle.Bezier.Value 11, Spring.Value 12",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
+  },
+  {
+   "id": "ui-systems-030",
+   "file": "references/ui-systems.md",
+   "quote": "items, and in Studio 0.744.0.7441077 `TweenInfo.new(0.3, Enum.EasingStyle.Spring)` and",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.744.0.7441077, test place 118652544255235, 2026-10-22 (probe Script/LocalScript removed afterwards; execute_luau Edit)",
+   "evidence": "TweenInfo.new(0.5/1, Spring) errors from Script and LocalScript",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
+  },
+  {
+   "id": "ui-systems-031",
+   "file": "references/ui-systems.md",
+   "quote": "`TweenService:GetValue(…, Enum.EasingStyle.Spring, …)` error with `does not support",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.744.0.7441077, test place 118652544255235, 2026-10-22 (probe Script/LocalScript removed afterwards; execute_luau Edit)",
+   "evidence": "GetValue error text \"TweenService:GetValue does not support Enum.EasingStyle.Spring or Enum.EasingStyle.Bezier\"; UIPageLayout reads Back",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
+  },
+  {
+   "id": "legacy-migration-165",
+   "file": "references/legacy-migration.md",
+   "quote": "`+AudioSearchParams.SortType` (`+Enum.AudioSortType`: `Relevance`, `MostUsed`, `Trending`, `RecentlyCreated`, `ShortestToLongest`, `LongestToShortest`), `+AudioSearchParams.MaxPageSize` | A Script sets and reads both *(Studio)*. Whether `AssetService:SearchAudioAsync` (the deprecated `SearchAudio`'s replacement) honours them was not run",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.744.0.7441077, server Script probe, 2026-10-22; dump 0.744",
+   "evidence": "AudioSearchParams SortType=MostUsed and MaxPageSize=5 set and read back; AssetService.SearchAudio Deprecated -> SearchAudioAsync (dump); SearchAudioAsync not run",
+   "checked": "2026-10-22, engine 0.744.0.7441077"
   }
  ]
 }

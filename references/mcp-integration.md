@@ -124,10 +124,11 @@ and re-check the JSON syntax. Any client that supports `stdio` works.
 ## Tool Reference
 
 **Counts, stated precisely.** The official docs page lists **26 tools** (recounted 2026-10-17;
-the page last changed 2026-08-21, still its latest commit on 2026-10-21). The build observed on
-2026-10-17 and again on 2026-10-21 (Studio 0.743.0.7431133) exposes **28**: those 26 plus
-`generate_texture` and `segment_mesh`, which are present but undocumented. Their schemas were
-unchanged between the two dates. On 2026-10-11 (Studio 0.742) it also exposed
+the page last changed 2026-08-21, still its latest commit on 2026-10-22). The build observed on
+2026-10-17 and again on 2026-10-21 (Studio 0.743.0.7431133) and 2026-10-22 (Studio 0.744.0.7441077,
+`StudioMCP` binary of 2026-10-20) exposes **28**: those 26 plus `generate_texture` and
+`segment_mesh`, which are present but undocumented. Their schemas were unchanged across the three
+dates. On 2026-10-11 (Studio 0.742) it also exposed
 `list_plugin_guis` and `capture_plugin_gui`; on 2026-10-17 both were gone. Tool sets move; when a call fails with an unknown-tool error, list what
 your host actually exposes instead of trusting this table.
 
@@ -184,7 +185,7 @@ your host actually exposes instead of trusting this table.
 - **Nor does it reach `RobloxScriptSecurity`.** `PlayerScriptsUseInputActionSystem` was in the list
   above until 0.742; since 0.743 it is `RobloxScriptSecurity`, and `execute_luau` reading it fails
   with `The current thread cannot read 'PlayerScriptsUseInputActionSystem' (lacking capability
-  RobloxScript)` (Studio 0.743.0.7431133). It is still a Properties-window setting.
+  RobloxScript)` (Studio 0.743.0.7431133; same in 0.744.0.7441077). It is still a Properties-window setting.
 - In `Edit` it operates on the saved place. In `Client` / `Server` it operates on the live
   playtest DataModel, which only exists while a playtest is running.
 - **It does return values.** Earlier versions of this file claimed MCP tools could not return
@@ -267,7 +268,7 @@ than the whole page.
 > `raw.githubusercontent.com/Roblox/libmp/main/…` with the host's own fetch tool or `curl`
 > (that host is not on the allowlist), or use `skill("rbx-perf-profiling")`.
 
-**First-party skills exposed by the `skill` tool (unchanged from 2026-09-25 to 2026-10-21):**
+**First-party skills exposed by the `skill` tool (unchanged from 2026-09-25 to 2026-10-22):**
 `rbx-create-skill`, `rbx-debug`, `rbx-device-simulator-lua`, `rbx-docs-search`,
 `rbx-perf-profiling`, `rbx-scene-analysis`, `rbx-unit-test`. These are Roblox's, shipped inside
 Studio, and they are **narrower and more current than this skill on their specific topics** —
@@ -290,7 +291,7 @@ repository's references for architecture, security, and Luau standards, which th
 
 > Treat these two as unsupported: they are not on the docs page, so they may change or vanish
 > without a release note (`list_plugin_guis` / `capture_plugin_gui` did, between 2026-10-11 and
-> 2026-10-17). Descriptions are from the live schemas of 2026-10-17 (unchanged 2026-10-21);
+> 2026-10-17). Descriptions are from the live schemas of 2026-10-17 (unchanged 2026-10-21 and 2026-10-22);
 > neither was run. The Studio **Texture Generator** page (rewritten 2026-10-16, extended
 > 2026-10-20) describes the same two modes for the Studio tool: `Fast` gives 1K diffuse
 > textures and `Quality` 4K PBR textures, and Ctrl/Cmd+Z undoes a result. Whether the MCP tool

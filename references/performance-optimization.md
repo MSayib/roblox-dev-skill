@@ -575,7 +575,7 @@ ability to prevent crashes when it comes under memory pressure."*
 
 Enable it in the Properties window (Workspace → `StreamingEnabled`). It is **not scriptable** for
 game code: the official page says it "must be set on the `Workspace` object in Studio", and in
-Studio 0.742 a game Script writing it fails with "lacking capability PluginOrOpenCloud" (the dump's
+Studio 0.742 (and again in 0.744.0.7441077) a game Script writing it fails with "lacking capability PluginOrOpenCloud" (the dump's
 write security changed from `PluginSecurity` to `None` in 0.742, but the capability keeps it
 plugin-only). A Script may read it.
 

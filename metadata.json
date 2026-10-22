@@ -1,13 +1,21 @@
 {
   "skill_name": "roblox-dev-skill",
-  "version": "2.18.2",
-  "last_updated": "2026-10-21T21:30:00+07:00",
-  "last_updated_by": "claude-code (weekly cycle: creator-docs 2026-10-16..21 ingest; Studio 0.744 hidden, not live)",
-  "update_source": "clientsettings client-version (WindowsStudio64, MacStudio, WindowsPlayer, MacPlayer); setup.rbxcdn.com DeployHistory and the hidden 0.744.0.7441077 Full-API-Dump (version-7aaa6838d36c4448, diff only); luau-lang/luau releases + commits since 0.743; clientsettingscdn PCStudioApp/MacStudioApp flags; roblox-api-monitor --force (0.743 re-download, split, strict audit); Roblox/creator-docs commits 2026-10-16..21 (710b20a5 to 65621e8c); live Roblox Studio 0.743.0.7431133 via MCP (playtest probe Scripts/LocalScripts, execute_luau, user_keyboard_input, user_mouse_input, http_get) and the Rojo 34871 harness",
-  "engine_version_at_update": "0.743.0.7431133",
+  "version": "2.19.0",
+  "last_updated": "2026-10-22T16:30:00+07:00",
+  "last_updated_by": "claude-code (engine 0.744 ingest; every not-enabled claim re-run in Studio 0.744)",
+  "update_source": "clientsettings client-version (WindowsStudio64, MacStudio, WindowsPlayer, MacPlayer); luau-lang/luau releases + 0.743/master source tarballs (LuauBytecodeSlotAlloc gate); clientsettingscdn PCStudioApp/MacStudioApp flags; roblox-api-monitor 0.743->0.744 dump diff (291 changes, 147 developer-visible); Roblox/creator-docs commits since 2026-10-21 (none) and engine STUDIO_VERSION; live Roblox Studio 0.744.0.7441077 via MCP (playtest probe Scripts/LocalScripts, execute_luau) and the Rojo 34871 harness",
+  "engine_version_at_update": "0.744.0.7441077",
   "luau_version_at_update": "0.743",
   "update_interval_days": 7,
   "update_history": [
+    {
+      "date": "2026-10-22T16:30:00+07:00",
+      "version": "2.19.0",
+      "changes": "Engine 0.744.0.7441077 (Luau still 0.743). legacy-migration.md 0.744 section (947 classes +4, 652 enums +1): EasingStyle.Spring/Bezier rejected by TweenInfo.new and GetValue, UIPageLayout keeps Back (ui-systems.md note); Avatar*Rules + ApplyAvatarRulesAsync + LoadCharacterWithAvatarRulesAsync now None+AvatarAppearance, callable from a Script, R6 rule had no visible effect; AvatarRules.AvatarType deprecated and still RobloxScriptSecurity; RunService.IsEdit/RunState still plugin-only (PluginOrOpenCloud); AnimationPlayer creatable flag dropped but RobloxScript; GetCollections returns {}; Lighting.Technology deprecated; AudioContent unhidden; AudioSearchParams SortType/MaxPageSize; SearchAudio -> SearchAudioAsync; PluginDebuggingEnabled RobloxScript. Re-run in 0.744: the 200-local change is ACTIVE (210/300 sequential single-use locals run; live locals still limited) -- old text kept as regression guard, eval #60 rewritten; every other not-enabled claim unchanged. MCP 28 tools unchanged. Claims 773 -> 799 (0 unverified, 68 false); evals 68 -> 72.",
+      "engine_version": "0.744.0.7441077",
+      "decision_by": "user (sayib) -- 2026-10-22 'Sekarang sudah update studio version, coba cek apa yang perlu kita update, dan sisakan 1 branch master saja jika sudah bisa rilis'",
+      "verified_by": "Studio 0.744.0.7441077 (place MieGede NewWorld 118652544255235) via MCP: probe Scripts + LocalScripts in playtests (removed afterwards, 0 left), execute_luau (Edit, plugin level); Rojo 34871 harness: server 98/98 cases, 20/20 expectations, client 28/28, 5/5, plugin 3/3, 2/2; run_static --strict 138 blocks 0 unexplained; roblox-api-monitor download/diff/split + strict audit 0 defects; audit-skill-examples 0 defects; check_claims --strict 799 claims, 0 stale, 0 uncovered; luau 0.743/master source grep; clientsettingscdn flags"
+    },
     {
       "date": "2026-10-21T21:30:00+07:00",
       "version": "2.18.2",

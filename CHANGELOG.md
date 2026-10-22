@@ -11,6 +11,66 @@ reference content was verified against at that time.
 
 ---
 
+## 2.19.0 — Oct 22, 2026
+
+**Engine 0.744.0.7441077, with every developer-visible change run in Studio 0.744, and every
+"not enabled" claim re-run so none of them is now a false negative.** Studio 0.744.0.7441077 went
+live on WindowsStudio64 and MacStudio (the Player is 0.744.0.7441080). Luau has no 0.744 release
+yet. There were no creator-docs commits after 2026-10-21, and the engine reference still reads
+0.743, so no 0.744 member has a docs page. Probes ran from an ordinary server `Script`, a
+`LocalScript` and MCP `execute_luau`, and were removed afterwards. Server 98/98 (20/20
+expectations), client 28/28 (5/5), plugin 3/3 (2/2), static 138 blocks, API audit 0 defects,
+claims 773 → 799 (0 unverified, 68 regression guards), evals 68 → 72.
+
+### Engine 0.744 (947 classes +4, 652 enums +1, 266 `*Service`, 48 deprecated classes, 574 members)
+
+- **`EasingStyle.Spring` and `Bezier` cannot be used (*tested*).** `TweenInfo.new` and
+  `TweenService:GetValue` reject them with "does not support Enum.EasingStyle.Spring or
+  Enum.EasingStyle.Bezier", and `UIPageLayout.EasingStyle` silently stays `Back`. `ui-systems.md`
+  now says so next to the tween example.
+- **The Avatar rules are scriptable, but no effect was seen (*tested*).** About 60 `Avatar*Rules`
+  properties, `StarterPlayer.PlaceAvatarRules`, `Humanoid:ApplyAvatarRulesAsync` and
+  `Player:LoadCharacterWithAvatarRulesAsync` went to `Security: None` with the new
+  `AvatarAppearance` capability. A Script can create the rules and set them. Both calls returned
+  with an R6 rule, but the character stayed R15. `AvatarRules.AvatarType` is deprecated and still
+  `RobloxScriptSecurity`, and so is `AvatarAbilityRules`.
+- **Still plugin-only (*tested*):** `RunService:IsEdit()` and `RunState` (`None` +
+  `PluginOrOpenCloud`). **Still not usable:** `AnimationPlayer` lost `NotCreatable`, but
+  `Instance.new` fails `lacking capability RobloxScript`. `CollectionService:GetCollections`
+  returned `{}` for a tagged part. `TestCoordinatorService` and `CloudClientService` are `nil`.
+- `Lighting.Technology` is deprecated (→ `LightingStyle`), `Sound` / `AudioPlayer.AudioContent`
+  are no longer `Hidden`, `AudioSearchParams.SortType` / `MaxPageSize` are settable,
+  `AssetService:SearchAudio` is deprecated (→ `SearchAudioAsync`), and
+  `Studio.PluginDebuggingEnabled` is now unreadable to plugins.
+
+### Re-run in Studio 0.744 (what the skill said "not enabled" or "not in Studio")
+
+- **Changed: the 200-local change from Luau 0.743 is active in Studio 0.744.** A Script with 210
+  or 300 sequential locals, each used once, ran; in 0.743 it failed "Out of local registers". The
+  limit itself is unchanged: 210 locals alive at the same time still fail. The open-source gate
+  is still off and not in the published flags, so the engine build is what changed. The old "Not in
+  Studio yet" text is a regression guard, and eval #60 was rewritten (a module that returns all
+  its locals keeps them alive).
+- **Unchanged (still not enabled or not present):**
+  - `coroutine.finally`, `GetPassOwnershipAsync`, `CanUsersTransferRobuxAsync`, the
+    `Shapecast` overrides, `GetSurfaceSlotsAsync`, the `TestService` registry,
+    `BindViolationProcessor`, the orthographic camera.
+  - `Enum.PlayerDeviceTrustLevel`, `AvatarUnificationMode`.
+  - `PlayerScriptsUseInputActionSystem` (`RobloxScript`), `RunContext` and `StreamingEnabled`
+    writes (`PluginOrOpenCloud`).
+  - The `if local`, UIGradient and UIShadow beta flags.
+- **MCP:** 28 tools with unchanged schemas in Studio 0.744 (`StudioMCP` binary of 2026-10-20).
+
+### Evals 68 → 72
+
+- **#69** a Spring tween cannot be built.
+- **#70** Avatar rules ran but did not force R6.
+- **#71** `RunService:IsEdit()` is still plugin-only.
+- **#72** an over-correction guard: sequential locals beyond 200 work in Studio 0.744, live ones
+  do not.
+
+---
+
 ## 2.18.2 — Oct 21, 2026
 
 **Roblox/creator-docs 2026-10-16 to 2026-10-21, with every testable change run in Studio

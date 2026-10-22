@@ -9,9 +9,9 @@ The skill integrates with a **local API reference hub** for token-efficient look
 ├── RobloxAPI/
 │   ├── dumps/                         # Full-API-Dump.json per version
 │   │   └── latest.json → (symlink)
-│   ├── classes/                       # one JSON per class (943 on 0.743, ~2 KB median)
-│   ├── enums/                         # one JSON per enum (651 on 0.743)
-│   ├── services/                      # service classes (264 on 0.743)
+│   ├── classes/                       # one JSON per class (947 on 0.744, ~2 KB median)
+│   ├── enums/                         # one JSON per enum (652 on 0.744)
+│   ├── services/                      # service classes (266 on 0.744)
 │   ├── deprecated/                    # 48 deprecated class JSONs
 │   ├── class-index.json               # Lightweight index for quick lookup
 │   ├── enum-index.json
@@ -28,8 +28,8 @@ The skill integrates with a **local API reference hub** for token-efficient look
 └── README.md
 ```
 
-**Why?** Re-measured 2026-10-17 on 0.743.0.7431133 (identical after a re-download on 2026-10-21): the full dump is **8,562,360 bytes**, while the
-943 split class files are **101 B min / 2,043 B median / 4,842 B mean / 105,165 B max**. A typical
+**Why?** Re-measured 2026-10-22 on 0.744.0.7441077: the full dump is **8,637,337 bytes**, while the
+947 split class files are **101 B min / 2,059 B median / 4,863 B mean / 105,173 B max**. A typical
 class lookup therefore reads about **0.02%** of the dump. (An earlier README claimed "845× smaller"
 from a "~10KB" class file; neither number is reproducible — the median class file is ~2 KB.
 `SKILL.md` carries the command that re-measures both. It is a portable `python3` one-liner that

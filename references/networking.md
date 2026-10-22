@@ -431,7 +431,8 @@ do not build new features on reading chat text, even in a game that has not opte
 - **Opting in is a Properties-window setting:** `TextChatService.PlatformIntegratedChat`
   (`Enum.RolloutState`). It is `RobloxScriptSecurity`: in Studio 0.743.0.7431133 a Script, a
   LocalScript and MCP `execute_luau` each fail to read it with `The current thread cannot read
-  'PlatformIntegratedChat' (lacking capability RobloxScript)`. Ask the user to flip it.
+  'PlatformIntegratedChat' (lacking capability RobloxScript)`, and `execute_luau` still does in
+  0.744.0.7441077. Ask the user to flip it.
 - **What changes with it `Enabled`**, measured in Studio 0.743.0.7431133 on 2026-10-21 with a
   message typed into the chat box during a playtest:
 
