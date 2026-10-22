@@ -11,6 +11,77 @@ reference content was verified against at that time.
 
 ---
 
+## 2.18.2 — Oct 21, 2026
+
+**Roblox/creator-docs 2026-10-16 to 2026-10-21, with every testable change run in Studio
+0.743.0.7431133, and a latent table error fixed.** No engine change in the skill. Studio
+0.744.0.7441077 was deployed hidden on 2026-10-19 but is not live (WindowsStudio64 and MacStudio
+still answer 0.743.0.7431133; the Player is 0.744.0.7441080). Its dump was diffed, and it is used
+here only to say that two documented APIs are missing from it too. The 0.744 changes (147
+developer-visible) are left for the release that can run them in Studio 0.744. The local dump was re-downloaded, re-split and
+audited (0.743.0.7431133, 0 defects). Luau: no release since 0.743. Claims register
+713 → 773 (0 unverified, 67 regression guards). Static 138 blocks, server 98/98 (20/20
+expectations), client 28/28 (5/5), plugin 3/3 (2/2), API audit 0 defects, installer suite 48/48.
+
+### Fixed
+
+- **`AudioPlayer` has no `SoundId`.** The `*Content` table in `file-formats-and-assets.md`
+  gave `SoundId` as the legacy name for both `Sound` and `AudioPlayer`. `AudioPlayer`'s is
+  `Asset` (with the deprecated `AssetId`); indexing `AudioPlayer.SoundId` errors. Writing
+  `AudioContent` changes `SoundId` / `Asset` and the reverse (*tested*). The old row is a
+  regression guard.
+
+### Added (docs changes, run in Studio where possible)
+
+- **Platform-integrated chat** (`networking.md`, new section). The docs make it required for all
+  games from May 2027. Run with `TextChatService.PlatformIntegratedChat` set to `Enabled`:
+  `TextChatMessage.Text` and `PrefixText` read `""` with a deprecation warning, `Player.Chatted`
+  **did not fire at all** (the docs page says these APIs return `""`), `TextChannel:SendAsync()`
+  returned `nil` and delivered nothing, and `TextChatCommand.Triggered` still received the full
+  line. With it disabled, all four carry the text. The property is `RobloxScriptSecurity`
+  (Properties window only). New tested examples: a `TextChatCommand` admin command and a
+  `TextChannelWindow` custom chat window. `security-hardening.md` points chat admin commands at
+  `TextChatCommand`; the SKILL.md routing row and the README name text chat.
+- **`coroutine.finally` is documented but still `nil`** in Studio 0.743, now from a LocalScript
+  too, and no gate for it is in Studio's published flags (re-checked, about 25,500 flags each).
+- **Device trust is documented, not shipped:** `Enum.PlayerDeviceTrustLevel` /
+  `PlayerDeviceTrustDecision` and `Player.DeviceTrustLevel` are in neither the 0.743 nor the 0.744
+  dump, and the enum errors in Studio.
+- **`Workspace.AvatarUnificationMode` no longer has an effect** (all items deprecated in the docs,
+  the R6 to R15 Adapter page deleted).
+- **IAS delta key codes are velocities.** `MouseWheel` bound to a `Direction1D` action read about
+  15 for about 0.066 s per simulated notch (`project-structure.md`).
+- **`BasePart.CenterOfMass` is local** (`(0, 0, 0)` for a lone part; `AssemblyCenterOfMass` is
+  the world position), `AnalyticsService:LogJourneyEvent` was removed from the docs but is still
+  in both dumps, a server `Kick` message over 500 bytes is discarded, Roblox Plus subscribers in
+  paid private servers still earn up to 100 Robux each per month, glTF imports build a different
+  hierarchy from FBX, and join-time guidance from the rewritten performance pages
+  (`performance-optimization.md`).
+- **MCP:** the tool list and every schema are unchanged (28 tools; docs page unchanged since
+  2026-08-21). New: `http_get` on a `github.com/Roblox/libmp/blob/….md` URL passes the allowlist
+  but returns GitHub's HTML page (about 1 MB); read LibMP files from `raw.githubusercontent.com`.
+  The Texture Generator page now documents Fast (1K diffuse) vs Quality (4K PBR) for the Studio
+  tool; whether MCP `generate_texture` matches was not checked.
+
+### Docs changes that touch nothing the skill states
+
+`bit32.extract` range wording (`width` must be in `[1, 32 - field]`; out of range errors "trying
+to access non-existent bits", *tested*), `ChangeHistoryService` link fixes, Marketplace item
+updates (rigid and layered accessories can now be updated in place), in-experience makeup
+creation (`AvatarCreationService:PromptCreateMakeupAsync`, already in the 0.743 dump; not run,
+it opens a publish prompt),
+ad and rewarded-video playbooks, IP licensing, the Open Cloud OpenAPI file.
+
+### Evals 63 → 68
+
+- **#64** `coroutine.finally` is documented but not enabled.
+- **#65** chat admin commands must use `TextChatCommand`, not `Player.Chatted`.
+- **#66** `Player.DeviceTrustLevel` does not exist yet.
+- **#67** `MouseWheel` under IAS is a velocity.
+- **#68** the R6 to R15 adapter no longer does anything.
+
+---
+
 ## 2.18.1 — Oct 17, 2026
 
 **A second pass after 2.18.0: the MCP surface and `docs/`.** No engine change (0.743.0.7431133 /

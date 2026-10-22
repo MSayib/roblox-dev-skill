@@ -15,7 +15,8 @@
 6. [MessagingService](#messagingservice)
 7. [Rate Limiting Patterns](#rate-limiting-patterns)
 8. [Folder Organization for Remotes](#folder-organization-for-remotes)
-9. [LEGACY](#legacy)
+9. [Text Chat and Platform-Integrated Chat](#text-chat-and-platform-integrated-chat)
+10. [LEGACY](#legacy)
 
 ---
 
@@ -413,6 +414,102 @@ createRemote("RemoteEvent", "NotifyPlayer", eventsFolder)
 createRemote("RemoteFunction", "GetInventory", functionsFolder)
 createRemote("UnreliableRemoteEvent", "MousePosition", unreliableFolder)
 ```
+
+---
+
+## Text Chat and Platform-Integrated Chat
+
+> **Source:** [Platform-integrated chat](https://create.roblox.com/docs/chat/platform-integrated-chat)
+> (page added 2026-10-20) · [TextChannelWindow](https://create.roblox.com/docs/reference/engine/classes/TextChannelWindow) ·
+> [TextChatCommand](https://create.roblox.com/docs/reference/engine/classes/TextChatCommand)
+
+**Platform-integrated chat** is an opt-in `TextChatService` mode in which Roblox delivers and
+renders chat, and **your code can no longer read what players type**. The docs page says it
+becomes **required for all games starting in May 2027**, when the APIs below are deprecated. So
+do not build new features on reading chat text, even in a game that has not opted in.
+
+- **Opting in is a Properties-window setting:** `TextChatService.PlatformIntegratedChat`
+  (`Enum.RolloutState`). It is `RobloxScriptSecurity`: in Studio 0.743.0.7431133 a Script, a
+  LocalScript and MCP `execute_luau` each fail to read it with `The current thread cannot read
+  'PlatformIntegratedChat' (lacking capability RobloxScript)`. Ask the user to flip it.
+- **What changes with it `Enabled`**, measured in Studio 0.743.0.7431133 on 2026-10-21 with a
+  message typed into the chat box during a playtest:
+
+  | API | Disabled (default) | Enabled |
+  |---|---|---|
+  | `TextChatService.MessageReceived` → `TextChatMessage.Text` / `.PrefixText` | the text | fires, but both are `""`, and each read logs `TextChatMessage.Text is deprecated when PlatformIntegratedChat is Enabled. Please use TextChannelWindow to build your custom chat UI.` |
+  | `Player.Chatted` (server) | fires with the text | **did not fire at all** (the docs page says these APIs return `""`; either way there is nothing to parse) |
+  | `TextChannel:SendAsync()` | sends; returns the `TextChatMessage` | returns `nil`, delivers nothing, and warns `TextChannel:SendAsync() is deprecated when PlatformIntegratedChat is Enabled` |
+  | `TextChatCommand.Triggered` (server) | full line, e.g. `"/probecmd alpha beta"` | **same: the full line still arrives** |
+
+  The docs page also lists `TextChatMessage.Translation` and `TextChatService.OnIncomingMessage`
+  as unsupported; those two were not measured here.
+- **Chat commands go through `TextChatCommand`.** It is the one path that still receives the
+  command text, so admin and debug commands with arguments keep working:
+
+```luau
+--!strict
+-- ServerScriptService/ChatCommands.server.luau
+local Players = game:GetService("Players")
+local TextChatService = game:GetService("TextChatService")
+
+-- Fill in your own admin UserIds. Never decide this from anything the client sends.
+local ADMIN_USER_IDS: { [number]: boolean } = {}
+
+local kickCommand = Instance.new("TextChatCommand")
+kickCommand.Name = "KickPlayerCommand"
+kickCommand.PrimaryAlias = "/kickplayer"
+kickCommand.Parent = TextChatService
+
+kickCommand.Triggered:Connect(function(source: TextSource, unfilteredText: string)
+	if not ADMIN_USER_IDS[source.UserId] then
+		return
+	end
+	-- The whole line arrives, alias included: "/kickplayer SomeName". It is unfiltered,
+	-- so never show it to other players without TextService filtering.
+	local targetName = string.match(unfilteredText, "^%S+%s+(%S+)")
+	local target = if targetName then Players:FindFirstChild(targetName) else nil
+	if target and target:IsA("Player") then
+		target:Kick("Removed by an admin.")
+	end
+end)
+```
+
+- **Custom chat display goes through `TextChannelWindow`.** Parent it under a `ScreenGui` or
+  `SurfaceGui` and set `Target` to one `TextChannel`; one window shows one channel, and the docs
+  say the Global channel cannot be a custom window's target. `ChatWindowConfiguration` settings do
+  not apply to it: set `UseDefaultFont = false` and then `FontFace`. Tested 2026-10-21 from a
+  LocalScript: the docs sample bound a window to `RBXGeneral` and took a custom `FontFace`.
+
+<!-- skilltest: client -->
+```luau
+--!strict
+-- StarterPlayerScripts/ChatWindow.client.luau
+local Players = game:GetService("Players")
+local TextChatService = game:GetService("TextChatService")
+
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "CustomChat"
+screenGui.Parent = Players.LocalPlayer:WaitForChild("PlayerGui")
+
+local general = TextChatService:WaitForChild("TextChannels"):WaitForChild("RBXGeneral") :: TextChannel
+
+local window = Instance.new("TextChannelWindow")
+window.Size = UDim2.fromOffset(400, 300)
+window.Position = UDim2.fromOffset(10, 10)
+window.Target = general
+window.UseDefaultFont = false                        -- FontFace is ignored while this is true
+window.FontFace = Font.fromEnum(Enum.Font.Arcade)
+window.Parent = screenGui
+```
+
+- **`ChatWindowConfiguration.TextChannelDisplayMode`** (show a custom channel only in its own
+  window) is set in Studio. A LocalScript can read it, and writing fails with `lacking capability
+  PluginOrOpenCloud` (tested 2026-10-21).
+- **Not affected**, per the docs page: signs, boards, mail and comment systems that do not go
+  through `TextChatService`. Their policy is unchanged (no two-way player communication, a rate
+  limit of at least 1 minute, moderation). A game that needs `PrefixText` chat tags should not
+  enable the mode yet, because prefixes are not supported.
 
 ---
 

@@ -611,6 +611,25 @@ Combine device blocking with the heuristic detection patterns from
 3. **Ban + Device Block** using `BanAsync` with `ApplyDeviceBlock = true`
 4. **Log** the ban reason and detection metadata for review
 
+### Kick messages, device trust, and chat-triggered admin commands
+
+- **A `Player:Kick()` message sent from the server is capped at 500 bytes.** Per the `Player`
+  reference (2026-10-21), a longer message is discarded and the player sees the default notice.
+  The limit is bytes, not characters, so emoji and non-Latin text reach it sooner. Not measured
+  here; keep kick reasons short.
+- **Device trust is documented but not in the engine yet.** Since 2026-10-21 the docs have
+  `Enum.PlayerDeviceTrustLevel` (`Pending`, `Unknown`, `None`, `Standard`, `Full`) and
+  `Enum.PlayerDeviceTrustDecision`, both pointing at a `Player.DeviceTrustLevel` property. That
+  property **does not exist yet**: it is in neither the 0.743 nor the 0.744 API dump, and in Studio 0.743.0.7431133
+  `Enum.PlayerDeviceTrustLevel` raises an error (tested). Do not write anti-cheat code against
+  it until the dump has it. When it ships, the enum's own wording applies: it rates the
+  *device*, not the player or the account, and every player starts at `Pending`.
+- **Chat admin commands that parse `Player.Chatted` or `TextChatMessage.Text` stop working
+  under platform-integrated chat**, which the docs make mandatory from May 2027. In a test with
+  it enabled, `Player.Chatted` did not fire at all. Use `TextChatCommand`, check the caller's
+  `TextSource.UserId` on the server, and see `networking.md` →
+  [Text Chat and Platform-Integrated Chat](networking.md#text-chat-and-platform-integrated-chat).
+
 ---
 
 ## 11. Scoped User Identifiers Warning

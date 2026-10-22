@@ -307,6 +307,23 @@ failure recovery. Data loss is irreversible.
 | Input Action System (IAS) full release | June 11 | `Workspace.PlayerScriptsUseInputActionSystem` — a Studio Properties-window setting. No script (MCP `execute_luau` included) can read or set it: it was `NotScriptable` until 0.742, and since 0.743 it is `RobloxScriptSecurity` ("lacking capability RobloxScript", Studio 0.743). See `references/project-structure.md` |
 | Roblox Connect calling APIs **SUNSET** | **July 15** | Remove usage before deadline |
 
+### October 2026 — documentation changes 2026-10-16 to 2026-10-21 (engine still 0.743)
+
+From the Roblox/creator-docs commits of 2026-10-16 to 2026-10-21, re-checked against the 0.743
+dump and, where marked *(Studio)*, run in Studio 0.743.0.7431133 on 2026-10-21.
+
+| Change | Action Required |
+|--------|-----------------|
+| **Platform-integrated chat** (new page, 2026-10-20): an opt-in `TextChatService.PlatformIntegratedChat` mode (`RobloxScriptSecurity`: a Properties-window setting no script can read), **required for all games from May 2027**, in which code cannot read chat text | With it enabled, `TextChatMessage.Text` / `PrefixText` read `""`, `Player.Chatted` did not fire, `TextChannel:SendAsync()` returned `nil`, and `TextChatCommand.Triggered` still got the full line *(Studio)*. Move chat commands to `TextChatCommand` and custom chat UI to `TextChannelWindow`; see `networking.md` |
+| **`Workspace.AvatarUnificationMode` no longer has an effect**: every `Enum.AvatarUnificationMode` item is deprecated with "R6 avatars always load as R6 rigs" (2026-10-20), and the *R6 to R15 Adapter* page was deleted (2026-10-16) | Nothing to set, and no adapter parts to code around: drop handling for the adapter's invisible R6 proxy parts and its `CollisionHead`. In the 0.743 and 0.744 dumps the property is still there, `NotScriptable` and without a `Deprecated` tag; a Script reading it gets "is not a valid member of Workspace" *(Studio)* |
+| `coroutine.finally` is documented on the `coroutine` page (2026-10-20) | **Still `nil`** in Studio 0.743 from a Script and a LocalScript *(Studio)*. See `luau-fundamentals.md` |
+| `Enum.PlayerDeviceTrustLevel` / `PlayerDeviceTrustDecision` documented (2026-10-21), for a `Player.DeviceTrustLevel` property | **Does not exist in the engine yet:** neither enum nor the property is in the 0.743 or 0.744 dump, and `Enum.PlayerDeviceTrustLevel` errors *(Studio)*. See `security-hardening.md` |
+| `AnalyticsService:LogJourneyEvent` **removed from the docs** (2026-10-21) | Still in the 0.743 and 0.744 dumps (`Security: None`), and a Script can still index it *(Studio)*. With no page describing it, do not add new uses |
+| `BasePart.CenterOfMass` summary corrected: it is the **local** position relative to the part's `CFrame`, not a world position | A part at `(100, 50, -30)` reads `CenterOfMass = 0, 0, 0` and `AssemblyCenterOfMass = 100, 50, -30` *(Studio)*. Use `AssemblyCenterOfMass` for a world position |
+| `Player:Kick()` from the server: a custom message over **500 bytes** is discarded and the default notice shown | Keep kick reasons short (*docs*; see `security-hardening.md`) |
+| `KeyCode.MouseWheel` / `TrackpadPinch` / `TouchPinch` (`Direction1D`) and `MouseDelta` / `TouchDelta` / `TrackpadPan` (`Direction2D`) report **velocities per second** under the Input Action System | One simulated wheel notch read about `15` for about 0.066 s *(Studio)*. See `project-structure.md` |
+| `AssetService:CreateAssetAsync` accepts `Enum.AssetType.Audio` with an `AudioTextToSpeech` root, for reusable text-to-speech assets; `BadgeService:GetBadgeInfoAsync` documents `AwardCount`, `PastDayAwardCount` and `Rarity`; `AudioFader.Volume` range is 0–10 (was documented 0–3); `TextChannelWindow.FontFace` / `UseDefaultFont` documented | *Docs only*, not run here (the first uploads an asset). `FontFace` and `UseDefaultFont` were set from a LocalScript *(Studio)* |
+
 ### October 2026 — engine 0.743.0.7431133 (ingested 2026-10-17)
 
 Derived by diffing the **0.742 and 0.743 Full API Dumps locally** with

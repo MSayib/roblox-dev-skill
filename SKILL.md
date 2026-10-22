@@ -23,6 +23,8 @@ official Roblox documentation (https://create.roblox.com/docs), the Luau languag
 > dump downloaded, re-split, and diffed against 0.742 on **2026-10-17**, with every
 > developer-visible change run in Studio 0.743. 943 classes / 651 enums; locally, 264 class files
 > named `*Service` (344 classes carry the `Service` tag) and 48 deprecated classes (573 members).
+> Re-downloaded and re-audited on 2026-10-21, still the live Studio build that day, with the
+> official docs checked through 2026-10-21.
 >
 > Roblox ships roughly weekly, so this line is stale by design — never quote it as today's version.
 > Re-derive it instead:
@@ -51,7 +53,7 @@ surface. The tools below belong to **Roblox's own MCP server, built into Studio*
 only tells you how to use them well. Official reference:
 https://create.roblox.com/docs/studio/mcp
 
-The docs page lists **26 tools**. The build observed 2026-10-17 (Studio 0.743) exposed **28**:
+The docs page lists **26 tools**. The build observed 2026-10-17 and 2026-10-21 (Studio 0.743) exposed **28**:
 those plus the undocumented `generate_texture` and `segment_mesh`. `list_plugin_guis` and
 `capture_plugin_gui`, seen on 2026-10-11 (Studio 0.742), were gone. Detect what your host actually
 exposes rather than trusting this table.
@@ -132,7 +134,7 @@ Match user intent to the appropriate reference file. Read the file BEFORE genera
 | Luau syntax, types, naming conventions, style | `references/luau-fundamentals.md` |
 | Project layout, architecture, patterns | `references/project-structure.md` |
 | Save/load player data, DataStore, ProfileStore | `references/datastore-persistence.md` |
-| Client-server communication, RemoteEvents, input | `references/networking.md` |
+| Client-server communication, RemoteEvents, input, text chat (`TextChatService`, chat commands, platform-integrated chat) | `references/networking.md` |
 | Security, anti-exploit, server authority, bans | `references/security-hardening.md` |
 | Agent→Studio safety, destructive MCP ops, prompt injection from place content | `references/agent-safety.md` |
 | Performance, memory, optimization, Parallel Luau | `references/performance-optimization.md` |
@@ -249,7 +251,9 @@ Use these when local data doesn't cover a topic, is obsolete, or you need prose 
 > `github.com/Roblox/libmp`, and **the URL must end in `.md` or be `llms.txt`**. So
 > `llms-full.txt`, `openapi.json`, and `robloxapi.github.io` are **rejected** by `http_get` — use
 > the host's own fetch tool or `curl` for those. `http_get`'s `query` argument returns only
-> matching sections, which is much cheaper than pulling a whole page into context.
+> matching sections, which is much cheaper than pulling a whole page into context. A
+> `github.com/Roblox/libmp/blob/….md` URL is accepted but comes back as GitHub's HTML page
+> (measured 2026-10-21); read LibMP files from `raw.githubusercontent.com` with curl instead.
 
 ### Lookup Workflow
 1. Check if a **reference file** covers the topic (Routing Table above)
