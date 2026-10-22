@@ -1,6 +1,6 @@
 {
   "skill_name": "roblox-dev-skill",
-  "version": "2.18.2",
+  "version": "2.19.0",
   "evals": [
     {
       "id": 1,
@@ -517,12 +517,12 @@
     },
     {
       "id": 60,
-      "prompt": "Luau 0.743 says locals no longer count toward the 200-local limit after their last use. My generated config module has about 230 top-level locals and fails with 'Out of local registers'. Is updating Studio enough?",
+      "prompt": "Luau 0.743 says locals no longer count toward the 200-local limit after their last use. My generated config module has about 230 top-level locals that it returns as one table at the end, and it fails with 'Out of local registers'. Is updating Studio enough?",
       "should_trigger": true,
       "expected_references": [
         "luau-fundamentals.md"
       ],
-      "notes": "No. The compiler change is gated (LuauBytecodeSlotAlloc, default off, not in Studio's published flags), and in Studio 0.743 a Script with 210 sequential locals, each used only on the next line, still fails with 'Out of local registers when trying to allocate v200: exceeded limit 200'. Correct answer restructures: put the values in a table, or scope groups of locals in do ... end blocks (210 locals inside do blocks compiled), or split the module. FAILS if it says the 0.743 update fixes it."
+      "notes": "No. Studio 0.744 does free a local after its last use (a Script with 210 or 300 sequential locals, each used once, ran in Studio 0.744.0.7441077; in 0.743 it failed), but the 200 limit itself is unchanged and applies to locals that are alive at the same time: 210 locals all used on the last line still fail with 'Out of local registers when trying to allocate v200: exceeded limit 200' in 0.744. A module that returns a table built from all its locals keeps every one alive. Correct answer restructures: build the table as it goes (fields instead of locals), scope groups in do ... end blocks, or split the module. FAILS if it says updating Studio fixes this module, or if it says the 0.743 change is still not in Studio."
     },
     {
       "id": 61,
@@ -596,6 +596,43 @@
         "legacy-migration.md"
       ],
       "notes": "The R6 to R15 Adapter page was deleted (2026-10-16) and every Enum.AvatarUnificationMode item is deprecated with 'no longer has an effect; R6 avatars always load as R6 rigs' (2026-10-20). Correct answer says the adapter no longer does anything, so there is nothing to enable, and points at the Avatar Settings rig type instead. FAILS if it gives steps to enable AvatarUnificationMode as if it worked."
+    },
+    {
+      "id": 69,
+      "prompt": "Roblox added Enum.EasingStyle.Spring. Make my shop button bounce in with a spring tween using TweenService.",
+      "should_trigger": true,
+      "expected_references": [
+        "ui-systems.md",
+        "legacy-migration.md"
+      ],
+      "notes": "EasingStyle.Spring and Bezier are in the 0.744 enum, but in Studio 0.744.0.7441077 TweenInfo.new and TweenService:GetValue both error 'does not support Enum.EasingStyle.Spring or Enum.EasingStyle.Bezier' and UIPageLayout silently keeps Back. Correct answer says Spring cannot be used yet and uses Elastic/Back (or a hand-rolled spring on RenderStepped). FAILS if it writes TweenInfo.new(..., Enum.EasingStyle.Spring) as working code."
+    },
+    {
+      "id": 70,
+      "prompt": "Since 0.744 Avatar rules are scriptable. In my server Script, force every player into R6 with Humanoid:ApplyAvatarRulesAsync and an AvatarBodyRules set to R6.",
+      "should_trigger": true,
+      "expected_references": [
+        "legacy-migration.md"
+      ],
+      "notes": "0.744 made the Avatar*Rules *Override properties, ApplyAvatarRulesAsync and LoadCharacterWithAvatarRulesAsync Security None (AvatarAppearance). In Studio 0.744 a Script could create AvatarRules + AvatarBodyRules(AvatarType = R6) and both calls returned without error, but the character stayed R15; there is no docs page. Correct answer says the API is callable but had no observed effect, and points at the Studio Avatar Settings window for R6. FAILS if it presents the rules code as a working way to force R6."
+    },
+    {
+      "id": 71,
+      "prompt": "0.744 changed RunService:IsEdit to Security None. Use it in my game Script to skip setup while editing.",
+      "should_trigger": true,
+      "expected_references": [
+        "legacy-migration.md"
+      ],
+      "notes": "IsEdit and RunState went to Security None but gained the PluginOrOpenCloud capability; from a Script and a LocalScript in Studio 0.744 both fail 'lacking capability PluginOrOpenCloud', and only execute_luau/plugins get a value. Correct answer says game code cannot call it (game scripts do not run in Edit anyway) and uses RunService:IsStudio() if Studio-only behaviour is the goal. FAILS if it calls RunService:IsEdit() from a game Script."
+    },
+    {
+      "id": 72,
+      "prompt": "Can I now write a long generated Luau function with more than 200 sequential temporary locals in Roblox?",
+      "should_trigger": true,
+      "expected_references": [
+        "luau-fundamentals.md"
+      ],
+      "notes": "Over-correction guard for the 0.743 note. In Studio 0.744.0.7441077 a Script with 210 and 300 sequential locals, each used once, ran (it failed in 0.743). Correct answer says yes in Studio 0.744 when each local is dead before the next ones pile up, that the 200 limit still applies to locals alive at the same time (210 live locals still fail), and that live servers were not measured. FAILS if it says the change is not in Studio, or that the 200 limit is gone."
     }
   ]
 }

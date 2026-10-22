@@ -54,7 +54,7 @@ Players.PlayerAdded:Connect(onPlayerAdded)
 
 > **`GetPassOwnershipAsync` is not a replacement yet.** Engine 0.743 added
 > `MarketplaceService:GetPassOwnershipAsync(player: Player, gamePassId)`, which returns a dictionary.
-> In Studio 0.743.0.7431133 a server Script calling it gets
+> In Studio 0.743.0.7431133, and again in 0.744.0.7441077, a server Script calling it gets
 > `MarketplaceService:GetPassOwnershipAsync() is not enabled`. There is no docs page, so the
 > dictionary's fields are unknown. Keep `UserOwnsGamePassAsync` (note: it takes a UserId, the new
 > one takes a `Player`).

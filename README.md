@@ -9,8 +9,8 @@ DataStores, UI, performance, monetization, migration, and driving Roblox Studio 
 server. Works with Claude Code, Codex, Cursor, Gemini CLI, Antigravity, GitHub Copilot, and any
 agent that reads the Agent Skills format.
 
-> **Skill 2.18.2** · verified against Roblox Studio **0.743.0.7431133** and **Luau 0.743** on
-> 2026-10-21. Every code example was type-checked under `--!strict` and run in a real Studio place,
+> **Skill 2.19.0** · verified against Roblox Studio **0.744.0.7441077** and **Luau 0.743** on
+> 2026-10-22. Every code example was type-checked under `--!strict` and run in a real Studio place,
 > and every factual statement checked against an official source or a test.
 > Roblox ships weekly, so this is *when it was last verified*, not today's version.
 

@@ -248,7 +248,8 @@ The two names are one value: in Studio 0.743.0.7431133 (from `execute_luau`), wr
 changed `AudioPlayer.Asset`. **`AudioPlayer` has no `SoundId`** (indexing it errors "is not a
 valid member"); an earlier version of this table listed `SoundId` for both classes. Both
 `AudioContent` properties carry the `Hidden` tag in the 0.743 dump, which keeps them out of the
-Properties window.
+Properties window; 0.744 removed it. In Studio 0.744.0.7441077, writing `Sound.AudioContent`
+still sets `SoundId`.
 
 **Important for asset scanning:** which name a file stores is not documented, so check both.
 Measured on `Starship.rbxl` (saved by Studio 2026-08-09): its PROP chunks use the **legacy** names

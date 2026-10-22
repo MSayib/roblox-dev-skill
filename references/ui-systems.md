@@ -253,6 +253,13 @@ tween.Completed:Wait()
 `BackgroundColor3`, `TextTransparency`, `ImageTransparency`, `Rotation`,
 `GroupTransparency` (on `CanvasGroup` — tween it to fade an entire subtree).
 
+> **`Enum.EasingStyle.Spring` and `Bezier` exist but cannot be used.** Engine 0.744 added both
+> items, and in Studio 0.744.0.7441077 `TweenInfo.new(0.3, Enum.EasingStyle.Spring)` and
+> `TweenService:GetValue(…, Enum.EasingStyle.Spring, …)` error with `does not support
+> Enum.EasingStyle.Spring or Enum.EasingStyle.Bezier`, and `UIPageLayout.EasingStyle = Spring`
+> silently stays `Back`. For a springy feel today, use `Elastic` or `Back`, or animate the value
+> yourself on `RenderStepped`.
+
 ---
 
 ## Responsive Design

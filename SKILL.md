@@ -8,7 +8,7 @@ description: >
   and anti-exploit, deprecated APIs, Rojo, and the Roblox Studio MCP tools (execute_luau,
   multi_edit, script_read). It holds facts that general knowledge gets wrong (which properties a
   game Script may set, features that exist but are not enabled, Studio betas that cannot be
-  published, engine and Luau changes up to 0.743) and worked examples tested in Studio, so consult
+  published, engine changes up to 0.744 and Luau up to 0.743) and worked examples tested in Studio, so consult
   it before answering from memory. Not for Lua outside Roblox (Redis, OpenResty, WoW addons, LOVE)
   or for other game engines.
 ---
@@ -19,12 +19,11 @@ Expert development companion for building Roblox experiences with Luau. Grounded
 official Roblox documentation (https://create.roblox.com/docs), the Luau language spec
 (https://luau.org), and the Roblox Lua Style Guide (https://roblox.github.io/lua-style-guide/).
 
-> **Engine**: Roblox Studio **0.743.0.7431133** with **Luau 0.743** (released 2026-10-16) —
-> dump downloaded, re-split, and diffed against 0.742 on **2026-10-17**, with every
-> developer-visible change run in Studio 0.743. 943 classes / 651 enums; locally, 264 class files
-> named `*Service` (344 classes carry the `Service` tag) and 48 deprecated classes (573 members).
-> Re-downloaded and re-audited on 2026-10-21, still the live Studio build that day, with the
-> official docs checked through 2026-10-21.
+> **Engine**: Roblox Studio **0.744.0.7441077** with **Luau 0.743** (released 2026-10-16; no 0.744
+> release yet) — dump downloaded, re-split, and diffed against 0.743 on **2026-10-22**, with every
+> developer-visible change run in Studio 0.744. 947 classes / 652 enums; locally, 266 class files
+> named `*Service` (346 classes carry the `Service` tag) and 48 deprecated classes (574 members).
+> The official docs were checked through 2026-10-22.
 >
 > Roblox ships roughly weekly, so this line is stale by design — never quote it as today's version.
 > Re-derive it instead:
@@ -53,7 +52,7 @@ surface. The tools below belong to **Roblox's own MCP server, built into Studio*
 only tells you how to use them well. Official reference:
 https://create.roblox.com/docs/studio/mcp
 
-The docs page lists **26 tools**. The build observed 2026-10-17 and 2026-10-21 (Studio 0.743) exposed **28**:
+The docs page lists **26 tools**. The build observed 2026-10-17, 2026-10-21 (Studio 0.743) and 2026-10-22 (Studio 0.744) exposed **28**:
 those plus the undocumented `generate_texture` and `segment_mesh`. `list_plugin_guis` and
 `capture_plugin_gui`, seen on 2026-10-11 (Studio 0.742), were gone. Detect what your host actually
 exposes rather than trusting this table.
@@ -163,10 +162,10 @@ Documentation Lookup workflow below.
 **Always check local files first** — they are pre-split, far cheaper to read than the full dump, and
 require no network. If `~/RobloxDocs/RobloxAPI/` exists, use it.
 
-**How much cheaper, re-measured 2026-10-17 on 0.743.0.7431133** (an earlier "845× smaller" figure
+**How much cheaper, re-measured 2026-10-22 on 0.744.0.7441077** (an earlier "845× smaller" figure
 was not reproducible from any measurement, so here are the real numbers and the command that
-produced them): the full dump is **8,562,360 bytes**; the 943 split class files run **101 B min,
-2,043 B median, 4,842 B mean, 105,165 B max**. So a typical class lookup reads about **0.02%** of
+produced them): the full dump is **8,637,337 bytes**; the 947 split class files run **101 B min,
+2,059 B median, 4,863 B mean, 105,173 B max**. So a typical class lookup reads about **0.02%** of
 the dump, and even the largest class reads under **1.3%** of it. Re-measure with:
 
 ```bash
@@ -204,8 +203,8 @@ grep -l '"<PropertyName>"' ~/RobloxDocs/RobloxAPI/classes/*.json
 ```bash
 # Check when local data was last updated
 cat ~/RobloxDocs/RobloxAPI/.current-version
-# → {"version":"0.743.0.7431133","platform":"MacStudio","platformVersion":"0.743.0.7431133",
-#    "winHash":"version-4f087c32742644ab","updatedAt":"2026-10-17T07:50:06Z","checkedAt":"2026-10-17T07:50:06Z"}
+# → {"version": "0.744.0.7441077", "platform": "MacStudio", "platformVersion": "0.744.0.7441077",
+#    "winHash": "version-7aaa6838d36c4448", "updatedAt": "2026-10-22T08:20:48Z", "checkedAt": "2026-10-22T08:20:48Z"}
 ```
 
 > **Read whichever timestamp is present: `updatedAt` OR `checkedAt`.** `updatedAt` is when a dump
