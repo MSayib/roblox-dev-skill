@@ -1,6 +1,6 @@
 {
   "skill_name": "roblox-dev-skill",
-  "version": "2.19.0",
+  "version": "2.20.0",
   "evals": [
     {
       "id": 1,
@@ -633,6 +633,52 @@
         "luau-fundamentals.md"
       ],
       "notes": "Over-correction guard for the 0.743 note. In Studio 0.744.0.7441077 a Script with 210 and 300 sequential locals, each used once, ran (it failed in 0.743). Correct answer says yes in Studio 0.744 when each local is dead before the next ones pile up, that the 200 limit still applies to locals alive at the same time (210 live locals still fail), and that live servers were not measured. FAILS if it says the change is not in Studio, or that the 200 limit is gone."
+    },
+    {
+      "id": 73,
+      "prompt": "Can I use coroutine.finally in my Roblox game now to clean up when a task.spawn thread is cancelled?",
+      "should_trigger": true,
+      "expected_references": [
+        "luau-fundamentals.md"
+      ],
+      "notes": "Reversal of the 0.742-0.744 'nil' claim. In Studio 0.745.0.7451137 coroutine.finally is a function from a Script, a LocalScript and execute_luau, and FFlagLuauCoroutineFinally is True in Studio and every player client's flags. Correct answer says yes, shows registering right after task.spawn, mentions the 'cancelled' status on task.cancel, LIFO order, and that it errors on a dead coroutine or one from coroutine.wrap; may note game-server flags are not published. FAILS if it says coroutine.finally is nil or not enabled in Roblox."
+    },
+    {
+      "id": 74,
+      "prompt": "How do I kick players whose device is untrusted using Player.DeviceTrustLevel, and how do I test it in Studio?",
+      "should_trigger": true,
+      "expected_references": [
+        "security-hardening.md"
+      ],
+      "notes": "Device trust shipped in 0.745. Correct answer rejects only from IntegrityService.EvaluatePlayerDeviceTrust on the server (not PlayerAdded), returns { Action = Enum.PlayerDeviceTrustDecision.Reject/Accept }, lists allowed levels instead of comparing Value numbers (Unknown sorts below None and covers Windows/Mac/iOS/consoles today), treats Pending as untrusted, and says Studio always reads Pending and never calls the callback (tested), so test the policy function separately. FAILS if it says the API does not exist yet, or compares levels numerically."
+    },
+    {
+      "id": 75,
+      "prompt": "Write a server script that teleports a party to a new reserved server with TeleportOptions.ReservedServerId instead of ReserveServerAsync.",
+      "should_trigger": true,
+      "expected_references": [
+        "networking.md"
+      ],
+      "notes": "Docs (2026-10-27) prefer ReservedServerId = HttpService:GenerateGUID(false). Correct answer sets only that routing field, wraps TeleportAsync in pcall, stores the ID to reuse it, and warns that Studio 0.745 refuses it ('require the Access Code V2 feature, which is not enabled on this server') and no teleport completes in Studio, so test between two places of a published game; ReserveServerAsync is not Deprecated-tagged in the dump. FAILS if it claims the new field was verified working, or sets two routing fields."
+    },
+    {
+      "id": 76,
+      "prompt": "Roblox added Enum.PartType.Capsule. Can I make capsule-shaped hitboxes with Part.Shape = Capsule?",
+      "should_trigger": true,
+      "expected_references": [
+        "legacy-migration.md"
+      ],
+      "notes": "Not usable yet: Studio 0.745 warns 'PartType.Capsule is not available yet. Parts with this Shape behave as Block.' and a capsule had a block's mass. Correct answer says so and suggests Ball/Cylinder or a capsule MeshPart. FAILS if it presents Capsule as working."
+    },
+    {
+      "id": 77,
+      "prompt": "Can I use RunService:BindToSimulationParallel in an Actor for parallel server-authority simulation?",
+      "should_trigger": true,
+      "expected_references": [
+        "legacy-migration.md",
+        "security-hardening.md"
+      ],
+      "notes": "Documented but not enabled in 0.745: from an Actor-parented Script and a plain Script it fails 'RunService:BindToSimulationParallel() is not enabled'; serial BindToSimulation works. FAILS if it writes code relying on the parallel bind without saying it errors."
     }
   ]
 }

@@ -22,7 +22,7 @@ Mode, in order: a `--@skilltest: skip <why>` directive; a fragment (static analy
 from the reader's project that no prelude supplies) -> skip:fragment; `plugin` -> plugin; a block
 marked beta-syntax / legacy / antipattern / placeholder / project-tree -> skip:<that> (a prelude
 lifts placeholder and project-tree: it builds what they refer to); anything that bans, teleports or
-prompts a purchase -> skip:side-effect; actor; client (directive, or the source uses LocalPlayer /
+prompts a purchase (unless `defines-only`) -> skip:side-effect; actor; client (directive, or the source uses LocalPlayer /
 UserInputService / PlayerGui / CurrentCamera) -> client; else server.
 """
 import json, os, re, shutil, sys, urllib.request
@@ -58,7 +58,9 @@ def mode_of(d, st, src):
     for key in ('beta-syntax', 'placeholder', 'project-tree', 'antipattern', 'legacy'):
         if key in d and key not in lifted:
             return f'skip:{key}'
-    if SIDE_EFFECT.search(src):
+    # `defines-only`: the side-effecting call sits inside a function that neither the block nor its
+    # expectation calls, so the block is safe to run.
+    if SIDE_EFFECT.search(src) and 'defines-only' not in d:
         return 'skip:side-effect'
     if 'actor' in d:
         return 'actor'

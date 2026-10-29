@@ -151,7 +151,7 @@ When a glTF node and its mesh share a name (`Cover`), one of them gets a `_Node`
 **Uses:** Textures, decals, UI image labels, mesh textures, custom materials, special effects.
 
 #### Modern Decal & Texture Capabilities (v736+)
-- **Emissive Decals**: Decals now support `EmissiveMaskContent`, `EmissiveStrength`, and `EmissiveTint` for glowing surfaces, neon signage, and futuristic sci-fi displays without extra light sources.
+- **Emissive Decals**: Decals now support `EmissiveMaskContent`, `EmissiveStrength`, and `EmissiveTint` for glowing surfaces, neon signage, and futuristic sci-fi displays without extra light sources. Documented on the `Decal` page since 2026-10-22: the mask is a grayscale image (white glows, black does not) and assigning one makes the decal PBR. A Script can set `EmissiveStrength` and `EmissiveTint`, but writing `EmissiveMaskContent` fails `lacking capability Plugin` (Studio 0.745), so set the mask in the Properties window.
 - **Runtime Asset Creation**: `AssetService.CreateDecalAsync` and `AssetService.CreateTextureAsync` enable dynamic creation of decals and textures from buffer/image data at runtime.
 
 ### Import Audio

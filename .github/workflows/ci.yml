@@ -84,7 +84,7 @@ jobs:
     name: Every Luau example under --!strict (luau-lsp)
     runs-on: ubuntu-latest
     env:
-      LUAU_LSP_VERSION: "1.69.0"
+      LUAU_LSP_VERSION: "1.70.1"
     steps:
       - uses: actions/checkout@v4
       - name: Install luau-lsp

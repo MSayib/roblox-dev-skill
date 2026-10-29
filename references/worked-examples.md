@@ -185,8 +185,9 @@ notice introduced by your fix is a future break.
 **Not this:**
 - A wholesale rewrite. `legacy-migration.md` has a "When NOT to Migrate" section for a reason:
   working code with no deprecation warning is not a migration target
-- `UserInputService` → IAS. Neither `UserInputService` nor `ContextActionService` is deprecated;
-  moving is a design choice, not a fix
+- `UserInputService` → IAS. Neither `UserInputService` nor `ContextActionService` is deprecated
+  (0.745 dump); moving is a design choice, not a fix. The `ContextActionService` page does say its
+  binding methods are "planned for deprecation" (2026-10-22), so new bindings belong in IAS
 
 **Routing:** `legacy-migration.md`, plus the local dump for the authoritative status.
 

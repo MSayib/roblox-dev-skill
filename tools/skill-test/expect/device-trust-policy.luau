@@ -1,0 +1,11 @@
+-- expect: the policy allows Unknown/Standard/Full only, Studio lets everyone trade, the callback rejects only None.
+__skilltest.eq("Pending refused", isTradeAllowed(Enum.PlayerDeviceTrustLevel.Pending), false)
+__skilltest.eq("None refused", isTradeAllowed(Enum.PlayerDeviceTrustLevel.None), false)
+__skilltest.eq("Unknown allowed", isTradeAllowed(Enum.PlayerDeviceTrustLevel.Unknown), true)
+__skilltest.eq("Standard allowed", isTradeAllowed(Enum.PlayerDeviceTrustLevel.Standard), true)
+__skilltest.eq("Full allowed", isTradeAllowed(Enum.PlayerDeviceTrustLevel.Full), true)
+__skilltest.eq("Studio branch allows trading", canTrade({ DeviceTrustLevel = Enum.PlayerDeviceTrustLevel.Pending } :: any), true)
+local rejected = evaluateDeviceTrust({ DeviceTrustLevel = Enum.PlayerDeviceTrustLevel.None } :: any, {})
+__skilltest.eq("None rejected by the callback", rejected.Action, Enum.PlayerDeviceTrustDecision.Reject)
+local accepted = evaluateDeviceTrust({ DeviceTrustLevel = Enum.PlayerDeviceTrustLevel.Unknown } :: any, {})
+__skilltest.eq("Unknown accepted by the callback", accepted.Action, Enum.PlayerDeviceTrustDecision.Accept)

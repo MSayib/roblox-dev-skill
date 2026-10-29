@@ -1,6 +1,6 @@
 # Luau Language Fundamentals
 
-> Reference for AI coding skill — verified against official Roblox documentation and Luau language release specs (**v0.743**, released 2026-10-16; engine 0.744.0.7441077, re-tested 2026-10-22; no Luau 0.744 release yet).
+> Reference for AI coding skill — verified against official Roblox documentation and Luau language release specs (**v0.744**, released 2026-10-23; engine 0.745.0.7451137, re-tested 2026-10-29).
 > Sources: https://create.roblox.com/docs/luau, https://luau.org, https://roblox.github.io/lua-style-guide/
 
 ## Table of Contents
@@ -35,9 +35,9 @@ typed language **derived from Lua 5.1**. Key additions over Lua 5.1:
 - Native code generation (`--!native`) and fast `pcall`/`xpcall` VM execution (`LOP_FASTPCALL`)
 - No `goto` statement
 
-### What landed in 0.736 through 0.743 (source: luau-lang/luau release notes)
+### What landed in 0.736 through 0.744 (source: luau-lang/luau release notes)
 
-All eight releases are **fixes and internals, not new syntax you can ship today**. Nothing here changes
+All nine releases are **fixes and internals, not new syntax you can ship today**. Nothing here changes
 how you write Luau for Roblox; it is here so nobody mistakes an internal change for a new feature.
 
 | Release | Change | What it means for your code |
@@ -66,9 +66,12 @@ how you write Luau for Roblox; it is here so nobody mistakes an internal change 
 | **0.741** | Compiler reuses a local's register after its last use; GC allocation-rate underflow fixed when the heap shrinks between cycles; NCG buffer range-check bug fixed | Internals, no edit. The buffer fix only touches `--!native` code that uses `buffer` |
 | **0.742** | Analysis: better scope handling in the strict-mode checker, MLStruct-style unifier rewrite rules, a `~nil` refinement of blocked types that never simplified, grouped `error` calls in control-flow analysis, autocomplete for function statements | Inference fixes, no edit expected. The release notes do not call any of them a soundness change; if `--!strict` reports something new after a Studio update, these are where to look |
 | **0.742** | `string.gsub` is faster when the pattern has no special characters; compiler and NCG (`--!native`) correctness fixes, including constant propagation on tables with metamethods | No edit. Plain-text `gsub` calls get faster on their own |
-| **0.742** | `coroutine.finally` is no longer behind a `Debug` flag in the open-source VM | **Still not in Roblox.** See the table below: the gate was renamed, not removed, and `coroutine.finally` is `nil` in Studio 0.742, 0.743 and 0.744. The `coroutine` page on create.roblox.com has documented it since 2026-10-20; that does not make it callable |
+| **0.742** | `coroutine.finally` is no longer behind a `Debug` flag in the open-source VM | **On in Roblox since the 0.745 build.** It was `nil` in Studio 0.742, 0.743 and 0.744; in Studio 0.745 it is a function, and `FFlagLuauCoroutineFinally` is `True` in the published flags of Studio and of every player client (checked 2026-10-29). See [`coroutine.finally`](#coroutinefinally--cleanup-when-a-coroutine-ends) below. |
 | **0.743** | `table.find` is faster, most on small arrays and when the value has no `__eq` metamethod; clearer analysis error when a read-only table (e.g. one passed through `table.freeze`) is given to a parameter whose type needs a read-write property; type-only cyclic modules with a conditional early return fixed | No edit. The new message names the read-only property instead of printing two identical-looking types |
 | **0.743** | Compiler: a local no longer counts toward the **200-local limit** after its last use, even in the same block; at debug level 2 constant locals are no longer kept | **Active in Studio 0.744, not in 0.743.** In Studio 0.743.0.7431133 a Script with 210 sequential locals, each used only on the next line, failed with `Out of local registers when trying to allocate v200: exceeded limit 200`. In Studio 0.744.0.7441077 the same Script with 210 and with 300 such locals ran. **The limit itself is unchanged:** 210 locals that all stay in use until the last line still fail with the same message in 0.744. The open-source gate (`LuauBytecodeSlotAlloc`) still defaults to off and is not in Studio's published flags, so the engine build is what changed, and live servers were not measured. A module that `return`s a table built from all its locals keeps every one alive: put the values in a table as you go, scope groups in `do ... end` blocks, or split the function |
+| **0.744** | Correctness fixes to `bit32.lrotate` and the `integer` library's `lrotate` / `extract` / `replace`; a dead-store-elimination bug, an Arm64 crash on functions with more than 256 constants, a `FORGLOOP` register bug and a compiler `uint8_t`→`int8_t` cast fixed | No edit. In Studio 0.745 `bit32.lrotate(0x80000001, 1)` is `3`, `lrotate(1, 33)` is `2`, `lrotate(0xF0000000, -4)` is `0x0F000000` and `lrotate(0x12345678, 8)` is `0x34567812` *(Studio)*. The `integer` library is still `nil` in Roblox |
+| **0.744** | Type system: width subtyping no longer injects `nil` for a stand-in property; type-pack handling in a call's tail argument fixed in nonstrict | Inference fixes, no edit |
+| **0.744** | Prototype: runtime support for **private class fields** | Part of the classes prototype, still behind `DebugLuauUserDefinedClasses` (off). Not usable |
 
 ### `if local` / `if const` — a Studio beta, NOT usable in published games
 
@@ -107,24 +110,89 @@ disappearing because the syntax is on for everyone — not a release note that m
 
 Checked 2026-10-17 against the 0.743 source and Studio's published client settings
 (`clientsettingscdn.roblox.com/v2/settings/application/PCStudioApp` and `MacStudioApp`), and
-re-checked 2026-10-21 and 2026-10-22 (Studio 0.744; ~25,600 flags each). None of the flags below is set there, and a Luau `FASTFLAGVARIABLE` defaults to **off**:
+re-checked 2026-10-21, 2026-10-22 (Studio 0.744; ~25,600 flags each) and 2026-10-29 against the 0.744 source and
+Studio 0.745 (~26,100 flags each). None of the flags below is set there, and a Luau `FASTFLAGVARIABLE` defaults to **off**.
+`coroutine.finally` was in this table until its flag was switched on for the 0.745 build (see the
+next section):
 
-| Prototype | Gate in 0.743 | Notes |
+| Prototype | Gate in 0.744 | Notes |
 |---|---|---|
 | **Exact tables by default** — `{ x: number }` rejects extra fields, `{ x: number, ... }` allows them (RFC luau-lang/rfcs#11), 0.740 | `DebugLuauParseExactTables`, `DebugLuauExactTableTypes` | The release note calls it "an experimental feature". Do not write `...` in a table type for Roblox |
-| **Classes** RFC prototype | `DebugLuauUserDefinedClasses`, `DebugLuauUserDefinedClassesRuntime` (both in the source since at least 0.737) | |
-| **`coroutine.finally`** (RFC #187), 0.738 | `LuauCoroutineFinally`, `LuauCoroutineFinallyAnalysis` (renamed from `DebugLuauCoroutineFinally` in 0.742) | The 0.742 release note says "stop gating behind a debug flag"; the flag lost its `Debug` prefix but still defaults to off (unchanged in 0.743). **Tested in Studio 0.742 and 0.743: `coroutine.finally` is `nil`** from a game Script and from the command bar, on 2026-10-21 from a LocalScript too, and on 2026-10-22 in Studio 0.744 from a Script, a LocalScript and `execute_luau`. **The official `coroutine` reference page has described it since 2026-10-20** (callbacks get `"finished"`, `"error"` or `"cancelled"`, run LIFO). The page is ahead of the engine: do not write it into game code until Studio returns a function for it |
-| Require top-level functions to be annotated, 0.738 | `DebugLuauWarnOnUnannotatedTopLevelFunctions` | A lint experiment |
+| **Classes** RFC prototype | `DebugLuauUserDefinedClasses`, `DebugLuauUserDefinedClassesRuntime` (both in the source since at least 0.737) | 0.744 added runtime support for private class fields, behind the same gate |
+| Require top-level functions to be annotated, 0.738 | none in 0.744 (`DebugLuauWarnOnUnannotatedTopLevelFunctions` until 0.743) | A lint experiment; its flag and check are gone from the 0.744 source |
 | An **`integer`** library (`integer.idiv` was fixed in 0.740) | `LuauIntegerLibrary` | Present in the open-source VM since at least 0.737, not enabled in Studio. Not a Roblox API |
 
-**None of these are enabled in Roblox Studio.** Do not write them into game code, and do not tell a
-user they can — they look like shipped features in a release note and error in Studio. `if local`
-shows the path: a flag lost its `Debug` prefix (0.740), then became a Studio beta (2026-10-06),
-and only a full release makes it publishable. `coroutine.finally` took the first step in 0.742.
+**Apart from `coroutine.finally`, none of these is enabled in Roblox Studio.** Do not write them
+into game code, and do not tell a user they can — they look like shipped features in a release note
+and error in Studio. `if local` shows one path: a flag lost its `Debug` prefix (0.740), then became
+a Studio beta (2026-10-06), and only a full release makes it publishable. `coroutine.finally` took
+the other: its flag lost the prefix in 0.742 and was switched on, with no beta, in the 0.745 build.
 
-There is **NO new standard-library function usable in Roblox in 0.736–0.743**; if a user asks "what new Luau methods
-can we use", the honest answer for this window is *none* — the changes are inference, VM internals,
-flag-gated prototypes, and one Studio-only beta syntax.
+There was **NO new standard-library function usable in Roblox in 0.736–0.743**, and Luau 0.744 adds
+none either. The one new function a game can call is **`coroutine.finally`**, switched on by Roblox in the
+0.745 engine build (below). Everything else in this window is inference, VM internals, flag-gated
+prototypes, and one Studio-only beta syntax.
+
+### `coroutine.finally` — cleanup when a coroutine ends
+
+**Usable in Studio 0.745** from a Script, a LocalScript and `execute_luau` (tested 2026-10-29), and
+`FFlagLuauCoroutineFinally` is `True` in the published flags of Studio and of the Windows, Mac,
+Android and iOS clients. Roblox does not publish its game servers' flags, so a server Script in a
+live game was not measured. `coroutine.finally(co, callback)` registers a callback that runs once
+when `co` ends:
+
+| How the coroutine ended | Callback arguments *(Studio)* |
+|---|---|
+| Returned | `"finished"`, then every return value (`return a + b, "x"` with 2, 3 gave `"finished", 5, "x"`) |
+| Errored | `"error"`, the error value. `coroutine.resume` still returns `false, err` |
+| `coroutine.close(co)` or `task.cancel(co)` | `"cancelled"` and nothing else |
+
+What else the Studio run showed, matching the `coroutine` reference page:
+
+- Callbacks run **last-registered first** (LIFO), at most once.
+- `coroutine.resume` / `close` return only after the callbacks have run. If a callback errors,
+  `resume` returns `false` and that error, and the callbacks after it do not run.
+- Registering on a **dead** coroutine errors `cannot register a finalizer on dead coroutine`.
+- A coroutine from **`coroutine.wrap`** that ends with a callback registered errors
+  `cannot run finalizers from a wrapped coroutine`. Use `coroutine.create` or `task.spawn`.
+- For a thread the engine resumes (`task.spawn` + `task.wait`, `task.delay`), the callback runs on
+  a separate thread. When that thread errors, the callback still gets `"error"` and the error is
+  also printed to the output as a script error.
+
+<!-- skilltest: expect coroutine-finally-cleanup -->
+```lua
+--!strict
+-- Destroy a temporary effect however its animation thread ends: it finished,
+-- it errored, or someone called task.cancel on it.
+local function startPulse(part: BasePart, seconds: number): thread
+	local highlight = Instance.new("Highlight")
+	highlight.Parent = part
+
+	local thread = task.spawn(function()
+		local started = os.clock()
+		while os.clock() - started < seconds do
+			highlight.FillTransparency = 0.5 + 0.5 * math.sin(os.clock() * 6)
+			task.wait()
+		end
+	end)
+
+	coroutine.finally(thread, function(status: string)
+		highlight:Destroy()
+	end)
+	return thread
+end
+
+local part = Instance.new("Part")
+part.Anchored = true
+part.Parent = workspace
+local pulse = startPulse(part, 10)
+task.wait(0.5)
+task.cancel(pulse) -- the Highlight is destroyed now, not after 10 seconds
+```
+
+Register the callback right after `task.spawn` returns, while the thread is still suspended: a
+thread that never yields is already dead by then. To keep code working on a build without it,
+check `if coroutine.finally then` and fall back to cleaning up in a `pcall` around the work.
 
 ---
 

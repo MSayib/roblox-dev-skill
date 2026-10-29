@@ -23,7 +23,8 @@ python3 tools/skill-test/extract_blocks.py "$OUT"          # every ```luau / ```
 python3 tools/skill-test/run_static.py "$OUT" --strict     # luau-lsp, exit 1 on any unexplained finding
 ```
 
-`run_static.py` needs [`luau-lsp`](https://github.com/JohnnyMorganz/luau-lsp) (it finds a rokit or
+`run_static.py` needs [`luau-lsp`](https://github.com/JohnnyMorganz/luau-lsp) **1.70.1 or newer** (1.69
+has no type definition for `coroutine.finally`; CI pins 1.70.1) (it finds a rokit or
 aftman install, or pass `--luau-lsp PATH`) and downloads the current Roblox definitions. It analyses
 **every block in strict mode** (nonstrict mode does not report unknown globals, so a fragment would
 look complete) against what a **game Script** may touch; blocks marked `plugin` are checked against

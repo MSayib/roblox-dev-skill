@@ -16,7 +16,8 @@
 7. [Rate Limiting Patterns](#rate-limiting-patterns)
 8. [Folder Organization for Remotes](#folder-organization-for-remotes)
 9. [Text Chat and Platform-Integrated Chat](#text-chat-and-platform-integrated-chat)
-10. [LEGACY](#legacy)
+10. [Teleporting to Reserved and VIP Servers](#teleporting-to-reserved-and-vip-servers)
+11. [LEGACY](#legacy)
 
 ---
 
@@ -511,6 +512,69 @@ window.Parent = screenGui
   through `TextChatService`. Their policy is unchanged (no two-way player communication, a rate
   limit of at least 1 minute, moderation). A game that needs `PrefixText` chat tags should not
   enable the mode yet, because prefixes are not supported.
+
+## Teleporting to Reserved and VIP Servers
+
+> **Source:** [Teleport to private servers](https://create.roblox.com/docs/projects/teleport-private-servers)
+> (new 2026-10-27) · [TeleportOptions](https://create.roblox.com/docs/reference/engine/classes/TeleportOptions)
+
+Since 2026-10-27 the docs route private-server teleports through two `TeleportOptions` fields
+and describe `TeleportService:ReserveServerAsync()`, `TeleportToPrivateServer()`,
+`TeleportOptions.ReservedServerAccessCode` and `ShouldReserveServer` as deprecated:
+
+| Field | Set it to | What happens (*docs*) |
+|---|---|---|
+| `ReservedServerId` | Any GUID you generate on the server, `HttpService:GenerateGUID(false)` | The first teleport with a new ID creates the reserved server; the same ID later routes to the same server. On arrival `game.PrivateServerId` equals that ID |
+| `VipServerId` | The `game.PrivateServerId` of a player-bought VIP server | Joins that VIP server; works with any place of the same experience, not another experience's |
+
+Only **one** routing field (`ReservedServerId`, `VipServerId`, `ReservedServerAccessCode`,
+`ShouldReserveServer`, `ServerInstanceId`) may be set per teleport. `ReserveServerAsync` "does not
+actually reserve a server in advance, but simply generates a random GUID", and servers made with
+access codes keep working. Persist a reserved ID (a data store keyed by lobby or party) if more
+players must reach that server later. `TeleportAsyncResult.ReservedServerAccessCode` is empty for
+these teleports; read `result.PrivateServerId`.
+
+**What Studio 0.745 does with them (2026-10-29):** both fields can be set and read back (a
+non-GUID string is accepted too), but `TeleportAsync` with either one fails `ReservedServerId and
+VipServerId require the Access Code V2 feature, which is not enabled on this server.` A live
+server was not tested. Studio cannot complete any teleport (a plain `TeleportAsync` fails
+`Request Context Failure`, `ReserveServerAsync` fails `HTTP 403`), and the 0.745 dump has no
+`Deprecated` tag on `ReserveServerAsync`. So before you ship the new fields, try them between two
+places of a **published** game. Existing `ReserveServerAsync` code does not need to change yet.
+
+<!-- skilltest: expect reserved-server-options; defines-only -->
+```lua
+--!strict
+-- Server Script: send a party to its own reserved server, using ReservedServerId (docs, 2026-10-27).
+local HttpService = game:GetService("HttpService")
+local TeleportService = game:GetService("TeleportService")
+
+local function newReservedServerOptions(reservedServerId: string?): (TeleportOptions, string)
+	local id = reservedServerId or HttpService:GenerateGUID(false) -- always on the server
+	local options = Instance.new("TeleportOptions")
+	options.ReservedServerId = id -- the only routing field set on this instance
+	return options, id
+end
+
+-- Returns the reserved server ID to store (e.g. by party ID) so others can follow later.
+local function sendToReservedServer(placeId: number, party: { Player }, reservedServerId: string?): (boolean, string)
+	local options, id = newReservedServerOptions(reservedServerId)
+	local ok, err = pcall(function()
+		return TeleportService:TeleportAsync(placeId, party, options)
+	end)
+	if not ok then
+		-- In Studio 0.745 this is "...require the Access Code V2 feature, which is not enabled on this server."
+		warn("Reserved-server teleport failed:", err)
+		return false, id
+	end
+	return true, id
+end
+```
+
+On the destination, `game.PrivateServerId ~= "" and game.PrivateServerOwnerId == 0` means a
+reserved server (in Studio both read `""` and `0`). To keep players in the same VIP server across
+places, set `options.VipServerId = game.PrivateServerId` on every teleport from it. A teleport with
+no routing field can also land a player in a VIP server they recently joined (*docs*).
 
 ---
 

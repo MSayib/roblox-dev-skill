@@ -83,21 +83,21 @@ Each row says when that file's content was last verified — not that it is curr
 2.16.0 every code example in every file is also type-checked and run in Studio on each release,
 and since 2.17.0 every high-risk statement in the prose of `SKILL.md` and `references/` is in a
 claims register with how it was verified ([testing.md](testing.md), [claims.md](claims.md)). The
-pages in `docs/` and the README are not in the register; they were checked by hand on 2026-10-17, 2026-10-21 and 2026-10-22.
+pages in `docs/` and the README are not in the register; they were checked by hand on 2026-10-17, 2026-10-21, 2026-10-22 and 2026-10-29.
 
 | Topic | Status | Reference File |
 |-------|--------|---------------|
-| Luau language (strict mode, types, generics, `if local` beta) | ✅ **Luau 0.743** (no 0.744 release yet), claims checked 2026-10-22 in Studio 0.744 (`coroutine.finally`, 200-local change re-tested) | `luau-fundamentals.md` |
-| Project architecture (services, Rojo, IAS, Script Sync) | ✅ claims checked 2026-10-22 (IAS setting re-tested in 0.744, `MouseWheel` value measured in 0.743) | `project-structure.md` |
+| Luau language (strict mode, types, generics, `if local` beta) | ✅ **Luau 0.744**, claims checked 2026-10-29 in Studio 0.745 (`coroutine.finally` now on, 200-local change re-tested in 0.744) | `luau-fundamentals.md` |
+| Project architecture (services, Rojo, IAS, Script Sync) | ✅ claims checked 2026-10-29 (CAS "planned for deprecation" note; IAS setting re-tested in 0.744, `MouseWheel` value measured in 0.743) | `project-structure.md` |
 | DataStore + ProfileStore + **MemoryStoreService** | ✅ claims checked 2026-10-11 (limits measured) | `datastore-persistence.md` |
-| Client-Server networking + BindableEvent caveats + **text chat / platform-integrated chat** | ✅ claims checked 2026-10-21 (chat behaviour tested in Studio 0.743) | `networking.md` |
-| Security — player→server (BanAsync, server authority, exploits, script capabilities) | ✅ claims checked 2026-10-21 | `security-hardening.md` |
+| Client-Server networking + BindableEvent caveats + **text chat / platform-integrated chat** + **reserved/VIP server teleports** | ✅ claims checked 2026-10-29 (teleport fields tested in Studio 0.745, chat behaviour in 0.743) | `networking.md` |
+| Security — player→server (BanAsync, server authority, **device trust**, exploits, script capabilities) | ✅ claims checked 2026-10-29 (device trust tested in Studio 0.745) | `security-hardening.md` |
 | Safety — agent→Studio (destructive MCP ops, injection from place content) | ✅ claims checked 2026-10-11 (undo measured) | `agent-safety.md` |
 | Worked examples (build / debug / migrate / verify / refuse / sell / migrate data / bind input) | ✅ **every Verification section run in Studio 0.742**; receipts and migrations asserted on each test run | `worked-examples.md` |
 | Performance (Parallel Luau, **RunService pipeline**, plugin-only fidelity/LOD/streaming settings) | ✅ claims checked 2026-10-22 (0.742–0.744, tested in Studio) | `performance-optimization.md` |
-| MCP integration (26 documented tools / 28 observed) | ✅ **re-verified 2026-10-22** against the official docs page + live schemas (Studio 0.744) | `mcp-integration.md` |
+| MCP integration (26 documented tools / 31 observed) | ✅ **re-verified 2026-10-29** against the official docs page + live schemas (Studio 0.745) | `mcp-integration.md` |
 | UI (**UIFlexItem**, **StyleSheet/StyleRule**, StyleQuery, UIShadow, UIGradient beta, per-corner UICorner) | ✅ claims checked 2026-10-22 (`EasingStyle.Spring`/`Bezier` tested in 0.744) | `ui-systems.md` |
-| Legacy migration (RunService events, **0.744 additions**, per-release API tables) | ✅ claims checked 2026-10-22 against dumps 0.723–0.744 (0.744 rows tested in Studio 0.744, the 2026-10-16..21 docs rows in 0.743) | `legacy-migration.md` |
+| Legacy migration (RunService events, **0.745 additions**, per-release API tables) | ✅ claims checked 2026-10-29 against dumps 0.723–0.745 (0.745 and 2026-10-22..29 docs rows tested in Studio 0.745) | `legacy-migration.md` |
 | Studio plugins, `Script.Source` limits, engine limits | ✅ measured Aug 2026, source limits re-measured 2026-10-11 | `studio-plugins-and-limits.md` |
 | Monetization (Transfers, **Subscriptions**) | ✅ claims checked 2026-10-22 (`GetPassOwnershipAsync` re-tested in 0.744) | `monetization.md` |
 | File formats (**ZSTD/LZ4**, **MeshContent**, importing) | ✅ claims checked 2026-10-21 (`AudioContent` names tested) | `file-formats-and-assets.md` |

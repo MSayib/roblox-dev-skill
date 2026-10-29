@@ -124,7 +124,10 @@ and re-check the JSON syntax. Any client that supports `stdio` works.
 ## Tool Reference
 
 **Counts, stated precisely.** The official docs page lists **26 tools** (recounted 2026-10-17;
-the page last changed 2026-08-21, still its latest commit on 2026-10-22). The build observed on
+the page last changed 2026-08-21, still its latest commit on 2026-10-29). **On 2026-10-29 (Studio
+0.745.0.7451137) the build exposes 31**: the 28 below plus three undocumented skill-authoring
+tools, `list_skills`, `create_skill` and `edit_skill` (see *Documentation and skills*); the other
+28 schemas were unchanged. The build observed on
 2026-10-17 and again on 2026-10-21 (Studio 0.743.0.7431133) and 2026-10-22 (Studio 0.744.0.7441077,
 `StudioMCP` binary of 2026-10-20) exposes **28**: those 26 plus `generate_texture` and
 `segment_mesh`, which are present but undocumented. Their schemas were unchanged across the three
@@ -251,6 +254,14 @@ nested.
 |---|---|
 | `http_get` | Fetches Roblox documentation **from an allowlist only**. Supports in-content keyword search via `query`, with `context_lines` (default 3) and `return_full`. |
 | `skill` | Retrieves Roblox's own first-party reference material for a named skill. |
+| `list_skills` | Lists every available skill with its source (`Roblox` for the first-party ones) and description. Read-only. *New 2026-10-29, undocumented* |
+| `create_skill` | Creates a **user** skill from `skill_name` (lowercase, digits, `_` and `-`; may not start with `rbx-`), a one-line `skill_description` and a markdown `skill_body`, and "**publishes**" it, available immediately. *New 2026-10-29, undocumented; not run here* |
+| `edit_skill` | Renames or rewrites a user-created skill (`new_name`, `new_description`, `new_skill_body` replaces the whole body). Roblox's own skills cannot be edited. *New 2026-10-29, undocumented; not run here* |
+
+**`create_skill` and `edit_skill` write persistent state outside the place**, which a place
+revert does not undo, and `edit_skill` replaces the body without a diff. Ask before calling
+either, and read the current body with `skill` before an edit. Where a published skill is
+stored and who can see it is not documented; treat it as visible beyond this session.
 
 **`http_get` is allowlisted, not a general fetcher.** Permitted prefixes: `create.roblox.com/docs`
 (including `/reference/engine`, `/cloud`, `/performance-optimization`) and
@@ -268,9 +279,12 @@ than the whole page.
 > `raw.githubusercontent.com/Roblox/libmp/main/…` with the host's own fetch tool or `curl`
 > (that host is not on the allowlist), or use `skill("rbx-perf-profiling")`.
 
-**First-party skills exposed by the `skill` tool (unchanged from 2026-09-25 to 2026-10-22):**
-`rbx-create-skill`, `rbx-debug`, `rbx-device-simulator-lua`, `rbx-docs-search`,
-`rbx-perf-profiling`, `rbx-scene-analysis`, `rbx-unit-test`. These are Roblox's, shipped inside
+**First-party skills exposed by the `skill` tool (2026-10-29, nine):**
+`rbx-configs-experimentation`, `rbx-create-skill`, `rbx-debug`, `rbx-device-simulator-lua`,
+`rbx-docs-search`, `rbx-instrument-analytics`, `rbx-perf-profiling`, `rbx-scene-analysis`,
+`rbx-unit-test`. The seven without `configs-experimentation` (ConfigService live values and A/B
+experiments) and `instrument-analytics` (adding `AnalyticsService` economy / funnel / custom
+events) were unchanged from 2026-09-25 to 2026-10-22. These are Roblox's, shipped inside
 Studio, and they are **narrower and more current than this skill on their specific topics** —
 prefer `skill("rbx-debug")` for breakpoint work, `skill("rbx-perf-profiling")` for MicroProfiler
 and LibMP analysis, and `skill("rbx-scene-analysis")` for SceneAnalysisService. Use this
@@ -435,5 +449,6 @@ version does not reintroduce them.
 | `http_get` fetches any URL from Studio | **Allowlisted** to Roblox docs domains, and the URL must end in `.md` or be `llms.txt`. `llms-full.txt` and `openapi.json` are rejected. | Live schema |
 | `search_asset` searches "the marketplace / Toolbox" | **Creator Store + Creator Inventory**, with type / price / tag / scope filters. | Official docs |
 | 29 tools | **26 documented**, **28 in this build** (+`generate_texture`, +`segment_mesh`, both undocumented). | Official docs + live tool list |
-| `skill` and `subagent` absent from this file | Both are real and officially documented. Roblox ships 7 first-party `rbx-*` skills that partly supersede hand-rolled approaches. | Official docs + live schemas |
+| 28 tools (2026-10-17 to 2026-10-22) | **31 on 2026-10-29** (Studio 0.745): +`list_skills`, +`create_skill`, +`edit_skill`. | Live tool list |
+| `skill` and `subagent` absent from this file | Both are real and officially documented. Roblox ships 7 first-party `rbx-*` skills that partly supersede hand-rolled approaches (9 on 2026-10-29). | Official docs + live schemas |
 | `set_active_studio` is a tool | Does not exist. Targeting is per call via `studio_id`. (Corrected in v2.7.0, kept here as a guard.) | Official docs |

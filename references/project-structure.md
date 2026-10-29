@@ -581,6 +581,12 @@ input events everywhere.
 > are deprecated. An earlier version of this file said IAS "replaces the legacy per-input-event
 > model", which overstates it — IAS is the recommended cross-platform approach for new input work,
 > and the older services remain valid.
+>
+> **Update 2026-10-22:** the `ContextActionService` page now says `BindAction()` and the related
+> binding methods "aren't recommended for new work and are planned for deprecation", pointing to
+> IAS. In the 0.745 dump `BindAction` still has no `Deprecated` tag. So: existing CAS bindings keep
+> working and are not a bug to fix, but **write new input bindings with IAS**, and expect a
+> deprecation tag on CAS later. `UserInputService` is not mentioned.
 
 ### Enabling IAS
 
