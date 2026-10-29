@@ -1,0 +1,12 @@
+-- expect: a new GUID per call unless one is given, set as the only routing field.
+local options, id = newReservedServerOptions()
+__skilltest.eq("GUID length", #id, 36)
+__skilltest.eq("ReservedServerId set", options.ReservedServerId, id)
+__skilltest.eq("no access code", options.ReservedServerAccessCode, "")
+__skilltest.eq("ShouldReserveServer off", options.ShouldReserveServer, false)
+__skilltest.eq("ServerInstanceId empty", options.ServerInstanceId, "")
+local again = newReservedServerOptions(id)
+__skilltest.eq("given ID reused", again.ReservedServerId, id)
+local _, other = newReservedServerOptions()
+__skilltest.check("a second call gets a new ID", other ~= id)
+__skilltest.eq("sendToReservedServer is a function", typeof(sendToReservedServer), "function")

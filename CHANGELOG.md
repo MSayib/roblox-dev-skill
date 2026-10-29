@@ -11,6 +11,90 @@ reference content was verified against at that time.
 
 ---
 
+## 2.20.0 — Oct 29, 2026
+
+**Engine 0.745.0.7451137 and Luau 0.744, with every developer-visible change run in Studio 0.745,
+every "not enabled" claim re-run, and the creator-docs of 2026-10-22 to 2026-10-29 ingested.**
+Studio and the Player went live as 0.745.0.7451137; Luau 0.744 came out on 2026-10-23. Probes ran
+from a server `Script`, a `LocalScript`, an `Actor` Script and MCP `execute_luau`, and were
+removed afterwards. Server 101/101 (23/23 expectations), client 28/28 (5/5), plugin 3/3 (2/2),
+static 141 blocks, API audit 0 defects, claims 799 → 911 (0 unverified, 74 regression guards),
+evals 72 → 77, installers 48/48.
+
+### Changed: now usable
+
+- **`coroutine.finally` works (*tested*).** It was `nil` in Studio 0.742–0.744; in 0.745 it is a
+  function from a Script, a LocalScript and `execute_luau`, and `FFlagLuauCoroutineFinally` is
+  `True` in Studio's and every player client's published flags. `luau-fundamentals.md` has a new
+  section: statuses (`finished` with the return values, `error`, `cancelled`), LIFO order, the
+  dead-coroutine and `coroutine.wrap` errors, and a tested cleanup example. The "nil" and "no new
+  library function" lines are regression guards now.
+- **`Shapecast` `cframeOverride` / `sizeOverride` work (*tested*).** They errored "not enabled
+  yet" in 0.743–0.744; now a cast from a part far away hits a target under the override, and a wider
+  size hits what the part's own size misses.
+- **Device trust shipped.** `Player.DeviceTrustLevel`, `IntegrityService.EvaluatePlayerDeviceTrust`
+  and both enums are in the 0.745 dump. `security-hardening.md` has a new *Device trust* section
+  with a tested policy example. In Studio the level is always `Pending` and the callback never runs
+  (*tested*, as documented); never compare levels as numbers (`Unknown` sorts below `None`).
+
+### Engine 0.745 (949 classes +3 −1, 654 enums +2, 267 `*Service`, 48 deprecated classes, 574 members)
+
+- **Not usable yet (*tested*):** `PartType.Capsule` ("not available yet … behave as Block"),
+  `RunService:BindToSimulationParallel` / `BindToAnimationParallel` ("is not enabled", also inside
+  an Actor), `GeometryService:BakeToMeshAsync`, `AssetService:GetLatestVersionUriAsync`,
+  `SceneAnalysisService:GetCollisionGeometryMemoryAsync`, `EditableMesh:AddFace` (`AddTriangle`
+  works), the `TestService` registry (new error text).
+- **Plugin-only (*tested*):** `StarterPlayer.CreateDefaultPlayerModule` (now `None` +
+  `PluginOrOpenCloud`), `Players.BanningEnabled`, `UseStrafingAnimations`. `Workspace.AuthorityMode`
+  is `None` on its docs page but still `RobloxScriptSecurity` in the engine.
+- `AvatarClothingRules` overrides renamed with no alias (`ClassicShirtsAccessoryOverride` →
+  `ClassicShirtOverride`, …); `+AvatarCollisionRules.BodyPartsCollidableOnDeath`; every
+  `AvatarUnificationMode` item deprecated; `BulkImportService` and `Part.shap` removed.
+
+### Docs 2026-10-22 to 2026-10-29
+
+- **Teleports to reserved and VIP servers** (`networking.md`, new section): the docs deprecate
+  `ReserveServerAsync` / access codes in favour of `TeleportOptions.ReservedServerId` (a GUID) and
+  `VipServerId`. In Studio 0.745 both fail "require the Access Code V2 feature, which is not enabled
+  on this server" (*tested*); the dump does not deprecate `ReserveServerAsync`. Tested option
+  builder; test the new fields in a published game first.
+- `ContextActionService` binding methods are "planned for deprecation" (not tagged yet): new input
+  bindings belong in IAS (`project-structure.md`, `worked-examples.md`).
+- Scoped user IDs page rewritten (effective user ID, groups domain, "`User.Id` equals `UserId`");
+  Studio 0.745 still shows two different values for the same account (*tested*). No staff post
+  since 2026-09-01.
+- `GamepadService:EnableGamepadCursor()` with no argument still errors (*tested*); Decal emissive
+  mask is plugin-write only (*tested*); `PromptCreatePlatformContentAsync` (images from
+  `EditableImage`); Expanded Terrain (Properties-window only); server-authority guide additions;
+  memory-store flush; cross-game pass/product prompts fail.
+
+### Luau 0.744
+
+- Fixes only (`bit32.lrotate` / `integer.*` correctness, DSE, Arm64, `FORGLOOP`); private class
+  fields prototype behind the classes gate. The unannotated-top-level-functions lint flag is gone
+  from the source.
+
+### MCP
+
+- **31 tools** in Studio 0.745: +`list_skills`, +`create_skill`, +`edit_skill` (undocumented;
+  `create_skill` / `edit_skill` publish persistent skills, so ask first). Nine first-party skills:
+  +`rbx-configs-experimentation`, +`rbx-instrument-analytics`.
+
+### Tooling
+
+- `run_static.py` passes the `coroutine.finally` analysis flag (both names); use luau-lsp
+  **1.70.1 or newer** (1.69 has no definition for it).
+- `build_suite.py`: `defines-only` directive runs a block whose side-effecting call (here
+  `TeleportAsync`) is only inside a function the test does not call.
+
+### Evals 72 → 77
+
+- **#73** `coroutine.finally` is usable now. **#74** device trust: reject in the callback, list
+  levels, Studio is always `Pending`. **#75** `ReservedServerId` refused in Studio. **#76**
+  `PartType.Capsule` behaves as a block. **#77** `BindToSimulationParallel` is not enabled.
+
+---
+
 ## 2.19.0 — Oct 22, 2026
 
 **Engine 0.744.0.7441077, with every developer-visible change run in Studio 0.744, and every

@@ -1,13 +1,21 @@
 {
   "skill_name": "roblox-dev-skill",
-  "version": "2.19.0",
-  "last_updated": "2026-10-22T16:30:00+07:00",
-  "last_updated_by": "claude-code (engine 0.744 ingest; every not-enabled claim re-run in Studio 0.744)",
-  "update_source": "clientsettings client-version (WindowsStudio64, MacStudio, WindowsPlayer, MacPlayer); luau-lang/luau releases + 0.743/master source tarballs (LuauBytecodeSlotAlloc gate); clientsettingscdn PCStudioApp/MacStudioApp flags; roblox-api-monitor 0.743->0.744 dump diff (291 changes, 147 developer-visible); Roblox/creator-docs commits since 2026-10-21 (none) and engine STUDIO_VERSION; live Roblox Studio 0.744.0.7441077 via MCP (playtest probe Scripts/LocalScripts, execute_luau) and the Rojo 34871 harness",
-  "engine_version_at_update": "0.744.0.7441077",
-  "luau_version_at_update": "0.743",
+  "version": "2.20.0",
+  "last_updated": "2026-10-29T13:00:00+07:00",
+  "last_updated_by": "claude-code (engine 0.745 + Luau 0.744 + creator-docs 2026-10-22..29 ingest; every not-enabled claim re-run in Studio 0.745)",
+  "update_source": "clientsettings client-version (WindowsStudio64, MacStudio, WindowsPlayer, MacPlayer); luau-lang/luau 0.744 release + 0.743/0.744 source tarballs; clientsettingscdn PCStudioApp/MacStudioApp/PCDesktopClient/MacDesktopClient/AndroidApp/iOSApp flags; roblox-api-monitor 0.744->0.745 dump diff (83 changes, 47 developer-visible); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29, STUDIO_VERSION 0.745); DevForum topic 4677155; live Roblox Studio 0.745.0.7451137 via MCP (playtest probe Scripts/LocalScripts/Actor, execute_luau) and the Rojo 34871 harness",
+  "engine_version_at_update": "0.745.0.7451137",
+  "luau_version_at_update": "0.744",
   "update_interval_days": 7,
   "update_history": [
+    {
+      "date": "2026-10-29T13:00:00+07:00",
+      "version": "2.20.0",
+      "changes": "Engine 0.745.0.7451137 + Luau 0.744. NOW USABLE (tested): coroutine.finally (was nil 0.742-0.744; flags True in Studio and all clients; new luau-fundamentals section + example), Shapecast cframeOverride/sizeOverride, Player.DeviceTrustLevel/IntegrityService (Pending in Studio, callback never called; new security-hardening section + example). NOT USABLE (tested): PartType.Capsule (behaves as Block), BindToSimulationParallel/BindToAnimationParallel, BakeToMeshAsync, GetLatestVersionUriAsync, GetCollisionGeometryMemoryAsync, EditableMesh:AddFace, TestService registry; CreateDefaultPlayerModule/BanningEnabled/UseStrafingAnimations plugin-only; AuthorityMode still RobloxScript despite docs. AvatarClothingRules renames. Docs 2026-10-22..29: teleport ReservedServerId/VipServerId (new networking section; refused in Studio 'Access Code V2 not enabled'), CAS planned for deprecation, scoped user IDs page rewrite (User.Id still != UserId in Studio), GamepadService no-arg still errors, Decal emissive mask plugin-only, PromptCreatePlatformContentAsync, Expanded Terrain, server-authority additions, memory-store flush. MCP 31 tools (+list_skills/create_skill/edit_skill), 9 first-party skills. Claims 799 -> 911 (0 unverified, 74 false); evals 72 -> 77.",
+      "engine_version": "0.745.0.7451137",
+      "decision_by": "user (sayib) -- 2026-10-29 'Ada banyak update, mari lakukan weekly update'",
+      "verified_by": "Studio 0.745.0.7451137 (place MieGede NewWorld 118652544255235) via MCP: probe Scripts + LocalScript + Actor Script in playtests (removed afterwards, 0 left), execute_luau (Edit/Server/Client); Rojo 34871 harness: server 101/101 cases, 23/23 expectations, client 28/28, 5/5, plugin 3/3, 2/2; run_static --strict 141 blocks 0 unexplained (luau-lsp 1.70.1); roblox-api-monitor download/diff/split strict audit 0 defects; audit-skill-examples 0 defects; check_claims --strict 911 claims, 0 stale, 0 uncovered; check_sources passed; test_unix.sh 48/48"
+    },
     {
       "date": "2026-10-22T16:30:00+07:00",
       "version": "2.19.0",

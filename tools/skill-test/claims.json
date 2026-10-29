@@ -6,7 +6,9 @@
   "GeometryService:CreateSolidPrimitive": "the row documents its removal",
   "Player.PlayerScripts": "a path to a child the engine creates, not a member",
   "Player.PlayerGui": "a path to a child the engine creates, not a member",
-  "Player.DeviceTrustLevel": "documented 2026-10-21 but in neither the 0.743 nor the 0.744 dump; the text says it does not exist yet"
+  "Player.DeviceTrustLevel": "documented 2026-10-21 but in neither the 0.743 nor the 0.744 dump; the text says it does not exist yet",
+  "Part.shap": "the 0.745 row documents its removal",
+  "Player.StepIdOffset": "the 0.745 row documents its removal"
  },
  "claims": [
   {
@@ -108,36 +110,6 @@
    "source": "metadata.json 2.15.0 verified_by",
    "evidence": "Summary of the 0.742 rows tested from playtest Scripts in 2.15.0 (orthographic Camera, TestService registry, CanUsersTransferRobuxAsync ... present but not enabled); the details are claims in legacy-migration.md.",
    "checked": "2026-10-11, engine 0.742.0.7421053"
-  },
-  {
-   "id": "SKILL-003",
-   "file": "SKILL.md",
-   "quote": "published, engine changes up to 0.744 and Luau up to 0.743) and worked examples tested in Studio, so consult",
-   "status": "source",
-   "kind": "number",
-   "source": "clientsettings; luau-lang releases",
-   "evidence": "Studio 0.744.0.7441077 ingested 2026-10-22; latest Luau release 0.743",
-   "checked": "2026-10-22, engine 0.744.0.7441077"
-  },
-  {
-   "id": "SKILL-004",
-   "file": "SKILL.md",
-   "quote": "**Engine**: Roblox Studio **0.744.0.7441077** with **Luau 0.743** (released 2026-10-16; no 0.744",
-   "status": "source",
-   "kind": "number",
-   "source": "clientsettings client-version; luau-lang/luau releases API",
-   "evidence": "WindowsStudio64/MacStudio 0.744.0.7441077 on 2026-10-22; latest Luau release 0.743 (2026-10-16)",
-   "checked": "2026-10-22, engine 0.744.0.7441077"
-  },
-  {
-   "id": "SKILL-005",
-   "file": "SKILL.md",
-   "quote": "release yet) — dump downloaded, re-split, and diffed against 0.743 on **2026-10-22**, with every",
-   "status": "source",
-   "kind": "number",
-   "source": "roblox-api-monitor.py 2026-10-22T08:20Z",
-   "evidence": "Downloaded, validated, diffed 0.743->0.744 (291 changes, 147 developer-visible), split, strict audit 0 defects",
-   "checked": "2026-10-22, engine 0.744.0.7441077"
   },
   {
    "id": "SKILL-008",
@@ -1530,16 +1502,6 @@
    "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
-   "id": "legacy-migration-062",
-   "file": "references/legacy-migration.md",
-   "quote": "`+TeleportOptions.ReservedServerId`, `+TeleportOptions.VipServerId`; `Enum.TeleportMethod` +`TeleportSwitchServer` | New public teleport targeting fields. The matching `TeleportService:TeleportSwitchServer()` is **`RobloxScriptSecurity`** — you cannot call it, so do not build on it",
-   "status": "dump",
-   "kind": "negative",
-   "source": "scratchpad verify_legacy_dump.py over local dumps 0.733-0.742 (81 assertions)",
-   "evidence": "TeleportOptions.ReservedServerId/VipServerId and TeleportMethod.TeleportSwitchServer new in 0.740; TeleportService:TeleportSwitchServer RobloxScriptSecurity.",
-   "checked": "2026-10-11, engine 0.742.0.7421053"
-  },
-  {
    "id": "legacy-migration-063",
    "file": "references/legacy-migration.md",
    "quote": "`WorldRoot.PhysicsStepTime` gained the **`ReadOnly`** tag | No action. It is `RobloxScriptSecurity` for both read and write, so game code could never touch it in the first place",
@@ -1678,16 +1640,6 @@
    "source": "DevForum topic 4677155 (Roblox Staff)",
    "evidence": "June 10 update: cross-game journeys such as gift sharing will be impacted.",
    "checked": "2026-10-11, engine 0.742.0.7421053"
-  },
-  {
-   "id": "luau-fundamentals-001",
-   "file": "references/luau-fundamentals.md",
-   "quote": "Reference for AI coding skill — verified against official Roblox documentation and Luau language release specs (**v0.743**, released 2026-10-16; engine 0.744.0.7441077, re-tested 2026-10-22; no Luau 0.744 release yet).",
-   "status": "source",
-   "kind": "number",
-   "source": "luau-lang/luau releases API; Studio 0.744.0.7441077, test place 118652544255235, 2026-10-22",
-   "evidence": "Latest release 0.743; engine-level rows re-run in Studio 0.744",
-   "checked": "2026-10-22, engine 0.744.0.7441077"
   },
   {
    "id": "luau-fundamentals-002",
@@ -1933,11 +1885,11 @@
    "id": "luau-fundamentals-026",
    "file": "references/luau-fundamentals.md",
    "quote": "**0.742** | `coroutine.finally` is no longer behind a `Debug` flag in the open-source VM | **Still not in Roblox.** See the table below: the gate was renamed, not removed, and `coroutine.finally` is `nil` in Studio 0.742",
-   "status": "studio",
-   "kind": "negative",
-   "source": "luau-lang/luau release 0.742 (GitHub releases API); execute_luau Edit",
-   "evidence": "Release: \"Stop gating coroutine.finally behind a debug flag\". Source 0.742: LuauCoroutineFinally gate; Studio 0.742: coroutine.finally is nil (2026-10-11).",
-   "checked": "2026-10-11, engine 0.742.0.7421053"
+   "status": "false",
+   "kind": "regression",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29 (probe Script, LocalScript, execute_luau); clientsettingscdn PCStudioApp/MacStudioApp/PCDesktopClient/MacDesktopClient/AndroidApp/iOSApp",
+   "evidence": "Outdated by Studio 0.745: typeof(coroutine.finally) == 'function' from a Script, a LocalScript and execute_luau; FFlagLuauCoroutineFinally True in Studio and all player-client flags.",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
   },
   {
    "id": "luau-fundamentals-027",
@@ -2030,16 +1982,6 @@
    "checked": "2026-10-17, engine 0.743.0.7431133"
   },
   {
-   "id": "luau-fundamentals-036",
-   "file": "references/luau-fundamentals.md",
-   "quote": "Prototype | Gate in 0.743 | Notes",
-   "status": "source",
-   "kind": "number",
-   "source": "luau-lang/luau 0.743 source tarball",
-   "evidence": "DebugLuauParseExactTables, DebugLuauExactTableTypes, DebugLuauUserDefinedClasses(+Runtime), LuauCoroutineFinally(+Analysis), DebugLuauWarnOnUnannotatedTopLevelFunctions, LuauIntegerLibrary all present, default off.",
-   "checked": "2026-10-17, engine 0.743.0.7431133"
-  },
-  {
    "id": "luau-fundamentals-037",
    "file": "references/luau-fundamentals.md",
    "quote": "**Exact tables by default** — `{ x: number }` rejects extra fields, `{ x: number, ... }` allows them (RFC luau-lang/rfcs#11), 0.740 | `DebugLuauParseExactTables`, `DebugLuauExactTableTypes` | The release note calls it \"an experimental feature\". Do not write `...` in a table type for Roblox",
@@ -2053,21 +1995,11 @@
    "id": "luau-fundamentals-039",
    "file": "references/luau-fundamentals.md",
    "quote": "**`coroutine.finally`** (RFC #187), 0.738 | `LuauCoroutineFinally`, `LuauCoroutineFinallyAnalysis` (renamed from `DebugLuauCoroutineFinally` in 0.742)",
-   "status": "studio",
-   "kind": "number",
-   "source": "luau-lang/luau source 0.737-0.743; playtest Script + LocalScript + execute_luau, Studio 0.743.0.7431133",
-   "evidence": "Gate unchanged in 0.743 (default off). coroutine.finally is nil from a server Script, a LocalScript and execute_luau in Studio 0.743.",
-   "checked": "2026-10-17, engine 0.743.0.7431133"
-  },
-  {
-   "id": "luau-fundamentals-040",
-   "file": "references/luau-fundamentals.md",
-   "quote": "Require top-level functions to be annotated, 0.738 | `DebugLuauWarnOnUnannotatedTopLevelFunctions` | A lint experiment",
-   "status": "source",
-   "kind": "number",
-   "source": "luau-lang/luau source tarballs 0.737-0.742; release 0.738",
-   "evidence": "DebugLuauWarnOnUnannotatedTopLevelFunctions first in the 0.738 source; release \"Prototype ... Requiring top-level functions to be annotated\".",
-   "checked": "2026-10-11, engine 0.742.0.7421053"
+   "status": "false",
+   "kind": "regression",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29 (probe Script, LocalScript, execute_luau); clientsettingscdn PCStudioApp/MacStudioApp/PCDesktopClient/MacDesktopClient/AndroidApp/iOSApp",
+   "evidence": "Outdated by Studio 0.745: coroutine.finally is a function and its flags are True; row removed from the not-usable table.",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
   },
   {
    "id": "luau-fundamentals-041",
@@ -2090,34 +2022,14 @@
    "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
-   "id": "luau-fundamentals-043",
-   "file": "references/luau-fundamentals.md",
-   "quote": "shows the path: a flag lost its `Debug` prefix (0.740), then became a Studio beta (2026-10-06),",
-   "status": "source",
-   "kind": "number",
-   "source": "luau-lang/luau source tarballs 0.737-0.742; DevForum topic 4918297 (Roblox Staff jjtangerine, 2026-10-06; post #41 Yuria_theWitch)",
-   "evidence": "0.739 DebugLuauIfLocal*, 0.740 LuauExperimentalIfLocal*; Studio beta 2026-10-06.",
-   "checked": "2026-10-11, engine 0.742.0.7421053"
-  },
-  {
-   "id": "luau-fundamentals-044",
-   "file": "references/luau-fundamentals.md",
-   "quote": "and only a full release makes it publishable. `coroutine.finally` took the first step in 0.742.",
-   "status": "source",
-   "kind": "negative",
-   "source": "luau-lang/luau release 0.742 (GitHub releases API)",
-   "evidence": "Debug gate removed for coroutine.finally in 0.742; still nil in Studio.",
-   "checked": "2026-10-11, engine 0.742.0.7421053"
-  },
-  {
    "id": "luau-fundamentals-045",
    "file": "references/luau-fundamentals.md",
    "quote": "There is **NO new standard-library function usable in Roblox in 0.736–0.743**",
-   "status": "source",
-   "kind": "number",
-   "source": "luau-lang/luau release notes 0.736-0.743",
-   "evidence": "0.743 notes: table.find faster, clearer read-only-property error, compiler local-slot reuse; no new library function.",
-   "checked": "2026-10-17, engine 0.743.0.7431133"
+   "status": "false",
+   "kind": "regression",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29 (probe Script, LocalScript, execute_luau); clientsettingscdn PCStudioApp/MacStudioApp/PCDesktopClient/MacDesktopClient/AndroidApp/iOSApp",
+   "evidence": "Outdated by Studio 0.745: coroutine.finally is a new callable standard-library function.",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
   },
   {
    "id": "luau-fundamentals-046",
@@ -4380,16 +4292,6 @@
    "checked": ""
   },
   {
-   "id": "worked-examples-016",
-   "file": "references/worked-examples.md",
-   "quote": "`UserInputService` → IAS. Neither `UserInputService` nor `ContextActionService` is deprecated;",
-   "status": "dump",
-   "kind": "negative",
-   "source": "API dump 0.742",
-   "evidence": "UserInputService tags NotCreatable/Service/NotReplicated; ContextActionService NotCreatable/Service; no Deprecated.",
-   "checked": "2026-10-11, engine 0.742.0.7421053"
-  },
-  {
    "id": "worked-examples-017",
    "file": "references/worked-examples.md",
    "quote": "A `Deprecated` tag often carries a `PreferredDescriptorName` naming the replacement — that is",
@@ -4680,26 +4582,6 @@
    "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
-   "id": "SKILL-052",
-   "file": "SKILL.md",
-   "quote": "developer-visible change run in Studio 0.744. 947 classes / 652 enums; locally, 266 class files",
-   "status": "dump",
-   "kind": "number",
-   "source": "API dump 0.744.0.7441077; Studio 0.744 probes",
-   "evidence": "947 classes, 652 enums, 266 *Service class files; developer-visible rows probed (legacy-migration 0.744 section)",
-   "checked": "2026-10-22, engine 0.744.0.7441077"
-  },
-  {
-   "id": "SKILL-053",
-   "file": "SKILL.md",
-   "quote": "named `*Service` (346 classes carry the `Service` tag) and 48 deprecated classes (574 members).",
-   "status": "dump",
-   "kind": "negative",
-   "source": "API dump 0.744.0.7441077",
-   "evidence": "346 classes tagged Service; 48 deprecated classes, 574 deprecated members (+Lighting.Technology)",
-   "checked": "2026-10-22, engine 0.744.0.7441077"
-  },
-  {
    "id": "SKILL-054",
    "file": "SKILL.md",
    "quote": "The docs page lists **26 tools**; the build observed 2026-10-11 (Studio 0.742) exposed **30**:",
@@ -4778,26 +4660,6 @@
    "source": "execute_luau / multi_edit runs, 2026-10-11",
    "evidence": "Historical observation as stated.",
    "checked": "2026-10-11, engine 0.742.0.7421053"
-  },
-  {
-   "id": "SKILL-059",
-   "file": "SKILL.md",
-   "quote": "**How much cheaper, re-measured 2026-10-22 on 0.744.0.7441077**",
-   "status": "studio",
-   "kind": "number",
-   "source": "Command in SKILL.md run 2026-10-22",
-   "evidence": "dump 8637337 B; 947 class files min 101 median 2059 mean 4863 max 105173",
-   "checked": "2026-10-22, engine 0.744.0.7441077"
-  },
-  {
-   "id": "SKILL-060",
-   "file": "SKILL.md",
-   "quote": "produced them): the full dump is **8,637,337 bytes**; the 947 split class files run **101 B min,",
-   "status": "studio",
-   "kind": "number",
-   "source": "Command in SKILL.md run 2026-10-22",
-   "evidence": "Same measurement; median/dump 0.024%, max/dump 1.22%",
-   "checked": "2026-10-22, engine 0.744.0.7441077"
   },
   {
    "id": "SKILL-061",
@@ -7030,26 +6892,6 @@
    "checked": "2026-10-17, engine 0.743.0.7431133"
   },
   {
-   "id": "SKILL-062",
-   "file": "SKILL.md",
-   "quote": "The docs page lists **26 tools**. The build observed 2026-10-17, 2026-10-21 (Studio 0.743) and 2026-10-22 (Studio 0.744) exposed **28**:",
-   "status": "studio",
-   "kind": "number",
-   "source": "MCP tool list of this session re-read 2026-10-22 (Studio 0.744.0.7441077, StudioMCP 2026-10-20)",
-   "evidence": "Same 28 tools and schemas; mcp.md latest commit aa6c8e18 2026-08-21",
-   "checked": "2026-10-22, engine 0.744.0.7441077"
-  },
-  {
-   "id": "SKILL-063",
-   "file": "SKILL.md",
-   "quote": "`capture_plugin_gui`, seen on 2026-10-11 (Studio 0.742), were gone. Detect what your host actually",
-   "status": "studio",
-   "kind": "number",
-   "source": "MCP tool list of this session (Studio 0.743.0.7431133, Studio MCP Proxy), 2026-10-17",
-   "evidence": "Both were in the 2026-10-11 session (Studio 0.742); absent on 2026-10-17.",
-   "checked": "2026-10-17, engine 0.743.0.7431133"
-  },
-  {
    "id": "mcp-integration-062",
    "file": "references/mcp-integration.md",
    "quote": "**Counts, stated precisely.** The official docs page lists **26 tools** (recounted 2026-10-17;",
@@ -7098,16 +6940,6 @@
    "source": "MCP tool list of this session (Studio 0.743.0.7431133, Studio MCP Proxy), 2026-10-17",
    "evidence": "Absent from the 2026-10-17 tool list; behaviour text is from the 2026-10-11 schema.",
    "checked": "2026-10-17, engine 0.743.0.7431133"
-  },
-  {
-   "id": "mcp-integration-073",
-   "file": "references/mcp-integration.md",
-   "quote": "**First-party skills exposed by the `skill` tool (unchanged from 2026-09-25 to 2026-10-22):**",
-   "status": "studio",
-   "kind": "number",
-   "source": "skill tool schema 2026-10-22",
-   "evidence": "Same 7 rbx-* skills",
-   "checked": "2026-10-22, engine 0.744.0.7441077"
   },
   {
    "id": "mcp-integration-074",
@@ -7268,26 +7100,6 @@
    "source": "Roblox/creator-docs 65621e8c AssetService.yaml, 710b20a5 BadgeService.yaml, 74006430 AudioFader.yaml and TextChannelWindow.yaml; Studio 0.743.0.7431133, test place 118652544255235, 2026-10-21",
    "evidence": "Docs text only for the first three (CreateAssetAsync not run: it uploads); TextChannelWindow UseDefaultFont=false and FontFace=Arcade set from a LocalScript, read back PressStart2P family",
    "checked": "2026-10-21, engine 0.743.0.7431133"
-  },
-  {
-   "id": "luau-fundamentals-072",
-   "file": "references/luau-fundamentals.md",
-   "quote": "re-checked 2026-10-21 and 2026-10-22 (Studio 0.744; ~25,600 flags each). None of the flags below is set there, and a Luau `FASTFLAGVARIABLE` defaults to **off**:",
-   "status": "source",
-   "kind": "number",
-   "source": "clientsettingscdn PCStudioApp (25,628) / MacStudioApp (25,590), 2026-10-22",
-   "evidence": "No ExactTable/UserDefinedClasses/CoroutineFinally/IntegerLibrary/BytecodeSlotAlloc/ExperimentalIfLocal key; IfLocal beta flags unchanged",
-   "checked": "2026-10-22, engine 0.744.0.7441077"
-  },
-  {
-   "id": "mcp-integration-077",
-   "file": "references/mcp-integration.md",
-   "quote": "the page last changed 2026-08-21, still its latest commit on 2026-10-22). The build observed on",
-   "status": "source",
-   "kind": "number",
-   "source": "GitHub API commits?path=studio/mcp.md, 2026-10-22",
-   "evidence": "Latest aa6c8e18 2026-08-21",
-   "checked": "2026-10-22, engine 0.744.0.7441077"
   },
   {
    "id": "mcp-integration-078",
@@ -7643,31 +7455,31 @@
    "id": "security-hardening-059",
    "file": "references/security-hardening.md",
    "quote": "**Device trust is documented but not in the engine yet.** Since 2026-10-21 the docs have",
-   "status": "docs",
-   "kind": "number",
-   "source": "Roblox/creator-docs 65621e8c enums PlayerDeviceTrustLevel.yaml / PlayerDeviceTrustDecision.yaml",
-   "evidence": "Both added 2026-10-21; items Pending, Unknown, None, Standard, Full",
-   "checked": "2026-10-21, engine 0.743.0.7431133"
+   "status": "false",
+   "kind": "regression",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29 (probe Script, LocalScript, execute_luau); clientsettingscdn PCStudioApp/MacStudioApp/PCDesktopClient/MacDesktopClient/AndroidApp/iOSApp",
+   "evidence": "Outdated by engine 0.745: Player.DeviceTrustLevel, both enums and IntegrityService are in the 0.745 dump and readable in Studio (Pending).",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
   },
   {
    "id": "security-hardening-060",
    "file": "references/security-hardening.md",
    "quote": "property **does not exist yet**: it is in neither the 0.743 nor the 0.744 API dump, and in Studio 0.743.0.7431133",
-   "status": "dump",
-   "kind": "negative",
-   "source": "0.743.0.7431133 and 0.744.0.7441077 Full API Dumps, 2026-10-21",
-   "evidence": "No DeviceTrustLevel member on Player; no PlayerDeviceTrust* enum",
-   "checked": "2026-10-21, engine 0.743.0.7431133"
+   "status": "false",
+   "kind": "regression",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29 (probe Script, LocalScript, execute_luau); clientsettingscdn PCStudioApp/MacStudioApp/PCDesktopClient/MacDesktopClient/AndroidApp/iOSApp",
+   "evidence": "Outdated by engine 0.745: the property is in the 0.745 dump.",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
   },
   {
    "id": "security-hardening-061",
    "file": "references/security-hardening.md",
    "quote": "`Enum.PlayerDeviceTrustLevel` raises an error (tested). Do not write anti-cheat code against",
-   "status": "studio",
-   "kind": "negative",
-   "source": "Studio 0.743.0.7431133, test place 118652544255235, 2026-10-21",
-   "evidence": "execute_luau: pcall(function() return Enum.PlayerDeviceTrustLevel end) -> false",
-   "checked": "2026-10-21, engine 0.743.0.7431133"
+   "status": "false",
+   "kind": "regression",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29 (probe Script, LocalScript, execute_luau); clientsettingscdn PCStudioApp/MacStudioApp/PCDesktopClient/MacDesktopClient/AndroidApp/iOSApp",
+   "evidence": "Outdated by engine 0.745: Enum.PlayerDeviceTrustLevel exists (Pending=0..Full=4).",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
   },
   {
    "id": "security-hardening-062",
@@ -7718,16 +7530,6 @@
    "source": "API dump 0.743.0.7431133",
    "evidence": "Sound.AudioContent and AudioPlayer.AudioContent Tags [Hidden]; both lose Hidden in the 0.744 dump",
    "checked": "2026-10-21, engine 0.743.0.7431133"
-  },
-  {
-   "id": "SKILL-066",
-   "file": "SKILL.md",
-   "quote": "The official docs were checked through 2026-10-22.",
-   "status": "source",
-   "kind": "number",
-   "source": "Roblox/creator-docs commits API since 2026-10-21T10:12Z, read 2026-10-22",
-   "evidence": "No commits after 65621e8c; engine reference STUDIO_VERSION still 0.743.0.7431133",
-   "checked": "2026-10-22, engine 0.744.0.7441077"
   },
   {
    "id": "false-200-locals-not-in-studio",
@@ -7998,6 +7800,1326 @@
    "source": "Studio 0.744.0.7441077, server Script probe, 2026-10-22; dump 0.744",
    "evidence": "AudioSearchParams SortType=MostUsed and MaxPageSize=5 set and read back; AssetService.SearchAudio Deprecated -> SearchAudioAsync (dump); SearchAudioAsync not run",
    "checked": "2026-10-22, engine 0.744.0.7441077"
+  },
+  {
+   "id": "SKILL-052",
+   "file": "SKILL.md",
+   "quote": "published, engine changes up to 0.745 and Luau up to 0.744) and worked examples tested in Studio, so consult",
+   "status": "dump",
+   "kind": "number",
+   "source": "API dumps 0.744.0.7441077 and 0.745.0.7451137 (diff-api-dumps.py, 83 changes / 47 developer-visible); Luau 0.744 release 2026-10-23",
+   "evidence": "949 classes (+FeatureMatchingService, FeatureMatchingSession, IntegrityService; -BulkImportService), 654 enums (+PlayerDeviceTrustDecision, +PlayerDeviceTrustLevel), 267 *Service class files, 347 Service-tagged, 48 deprecated classes, 574 deprecated members in both dumps",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "SKILL-053",
+   "file": "SKILL.md",
+   "quote": "**Engine**: Roblox Studio **0.745.0.7451137** with **Luau 0.744** (released 2026-10-23) — dump",
+   "status": "dump",
+   "kind": "number",
+   "source": "API dumps 0.744.0.7441077 and 0.745.0.7451137 (diff-api-dumps.py, 83 changes / 47 developer-visible); Luau 0.744 release 2026-10-23",
+   "evidence": "949 classes (+FeatureMatchingService, FeatureMatchingSession, IntegrityService; -BulkImportService), 654 enums (+PlayerDeviceTrustDecision, +PlayerDeviceTrustLevel), 267 *Service class files, 347 Service-tagged, 48 deprecated classes, 574 deprecated members in both dumps",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "SKILL-059",
+   "file": "SKILL.md",
+   "quote": "downloaded, re-split, and diffed against 0.744 on **2026-10-29**, with every developer-visible",
+   "status": "dump",
+   "kind": "number",
+   "source": "API dumps 0.744.0.7441077 and 0.745.0.7451137 (diff-api-dumps.py, 83 changes / 47 developer-visible); Luau 0.744 release 2026-10-23",
+   "evidence": "949 classes (+FeatureMatchingService, FeatureMatchingSession, IntegrityService; -BulkImportService), 654 enums (+PlayerDeviceTrustDecision, +PlayerDeviceTrustLevel), 267 *Service class files, 347 Service-tagged, 48 deprecated classes, 574 deprecated members in both dumps",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "SKILL-060",
+   "file": "SKILL.md",
+   "quote": "change run in Studio 0.745. 949 classes / 654 enums; locally, 267 class files named `*Service`",
+   "status": "dump",
+   "kind": "number",
+   "source": "API dumps 0.744.0.7441077 and 0.745.0.7451137 (diff-api-dumps.py, 83 changes / 47 developer-visible); Luau 0.744 release 2026-10-23",
+   "evidence": "949 classes (+FeatureMatchingService, FeatureMatchingSession, IntegrityService; -BulkImportService), 654 enums (+PlayerDeviceTrustDecision, +PlayerDeviceTrustLevel), 267 *Service class files, 347 Service-tagged, 48 deprecated classes, 574 deprecated members in both dumps",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "SKILL-062",
+   "file": "SKILL.md",
+   "quote": "(347 classes carry the `Service` tag) and 48 deprecated classes (574 members). The official docs",
+   "status": "dump",
+   "kind": "negative",
+   "source": "API dumps 0.744.0.7441077 and 0.745.0.7451137 (diff-api-dumps.py, 83 changes / 47 developer-visible); Luau 0.744 release 2026-10-23",
+   "evidence": "949 classes (+FeatureMatchingService, FeatureMatchingSession, IntegrityService; -BulkImportService), 654 enums (+PlayerDeviceTrustDecision, +PlayerDeviceTrustLevel), 267 *Service class files, 347 Service-tagged, 48 deprecated classes, 574 deprecated members in both dumps",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "SKILL-063",
+   "file": "SKILL.md",
+   "quote": "were checked through 2026-10-29. New in 0.745 and usable: `coroutine.finally`, the `Shapecast`",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) (STUDIO_VERSION 0.745.0.7451137 since f7a0847 2026-10-22)",
+   "evidence": "coroutine.finally a function; Shapecast cframeOverride hit a target 1000 studs from the part (8.5) and sizeOverride 20-wide hit an off-centre target the 2-wide cast missed; DeviceTrustLevel Pending; Capsule warning; BindTo*Parallel / BakeToMeshAsync / AddFace refused",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "SKILL-065",
+   "file": "SKILL.md",
+   "quote": "The docs page lists **26 tools**. The build observed 2026-10-29 (Studio 0.745) exposed **31**:",
+   "status": "studio",
+   "kind": "number",
+   "source": "Live Roblox_Studio MCP tool list and schemas in this session (Studio 0.745.0.7451137), 2026-10-29; Roblox/creator-docs studio/mcp.md unchanged since 2026-08-21",
+   "evidence": "31 tools: the 28 of 2026-10-22 plus list_skills, create_skill, edit_skill (schemas read; list_skills run; create/edit not run). Other schemas unchanged",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "SKILL-066",
+   "file": "SKILL.md",
+   "quote": "`list_skills`, `create_skill` and `edit_skill` (28 on 2026-10-17 to 2026-10-22, Studio",
+   "status": "studio",
+   "kind": "number",
+   "source": "Live Roblox_Studio MCP tool list and schemas in this session (Studio 0.745.0.7451137), 2026-10-29; Roblox/creator-docs studio/mcp.md unchanged since 2026-08-21",
+   "evidence": "31 tools: the 28 of 2026-10-22 plus list_skills, create_skill, edit_skill (schemas read; list_skills run; create/edit not run). Other schemas unchanged",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "SKILL-067",
+   "file": "SKILL.md",
+   "quote": "0.743–0.744; `list_plugin_guis` and `capture_plugin_gui`, seen on 2026-10-11 in Studio 0.742,",
+   "status": "studio",
+   "kind": "number",
+   "source": "Live Roblox_Studio MCP tool list and schemas in this session (Studio 0.745.0.7451137), 2026-10-29; Roblox/creator-docs studio/mcp.md unchanged since 2026-08-21",
+   "evidence": "31 tools: the 28 of 2026-10-22 plus list_skills, create_skill, edit_skill (schemas read; list_skills run; create/edit not run). Other schemas unchanged",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "SKILL-068",
+   "file": "SKILL.md",
+   "quote": "**How much cheaper, re-measured 2026-10-29 on 0.745.0.7451137** (an earlier \"845× smaller\" figure",
+   "status": "studio",
+   "kind": "number",
+   "source": "Command in SKILL.md run 2026-10-29 on ~/RobloxDocs 0.745.0.7451137",
+   "evidence": "dump 8677424 B; 949 class files min 101, median 2065, mean 4876, max 105774",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "SKILL-069",
+   "file": "SKILL.md",
+   "quote": "produced them): the full dump is **8,677,424 bytes**; the 949 split class files run **101 B min,",
+   "status": "studio",
+   "kind": "number",
+   "source": "Command in SKILL.md run 2026-10-29 on ~/RobloxDocs 0.745.0.7451137",
+   "evidence": "dump 8677424 B; 949 class files min 101, median 2065, mean 4876, max 105774",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "file-formats-and-assets-030",
+   "file": "references/file-formats-and-assets.md",
+   "quote": "**Emissive Decals**: Decals now support `EmissiveMaskContent`, `EmissiveStrength`, and `EmissiveTint` for glowing surfaces, neon signage, and futuristic sci-fi displays without extra light sources. Documented on the `Decal` page since 2026-10-22: the mask is a grayscale image (white glows, black does not) and assigning one makes the decal PBR. A Script can set `EmissiveStrength` and `EmissiveTint`, but writing `EmissiveMaskContent` fails `lacking capability Plugin` (Studio 0.745), so set the mask in the Properties window.",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) Decal.yaml",
+   "evidence": "EmissiveStrength 1 -> 3, EmissiveTint white -> red set from a Script; EmissiveMaskContent write 'lacking capability Plugin'",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "legacy-migration-166",
+   "file": "references/legacy-migration.md",
+   "quote": "Derived by diffing the **0.744 and 0.745 Full API Dumps locally** with",
+   "status": "dump",
+   "kind": "number",
+   "source": "API dumps 0.744.0.7441077 and 0.745.0.7451137 (diff-api-dumps.py, 83 changes / 47 developer-visible); Luau 0.744 release 2026-10-23",
+   "evidence": "949 classes (+FeatureMatchingService, FeatureMatchingSession, IntegrityService; -BulkImportService), 654 enums (+PlayerDeviceTrustDecision, +PlayerDeviceTrustLevel), 267 *Service class files, 347 Service-tagged, 48 deprecated classes, 574 deprecated members in both dumps",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "legacy-migration-167",
+   "file": "references/legacy-migration.md",
+   "quote": "`tools/robloxdocs/diff-api-dumps.py`, 2026-10-29. **949 classes (+3, −1), 654 enums (+2), 267",
+   "status": "dump",
+   "kind": "number",
+   "source": "API dumps 0.744.0.7441077 and 0.745.0.7451137 (diff-api-dumps.py, 83 changes / 47 developer-visible); Luau 0.744 release 2026-10-23",
+   "evidence": "949 classes (+FeatureMatchingService, FeatureMatchingSession, IntegrityService; -BulkImportService), 654 enums (+PlayerDeviceTrustDecision, +PlayerDeviceTrustLevel), 267 *Service class files, 347 Service-tagged, 48 deprecated classes, 574 deprecated members in both dumps",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "legacy-migration-168",
+   "file": "references/legacy-migration.md",
+   "quote": "classes named `*Service` (347 tagged `Service`), 48 deprecated classes (574 members).** 83",
+   "status": "dump",
+   "kind": "negative",
+   "source": "API dumps 0.744.0.7441077 and 0.745.0.7451137 (diff-api-dumps.py, 83 changes / 47 developer-visible); Luau 0.744 release 2026-10-23",
+   "evidence": "949 classes (+FeatureMatchingService, FeatureMatchingSession, IntegrityService; -BulkImportService), 654 enums (+PlayerDeviceTrustDecision, +PlayerDeviceTrustLevel), 267 *Service class files, 347 Service-tagged, 48 deprecated classes, 574 deprecated members in both dumps",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "legacy-migration-169",
+   "file": "references/legacy-migration.md",
+   "quote": "changes, 47 developer-visible. Luau 0.744 (2026-10-23), see `luau-fundamentals.md`. Every row",
+   "status": "dump",
+   "kind": "number",
+   "source": "API dumps 0.744.0.7441077 and 0.745.0.7451137 (diff-api-dumps.py, 83 changes / 47 developer-visible); Luau 0.744 release 2026-10-23",
+   "evidence": "949 classes (+FeatureMatchingService, FeatureMatchingSession, IntegrityService; -BulkImportService), 654 enums (+PlayerDeviceTrustDecision, +PlayerDeviceTrustLevel), 267 *Service class files, 347 Service-tagged, 48 deprecated classes, 574 deprecated members in both dumps",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "legacy-migration-170",
+   "file": "references/legacy-migration.md",
+   "quote": "marked *(Studio)* was run in Studio 0.745.0.7451137 from an ordinary server `Script`, a",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) (STUDIO_VERSION 0.745.0.7451137 since f7a0847 2026-10-22)",
+   "evidence": "coroutine.finally a function; Shapecast cframeOverride hit a target 1000 studs from the part (8.5) and sizeOverride 20-wide hit an off-centre target the 2-wide cast missed; DeviceTrustLevel Pending; Capsule warning; BindTo*Parallel / BakeToMeshAsync / AddFace refused",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "legacy-migration-171",
+   "file": "references/legacy-migration.md",
+   "quote": "were removed. The engine reference on create.roblox.com reads 0.745 (`STUDIO_VERSION`) since",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) (STUDIO_VERSION 0.745.0.7451137 since f7a0847 2026-10-22)",
+   "evidence": "coroutine.finally a function; Shapecast cframeOverride hit a target 1000 studs from the part (8.5) and sizeOverride 20-wide hit an off-centre target the 2-wide cast missed; DeviceTrustLevel Pending; Capsule warning; BindTo*Parallel / BakeToMeshAsync / AddFace refused",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "legacy-migration-172",
+   "file": "references/legacy-migration.md",
+   "quote": "2026-10-22.",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) (STUDIO_VERSION 0.745.0.7451137 since f7a0847 2026-10-22)",
+   "evidence": "coroutine.finally a function; Shapecast cframeOverride hit a target 1000 studs from the part (8.5) and sizeOverride 20-wide hit an off-centre target the 2-wide cast missed; DeviceTrustLevel Pending; Capsule warning; BindTo*Parallel / BakeToMeshAsync / AddFace refused",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "legacy-migration-173",
+   "file": "references/legacy-migration.md",
+   "quote": "what is new in the dump does not: `PartType.Capsule`, the parallel `BindTo*` methods,",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) (STUDIO_VERSION 0.745.0.7451137 since f7a0847 2026-10-22)",
+   "evidence": "coroutine.finally a function; Shapecast cframeOverride hit a target 1000 studs from the part (8.5) and sizeOverride 20-wide hit an off-centre target the 2-wide cast missed; DeviceTrustLevel Pending; Capsule warning; BindTo*Parallel / BakeToMeshAsync / AddFace refused",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "legacy-migration-174",
+   "file": "references/legacy-migration.md",
+   "quote": "**`Enum.PartType` +`Capsule` (5)** | **Not usable yet.** Setting `Part.Shape = Enum.PartType.Capsule` is accepted and reads back `Capsule`, but Studio warns `PartType.Capsule is not available yet. Parts with this Shape behave as Block.` and a 4×10×2 capsule had the mass of a block (56) and landed flat *(Studio)*. Keep `Ball` / `Cylinder` or a capsule `MeshPart`",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards)",
+   "evidence": "Shape=Capsule read back Capsule; warning 'PartType.Capsule is not available yet. Parts with this Shape behave as Block.'; 4x10x2 mass 56 (block), landed with Orientation 0,0,0",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "legacy-migration-175",
+   "file": "references/legacy-migration.md",
+   "quote": "**`Player.DeviceTrustLevel`** (`Enum.PlayerDeviceTrustLevel`), `+IntegrityService` (`EvaluatePlayerDeviceTrust` callback), `+Enum.PlayerDeviceTrustDecision` | **Now in the engine** (they were documented on 2026-10-21 before they shipped). In a playtest the level stays `Pending` on the server and on the player's own client and the callback is never called, as the docs say; assigning the callback from a LocalScript fails `EvaluatePlayerDeviceTrust can only be assigned on the server` *(Studio)*. See `security-hardening.md` → *Device trust*",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); API dumps 0.744.0.7441077 and 0.745.0.7451137 (diff-api-dumps.py, 83 changes / 47 developer-visible); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) scripting/security/device-trust.md",
+   "evidence": "Server and own client read Pending; unchanged after 12 s; callback calls 0; LocalScript assign error 'EvaluatePlayerDeviceTrust can only be assigned on the server'",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "legacy-migration-176",
+   "file": "references/legacy-migration.md",
+   "quote": "`TeleportOptions.ReservedServerId` / `VipServerId` (in the dump since 0.740); the docs deprecate `TeleportService:ReserveServerAsync` and `TeleportOptions.ReservedServerAccessCode` / `ShouldReserveServer` (2026-10-27) | **The replacement refuses in Studio.** `TeleportAsync` with `ReservedServerId` fails `ReservedServerId and VipServerId require the Access Code V2 feature, which is not enabled on this server.` *(Studio)*. A live server was not tested. The dump does **not** tag `ReserveServerAsync` as deprecated, and the docs say it keeps working. See `networking.md` → *Teleporting to reserved and VIP servers*",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); dumps 0.739/0.740/0.745 (ReservedServerId first in 0.740); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) projects/teleport-private-servers.md, TeleportService.yaml",
+   "evidence": "TeleportAsync with ReservedServerId (alone or with another field) failed 'ReservedServerId and VipServerId require the Access Code V2 feature, which is not enabled on this server.'; plain TeleportAsync 'Request Context Failure'; ReserveServerAsync 'HTTP 403 (Forbidden)'; non-GUID string set ok; ReserveServerAsync has no Deprecated tag in 0.745",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "legacy-migration-177",
+   "file": "references/legacy-migration.md",
+   "quote": "`+RunService:BindToSimulationParallel()` / `BindToAnimationParallel()` (`Basic`) | **Not enabled:** from an `Actor`-parented Script and from a plain Script both fail `RunService:BindToSimulationParallel() is not enabled`. The serial `BindToSimulation` returned a connection from the same Actor *(Studio)*. The `RunService` page documents both",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards)",
+   "evidence": "Actor-parented Script and plain Script: 'RunService:BindToSimulationParallel() is not enabled' / BindToAnimationParallel same; serial BindToSimulation returned RBXScriptConnection",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "legacy-migration-178",
+   "file": "references/legacy-migration.md",
+   "quote": "`StarterPlayer.CreateDefaultPlayerModule` (`RobloxScriptSecurity` → **`None` + `PluginOrOpenCloud`**), `Players.BanningEnabled` and `UseStrafingAnimations` (`NotScriptable` dropped, + `PluginOrOpenCloud`) | **Plugin-only.** A Script and a LocalScript fail to read and write all three (`lacking capability PluginOrOpenCloud`); `execute_luau` reads them (`true`) *(Studio)*. Set them in the Properties window",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards)",
+   "evidence": "Script and LocalScript: cannot read/write CreateDefaultPlayerModule, BanningEnabled, UseStrafingAnimations (lacking capability PluginOrOpenCloud); execute_luau read true, true, true",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "legacy-migration-179",
+   "file": "references/legacy-migration.md",
+   "quote": "`Workspace.AuthorityMode` | The `Workspace` page (2026-10-22) lists it as `Security: None`, but the 0.745 dump still has `RobloxScriptSecurity`, and a Script, a LocalScript and `execute_luau` all fail `lacking capability RobloxScript` *(Studio)*. The page is ahead of the engine; set it in the Properties window",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) Workspace.yaml",
+   "evidence": "Docs: AuthorityMode read/write None (Basic). Dump 0.745 RobloxScriptSecurity. Script, LocalScript, execute_luau: 'cannot read AuthorityMode (lacking capability RobloxScript)'",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "legacy-migration-180",
+   "file": "references/legacy-migration.md",
+   "quote": "`AvatarClothingRules`: `ClassicShirtsAccessoryOverride` → `ClassicShirtOverride`, `ClassicPantsAccessoryOverride` → `ClassicPantsOverride`, `ClassicTShirtsAccessoryOverride` → `ClassicTShirtOverride`, `LeftShoesAccessoryOverride` → `LeftShoeAccessoryOverride`, `RightShoesAccessoryOverride` → `RightShoeAccessoryOverride`; `+AvatarCollisionRules.BodyPartsCollidableOnDeath` | **Renamed without an alias:** the old names fail `is not a valid member`, the new ones read `0` *(Studio)*. Rename them in any 0.744 code. `BodyPartsCollidableOnDeath` defaults to `true` and is writable *(Studio)*; like the other rules (0.744 row) no effect was checked",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); API dumps 0.744.0.7441077 and 0.745.0.7451137 (diff-api-dumps.py, 83 changes / 47 developer-visible)",
+   "evidence": "New names read 0; ClassicShirtsAccessoryOverride 'is not a valid member of AvatarClothingRules'; BodyPartsCollidableOnDeath true -> false",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "legacy-migration-181",
+   "file": "references/legacy-migration.md",
+   "quote": "`EditableMesh:AddFace(vertexIds)` → `AddFace(...)` (a tuple, `CustomLuaState`); the page now shows `AddFace(v0, v1, v2)` | **Not available:** `AddFace` fails `EditableMesh API function not available` with a tuple, a table, or 2 IDs, in a playtest and in Edit. `AddTriangle(v0, v1, v2)` works *(Studio)*. Keep `AddTriangle`",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) EditableMesh.yaml",
+   "evidence": "AddFace tuple3/tuple4/table/2 ids: 'EditableMesh API function not available' (playtest and Edit); AddTriangle returned a face id, GetFaces 1",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "legacy-migration-182",
+   "file": "references/legacy-migration.md",
+   "quote": "`+GeometryService:BakeToMeshAsync(input, options?)` → `MeshPart`, `+AssetService:GetLatestVersionUriAsync(asset)` → `Content`, `+SceneAnalysisService:GetCollisionGeometryMemoryAsync()` | **Not available:** `BakeToMeshAsync: This API is not available yet`, `GetLatestVersionUriAsync is not available yet`, `SceneAnalysisService is not enabled` *(Studio)*. No docs page for any of them",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards)",
+   "evidence": "'GeometryService:BakeToMeshAsync: This API is not available yet', 'AssetService:GetLatestVersionUriAsync is not available yet', 'SceneAnalysisService is not enabled'; FluidForceSensor BuoyancyForce/Torque 0,0,0",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "legacy-migration-183",
+   "file": "references/legacy-migration.md",
+   "quote": "`+TestExecutionContext:Skip(reason)`, `+TestResult.SkipReason`; `TestService` / `TestSuite:RegisterTest` gain an `options` dictionary | **Still not enabled.** `RegisterTest` now fails `TestService test registration isn't enabled in this session yet.` (the 0.742 message was \"Feature flag is disabled.\") *(Studio)*",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards)",
+   "evidence": "RegisterTest: 'TestService test registration isn't enabled in this session yet.'",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "legacy-migration-184",
+   "file": "references/legacy-migration.md",
+   "quote": "`TextDocument.TextContent` (`PluginSecurity` → `None` + `PluginOrOpenCloud`); `ScriptEditorService:OpenTemporaryDocumentAsync` gains `options`; `+OpenTextDocumentDocumentAsync` (`RobloxScriptSecurity`) | Plugin APIs (*dump only*)",
+   "status": "dump",
+   "kind": "negative",
+   "source": "API dumps 0.744.0.7441077 and 0.745.0.7451137 (diff-api-dumps.py, 83 changes / 47 developer-visible)",
+   "evidence": "TextDocument.TextContent None/None + PluginOrOpenCloud; OpenTemporaryDocumentAsync options; OpenTextDocumentDocumentAsync RobloxScriptSecurity",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "legacy-migration-185",
+   "file": "references/legacy-migration.md",
+   "quote": "`PhysicsActivitySensor.Position` / `Size` now `NotReplicated`; `TextChannelWindow` no longer `NotBrowsable` (shown in the Explorer's insert menu) | No action. `PhysicsActivitySensor` still needs `InternalTest` to create *(Studio)*",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); API dumps 0.744.0.7441077 and 0.745.0.7451137 (diff-api-dumps.py, 83 changes / 47 developer-visible)",
+   "evidence": "PhysicsActivitySensor create: lacking capability InternalTest; AvatarUnificationMode not a valid member of Workspace; GetAllCollections lacking capability RobloxScript; removals per dump diff",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "legacy-migration-186",
+   "file": "references/legacy-migration.md",
+   "quote": "`Enum.AvatarUnificationMode`: every item now tagged `Deprecated` | Matches the 2026-10-20 docs. The property is still `NotScriptable` (a Script gets \"is not a valid member of Workspace\") *(Studio)*",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); API dumps 0.744.0.7441077 and 0.745.0.7451137 (diff-api-dumps.py, 83 changes / 47 developer-visible)",
+   "evidence": "PhysicsActivitySensor create: lacking capability InternalTest; AvatarUnificationMode not a valid member of Workspace; GetAllCollections lacking capability RobloxScript; removals per dump diff",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "legacy-migration-187",
+   "file": "references/legacy-migration.md",
+   "quote": "**Removed:** `BulkImportService` (every member was `RobloxScriptSecurity`), `Part.shap` (a stray, typo'd property), `Player.StepIdOffset` (`RobloxSecurity`) | Nothing to migrate",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); API dumps 0.744.0.7441077 and 0.745.0.7451137 (diff-api-dumps.py, 83 changes / 47 developer-visible)",
+   "evidence": "PhysicsActivitySensor create: lacking capability InternalTest; AvatarUnificationMode not a valid member of Workspace; GetAllCollections lacking capability RobloxScript; removals per dump diff",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "legacy-migration-188",
+   "file": "references/legacy-migration.md",
+   "quote": "Roblox-internal (*dump only*): `FeatureMatchingService` / `FeatureMatchingSession` (both need the `InternalTest` capability), `CloudClientService` reservations, `CollectionService:GetAllCollections` (a Script fails `lacking capability RobloxScript` *(Studio)*), `MarketplaceService:PromptNativePurchaseWithContext`, `AnimatedImageService` / `AnimationClipProvider` / `AnimationPlayer.Ended` / `Stopped`, `Audio*.Streaming`, `LinkingService:RegisterLuaUrlWithPolicy`, `Humanoid.BodyPartsCollidableOnDeath` (`NotScriptable`) | Ignore for game code",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); API dumps 0.744.0.7441077 and 0.745.0.7451137 (diff-api-dumps.py, 83 changes / 47 developer-visible)",
+   "evidence": "PhysicsActivitySensor create: lacking capability InternalTest; AvatarUnificationMode not a valid member of Workspace; GetAllCollections lacking capability RobloxScript; removals per dump diff",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "legacy-migration-189",
+   "file": "references/legacy-migration.md",
+   "quote": "From the Roblox/creator-docs commits of 2026-10-22 to 2026-10-29 (`65621e8..c8f5276`), checked",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) (STUDIO_VERSION 0.745.0.7451137 since f7a0847 2026-10-22)",
+   "evidence": "coroutine.finally a function; Shapecast cframeOverride hit a target 1000 studs from the part (8.5) and sizeOverride 20-wide hit an off-centre target the 2-wide cast missed; DeviceTrustLevel Pending; Capsule warning; BindTo*Parallel / BakeToMeshAsync / AddFace refused",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "legacy-migration-190",
+   "file": "references/legacy-migration.md",
+   "quote": "against the 0.745 dump and, where marked *(Studio)*, run in Studio 0.745.0.7451137 on 2026-10-29.",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) (STUDIO_VERSION 0.745.0.7451137 since f7a0847 2026-10-22)",
+   "evidence": "coroutine.finally a function; Shapecast cframeOverride hit a target 1000 studs from the part (8.5) and sizeOverride 20-wide hit an off-centre target the 2-wide cast missed; DeviceTrustLevel Pending; Capsule warning; BindTo*Parallel / BakeToMeshAsync / AddFace refused",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "legacy-migration-191",
+   "file": "references/legacy-migration.md",
+   "quote": "**Device trust guide** (`scripting/security/device-trust.md`, new) and `IntegrityService` / `Player.DeviceTrustLevel` pages | See `security-hardening.md` → *Device trust* and the 0.745 row above",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); API dumps 0.744.0.7441077 and 0.745.0.7451137 (diff-api-dumps.py, 83 changes / 47 developer-visible); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) scripting/security/device-trust.md",
+   "evidence": "Server and own client read Pending; unchanged after 12 s; callback calls 0; LocalScript assign error 'EvaluatePlayerDeviceTrust can only be assigned on the server'",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "legacy-migration-192",
+   "file": "references/legacy-migration.md",
+   "quote": "**Teleport to private servers** (`projects/teleport-private-servers.md`, new); `TeleportService:ReserveServerAsync`, `TeleportToPrivateServer`, `TeleportOptions.ReservedServerAccessCode` / `ShouldReserveServer` described as deprecated; `DataModel.PrivateServerId` now says \"VIP server or reserved server\" | See `networking.md` → *Teleporting to reserved and VIP servers*. The replacement fields refuse in Studio (0.745 row)",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); dumps 0.739/0.740/0.745 (ReservedServerId first in 0.740); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) projects/teleport-private-servers.md, TeleportService.yaml",
+   "evidence": "TeleportAsync with ReservedServerId (alone or with another field) failed 'ReservedServerId and VipServerId require the Access Code V2 feature, which is not enabled on this server.'; plain TeleportAsync 'Request Context Failure'; ReserveServerAsync 'HTTP 403 (Forbidden)'; non-GUID string set ok; ReserveServerAsync has no Deprecated tag in 0.745",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "legacy-migration-193",
+   "file": "references/legacy-migration.md",
+   "quote": "`ContextActionService:BindAction()` and the related binding methods are \"not recommended for new work and planned for deprecation\" in favour of the Input Action System | **Not deprecated yet**: `BindAction` has no `Deprecated` tag in the 0.745 dump. Write new input code with IAS (`project-structure.md`); existing CAS code keeps working",
+   "status": "docs",
+   "kind": "negative",
+   "source": "Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) ContextActionService.yaml (f7a0847..142c105); dump 0.745",
+   "evidence": "Page: 'aren't recommended for new work and are planned for deprecation'; BindAction has no Deprecated tag in 0.745",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "legacy-migration-194",
+   "file": "references/legacy-migration.md",
+   "quote": "*Users and scoped user IDs* page rewritten (2026-10-23): one **effective user ID** per game, group or app; \"`Player.User.Id` equals `Player.UserId`\"; scoped IDs \"have not rolled out broadly yet\" | **Not what Studio shows.** For the same account in Studio 0.745, `player.UserId` is `8935399566` and `player.User.Id` is `1237928291809` *(Studio)*, as in 0.742. No staff post in DevForum topic 4677155 since 2026-09-01 (checked 2026-10-29). See *Scoped User Identifiers* below",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) players/users.md (46be165, 2026-10-23); DevForum topic 4677155 posts.json (staff posts: last 2026-09-01; #361)",
+   "evidence": "UserId 8935399566, User.Id 1237928291809, User.fromId(UserId).Id 8935399566; page says Player.User.Id equals Player.UserId",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "legacy-migration-195",
+   "file": "references/legacy-migration.md",
+   "quote": "`BasePart:GetJoints()` returns only joints and constraints that are **active**: both parts must be in the same simulated container (`Workspace` or one `WorldModel`) | A weld to a part in `ServerStorage` is not returned on either part (*docs*)",
+   "status": "docs",
+   "kind": "negative",
+   "source": "Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) BasePart.yaml, MarketplaceService.yaml, parts/custom-terrain-materials.md, projects/server-authority/index.md",
+   "evidence": "Text as quoted; ExpandedTerrain NotScriptable confirmed in Studio ('is not a valid member of Workspace')",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "legacy-migration-196",
+   "file": "references/legacy-migration.md",
+   "quote": "`GamepadService:EnableGamepadCursor(guiObject?)`: the page says the argument may be omitted | **Not in 0.745:** calling it with no argument fails `Argument 1 missing or nil` from a LocalScript *(Studio)*. Pass `nil` explicitly",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) GamepadService.yaml",
+   "evidence": "LocalScript EnableGamepadCursor(): 'Argument 1 missing or nil'",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "legacy-migration-197",
+   "file": "references/legacy-migration.md",
+   "quote": "`MarketplaceService:PromptGamePassPurchase` / `PromptProductPurchase`: a pass or developer product from **another** game fails, even if you own both; Studio's mocked purchase does not check this | Verify every ID belongs to the current game before you publish; a Studio test does not catch it (*docs*)",
+   "status": "docs",
+   "kind": "negative",
+   "source": "Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) BasePart.yaml, MarketplaceService.yaml, parts/custom-terrain-materials.md, projects/server-authority/index.md",
+   "evidence": "Text as quoted; ExpandedTerrain NotScriptable confirmed in Studio ('is not a valid member of Workspace')",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "legacy-migration-198",
+   "file": "references/legacy-migration.md",
+   "quote": "`AssetService:PromptCreatePlatformContentAsync(player, object, assetType)` replaces `PromptCreateAssetAsync` (which left the dump in 0.737): players can publish an `EditableImage` as an `Enum.AssetType.Image`; packages from an `Instance` are not supported now | Needs a server Script, a published place and **Allow Mesh/Image APIs** (*docs*; not run, it opens a publish dialog). `PromptCreateAssetAsync` is \"not a valid member of AssetService\" *(Studio)*",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) projects/assets/in-experience-asset-creation.md; dumps 0.736/0.737",
+   "evidence": "PromptCreateAssetAsync last in 0.736 dump; Script: 'PromptCreateAssetAsync is not a valid member of AssetService'; PromptCreatePlatformContentAsync not run",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "legacy-migration-199",
+   "file": "references/legacy-migration.md",
+   "quote": "`Decal.EmissiveMaskContent` (`Content`; write `PluginSecurity`), `EmissiveStrength` (default `1`), `EmissiveTint` (default white) documented (in the dump since 0.740) | A Script sets `EmissiveStrength` and `EmissiveTint`; writing `EmissiveMaskContent` fails `lacking capability Plugin` *(Studio)*. Set the mask in the Properties window",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) Decal.yaml",
+   "evidence": "EmissiveStrength 1 -> 3, EmissiveTint white -> red set from a Script; EmissiveMaskContent write 'lacking capability Plugin'",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "legacy-migration-200",
+   "file": "references/legacy-migration.md",
+   "quote": "**Expanded Terrain** / custom terrain materials (`parts/custom-terrain-materials.md`, new): up to 62 paintable materials, enabled per place by `Workspace` **Expanded Terrain** = Enabled, which restarts the place | A Properties-window setting: `workspace.ExpandedTerrain` is `NotScriptable` (\"is not a valid member\" from a Script) *(Studio)*. Known limits in the guide: a `MaterialVariant`'s custom physical properties are ignored, and thin terrain (<16 voxels) can vanish with a small streaming radius",
+   "status": "docs",
+   "kind": "negative",
+   "source": "Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) BasePart.yaml, MarketplaceService.yaml, parts/custom-terrain-materials.md, projects/server-authority/index.md",
+   "evidence": "Text as quoted; ExpandedTerrain NotScriptable confirmed in Studio ('is not a valid member of Workspace')",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "legacy-migration-201",
+   "file": "references/legacy-migration.md",
+   "quote": "Server authority guide: prediction covers whole assemblies; inside `BindToSimulation` callbacks `Instance.new` / `Clone` work but `Destroy()` and re-parenting error (destroy from `PostSimulation` instead); `Humanoid:EquipTool()` / `UnequipTools()` cannot be called there and Tools are \"not fully supported\" yet; `RunService:GetPredictionStatus()` | *Docs*; not run (it needs `AuthorityMode = Server`, a Properties-window setting). See `security-hardening.md`",
+   "status": "docs",
+   "kind": "negative",
+   "source": "Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) BasePart.yaml, MarketplaceService.yaml, parts/custom-terrain-materials.md, projects/server-authority/index.md",
+   "evidence": "Text as quoted; ExpandedTerrain NotScriptable confirmed in Studio ('is not a valid member of Workspace')",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "legacy-migration-202",
+   "file": "references/legacy-migration.md",
+   "quote": "`GuiObject:TweenPosition` / `TweenSize` / `TweenSizeAndPosition` (all deprecated since 0.738) error on `EasingStyle.Bezier` or `Spring` | Same as `TweenInfo.new` (0.744 row); use `TweenService` anyway",
+   "status": "docs",
+   "kind": "negative",
+   "source": "Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) GuiObject.yaml",
+   "evidence": "TweenPosition/TweenSize/TweenSizeAndPosition raise on Bezier/Spring",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "legacy-migration-203",
+   "file": "references/legacy-migration.md",
+   "quote": "`+TeleportOptions.ReservedServerId`, `+TeleportOptions.VipServerId`; `Enum.TeleportMethod` +`TeleportSwitchServer` | New public teleport targeting fields. **Update (0.745):** the docs now prefer them to `ReserveServerAsync`, but `TeleportAsync` with either one fails in Studio 0.745 (\"require the Access Code V2 feature\"); see the 0.745 row. The matching `TeleportService:TeleportSwitchServer()` is **`RobloxScriptSecurity`** — you cannot call it, so do not build on it",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); dumps 0.739/0.740/0.745 (ReservedServerId first in 0.740); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) projects/teleport-private-servers.md, TeleportService.yaml",
+   "evidence": "TeleportAsync with ReservedServerId (alone or with another field) failed 'ReservedServerId and VipServerId require the Access Code V2 feature, which is not enabled on this server.'; plain TeleportAsync 'Request Context Failure'; ReserveServerAsync 'HTTP 403 (Forbidden)'; non-GUID string set ok; ReserveServerAsync has no Deprecated tag in 0.745",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "legacy-migration-204",
+   "file": "references/legacy-migration.md",
+   "quote": "**Re-checked 2026-10-29:** still no staff post after 2026-09-01. The official page was rewritten",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) players/users.md (46be165, 2026-10-23); DevForum topic 4677155 posts.json (staff posts: last 2026-09-01; #361)",
+   "evidence": "UserId 8935399566, User.Id 1237928291809, User.fromId(UserId).Id 8935399566; page says Player.User.Id equals Player.UserId",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "legacy-migration-205",
+   "file": "references/legacy-migration.md",
+   "quote": "on 2026-10-23 as *Users and scoped user IDs*: each user has one **effective user ID** per game,",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) players/users.md (46be165, 2026-10-23); DevForum topic 4677155 posts.json (staff posts: last 2026-09-01; #361)",
+   "evidence": "UserId 8935399566, User.Id 1237928291809, User.fromId(UserId).Id 8935399566; page says Player.User.Id equals Player.UserId",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "legacy-migration-206",
+   "file": "references/legacy-migration.md",
+   "quote": "0.745 does not match that last point** for the account tested here (see step 3 below). In-game",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) players/users.md (46be165, 2026-10-23); DevForum topic 4677155 posts.json (staff posts: last 2026-09-01; #361)",
+   "evidence": "UserId 8935399566, User.Id 1237928291809, User.fromId(UserId).Id 8935399566; page says Player.User.Id equals Player.UserId",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "legacy-migration-207",
+   "file": "references/legacy-migration.md",
+   "quote": "scheme your saves use, or migrate them explicitly. Re-run in Studio 0.745 (2026-10-29): the",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) players/users.md (46be165, 2026-10-23); DevForum topic 4677155 posts.json (staff posts: last 2026-09-01; #361)",
+   "evidence": "UserId 8935399566, User.Id 1237928291809, User.fromId(UserId).Id 8935399566; page says Player.User.Id equals Player.UserId",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "luau-fundamentals-072",
+   "file": "references/luau-fundamentals.md",
+   "quote": "Reference for AI coding skill — verified against official Roblox documentation and Luau language release specs (**v0.744**, released 2026-10-23; engine 0.745.0.7451137, re-tested 2026-10-29).",
+   "status": "source",
+   "kind": "number",
+   "source": "luau-lang/luau 0.744 release notes and source tarball (0.743 for comparison); clientsettingscdn PCStudioApp/MacStudioApp and PCDesktopClient/MacDesktopClient/AndroidApp/iOSApp, 2026-10-29; Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards)",
+   "evidence": "0.744 notes: DSE fix, Arm64 >256 constants, bit32/integer lrotate/extract/replace fixes, FORGLOOP, private class fields prototype. Gates in 0.744: DebugLuauParseExactTables, DebugLuauUserDefinedClasses*, LuauIntegerLibrary; DebugLuauWarnOnUnannotatedTopLevelFunctions in 0.743, absent in 0.744. Studio flags ~26,100; only FFlagLuauCoroutineFinally(+Analysis) True. lrotate values and integer == nil in Studio",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "luau-fundamentals-073",
+   "file": "references/luau-fundamentals.md",
+   "quote": "**0.742** | `coroutine.finally` is no longer behind a `Debug` flag in the open-source VM | **On in Roblox since the 0.745 build.** It was `nil` in Studio 0.742, 0.743 and 0.744; in Studio 0.745 it is a function, and `FFlagLuauCoroutineFinally` is `True` in the published flags of Studio and of every player client (checked 2026-10-29). See [`coroutine.finally`](#coroutinefinally--cleanup-when-a-coroutine-ends) below.",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); luau-lang/luau 0.744 release notes and source tarball (0.743 for comparison); clientsettingscdn PCStudioApp/MacStudioApp and PCDesktopClient/MacDesktopClient/AndroidApp/iOSApp, 2026-10-29",
+   "evidence": "finished: 'second:finished | first:finished:5,x', resume true 5 x; error: 'error:boom', resume false boom; close: 'cancelled n=0'; dead: 'cannot register a finalizer on dead coroutine'; wrap: 'cannot run finalizers from a wrapped coroutine'; callback error: resume false cbfail, earlier-registered callback not run; task.cancel -> cancelled; engine-resumed -> finished 7 / error late (also printed as script error); LocalScript finished:42; harness case luau-fundamentals__L164 3/3",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "luau-fundamentals-074",
+   "file": "references/luau-fundamentals.md",
+   "quote": "**0.744** | Correctness fixes to `bit32.lrotate` and the `integer` library's `lrotate` / `extract` / `replace`; a dead-store-elimination bug, an Arm64 crash on functions with more than 256 constants, a `FORGLOOP` register bug and a compiler `uint8_t`→`int8_t` cast fixed | No edit. In Studio 0.745 `bit32.lrotate(0x80000001, 1)` is `3`, `lrotate(1, 33)` is `2`, `lrotate(0xF0000000, -4)` is `0x0F000000` and `lrotate(0x12345678, 8)` is `0x34567812` *(Studio)*. The `integer` library is still `nil` in Roblox",
+   "status": "source",
+   "kind": "number",
+   "source": "luau-lang/luau 0.744 release notes and source tarball (0.743 for comparison); clientsettingscdn PCStudioApp/MacStudioApp and PCDesktopClient/MacDesktopClient/AndroidApp/iOSApp, 2026-10-29; Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards)",
+   "evidence": "0.744 notes: DSE fix, Arm64 >256 constants, bit32/integer lrotate/extract/replace fixes, FORGLOOP, private class fields prototype. Gates in 0.744: DebugLuauParseExactTables, DebugLuauUserDefinedClasses*, LuauIntegerLibrary; DebugLuauWarnOnUnannotatedTopLevelFunctions in 0.743, absent in 0.744. Studio flags ~26,100; only FFlagLuauCoroutineFinally(+Analysis) True. lrotate values and integer == nil in Studio",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "luau-fundamentals-075",
+   "file": "references/luau-fundamentals.md",
+   "quote": "**0.744** | Type system: width subtyping no longer injects `nil` for a stand-in property; type-pack handling in a call's tail argument fixed in nonstrict | Inference fixes, no edit",
+   "status": "source",
+   "kind": "negative",
+   "source": "luau-lang/luau 0.744 release notes and source tarball (0.743 for comparison); clientsettingscdn PCStudioApp/MacStudioApp and PCDesktopClient/MacDesktopClient/AndroidApp/iOSApp, 2026-10-29; Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards)",
+   "evidence": "0.744 notes: DSE fix, Arm64 >256 constants, bit32/integer lrotate/extract/replace fixes, FORGLOOP, private class fields prototype. Gates in 0.744: DebugLuauParseExactTables, DebugLuauUserDefinedClasses*, LuauIntegerLibrary; DebugLuauWarnOnUnannotatedTopLevelFunctions in 0.743, absent in 0.744. Studio flags ~26,100; only FFlagLuauCoroutineFinally(+Analysis) True. lrotate values and integer == nil in Studio",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "luau-fundamentals-076",
+   "file": "references/luau-fundamentals.md",
+   "quote": "**0.744** | Prototype: runtime support for **private class fields** | Part of the classes prototype, still behind `DebugLuauUserDefinedClasses` (off). Not usable",
+   "status": "source",
+   "kind": "number",
+   "source": "luau-lang/luau 0.744 release notes and source tarball (0.743 for comparison); clientsettingscdn PCStudioApp/MacStudioApp and PCDesktopClient/MacDesktopClient/AndroidApp/iOSApp, 2026-10-29; Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards)",
+   "evidence": "0.744 notes: DSE fix, Arm64 >256 constants, bit32/integer lrotate/extract/replace fixes, FORGLOOP, private class fields prototype. Gates in 0.744: DebugLuauParseExactTables, DebugLuauUserDefinedClasses*, LuauIntegerLibrary; DebugLuauWarnOnUnannotatedTopLevelFunctions in 0.743, absent in 0.744. Studio flags ~26,100; only FFlagLuauCoroutineFinally(+Analysis) True. lrotate values and integer == nil in Studio",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "luau-fundamentals-077",
+   "file": "references/luau-fundamentals.md",
+   "quote": "re-checked 2026-10-21, 2026-10-22 (Studio 0.744; ~25,600 flags each) and 2026-10-29 against the 0.744 source and",
+   "status": "source",
+   "kind": "number",
+   "source": "luau-lang/luau 0.744 release notes and source tarball (0.743 for comparison); clientsettingscdn PCStudioApp/MacStudioApp and PCDesktopClient/MacDesktopClient/AndroidApp/iOSApp, 2026-10-29; Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards)",
+   "evidence": "0.744 notes: DSE fix, Arm64 >256 constants, bit32/integer lrotate/extract/replace fixes, FORGLOOP, private class fields prototype. Gates in 0.744: DebugLuauParseExactTables, DebugLuauUserDefinedClasses*, LuauIntegerLibrary; DebugLuauWarnOnUnannotatedTopLevelFunctions in 0.743, absent in 0.744. Studio flags ~26,100; only FFlagLuauCoroutineFinally(+Analysis) True. lrotate values and integer == nil in Studio",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "luau-fundamentals-078",
+   "file": "references/luau-fundamentals.md",
+   "quote": "Studio 0.745 (~26,100 flags each). None of the flags below is set there, and a Luau `FASTFLAGVARIABLE` defaults to **off**.",
+   "status": "source",
+   "kind": "number",
+   "source": "luau-lang/luau 0.744 release notes and source tarball (0.743 for comparison); clientsettingscdn PCStudioApp/MacStudioApp and PCDesktopClient/MacDesktopClient/AndroidApp/iOSApp, 2026-10-29; Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards)",
+   "evidence": "0.744 notes: DSE fix, Arm64 >256 constants, bit32/integer lrotate/extract/replace fixes, FORGLOOP, private class fields prototype. Gates in 0.744: DebugLuauParseExactTables, DebugLuauUserDefinedClasses*, LuauIntegerLibrary; DebugLuauWarnOnUnannotatedTopLevelFunctions in 0.743, absent in 0.744. Studio flags ~26,100; only FFlagLuauCoroutineFinally(+Analysis) True. lrotate values and integer == nil in Studio",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "luau-fundamentals-079",
+   "file": "references/luau-fundamentals.md",
+   "quote": "`coroutine.finally` was in this table until its flag was switched on for the 0.745 build (see the",
+   "status": "source",
+   "kind": "number",
+   "source": "luau-lang/luau 0.744 release notes and source tarball (0.743 for comparison); clientsettingscdn PCStudioApp/MacStudioApp and PCDesktopClient/MacDesktopClient/AndroidApp/iOSApp, 2026-10-29; Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards)",
+   "evidence": "0.744 notes: DSE fix, Arm64 >256 constants, bit32/integer lrotate/extract/replace fixes, FORGLOOP, private class fields prototype. Gates in 0.744: DebugLuauParseExactTables, DebugLuauUserDefinedClasses*, LuauIntegerLibrary; DebugLuauWarnOnUnannotatedTopLevelFunctions in 0.743, absent in 0.744. Studio flags ~26,100; only FFlagLuauCoroutineFinally(+Analysis) True. lrotate values and integer == nil in Studio",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "luau-fundamentals-080",
+   "file": "references/luau-fundamentals.md",
+   "quote": "Prototype | Gate in 0.744 | Notes",
+   "status": "source",
+   "kind": "number",
+   "source": "luau-lang/luau 0.744 release notes and source tarball (0.743 for comparison); clientsettingscdn PCStudioApp/MacStudioApp and PCDesktopClient/MacDesktopClient/AndroidApp/iOSApp, 2026-10-29; Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards)",
+   "evidence": "0.744 notes: DSE fix, Arm64 >256 constants, bit32/integer lrotate/extract/replace fixes, FORGLOOP, private class fields prototype. Gates in 0.744: DebugLuauParseExactTables, DebugLuauUserDefinedClasses*, LuauIntegerLibrary; DebugLuauWarnOnUnannotatedTopLevelFunctions in 0.743, absent in 0.744. Studio flags ~26,100; only FFlagLuauCoroutineFinally(+Analysis) True. lrotate values and integer == nil in Studio",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "luau-fundamentals-081",
+   "file": "references/luau-fundamentals.md",
+   "quote": "Require top-level functions to be annotated, 0.738 | none in 0.744 (`DebugLuauWarnOnUnannotatedTopLevelFunctions` until 0.743) | A lint experiment; its flag and check are gone from the 0.744 source",
+   "status": "source",
+   "kind": "number",
+   "source": "luau-lang/luau 0.744 release notes and source tarball (0.743 for comparison); clientsettingscdn PCStudioApp/MacStudioApp and PCDesktopClient/MacDesktopClient/AndroidApp/iOSApp, 2026-10-29; Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards)",
+   "evidence": "0.744 notes: DSE fix, Arm64 >256 constants, bit32/integer lrotate/extract/replace fixes, FORGLOOP, private class fields prototype. Gates in 0.744: DebugLuauParseExactTables, DebugLuauUserDefinedClasses*, LuauIntegerLibrary; DebugLuauWarnOnUnannotatedTopLevelFunctions in 0.743, absent in 0.744. Studio flags ~26,100; only FFlagLuauCoroutineFinally(+Analysis) True. lrotate values and integer == nil in Studio",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "luau-fundamentals-082",
+   "file": "references/luau-fundamentals.md",
+   "quote": "and error in Studio. `if local` shows one path: a flag lost its `Debug` prefix (0.740), then became",
+   "status": "source",
+   "kind": "negative",
+   "source": "luau-lang/luau 0.744 release notes and source tarball (0.743 for comparison); clientsettingscdn PCStudioApp/MacStudioApp and PCDesktopClient/MacDesktopClient/AndroidApp/iOSApp, 2026-10-29; Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards)",
+   "evidence": "0.744 notes: DSE fix, Arm64 >256 constants, bit32/integer lrotate/extract/replace fixes, FORGLOOP, private class fields prototype. Gates in 0.744: DebugLuauParseExactTables, DebugLuauUserDefinedClasses*, LuauIntegerLibrary; DebugLuauWarnOnUnannotatedTopLevelFunctions in 0.743, absent in 0.744. Studio flags ~26,100; only FFlagLuauCoroutineFinally(+Analysis) True. lrotate values and integer == nil in Studio",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "luau-fundamentals-083",
+   "file": "references/luau-fundamentals.md",
+   "quote": "a Studio beta (2026-10-06), and only a full release makes it publishable. `coroutine.finally` took",
+   "status": "source",
+   "kind": "negative",
+   "source": "luau-lang/luau 0.744 release notes and source tarball (0.743 for comparison); clientsettingscdn PCStudioApp/MacStudioApp and PCDesktopClient/MacDesktopClient/AndroidApp/iOSApp, 2026-10-29; Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards)",
+   "evidence": "0.744 notes: DSE fix, Arm64 >256 constants, bit32/integer lrotate/extract/replace fixes, FORGLOOP, private class fields prototype. Gates in 0.744: DebugLuauParseExactTables, DebugLuauUserDefinedClasses*, LuauIntegerLibrary; DebugLuauWarnOnUnannotatedTopLevelFunctions in 0.743, absent in 0.744. Studio flags ~26,100; only FFlagLuauCoroutineFinally(+Analysis) True. lrotate values and integer == nil in Studio",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "luau-fundamentals-084",
+   "file": "references/luau-fundamentals.md",
+   "quote": "the other: its flag lost the prefix in 0.742 and was switched on, with no beta, in the 0.745 build.",
+   "status": "source",
+   "kind": "number",
+   "source": "luau-lang/luau 0.744 release notes and source tarball (0.743 for comparison); clientsettingscdn PCStudioApp/MacStudioApp and PCDesktopClient/MacDesktopClient/AndroidApp/iOSApp, 2026-10-29; Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards)",
+   "evidence": "0.744 notes: DSE fix, Arm64 >256 constants, bit32/integer lrotate/extract/replace fixes, FORGLOOP, private class fields prototype. Gates in 0.744: DebugLuauParseExactTables, DebugLuauUserDefinedClasses*, LuauIntegerLibrary; DebugLuauWarnOnUnannotatedTopLevelFunctions in 0.743, absent in 0.744. Studio flags ~26,100; only FFlagLuauCoroutineFinally(+Analysis) True. lrotate values and integer == nil in Studio",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "luau-fundamentals-085",
+   "file": "references/luau-fundamentals.md",
+   "quote": "There was **NO new standard-library function usable in Roblox in 0.736–0.743**, and Luau 0.744 adds",
+   "status": "source",
+   "kind": "number",
+   "source": "luau-lang/luau 0.744 release notes and source tarball (0.743 for comparison); clientsettingscdn PCStudioApp/MacStudioApp and PCDesktopClient/MacDesktopClient/AndroidApp/iOSApp, 2026-10-29; Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards)",
+   "evidence": "0.744 notes: DSE fix, Arm64 >256 constants, bit32/integer lrotate/extract/replace fixes, FORGLOOP, private class fields prototype. Gates in 0.744: DebugLuauParseExactTables, DebugLuauUserDefinedClasses*, LuauIntegerLibrary; DebugLuauWarnOnUnannotatedTopLevelFunctions in 0.743, absent in 0.744. Studio flags ~26,100; only FFlagLuauCoroutineFinally(+Analysis) True. lrotate values and integer == nil in Studio",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "luau-fundamentals-086",
+   "file": "references/luau-fundamentals.md",
+   "quote": "0.745 engine build (below). Everything else in this window is inference, VM internals, flag-gated",
+   "status": "source",
+   "kind": "number",
+   "source": "luau-lang/luau 0.744 release notes and source tarball (0.743 for comparison); clientsettingscdn PCStudioApp/MacStudioApp and PCDesktopClient/MacDesktopClient/AndroidApp/iOSApp, 2026-10-29; Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards)",
+   "evidence": "0.744 notes: DSE fix, Arm64 >256 constants, bit32/integer lrotate/extract/replace fixes, FORGLOOP, private class fields prototype. Gates in 0.744: DebugLuauParseExactTables, DebugLuauUserDefinedClasses*, LuauIntegerLibrary; DebugLuauWarnOnUnannotatedTopLevelFunctions in 0.743, absent in 0.744. Studio flags ~26,100; only FFlagLuauCoroutineFinally(+Analysis) True. lrotate values and integer == nil in Studio",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "luau-fundamentals-087",
+   "file": "references/luau-fundamentals.md",
+   "quote": "prototypes, and one Studio-only beta syntax.",
+   "status": "source",
+   "kind": "negative",
+   "source": "luau-lang/luau 0.744 release notes and source tarball (0.743 for comparison); clientsettingscdn PCStudioApp/MacStudioApp and PCDesktopClient/MacDesktopClient/AndroidApp/iOSApp, 2026-10-29; Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards)",
+   "evidence": "0.744 notes: DSE fix, Arm64 >256 constants, bit32/integer lrotate/extract/replace fixes, FORGLOOP, private class fields prototype. Gates in 0.744: DebugLuauParseExactTables, DebugLuauUserDefinedClasses*, LuauIntegerLibrary; DebugLuauWarnOnUnannotatedTopLevelFunctions in 0.743, absent in 0.744. Studio flags ~26,100; only FFlagLuauCoroutineFinally(+Analysis) True. lrotate values and integer == nil in Studio",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "luau-fundamentals-088",
+   "file": "references/luau-fundamentals.md",
+   "quote": "**Usable in Studio 0.745** from a Script, a LocalScript and `execute_luau` (tested 2026-10-29), and",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); luau-lang/luau 0.744 release notes and source tarball (0.743 for comparison); clientsettingscdn PCStudioApp/MacStudioApp and PCDesktopClient/MacDesktopClient/AndroidApp/iOSApp, 2026-10-29",
+   "evidence": "finished: 'second:finished | first:finished:5,x', resume true 5 x; error: 'error:boom', resume false boom; close: 'cancelled n=0'; dead: 'cannot register a finalizer on dead coroutine'; wrap: 'cannot run finalizers from a wrapped coroutine'; callback error: resume false cbfail, earlier-registered callback not run; task.cancel -> cancelled; engine-resumed -> finished 7 / error late (also printed as script error); LocalScript finished:42; harness case luau-fundamentals__L164 3/3",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "luau-fundamentals-089",
+   "file": "references/luau-fundamentals.md",
+   "quote": "Android and iOS clients. Roblox does not publish its game servers' flags, so a server Script in a",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); luau-lang/luau 0.744 release notes and source tarball (0.743 for comparison); clientsettingscdn PCStudioApp/MacStudioApp and PCDesktopClient/MacDesktopClient/AndroidApp/iOSApp, 2026-10-29",
+   "evidence": "finished: 'second:finished | first:finished:5,x', resume true 5 x; error: 'error:boom', resume false boom; close: 'cancelled n=0'; dead: 'cannot register a finalizer on dead coroutine'; wrap: 'cannot run finalizers from a wrapped coroutine'; callback error: resume false cbfail, earlier-registered callback not run; task.cancel -> cancelled; engine-resumed -> finished 7 / error late (also printed as script error); LocalScript finished:42; harness case luau-fundamentals__L164 3/3",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "luau-fundamentals-090",
+   "file": "references/luau-fundamentals.md",
+   "quote": "Errored | `\"error\"`, the error value. `coroutine.resume` still returns `false, err`",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); luau-lang/luau 0.744 release notes and source tarball (0.743 for comparison); clientsettingscdn PCStudioApp/MacStudioApp and PCDesktopClient/MacDesktopClient/AndroidApp/iOSApp, 2026-10-29",
+   "evidence": "finished: 'second:finished | first:finished:5,x', resume true 5 x; error: 'error:boom', resume false boom; close: 'cancelled n=0'; dead: 'cannot register a finalizer on dead coroutine'; wrap: 'cannot run finalizers from a wrapped coroutine'; callback error: resume false cbfail, earlier-registered callback not run; task.cancel -> cancelled; engine-resumed -> finished 7 / error late (also printed as script error); LocalScript finished:42; harness case luau-fundamentals__L164 3/3",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "luau-fundamentals-091",
+   "file": "references/luau-fundamentals.md",
+   "quote": "`coroutine.resume` / `close` return only after the callbacks have run. If a callback errors,",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); luau-lang/luau 0.744 release notes and source tarball (0.743 for comparison); clientsettingscdn PCStudioApp/MacStudioApp and PCDesktopClient/MacDesktopClient/AndroidApp/iOSApp, 2026-10-29",
+   "evidence": "finished: 'second:finished | first:finished:5,x', resume true 5 x; error: 'error:boom', resume false boom; close: 'cancelled n=0'; dead: 'cannot register a finalizer on dead coroutine'; wrap: 'cannot run finalizers from a wrapped coroutine'; callback error: resume false cbfail, earlier-registered callback not run; task.cancel -> cancelled; engine-resumed -> finished 7 / error late (also printed as script error); LocalScript finished:42; harness case luau-fundamentals__L164 3/3",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "luau-fundamentals-092",
+   "file": "references/luau-fundamentals.md",
+   "quote": "`resume` returns `false` and that error, and the callbacks after it do not run.",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); luau-lang/luau 0.744 release notes and source tarball (0.743 for comparison); clientsettingscdn PCStudioApp/MacStudioApp and PCDesktopClient/MacDesktopClient/AndroidApp/iOSApp, 2026-10-29",
+   "evidence": "finished: 'second:finished | first:finished:5,x', resume true 5 x; error: 'error:boom', resume false boom; close: 'cancelled n=0'; dead: 'cannot register a finalizer on dead coroutine'; wrap: 'cannot run finalizers from a wrapped coroutine'; callback error: resume false cbfail, earlier-registered callback not run; task.cancel -> cancelled; engine-resumed -> finished 7 / error late (also printed as script error); LocalScript finished:42; harness case luau-fundamentals__L164 3/3",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "luau-fundamentals-093",
+   "file": "references/luau-fundamentals.md",
+   "quote": "Registering on a **dead** coroutine errors `cannot register a finalizer on dead coroutine`.",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); luau-lang/luau 0.744 release notes and source tarball (0.743 for comparison); clientsettingscdn PCStudioApp/MacStudioApp and PCDesktopClient/MacDesktopClient/AndroidApp/iOSApp, 2026-10-29",
+   "evidence": "finished: 'second:finished | first:finished:5,x', resume true 5 x; error: 'error:boom', resume false boom; close: 'cancelled n=0'; dead: 'cannot register a finalizer on dead coroutine'; wrap: 'cannot run finalizers from a wrapped coroutine'; callback error: resume false cbfail, earlier-registered callback not run; task.cancel -> cancelled; engine-resumed -> finished 7 / error late (also printed as script error); LocalScript finished:42; harness case luau-fundamentals__L164 3/3",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "luau-fundamentals-094",
+   "file": "references/luau-fundamentals.md",
+   "quote": "A coroutine from **`coroutine.wrap`** that ends with a callback registered errors",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); luau-lang/luau 0.744 release notes and source tarball (0.743 for comparison); clientsettingscdn PCStudioApp/MacStudioApp and PCDesktopClient/MacDesktopClient/AndroidApp/iOSApp, 2026-10-29",
+   "evidence": "finished: 'second:finished | first:finished:5,x', resume true 5 x; error: 'error:boom', resume false boom; close: 'cancelled n=0'; dead: 'cannot register a finalizer on dead coroutine'; wrap: 'cannot run finalizers from a wrapped coroutine'; callback error: resume false cbfail, earlier-registered callback not run; task.cancel -> cancelled; engine-resumed -> finished 7 / error late (also printed as script error); LocalScript finished:42; harness case luau-fundamentals__L164 3/3",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "luau-fundamentals-095",
+   "file": "references/luau-fundamentals.md",
+   "quote": "`cannot run finalizers from a wrapped coroutine`. Use `coroutine.create` or `task.spawn`.",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); luau-lang/luau 0.744 release notes and source tarball (0.743 for comparison); clientsettingscdn PCStudioApp/MacStudioApp and PCDesktopClient/MacDesktopClient/AndroidApp/iOSApp, 2026-10-29",
+   "evidence": "finished: 'second:finished | first:finished:5,x', resume true 5 x; error: 'error:boom', resume false boom; close: 'cancelled n=0'; dead: 'cannot register a finalizer on dead coroutine'; wrap: 'cannot run finalizers from a wrapped coroutine'; callback error: resume false cbfail, earlier-registered callback not run; task.cancel -> cancelled; engine-resumed -> finished 7 / error late (also printed as script error); LocalScript finished:42; harness case luau-fundamentals__L164 3/3",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "luau-fundamentals-096",
+   "file": "references/luau-fundamentals.md",
+   "quote": "a separate thread. When that thread errors, the callback still gets `\"error\"` and the error is",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); luau-lang/luau 0.744 release notes and source tarball (0.743 for comparison); clientsettingscdn PCStudioApp/MacStudioApp and PCDesktopClient/MacDesktopClient/AndroidApp/iOSApp, 2026-10-29",
+   "evidence": "finished: 'second:finished | first:finished:5,x', resume true 5 x; error: 'error:boom', resume false boom; close: 'cancelled n=0'; dead: 'cannot register a finalizer on dead coroutine'; wrap: 'cannot run finalizers from a wrapped coroutine'; callback error: resume false cbfail, earlier-registered callback not run; task.cancel -> cancelled; engine-resumed -> finished 7 / error late (also printed as script error); LocalScript finished:42; harness case luau-fundamentals__L164 3/3",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "luau-fundamentals-097",
+   "file": "references/luau-fundamentals.md",
+   "quote": "also printed to the output as a script error.",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); luau-lang/luau 0.744 release notes and source tarball (0.743 for comparison); clientsettingscdn PCStudioApp/MacStudioApp and PCDesktopClient/MacDesktopClient/AndroidApp/iOSApp, 2026-10-29",
+   "evidence": "finished: 'second:finished | first:finished:5,x', resume true 5 x; error: 'error:boom', resume false boom; close: 'cancelled n=0'; dead: 'cannot register a finalizer on dead coroutine'; wrap: 'cannot run finalizers from a wrapped coroutine'; callback error: resume false cbfail, earlier-registered callback not run; task.cancel -> cancelled; engine-resumed -> finished 7 / error late (also printed as script error); LocalScript finished:42; harness case luau-fundamentals__L164 3/3",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "luau-fundamentals-098",
+   "file": "references/luau-fundamentals.md",
+   "quote": "thread that never yields is already dead by then. To keep code working on a build without it,",
+   "status": "advice",
+   "kind": "negative",
+   "source": "",
+   "evidence": "",
+   "checked": ""
+  },
+  {
+   "id": "mcp-integration-077",
+   "file": "references/mcp-integration.md",
+   "quote": "the page last changed 2026-08-21, still its latest commit on 2026-10-29). **On 2026-10-29 (Studio",
+   "status": "studio",
+   "kind": "number",
+   "source": "Live Roblox_Studio MCP tool list and schemas in this session (Studio 0.745.0.7451137), 2026-10-29; Roblox/creator-docs studio/mcp.md unchanged since 2026-08-21",
+   "evidence": "31 tools: the 28 of 2026-10-22 plus list_skills, create_skill, edit_skill (schemas read; list_skills run; create/edit not run). Other schemas unchanged",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "mcp-integration-085",
+   "file": "references/mcp-integration.md",
+   "quote": "0.745.0.7451137) the build exposes 31**: the 28 below plus three undocumented skill-authoring",
+   "status": "studio",
+   "kind": "number",
+   "source": "Live Roblox_Studio MCP tool list and schemas in this session (Studio 0.745.0.7451137), 2026-10-29; Roblox/creator-docs studio/mcp.md unchanged since 2026-08-21",
+   "evidence": "31 tools: the 28 of 2026-10-22 plus list_skills, create_skill, edit_skill (schemas read; list_skills run; create/edit not run). Other schemas unchanged",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "mcp-integration-086",
+   "file": "references/mcp-integration.md",
+   "quote": "`list_skills` | Lists every available skill with its source (`Roblox` for the first-party ones) and description. Read-only. *New 2026-10-29, undocumented*",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Live Roblox_Studio MCP tool list and schemas in this session (Studio 0.745.0.7451137), 2026-10-29; Roblox/creator-docs studio/mcp.md unchanged since 2026-08-21",
+   "evidence": "31 tools: the 28 of 2026-10-22 plus list_skills, create_skill, edit_skill (schemas read; list_skills run; create/edit not run). Other schemas unchanged",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "mcp-integration-087",
+   "file": "references/mcp-integration.md",
+   "quote": "`create_skill` | Creates a **user** skill from `skill_name` (lowercase, digits, `_` and `-`; may not start with `rbx-`), a one-line `skill_description` and a markdown `skill_body`, and \"**publishes**\" it, available immediately. *New 2026-10-29, undocumented; not run here*",
+   "status": "studio",
+   "kind": "number",
+   "source": "Live Roblox_Studio MCP tool list and schemas in this session (Studio 0.745.0.7451137), 2026-10-29; Roblox/creator-docs studio/mcp.md unchanged since 2026-08-21",
+   "evidence": "31 tools: the 28 of 2026-10-22 plus list_skills, create_skill, edit_skill (schemas read; list_skills run; create/edit not run). Other schemas unchanged",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "mcp-integration-088",
+   "file": "references/mcp-integration.md",
+   "quote": "`edit_skill` | Renames or rewrites a user-created skill (`new_name`, `new_description`, `new_skill_body` replaces the whole body). Roblox's own skills cannot be edited. *New 2026-10-29, undocumented; not run here*",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Live Roblox_Studio MCP tool list and schemas in this session (Studio 0.745.0.7451137), 2026-10-29; Roblox/creator-docs studio/mcp.md unchanged since 2026-08-21",
+   "evidence": "31 tools: the 28 of 2026-10-22 plus list_skills, create_skill, edit_skill (schemas read; list_skills run; create/edit not run). Other schemas unchanged",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "mcp-integration-089",
+   "file": "references/mcp-integration.md",
+   "quote": "revert does not undo, and `edit_skill` replaces the body without a diff. Ask before calling",
+   "status": "advice",
+   "kind": "negative",
+   "source": "",
+   "evidence": "",
+   "checked": ""
+  },
+  {
+   "id": "mcp-integration-090",
+   "file": "references/mcp-integration.md",
+   "quote": "stored and who can see it is not documented; treat it as visible beyond this session.",
+   "status": "advice",
+   "kind": "negative",
+   "source": "",
+   "evidence": "",
+   "checked": ""
+  },
+  {
+   "id": "mcp-integration-091",
+   "file": "references/mcp-integration.md",
+   "quote": "**First-party skills exposed by the `skill` tool (2026-10-29, nine):**",
+   "status": "studio",
+   "kind": "number",
+   "source": "Live Roblox_Studio MCP tool list and schemas in this session (Studio 0.745.0.7451137), 2026-10-29; Roblox/creator-docs studio/mcp.md unchanged since 2026-08-21",
+   "evidence": "list_skills returned 9 Roblox skills: the 7 earlier plus rbx-configs-experimentation and rbx-instrument-analytics",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "mcp-integration-092",
+   "file": "references/mcp-integration.md",
+   "quote": "events) were unchanged from 2026-09-25 to 2026-10-22. These are Roblox's, shipped inside",
+   "status": "studio",
+   "kind": "number",
+   "source": "Live Roblox_Studio MCP tool list and schemas in this session (Studio 0.745.0.7451137), 2026-10-29; Roblox/creator-docs studio/mcp.md unchanged since 2026-08-21",
+   "evidence": "list_skills returned 9 Roblox skills: the 7 earlier plus rbx-configs-experimentation and rbx-instrument-analytics",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "mcp-integration-093",
+   "file": "references/mcp-integration.md",
+   "quote": "28 tools (2026-10-17 to 2026-10-22) | **31 on 2026-10-29** (Studio 0.745): +`list_skills`, +`create_skill`, +`edit_skill`. | Live tool list",
+   "status": "studio",
+   "kind": "number",
+   "source": "Live Roblox_Studio MCP tool list and schemas in this session (Studio 0.745.0.7451137), 2026-10-29; Roblox/creator-docs studio/mcp.md unchanged since 2026-08-21",
+   "evidence": "31 tools: the 28 of 2026-10-22 plus list_skills, create_skill, edit_skill (schemas read; list_skills run; create/edit not run). Other schemas unchanged",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "mcp-integration-094",
+   "file": "references/mcp-integration.md",
+   "quote": "`skill` and `subagent` absent from this file | Both are real and officially documented. Roblox ships 7 first-party `rbx-*` skills that partly supersede hand-rolled approaches (9 on 2026-10-29). | Official docs + live schemas",
+   "status": "studio",
+   "kind": "number",
+   "source": "Live Roblox_Studio MCP tool list and schemas in this session (Studio 0.745.0.7451137), 2026-10-29; Roblox/creator-docs studio/mcp.md unchanged since 2026-08-21",
+   "evidence": "list_skills returned 9 Roblox skills: the 7 earlier plus rbx-configs-experimentation and rbx-instrument-analytics",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "networking-035",
+   "file": "references/networking.md",
+   "quote": "(new 2026-10-27) · [TeleportOptions](https://create.roblox.com/docs/reference/engine/classes/TeleportOptions)",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) projects/teleport-private-servers.md, TeleportOptions.yaml, TeleportAsyncResult.yaml",
+   "evidence": "Routing-field exclusivity, GUID flow, 'does not actually reserve a server in advance' quote, legacy codes keep working",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "networking-036",
+   "file": "references/networking.md",
+   "quote": "Since 2026-10-27 the docs route private-server teleports through two `TeleportOptions` fields",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) projects/teleport-private-servers.md, TeleportOptions.yaml, TeleportAsyncResult.yaml",
+   "evidence": "Routing-field exclusivity, GUID flow, 'does not actually reserve a server in advance' quote, legacy codes keep working",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "networking-037",
+   "file": "references/networking.md",
+   "quote": "`TeleportOptions.ReservedServerAccessCode` and `ShouldReserveServer` as deprecated:",
+   "status": "docs",
+   "kind": "negative",
+   "source": "Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) projects/teleport-private-servers.md, TeleportOptions.yaml, TeleportAsyncResult.yaml",
+   "evidence": "Routing-field exclusivity, GUID flow, 'does not actually reserve a server in advance' quote, legacy codes keep working",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "networking-038",
+   "file": "references/networking.md",
+   "quote": "Only **one** routing field (`ReservedServerId`, `VipServerId`, `ReservedServerAccessCode`,",
+   "status": "docs",
+   "kind": "negative",
+   "source": "Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) projects/teleport-private-servers.md, TeleportOptions.yaml, TeleportAsyncResult.yaml",
+   "evidence": "Routing-field exclusivity, GUID flow, 'does not actually reserve a server in advance' quote, legacy codes keep working",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "networking-039",
+   "file": "references/networking.md",
+   "quote": "`ShouldReserveServer`, `ServerInstanceId`) may be set per teleport. `ReserveServerAsync` \"does not",
+   "status": "docs",
+   "kind": "negative",
+   "source": "Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) projects/teleport-private-servers.md, TeleportOptions.yaml, TeleportAsyncResult.yaml",
+   "evidence": "Routing-field exclusivity, GUID flow, 'does not actually reserve a server in advance' quote, legacy codes keep working",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "networking-040",
+   "file": "references/networking.md",
+   "quote": "**What Studio 0.745 does with them (2026-10-29):** both fields can be set and read back (a",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); dumps 0.739/0.740/0.745 (ReservedServerId first in 0.740); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) projects/teleport-private-servers.md, TeleportService.yaml",
+   "evidence": "TeleportAsync with ReservedServerId (alone or with another field) failed 'ReservedServerId and VipServerId require the Access Code V2 feature, which is not enabled on this server.'; plain TeleportAsync 'Request Context Failure'; ReserveServerAsync 'HTTP 403 (Forbidden)'; non-GUID string set ok; ReserveServerAsync has no Deprecated tag in 0.745",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "networking-041",
+   "file": "references/networking.md",
+   "quote": "non-GUID string is accepted too), but `TeleportAsync` with either one fails `ReservedServerId and",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); dumps 0.739/0.740/0.745 (ReservedServerId first in 0.740); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) projects/teleport-private-servers.md, TeleportService.yaml",
+   "evidence": "TeleportAsync with ReservedServerId (alone or with another field) failed 'ReservedServerId and VipServerId require the Access Code V2 feature, which is not enabled on this server.'; plain TeleportAsync 'Request Context Failure'; ReserveServerAsync 'HTTP 403 (Forbidden)'; non-GUID string set ok; ReserveServerAsync has no Deprecated tag in 0.745",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "networking-042",
+   "file": "references/networking.md",
+   "quote": "VipServerId require the Access Code V2 feature, which is not enabled on this server.` A live",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); dumps 0.739/0.740/0.745 (ReservedServerId first in 0.740); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) projects/teleport-private-servers.md, TeleportService.yaml",
+   "evidence": "TeleportAsync with ReservedServerId (alone or with another field) failed 'ReservedServerId and VipServerId require the Access Code V2 feature, which is not enabled on this server.'; plain TeleportAsync 'Request Context Failure'; ReserveServerAsync 'HTTP 403 (Forbidden)'; non-GUID string set ok; ReserveServerAsync has no Deprecated tag in 0.745",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "networking-043",
+   "file": "references/networking.md",
+   "quote": "server was not tested. Studio cannot complete any teleport (a plain `TeleportAsync` fails",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); dumps 0.739/0.740/0.745 (ReservedServerId first in 0.740); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) projects/teleport-private-servers.md, TeleportService.yaml",
+   "evidence": "TeleportAsync with ReservedServerId (alone or with another field) failed 'ReservedServerId and VipServerId require the Access Code V2 feature, which is not enabled on this server.'; plain TeleportAsync 'Request Context Failure'; ReserveServerAsync 'HTTP 403 (Forbidden)'; non-GUID string set ok; ReserveServerAsync has no Deprecated tag in 0.745",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "networking-044",
+   "file": "references/networking.md",
+   "quote": "`Request Context Failure`, `ReserveServerAsync` fails `HTTP 403`), and the 0.745 dump has no",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); dumps 0.739/0.740/0.745 (ReservedServerId first in 0.740); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) projects/teleport-private-servers.md, TeleportService.yaml",
+   "evidence": "TeleportAsync with ReservedServerId (alone or with another field) failed 'ReservedServerId and VipServerId require the Access Code V2 feature, which is not enabled on this server.'; plain TeleportAsync 'Request Context Failure'; ReserveServerAsync 'HTTP 403 (Forbidden)'; non-GUID string set ok; ReserveServerAsync has no Deprecated tag in 0.745",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "networking-045",
+   "file": "references/networking.md",
+   "quote": "`Deprecated` tag on `ReserveServerAsync`. So before you ship the new fields, try them between two",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); dumps 0.739/0.740/0.745 (ReservedServerId first in 0.740); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) projects/teleport-private-servers.md, TeleportService.yaml",
+   "evidence": "TeleportAsync with ReservedServerId (alone or with another field) failed 'ReservedServerId and VipServerId require the Access Code V2 feature, which is not enabled on this server.'; plain TeleportAsync 'Request Context Failure'; ReserveServerAsync 'HTTP 403 (Forbidden)'; non-GUID string set ok; ReserveServerAsync has no Deprecated tag in 0.745",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "networking-046",
+   "file": "references/networking.md",
+   "quote": "places of a **published** game. Existing `ReserveServerAsync` code does not need to change yet.",
+   "status": "advice",
+   "kind": "negative",
+   "source": "",
+   "evidence": "",
+   "checked": ""
+  },
+  {
+   "id": "project-structure-035",
+   "file": "references/project-structure.md",
+   "quote": "**Update 2026-10-22:** the `ContextActionService` page now says `BindAction()` and the related",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) ContextActionService.yaml (f7a0847..142c105); dump 0.745",
+   "evidence": "Page: 'aren't recommended for new work and are planned for deprecation'; BindAction has no Deprecated tag in 0.745",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "project-structure-036",
+   "file": "references/project-structure.md",
+   "quote": "IAS. In the 0.745 dump `BindAction` still has no `Deprecated` tag. So: existing CAS bindings keep",
+   "status": "docs",
+   "kind": "negative",
+   "source": "Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) ContextActionService.yaml (f7a0847..142c105); dump 0.745",
+   "evidence": "Page: 'aren't recommended for new work and are planned for deprecation'; BindAction has no Deprecated tag in 0.745",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "project-structure-037",
+   "file": "references/project-structure.md",
+   "quote": "deprecation tag on CAS later. `UserInputService` is not mentioned.",
+   "status": "docs",
+   "kind": "negative",
+   "source": "Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) ContextActionService.yaml (f7a0847..142c105); dump 0.745",
+   "evidence": "Page: 'aren't recommended for new work and are planned for deprecation'; BindAction has no Deprecated tag in 0.745",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "security-hardening-063",
+   "file": "references/security-hardening.md",
+   "quote": "The `Workspace` reference page lists `AuthorityMode` as `Security: None` since 2026-10-22, but in",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) Workspace.yaml",
+   "evidence": "Docs: AuthorityMode read/write None (Basic). Dump 0.745 RobloxScriptSecurity. Script, LocalScript, execute_luau: 'cannot read AuthorityMode (lacking capability RobloxScript)'",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "security-hardening-064",
+   "file": "references/security-hardening.md",
+   "quote": "Studio 0.745 a Script, a LocalScript and `execute_luau` still fail to read it (`lacking capability",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) Workspace.yaml",
+   "evidence": "Docs: AuthorityMode read/write None (Basic). Dump 0.745 RobloxScriptSecurity. Script, LocalScript, execute_luau: 'cannot read AuthorityMode (lacking capability RobloxScript)'",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "security-hardening-065",
+   "file": "references/security-hardening.md",
+   "quote": "RobloxScript`, tested 2026-10-29), as the 0.745 dump says.",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) Workspace.yaml",
+   "evidence": "Docs: AuthorityMode read/write None (Basic). Dump 0.745 RobloxScriptSecurity. Script, LocalScript, execute_luau: 'cannot read AuthorityMode (lacking capability RobloxScript)'",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "security-hardening-066",
+   "file": "references/security-hardening.md",
+   "quote": "What the guide added on 2026-10-22 (*docs*, not run here: it needs `AuthorityMode = Server`):",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) BasePart.yaml, MarketplaceService.yaml, parts/custom-terrain-materials.md, projects/server-authority/index.md",
+   "evidence": "Text as quoted; ExpandedTerrain NotScriptable confirmed in Studio ('is not a valid member of Workspace')",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "security-hardening-067",
+   "file": "references/security-hardening.md",
+   "quote": "too, while an unwelded model parented to the character is not; inside a `BindToSimulation`",
+   "status": "docs",
+   "kind": "negative",
+   "source": "Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) BasePart.yaml, MarketplaceService.yaml, parts/custom-terrain-materials.md, projects/server-authority/index.md",
+   "evidence": "Text as quoted; ExpandedTerrain NotScriptable confirmed in Studio ('is not a valid member of Workspace')",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "security-hardening-068",
+   "file": "references/security-hardening.md",
+   "quote": "callback `Instance.new` / `Clone` work but `Destroy()` and re-parenting error, so destroy from",
+   "status": "docs",
+   "kind": "negative",
+   "source": "Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) BasePart.yaml, MarketplaceService.yaml, parts/custom-terrain-materials.md, projects/server-authority/index.md",
+   "evidence": "Text as quoted; ExpandedTerrain NotScriptable confirmed in Studio ('is not a valid member of Workspace')",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "security-hardening-069",
+   "file": "references/security-hardening.md",
+   "quote": "`RunService.PostSimulation`; `Humanoid:EquipTool()` / `UnequipTools()` cannot be called there,",
+   "status": "docs",
+   "kind": "negative",
+   "source": "Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) BasePart.yaml, MarketplaceService.yaml, parts/custom-terrain-materials.md, projects/server-authority/index.md",
+   "evidence": "Text as quoted; ExpandedTerrain NotScriptable confirmed in Studio ('is not a valid member of Workspace')",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "security-hardening-070",
+   "file": "references/security-hardening.md",
+   "quote": "whether an instance is predicted. The parallel `BindToSimulationParallel` is not enabled in 0.745.",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards)",
+   "evidence": "Actor-parented Script and plain Script: 'RunService:BindToSimulationParallel() is not enabled' / BindToAnimationParallel same; serial BindToSimulation returned RBXScriptConnection",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "security-hardening-071",
+   "file": "references/security-hardening.md",
+   "quote": "**Device trust shipped in engine 0.745** (`Player.DeviceTrustLevel`, `IntegrityService`); see",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) scripting/security/device-trust.md, IntegrityService.yaml, Player.yaml",
+   "evidence": "Pending on server and own client for 12 s, callback never called; LocalScript assign error; enum values Pending=0 Unknown=1 None=2 Standard=3 Full=4; harness case security-hardening__L683 passed (server 23/23 expectations)",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "security-hardening-072",
+   "file": "references/security-hardening.md",
+   "quote": "Since 0.745 the engine rates each player's **device** as they join. `Player.DeviceTrustLevel` is",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) scripting/security/device-trust.md, IntegrityService.yaml, Player.yaml",
+   "evidence": "Pending on server and own client for 12 s, callback never called; LocalScript assign error; enum values Pending=0 Unknown=1 None=2 Standard=3 Full=4; harness case security-hardening__L683 passed (server 23/23 expectations)",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "security-hardening-073",
+   "file": "references/security-hardening.md",
+   "quote": "Roblox-side error), `None` (failed, or a platform often used for cheating), `Standard` (some",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) scripting/security/device-trust.md, IntegrityService.yaml, Player.yaml",
+   "evidence": "Pending on server and own client for 12 s, callback never called; LocalScript assign error; enum values Pending=0 Unknown=1 None=2 Standard=3 Full=4; harness case security-hardening__L683 passed (server 23/23 expectations)",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "security-hardening-074",
+   "file": "references/security-hardening.md",
+   "quote": "What was run in Studio 0.745 (2026-10-29):",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) scripting/security/device-trust.md, IntegrityService.yaml, Player.yaml",
+   "evidence": "Pending on server and own client for 12 s, callback never called; LocalScript assign error; enum values Pending=0 Unknown=1 None=2 Standard=3 Full=4; harness case security-hardening__L683 passed (server 23/23 expectations)",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "security-hardening-075",
+   "file": "references/security-hardening.md",
+   "quote": "change in 12 s, and `IntegrityService.EvaluatePlayerDeviceTrust` was **never called**. The docs",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) scripting/security/device-trust.md, IntegrityService.yaml, Player.yaml",
+   "evidence": "Pending on server and own client for 12 s, callback never called; LocalScript assign error; enum values Pending=0 Unknown=1 None=2 Standard=3 Full=4; harness case security-hardening__L683 passed (server 23/23 expectations)",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "security-hardening-076",
+   "file": "references/security-hardening.md",
+   "quote": "say Roblox does not check devices in Studio, so **nothing you gate on trust can be tested in",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) scripting/security/device-trust.md, IntegrityService.yaml, Player.yaml",
+   "evidence": "Pending on server and own client for 12 s, callback never called; LocalScript assign error; enum values Pending=0 Unknown=1 None=2 Standard=3 Full=4; harness case security-hardening__L683 passed (server 23/23 expectations)",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "security-hardening-077",
+   "file": "references/security-hardening.md",
+   "quote": "Assigning the callback from a LocalScript fails `EvaluatePlayerDeviceTrust can only be assigned",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) scripting/security/device-trust.md, IntegrityService.yaml, Player.yaml",
+   "evidence": "Pending on server and own client for 12 s, callback never called; LocalScript assign error; enum values Pending=0 Unknown=1 None=2 Standard=3 Full=4; harness case security-hardening__L683 passed (server 23/23 expectations)",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "security-hardening-078",
+   "file": "references/security-hardening.md",
+   "quote": "Values: `Pending = 0`, `Unknown = 1`, `None = 2`, `Standard = 3`, `Full = 4`. **Never compare",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) scripting/security/device-trust.md, IntegrityService.yaml, Player.yaml",
+   "evidence": "Pending on server and own client for 12 s, callback never called; LocalScript assign error; enum values Pending=0 Unknown=1 None=2 Standard=3 Full=4; harness case security-hardening__L683 passed (server 23/23 expectations)",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "security-hardening-079",
+   "file": "references/security-hardening.md",
+   "quote": "supports those platforms (only Android, Chromebook and Meta Quest are checked; a web browser",
+   "status": "docs",
+   "kind": "negative",
+   "source": "Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) scripting/security/device-trust.md",
+   "evidence": "Platform table, ~10 s timeout, accept on nil/invalid/error, measures semantics, PlayerAdded warning, Creator Hub Safety > Anti-cheat",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "security-hardening-080",
+   "file": "references/security-hardening.md",
+   "quote": "when the level is known, can yield but times out after about 10 s (then the player is accepted),",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) scripting/security/device-trust.md",
+   "evidence": "Platform table, ~10 s timeout, accept on nil/invalid/error, measures semantics, PlayerAdded warning, Creator Hub Safety > Anti-cheat",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "security-hardening-081",
+   "file": "references/security-hardening.md",
+   "quote": "`nil` return, a bad table or an error also **accepts**. Its second argument `measures` has the",
+   "status": "docs",
+   "kind": "negative",
+   "source": "Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) scripting/security/device-trust.md",
+   "evidence": "Platform table, ~10 s timeout, accept on nil/invalid/error, measures semantics, PlayerAdded warning, Creator Hub Safety > Anti-cheat",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "security-hardening-082",
+   "file": "references/security-hardening.md",
+   "quote": "`true` when it is not available, so check the level first. Reject only in the callback, never",
+   "status": "docs",
+   "kind": "negative",
+   "source": "Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) scripting/security/device-trust.md",
+   "evidence": "Platform table, ~10 s timeout, accept on nil/invalid/error, measures semantics, PlayerAdded warning, Creator Hub Safety > Anti-cheat",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "security-hardening-083",
+   "file": "references/security-hardening.md",
+   "quote": "from `PlayerAdded` (the level is not known yet). Creator Hub → **Safety → Anti-cheat** estimates",
+   "status": "docs",
+   "kind": "negative",
+   "source": "Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) scripting/security/device-trust.md",
+   "evidence": "Platform table, ~10 s timeout, accept on nil/invalid/error, measures semantics, PlayerAdded warning, Creator Hub Safety > Anti-cheat",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "security-hardening-084",
+   "file": "references/security-hardening.md",
+   "quote": "Re-checked 2026-10-29: no new staff post; the official page (rewritten 2026-10-23) says scoped",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) players/users.md (46be165, 2026-10-23); DevForum topic 4677155 posts.json (staff posts: last 2026-09-01; #361)",
+   "evidence": "UserId 8935399566, User.Id 1237928291809, User.fromId(UserId).Id 8935399566; page says Player.User.Id equals Player.UserId",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "worked-examples-046",
+   "file": "references/worked-examples.md",
+   "quote": "`UserInputService` → IAS. Neither `UserInputService` nor `ContextActionService` is deprecated",
+   "status": "docs",
+   "kind": "negative",
+   "source": "Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) ContextActionService.yaml (f7a0847..142c105); dump 0.745",
+   "evidence": "Page: 'aren't recommended for new work and are planned for deprecation'; BindAction has no Deprecated tag in 0.745",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "worked-examples-047",
+   "file": "references/worked-examples.md",
+   "quote": "(0.745 dump); moving is a design choice, not a fix. The `ContextActionService` page does say its",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) ContextActionService.yaml (f7a0847..142c105); dump 0.745",
+   "evidence": "Page: 'aren't recommended for new work and are planned for deprecation'; BindAction has no Deprecated tag in 0.745",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "worked-examples-048",
+   "file": "references/worked-examples.md",
+   "quote": "binding methods are \"planned for deprecation\" (2026-10-22), so new bindings belong in IAS",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) ContextActionService.yaml (f7a0847..142c105); dump 0.745",
+   "evidence": "Page: 'aren't recommended for new work and are planned for deprecation'; BindAction has no Deprecated tag in 0.745",
+   "checked": "2026-10-29, engine 0.745.0.7451137"
   }
  ]
 }

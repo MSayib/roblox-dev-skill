@@ -95,7 +95,13 @@ def main(argv):
     for level, ids in groups.items():
         if not ids:
             continue
+        # coroutine.finally's type definition is flag-gated; Studio publishes the flag as True since
+        # 0.745 (2026-10-29). Luau renamed it in 0.742, so pass both names: luau-lsp 1.70.x bundles the
+        # Debug-prefixed one, and an unknown name is ignored. luau-lsp 1.69 has neither and reports
+        # "Key 'finally' not found"; use 1.70.1 or newer.
         proc = subprocess.run([lsp, 'analyze', '--no-flags-enabled', '--flag:LuauSolverV2=true',
+                               '--flag:LuauCoroutineFinallyAnalysis=true',
+                               '--flag:DebugLuauCoroutineFinallyAnalysis=true',
                                '--platform', 'roblox', '--defs', f'@roblox={defs[level]}',
                                *[os.path.join('strict', i + '.luau') for i in ids]],
                               cwd=out, capture_output=True, text=True, encoding='utf-8', errors='replace')

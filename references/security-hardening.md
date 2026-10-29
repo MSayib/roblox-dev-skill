@@ -248,6 +248,18 @@ window, which also sets the other requirements the official page lists
 others are `NotScriptable`, `RobloxScriptSecurity` (`PlayerScriptsUseInputActionSystem` since 0.743)
 or plugin-only (dump 0.743), so a script cannot switch a place over.
 
+The `Workspace` reference page lists `AuthorityMode` as `Security: None` since 2026-10-22, but in
+Studio 0.745 a Script, a LocalScript and `execute_luau` still fail to read it (`lacking capability
+RobloxScript`, tested 2026-10-29), as the 0.745 dump says.
+
+What the guide added on 2026-10-22 (*docs*, not run here: it needs `AuthorityMode = Server`):
+prediction covers a whole **assembly**, so a sword welded to a predicted character is predicted
+too, while an unwelded model parented to the character is not; inside a `BindToSimulation`
+callback `Instance.new` / `Clone` work but `Destroy()` and re-parenting error, so destroy from
+`RunService.PostSimulation`; `Humanoid:EquipTool()` / `UnequipTools()` cannot be called there,
+and Tools are "not fully supported" yet; `RunService:GetPredictionStatus()` tells a client
+whether an instance is predicted. The parallel `BindToSimulationParallel` is not enabled in 0.745.
+
 Heuristic checks (rubber-banding, speed checks, below) still work without it; Server Authority
 removes the class of exploits they guess at, such as speed hacks, at the engine level.
 
@@ -617,18 +629,96 @@ Combine device blocking with the heuristic detection patterns from
   reference (2026-10-21), a longer message is discarded and the player sees the default notice.
   The limit is bytes, not characters, so emoji and non-Latin text reach it sooner. Not measured
   here; keep kick reasons short.
-- **Device trust is documented but not in the engine yet.** Since 2026-10-21 the docs have
-  `Enum.PlayerDeviceTrustLevel` (`Pending`, `Unknown`, `None`, `Standard`, `Full`) and
-  `Enum.PlayerDeviceTrustDecision`, both pointing at a `Player.DeviceTrustLevel` property. That
-  property **does not exist yet**: it is in neither the 0.743 nor the 0.744 API dump, and in Studio 0.743.0.7431133
-  `Enum.PlayerDeviceTrustLevel` raises an error (tested). Do not write anti-cheat code against
-  it until the dump has it. When it ships, the enum's own wording applies: it rates the
-  *device*, not the player or the account, and every player starts at `Pending`.
+- **Device trust shipped in engine 0.745** (`Player.DeviceTrustLevel`, `IntegrityService`); see
+  *Device trust* below.
 - **Chat admin commands that parse `Player.Chatted` or `TextChatMessage.Text` stop working
   under platform-integrated chat**, which the docs make mandatory from May 2027. In a test with
   it enabled, `Player.Chatted` did not fire at all. Use `TextChatCommand`, check the caller's
   `TextSource.UserId` on the server, and see `networking.md` →
   [Text Chat and Platform-Integrated Chat](networking.md#text-chat-and-platform-integrated-chat).
+
+---
+
+### Device trust (`IntegrityService`, engine 0.745)
+
+Since 0.745 the engine rates each player's **device** as they join. `Player.DeviceTrustLevel` is
+one of `Pending` (still checking; everyone starts here), `Unknown` (unsupported platform or a
+Roblox-side error), `None` (failed, or a platform often used for cheating), `Standard` (some
+checks passed) or `Full` (all passed). Roblox takes no action itself: you decide, per feature, what
+each level allows. Official guide: https://create.roblox.com/docs/scripting/security/device-trust
+
+What was run in Studio 0.745 (2026-10-29):
+
+- In a playtest the level is `Pending` on the server and on the player's own client, did not
+  change in 12 s, and `IntegrityService.EvaluatePlayerDeviceTrust` was **never called**. The docs
+  say Roblox does not check devices in Studio, so **nothing you gate on trust can be tested in
+  Studio** except through the branch shown below.
+- Assigning the callback from a LocalScript fails `EvaluatePlayerDeviceTrust can only be assigned
+  on the server`. Other clients see `Pending` for everyone (*docs*), so decide on the server.
+- Values: `Pending = 0`, `Unknown = 1`, `None = 2`, `Standard = 3`, `Full = 4`. **Never compare
+  them as numbers**: `Unknown` sorts below `None`, so `level.Value > None.Value` also shuts out
+  every Windows, Mac, iOS, Xbox and PlayStation player, who all report `Unknown` until Roblox
+  supports those platforms (only Android, Chromebook and Meta Quest are checked; a web browser
+  reports `None`). List the levels you allow.
+
+From the docs, not observable in Studio: the level changes **once**, after `PlayerAdded`, and can
+stay `Pending` all session, so treat `Pending` as untrusted. The callback runs once per player
+when the level is known, can yield but times out after about 10 s (then the player is accepted),
+and returns `{ Action = Enum.PlayerDeviceTrustDecision.Accept | Reject, Message = "..." }`. A
+`nil` return, a bad table or an error also **accepts**. Its second argument `measures` has the
+booleans `IsPlatformVersionSecure`, `IsPlatformBootSecure` and `IsAppSecure`; a measure is also
+`true` when it is not available, so check the level first. Reject only in the callback, never
+from `PlayerAdded` (the level is not known yet). Creator Hub → **Safety → Anti-cheat** estimates
+how many of your players each level covers. It rates the device, **not the player**: server-side
+validation (§1–§3) is still what stops exploits.
+
+<!-- skilltest: expect device-trust-policy -->
+```lua
+--!strict
+-- Server Script in ServerScriptService: gate trading by device trust, and reject only
+-- devices that failed the check. Pending (still checking, or Studio) is never trusted.
+local IntegrityService = game:GetService("IntegrityService")
+local RunService = game:GetService("RunService")
+
+local IS_STUDIO = RunService:IsStudio()
+
+local TRADE_TRUST_LEVELS: { [Enum.PlayerDeviceTrustLevel]: boolean } = {
+	[Enum.PlayerDeviceTrustLevel.Unknown] = true, -- unsupported platforms, e.g. Windows today
+	[Enum.PlayerDeviceTrustLevel.Standard] = true,
+	[Enum.PlayerDeviceTrustLevel.Full] = true,
+}
+
+local function isTradeAllowed(level: Enum.PlayerDeviceTrustLevel): boolean
+	return TRADE_TRUST_LEVELS[level] == true
+end
+
+local function canTrade(player: Player): boolean
+	-- Roblox does not check devices in Studio: the level stays Pending there
+	if IS_STUDIO then
+		return true
+	end
+	return isTradeAllowed(player.DeviceTrustLevel)
+end
+
+type TrustDecision = { Action: Enum.PlayerDeviceTrustDecision, Message: string? }
+
+-- Runs once per player, when the level is known (never in Studio)
+local function evaluateDeviceTrust(player: Player, measures: { [string]: boolean }): TrustDecision
+	if player.DeviceTrustLevel == Enum.PlayerDeviceTrustLevel.None then
+		return {
+			Action = Enum.PlayerDeviceTrustDecision.Reject,
+			Message = "This game can't verify your device.",
+		}
+	end
+	return { Action = Enum.PlayerDeviceTrustDecision.Accept }
+end
+
+IntegrityService.EvaluatePlayerDeviceTrust = evaluateDeviceTrust
+```
+
+Call `canTrade` on the server before every trade (both players), and tell the client which
+features to show; a LocalScript check is bypassable. The Studio branch lets you playtest the rest
+of the feature; test the policy itself by calling `isTradeAllowed` with each level.
 
 ---
 
@@ -640,6 +730,10 @@ Combine device blocking with the heuristic detection patterns from
 > rollout in October 2026; a staff update on 2026-09-01 delayed it, promising a new timeline in
 > October, and none had been posted by 2026-10-11 (DevForum topic 4677155). Opt-in testing is
 > available now. This affects cross-game systems; check the announcement for the current date.
+> Re-checked 2026-10-29: no new staff post; the official page (rewritten 2026-10-23) says scoped
+> IDs "have not rolled out broadly yet" and adds **groups** as a third domain. See
+> `legacy-migration.md` → *Scoped User Identifiers* for the `UserId` / `User.Id` mismatch Studio
+> still shows.
 
 ### What Changes
 
