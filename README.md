@@ -9,8 +9,8 @@ DataStores, UI, performance, monetization, migration, and driving Roblox Studio 
 server. Works with Claude Code, Codex, Cursor, Gemini CLI, Antigravity, GitHub Copilot, and any
 agent that reads the Agent Skills format.
 
-> **Skill 2.20.0** · verified against Roblox Studio **0.745.0.7451137** and **Luau 0.744** on
-> 2026-10-29. Every code example was type-checked under `--!strict` and run in a real Studio place,
+> **Skill 2.21.0** · verified against Roblox Studio **0.746.0.7461264** and **Luau 0.745** on
+> 2026-11-05. Every code example was type-checked under `--!strict` and run in a real Studio place,
 > and every factual statement checked against an official source or a test.
 > Roblox ships weekly, so this is *when it was last verified*, not today's version.
 
@@ -59,8 +59,8 @@ updating, uninstalling and manual install: **[docs/installation.md](docs/install
 | [networking](references/networking.md) | RemoteEvents, RemoteFunctions, unreliable remotes, bindables, text chat and platform-integrated chat, teleports to reserved and VIP servers |
 | [security-hardening](references/security-hardening.md) | Server authority, validating remote input, anti-exploit, bans, device trust, script capabilities |
 | [datastore-persistence](references/datastore-persistence.md) | DataStoreService, ProfileStore, MemoryStoreService |
-| [performance-optimization](references/performance-optimization.md) | Memory, Parallel Luau and Actors, streaming, the frame pipeline |
-| [ui-systems](references/ui-systems.md) | GUI layout, StyleSheets, BillboardGui / SurfaceGui, ProximityPrompt |
+| [performance-optimization](references/performance-optimization.md) | Memory, Parallel Luau and Actors, streaming, the frame pipeline, thick casts with `RaycastParams.Margin` |
+| [ui-systems](references/ui-systems.md) | GUI layout, StyleSheets, BillboardGui / SurfaceGui, ProximityPrompt, `Color3` contrast methods |
 | [monetization](references/monetization.md) | Game passes, developer products, subscriptions, Robux transfers |
 | [legacy-migration](references/legacy-migration.md) | Deprecated APIs and replacements, what each engine release changed |
 | [mcp-integration](references/mcp-integration.md) | Studio MCP tools with their real signatures and limits |

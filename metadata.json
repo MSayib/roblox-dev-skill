@@ -1,13 +1,21 @@
 {
   "skill_name": "roblox-dev-skill",
-  "version": "2.20.0",
-  "last_updated": "2026-10-29T13:00:00+07:00",
-  "last_updated_by": "claude-code (engine 0.745 + Luau 0.744 + creator-docs 2026-10-22..29 ingest; every not-enabled claim re-run in Studio 0.745)",
-  "update_source": "clientsettings client-version (WindowsStudio64, MacStudio, WindowsPlayer, MacPlayer); luau-lang/luau 0.744 release + 0.743/0.744 source tarballs; clientsettingscdn PCStudioApp/MacStudioApp/PCDesktopClient/MacDesktopClient/AndroidApp/iOSApp flags; roblox-api-monitor 0.744->0.745 dump diff (83 changes, 47 developer-visible); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29, STUDIO_VERSION 0.745); DevForum topic 4677155; live Roblox Studio 0.745.0.7451137 via MCP (playtest probe Scripts/LocalScripts/Actor, execute_luau) and the Rojo 34871 harness",
-  "engine_version_at_update": "0.745.0.7451137",
-  "luau_version_at_update": "0.744",
+  "version": "2.21.0",
+  "last_updated": "2026-11-05T14:00:00+07:00",
+  "last_updated_by": "claude-code (engine 0.746 + Luau 0.745 + creator-docs 2026-10-30..11-04 ingest; every not-enabled claim re-run in Studio 0.746)",
+  "update_source": "clientsettings client-version (WindowsStudio64, MacStudio, WindowsPlayer, MacPlayer); luau-lang/luau 0.745 release + 0.744/0.745 source tarballs; clientsettingscdn PCStudioApp/MacStudioApp/PCDesktopClient/MacDesktopClient/AndroidApp/iOSApp flags; roblox-api-monitor 0.745->0.746 dump diff (111 changes, 85 developer-visible); Roblox/creator-docs c8f5276..a47045f (2026-10-30..11-04); live Roblox Studio 0.746.0.7461264 via MCP (playtest probe Script/LocalScript/Actor, execute_luau) and the Rojo 34871 harness",
+  "engine_version_at_update": "0.746.0.7461264",
+  "luau_version_at_update": "0.745",
   "update_interval_days": 7,
   "update_history": [
+    {
+      "date": "2026-11-05T14:00:00+07:00",
+      "version": "2.21.0",
+      "changes": "Engine 0.746.0.7461264 + Luau 0.745. NOW USABLE (tested): RaycastParams.Margin/SizeGradient (new performance-optimization section + example), Color3 GetLuminance/GetContrastRatio/GetContrastingColor (new ui-systems section + example), EnableGamepadCursor() with no argument, AuthorityMode read from Script/LocalScript. CORRECTED: --!native covers Android clients (docs + FFlagLuauCodegen; not measured on a device); LogJourneyEvent back (bad names log, do not throw); teleports: Access Code V2 refusal gone, Studio still cannot complete one, dump deprecates ReserveServerAsync. NOT USABLE (tested): SplitApartAsync, GetWaveformKeys, SerializeValue/DeserializeValue, PlaceSettings, non-Default alphaBlendType, while local (syntax error), plus every earlier not-enabled claim re-run unchanged. PLUGIN-ONLY (tested): streaming properties, NextGenerationPhysicsSolver, InputSinkEnabled, DefaultListenerLocation. DOCS AHEAD (tested): orthographic Camera, SelectionGained inputDirection, UseHitbox/HitboxSize, Decal maps, VoiceChatService, CreateVirtualInput target. Docs 2026-10-30..11-04: chat guidelines rewrite, VIP access checks, ServerLowMemoryWarning, journeys. MCP 34 tools (+generate_scene/generate_avatar/auto_setup_avatar, schemas only), 14 first-party skills. Claims 911 -> 1074 (0 unverified, 115 false); evals 77 -> 84.",
+      "engine_version": "0.746.0.7461264",
+      "decision_by": "user (sayib) -- 2026-11-05 'Cek update' after choosing to wait for 0.746 to go live",
+      "verified_by": "Studio 0.746.0.7461264 (place MieGede NewWorld 118652544255235) via MCP: probe Script + LocalScript + Actor Script + 210-local Script in playtests (removed afterwards, 0 left), execute_luau (Edit/Server); Rojo 34871 harness: server 103/103 cases, 25/25 expectations, client 28/28, 5/5, plugin 3/3, 2/2; run_static --strict locally with luau-lsp 1.69: 143 blocks, only the 3 coroutine.finally findings 1.69 cannot type (1.70.1 in CI); roblox-api-monitor download/diff/split; audit-skill-examples 0 defects; check_claims --strict 1074 claims, 0 stale, 0 uncovered"
+    },
     {
       "date": "2026-10-29T13:00:00+07:00",
       "version": "2.20.0",

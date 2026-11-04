@@ -421,8 +421,16 @@ createRemote("UnreliableRemoteEvent", "MousePosition", unreliableFolder)
 ## Text Chat and Platform-Integrated Chat
 
 > **Source:** [Platform-integrated chat](https://create.roblox.com/docs/chat/platform-integrated-chat)
-> (page added 2026-10-20) · [TextChannelWindow](https://create.roblox.com/docs/reference/engine/classes/TextChannelWindow) ·
+> (page added 2026-10-20) · [Chat guidelines](https://create.roblox.com/docs/chat/guidelines)
+> (rewritten 2026-11-03) · [TextChannelWindow](https://create.roblox.com/docs/reference/engine/classes/TextChannelWindow) ·
 > [TextChatCommand](https://create.roblox.com/docs/reference/engine/classes/TextChatCommand)
+
+**Which text must be chat** (*docs*): anything that lets players hold a back-and-forth conversation
+in under 60 seconds must go through `TextChatService`, including custom chat, radios, phones and
+admin tools where people can reply; otherwise Roblox "might take your game down". Player-editable
+text others can see (signs, pet names, comments) is not chat only if it is filtered **and**
+rate-limited to one submission per minute per player; filtering alone is not enough, and comments
+may not support replies. Preset phrases from a fixed list and one-way developer text are not chat.
 
 **Platform-integrated chat** is an opt-in `TextChatService` mode in which Roblox delivers and
 renders chat, and **your code can no longer read what players type**. The docs page says it
@@ -534,13 +542,20 @@ access codes keep working. Persist a reserved ID (a data store keyed by lobby or
 players must reach that server later. `TeleportAsyncResult.ReservedServerAccessCode` is empty for
 these teleports; read `result.PrivateServerId`.
 
-**What Studio 0.745 does with them (2026-10-29):** both fields can be set and read back (a
-non-GUID string is accepted too), but `TeleportAsync` with either one fails `ReservedServerId and
-VipServerId require the Access Code V2 feature, which is not enabled on this server.` A live
-server was not tested. Studio cannot complete any teleport (a plain `TeleportAsync` fails
-`Request Context Failure`, `ReserveServerAsync` fails `HTTP 403`), and the 0.745 dump has no
-`Deprecated` tag on `ReserveServerAsync`. So before you ship the new fields, try them between two
-places of a **published** game. Existing `ReserveServerAsync` code does not need to change yet.
+**What Studio 0.746 does with them (2026-11-05):** both fields can be set and read back (a
+non-GUID string is accepted too). The Access Code V2 refusal that 0.745 gave is gone, but Studio
+still cannot complete any teleport: `ReservedServerId` fails `HTTP 403 (Forbidden)`, `VipServerId`
+and a plain `TeleportAsync` fail `Request Context Failure`, and `ReserveServerAsync` fails `HTTP
+403`. A live server was not tested. The 0.746 dump tags `ReserveServerAsync`,
+`ReservedServerAccessCode` and `ShouldReserveServer` `Deprecated`, so use the new fields in new
+code and try them between two places of a **published** game before you ship. The docs say servers
+made with access codes keep working, so existing code still runs.
+
+**VIP server access is checked per player at connect time** (*docs*, 2026-11-03): the server's
+Friends Allowed setting, its allowlist or a link code must grant access at that moment, and owners
+can change them at any time. In a group teleport, players without access fail individually and the
+rest go through. Always handle `TeleportService.TeleportInitFailed`: the player sees a "restricted"
+error, and the server may also have been closed or switched.
 
 <!-- skilltest: expect reserved-server-options; defines-only -->
 ```lua
@@ -563,7 +578,7 @@ local function sendToReservedServer(placeId: number, party: { Player }, reserved
 		return TeleportService:TeleportAsync(placeId, party, options)
 	end)
 	if not ok then
-		-- In Studio 0.745 this is "...require the Access Code V2 feature, which is not enabled on this server."
+		-- In Studio 0.746 this is "HTTP 403 (Forbidden)": Studio cannot complete a teleport.
 		warn("Reserved-server teleport failed:", err)
 		return false, id
 	end

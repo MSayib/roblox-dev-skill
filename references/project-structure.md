@@ -692,7 +692,8 @@ IAS underpins two newer systems:
 
 - **Character Controller Library:** A modular, customizable character movement
   system built on IAS action definitions. Still a Studio beta (latest update:
-  "[Studio Beta] Expanding the Character Controller Library", 2026-09-10).
+  "[Studio Beta] Expanding the Character Controller Library", 2026-09-10; the guide pages say so
+  too since 2026-11-04: enable it under Beta Features, then in Avatar Settings).
 - **Server Authority:** Moves character state validation to the server; fully released
   2026-07-09, and its official setup requires `PlayerScriptsUseInputActionSystem` to be enabled
   (see `security-hardening.md`).

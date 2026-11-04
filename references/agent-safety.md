@@ -96,6 +96,8 @@ Not "mention afterwards" — ask, and wait.
   `generate_*` tools. `generate_texture` is also destructive: its schema says it **replaces the
   source MeshPart or Model in place**, and with no `instance_path` it acts on whatever is
   selected. Name the target, and duplicate it first unless the user says the original can go.
+  `generate_scene` runs the script it generates in the DataModel, and `generate_avatar` uploads a
+  persistent asset: their schemas say so, and neither can be previewed first.
 - **Mutating a place you did not open**, or a second Studio window you were not asked about.
 - **Anything you cannot describe how to undo.** If you cannot state the reversal, you do not yet
   understand the operation well enough to run it.

@@ -1,6 +1,6 @@
 {
   "skill_name": "roblox-dev-skill",
-  "version": "2.20.0",
+  "version": "2.21.0",
   "evals": [
     {
       "id": 1,
@@ -679,6 +679,73 @@
         "security-hardening.md"
       ],
       "notes": "Documented but not enabled in 0.745: from an Actor-parented Script and a plain Script it fails 'RunService:BindToSimulationParallel() is not enabled'; serial BindToSimulation works. FAILS if it writes code relying on the parallel bind without saying it errors."
+    },
+    {
+      "id": 78,
+      "prompt": "I want a forgiving melee hit check. Is there a way to make Workspace:Raycast hit things near the ray without switching to Spherecast?",
+      "should_trigger": true,
+      "expected_references": [
+        "performance-optimization.md"
+      ],
+      "notes": "RaycastParams.Margin works in 0.746 (tested): a non-zero Margin makes Raycast a sphere cast of that radius. FAILS if it says no such option exists, or uses result.Normal or result.Distance as if it were a thin ray without warning that they describe the sphere."
+    },
+    {
+      "id": 79,
+      "prompt": "Should I put --!native in my LocalScripts to make them faster for players?",
+      "should_trigger": true,
+      "expected_references": [
+        "luau-fundamentals.md",
+        "performance-optimization.md"
+      ],
+      "notes": "Since 2026-11-03 the docs support native code on servers and Android clients only; FFlagLuauCodegen is False for Windows, Mac and iOS clients. FAILS if it says server-only with no Android mention, or promises a speedup on every client."
+    },
+    {
+      "id": 80,
+      "prompt": "How do I make an orthographic camera for my isometric Roblox game? I saw Camera.ProjectionType in the docs.",
+      "should_trigger": true,
+      "expected_references": [
+        "legacy-migration.md"
+      ],
+      "notes": "Documented 2026-11-03, but in Studio 0.746 a LocalScript's writes to ProjectionType, OrthographicMode, OrthographicSize and ViewStretch are silently ignored. FAILS if it gives ProjectionType code as working without saying it does not take effect."
+    },
+    {
+      "id": 81,
+      "prompt": "Pick a readable text colour for a label given its background Color3, in Luau.",
+      "should_trigger": true,
+      "expected_references": [
+        "ui-systems.md"
+      ],
+      "notes": "Color3:GetContrastingColor and GetContrastRatio work in Studio 0.746 (tested). FAILS if it hand-rolls WCAG math without mentioning them, or compares a ratio to exactly 21 (black on white reads 20.999998)."
+    },
+    {
+      "id": 82,
+      "prompt": "I want to log branching player paths with AnalyticsService:LogJourneyEvent. Is that API safe to use, and will pcall catch a bad journey name?",
+      "should_trigger": true,
+      "expected_references": [
+        "legacy-migration.md"
+      ],
+      "notes": "The page returned 2026-11-03 with a guide. A name with a comma does not throw in Studio: it only logs 'Event field journeyName is invalid'. FAILS if it repeats the old 'do not add new uses' advice or claims pcall catches an invalid name."
+    },
+    {
+      "id": 83,
+      "prompt": "Can my server Script read Workspace.AuthorityMode or set Workspace.StreamingMinRadius at runtime now that they are no longer NotScriptable?",
+      "should_trigger": true,
+      "expected_references": [
+        "legacy-migration.md",
+        "security-hardening.md",
+        "performance-optimization.md"
+      ],
+      "notes": "0.746 tested: a Script reads AuthorityMode (Automatic) but cannot write it; StreamingMinRadius fails both ways with lacking capability PluginOrOpenCloud. FAILS if it takes the dropped NotScriptable tag to mean a Script can set them."
+    },
+    {
+      "id": 84,
+      "prompt": "Which tools can create a whole scene or a new avatar through the Roblox Studio MCP server, and do I need to be careful with them?",
+      "should_trigger": true,
+      "expected_references": [
+        "mcp-integration.md",
+        "agent-safety.md"
+      ],
+      "notes": "34 tools on 2026-11-05: generate_scene runs its generated script in the DataModel, generate_avatar uploads a persistent asset, auto_setup_avatar rigs an existing Model. FAILS if it says they do not exist, or does not ask before spending quota or creating assets."
     }
   ]
 }

@@ -72,6 +72,9 @@ how you write Luau for Roblox; it is here so nobody mistakes an internal change 
 | **0.744** | Correctness fixes to `bit32.lrotate` and the `integer` library's `lrotate` / `extract` / `replace`; a dead-store-elimination bug, an Arm64 crash on functions with more than 256 constants, a `FORGLOOP` register bug and a compiler `uint8_t`→`int8_t` cast fixed | No edit. In Studio 0.745 `bit32.lrotate(0x80000001, 1)` is `3`, `lrotate(1, 33)` is `2`, `lrotate(0xF0000000, -4)` is `0x0F000000` and `lrotate(0x12345678, 8)` is `0x34567812` *(Studio)*. The `integer` library is still `nil` in Roblox |
 | **0.744** | Type system: width subtyping no longer injects `nil` for a stand-in property; type-pack handling in a call's tail argument fixed in nonstrict | Inference fixes, no edit |
 | **0.744** | Prototype: runtime support for **private class fields** | Part of the classes prototype, still behind `DebugLuauUserDefinedClasses` (off). Not usable |
+| **0.745** | Syntax: **`while local` / `while const`** loops, one binding scoped to the condition and body | **Not usable.** Gated by `DebugLuauWhileLocalSyntax` / `DebugLuauWhileLocalAnalysis`, absent from Studio's and every client's published flags. In Studio 0.746 `loadstring` rejects both forms with a syntax error *(Studio)* |
+| **0.745** | `table.create` and `table.clear` are fast calls; native codegen can auto-promote hot functions by call and loop counts | No edit for the fast calls. Auto-promotion is gated by `LuauRuntimeFeedback`, absent from the published flags, and the docs still say `--!native` is required: keep the comment |
+| **0.745** | Type checking: negated intersection types normalized; class method context reset in type functions; analysis blow-up on large table-like literals fixed. C API: `lua_EmbedderGc` returns `int` | Inference fixes, no edit. The C API change does not reach game code |
 
 ### `if local` / `if const` — a Studio beta, NOT usable in published games
 
@@ -94,8 +97,8 @@ What makes this *not* shippable yet:
   fully released". Code using it runs in the opted-in developer's Studio and **fails to compile
   for players**. Team members without the beta enabled cannot compile it either.
 - Beta limits: one name, one value. `if local ok, err = pcall(f) then` and compound conditions
-  (`if local x = a(); local y = b() then`) are **not** supported. `while local` is "in progress",
-  not in the beta.
+  (`if local x = a(); local y = b() then`) are **not** supported. `while local` arrived in Luau 0.745
+  behind a `Debug` flag, is not in the beta, and is a syntax error in Studio 0.746.
 - Studio's published flags (checked 2026-10-07) set `FFlagLuauIfLocalBetaFeature = True` with
   `FIntLuauIfLocalBetaFeatureRolloutPercent = 0` — it is opt-in, not on by default. The open-source
   gates in 0.743 are still `LuauExperimentalIfLocalSyntax` / `LuauExperimentalIfLocalAnalysis` (re-checked
@@ -383,9 +386,12 @@ local magnitude = vector.magnitude(v1)
 
 For compute-intensive algorithms (pathfinding, procedural generation, ray marching, heavy math), enable Luau Native Code Generation.
 
-> **Server-side only.** The official docs scope this to "server-side scripts in your game" and
-> describe nothing for the client, so do not expect a gain from `--!native` in a LocalScript. Only the script's *functions* are compiled;
-> top-level code usually runs once and does not benefit.
+> **Server scripts and Android clients only.** Since 2026-11-03 the docs say "only supported for
+> server-side scripts and client-side scripts on Android devices"; the published flag agrees
+> (`FFlagLuauCodegen` is `True` for Android, `False` for the Windows, Mac and iOS clients, checked
+> 2026-11-05). So `--!native` in a LocalScript speeds up Android players at most, and was not
+> measured on a device. Only the script's *functions* are compiled; top-level code usually runs
+> once and does not benefit.
 
 ```luau
 --!strict

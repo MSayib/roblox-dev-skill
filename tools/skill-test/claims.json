@@ -8,7 +8,15 @@
   "Player.PlayerGui": "a path to a child the engine creates, not a member",
   "Player.DeviceTrustLevel": "documented 2026-10-21 but in neither the 0.743 nor the 0.744 dump; the text says it does not exist yet",
   "Part.shap": "the 0.745 row documents its removal",
-  "Player.StepIdOffset": "the 0.745 row documents its removal"
+  "Player.StepIdOffset": "the 0.745 row documents its removal",
+  "Workspace.UseInputSink": "the rows document its addition in 0.741 and its removal in 0.746",
+  "Workspace.PrimalPhysicsSolver": "the row documents its removal in 0.746",
+  "Enum.PrimalPhysicsSolver": "the row documents its removal in 0.746",
+  "BasePart.siz": "the row documents its removal in 0.746",
+  "TestFailure.GetContext": "the row documents its removal in 0.746",
+  "AnimationRigData.LoadFromHumanoid": "the row documents its removal in 0.746",
+  "ScriptEditorService.OpenTextDocumentDocumentAsync": "the row documents its removal in 0.746",
+  "AnimatedImageService.UserCreatedTracks": "the row documents its removal in 0.746"
  },
  "claims": [
   {
@@ -2105,11 +2113,11 @@
    "id": "luau-fundamentals-056",
    "file": "references/luau-fundamentals.md",
    "quote": "top-level code usually runs once and does not benefit.",
-   "status": "docs",
-   "kind": "negative",
-   "source": "creator-docs luau/native-code-gen.md",
-   "evidence": "As 069.",
-   "checked": "2026-10-11, engine 0.742.0.7421053"
+   "status": "false",
+   "kind": "regression",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Outdated by the 2026-11-05 ingest (engine 0.746 / docs through 2026-11-04); the text was rewritten. Was: As 069.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
   },
   {
    "id": "luau-fundamentals-057",
@@ -3035,11 +3043,11 @@
    "id": "performance-optimization-031",
    "file": "references/performance-optimization.md",
    "quote": "**Native CodeGen (`--!native`)**: **server-side only.** Per the official docs, \"server-side scripts",
-   "status": "docs",
-   "kind": "negative",
-   "source": "creator-docs luau/native-code-gen.md",
-   "evidence": "\"server-side scripts in your game can be compiled directly into the machine code instructions\".",
-   "checked": "2026-10-11, engine 0.742.0.7421053"
+   "status": "false",
+   "kind": "regression",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Outdated by the 2026-11-05 ingest (engine 0.746 / docs through 2026-11-04); the text was rewritten. Was: \"server-side scripts in your game can be compiled directly into the machine code instructions\".",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
   },
   {
    "id": "performance-optimization-032",
@@ -3165,21 +3173,21 @@
    "id": "performance-optimization-047",
    "file": "references/performance-optimization.md",
    "quote": "**Key properties** (Properties window only: all three are `NotScriptable`, and a Script indexing",
-   "status": "studio",
-   "kind": "negative",
-   "source": "Studio 0.742 playtest probe Scripts (SkillTestClaimProbe, SkillTestFrameProbe), 2026-10-11; API dump 0.742",
-   "evidence": "StreamingMinRadius/TargetRadius/IntegrityMode NotScriptable; a Script reading them got \"not a valid member\".",
-   "checked": "2026-10-11, engine 0.742.0.7421053"
+   "status": "false",
+   "kind": "regression",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Outdated by the 2026-11-05 ingest (engine 0.746 / docs through 2026-11-04); the text was rewritten. Was: StreamingMinRadius/TargetRadius/IntegrityMode NotScriptable; a Script reading them got \"not a valid member\".",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
   },
   {
    "id": "performance-optimization-048",
    "file": "references/performance-optimization.md",
    "quote": "`StreamingIntegrityMode` gets \"is not a valid member of Workspace\" in Studio 0.742):",
-   "status": "studio",
-   "kind": "negative",
-   "source": "Studio 0.742 playtest probe Scripts (SkillTestClaimProbe, SkillTestFrameProbe), 2026-10-11",
-   "evidence": "\"StreamingIntegrityMode is not a valid member of Workspace\" from a playtest Script.",
-   "checked": "2026-10-11, engine 0.742.0.7421053"
+   "status": "false",
+   "kind": "regression",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Outdated by the 2026-11-05 ingest (engine 0.746 / docs through 2026-11-04); the text was rewritten. Was: \"StreamingIntegrityMode is not a valid member of Workspace\" from a playtest Script.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
   },
   {
    "id": "performance-optimization-049",
@@ -5305,11 +5313,11 @@
    "id": "performance-optimization-055",
    "file": "references/performance-optimization.md",
    "quote": "page describes it for server-side scripts only, so do not expect a gain from `--!native` in a",
-   "status": "docs",
-   "kind": "negative",
-   "source": "creator-docs luau/native-code-gen.md",
-   "evidence": "Page describes server-side scripts only.",
-   "checked": "2026-10-11, engine 0.742.0.7421053"
+   "status": "false",
+   "kind": "regression",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Outdated by the 2026-11-05 ingest (engine 0.746 / docs through 2026-11-04); the text was rewritten. Was: Page describes server-side scripts only.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
   },
   {
    "id": "performance-optimization-056",
@@ -5465,21 +5473,21 @@
    "id": "luau-fundamentals-068",
    "file": "references/luau-fundamentals.md",
    "quote": "**Server-side only.** The official docs scope this to \"server-side scripts in your game\" and",
-   "status": "docs",
-   "kind": "negative",
-   "source": "creator-docs luau/native-code-gen.md",
-   "evidence": "As 054.",
-   "checked": "2026-10-11, engine 0.742.0.7421053"
+   "status": "false",
+   "kind": "regression",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Outdated by the 2026-11-05 ingest (engine 0.746 / docs through 2026-11-04); the text was rewritten. Was: As 054.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
   },
   {
    "id": "luau-fundamentals-069",
    "file": "references/luau-fundamentals.md",
    "quote": "describe nothing for the client, so do not expect a gain from `--!native` in a LocalScript. Only the script's *functions* are compiled;",
-   "status": "docs",
-   "kind": "negative",
-   "source": "creator-docs luau/native-code-gen.md",
-   "evidence": "\"Only the script's functions are compiled natively\"; top-level scope does not benefit as much.",
-   "checked": "2026-10-11, engine 0.742.0.7421053"
+   "status": "false",
+   "kind": "regression",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Outdated by the 2026-11-05 ingest (engine 0.746 / docs through 2026-11-04); the text was rewritten. Was: \"Only the script's functions are compiled natively\"; top-level scope does not benefit as much.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
   },
   {
    "id": "false-classes-runtime-new-0742",
@@ -6025,11 +6033,11 @@
    "id": "project-structure-028",
    "file": "references/project-structure.md",
    "quote": "\"[Studio Beta] Expanding the Character Controller Library\", 2026-09-10).",
-   "status": "docs",
-   "kind": "number",
-   "source": "DevForum topic 4863739 (2026-09-10)",
-   "evidence": "\"[Studio Beta] Expanding the Character Controller Library\".",
-   "checked": "2026-10-11, engine 0.742.0.7421053"
+   "status": "false",
+   "kind": "regression",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Outdated by the 2026-11-05 ingest (engine 0.746 / docs through 2026-11-04); the text was rewritten. Was: \"[Studio Beta] Expanding the Character Controller Library\".",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
   },
   {
    "id": "project-structure-029",
@@ -6775,11 +6783,11 @@
    "id": "monetization-030",
    "file": "references/monetization.md",
    "quote": "In Studio 0.743.0.7431133, and again in 0.744.0.7441077, a server Script calling it gets",
-   "status": "studio",
-   "kind": "number",
-   "source": "Studio 0.744.0.7441077, test place 118652544255235, 2026-10-22",
-   "evidence": "Server Script 0.744: \"MarketplaceService:GetPassOwnershipAsync() is not enabled\"",
-   "checked": "2026-10-22, engine 0.744.0.7441077"
+   "status": "false",
+   "kind": "regression",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Outdated by the 2026-11-05 ingest (engine 0.746 / docs through 2026-11-04); the text was rewritten. Was: Server Script 0.744: \"MarketplaceService:GetPassOwnershipAsync() is not enabled\"",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
   },
   {
    "id": "monetization-031",
@@ -6815,11 +6823,11 @@
    "id": "security-hardening-056",
    "file": "references/security-hardening.md",
    "quote": "or plugin-only (dump 0.743), so a script cannot switch a place over.",
-   "status": "dump",
-   "kind": "negative",
-   "source": "API dump 0.743.0.7431133",
-   "evidence": "AuthorityMode RobloxScriptSecurity; others NotScriptable / RobloxScriptSecurity / PluginOrOpenCloud.",
-   "checked": "2026-10-17, engine 0.743.0.7431133"
+   "status": "false",
+   "kind": "regression",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Outdated by the 2026-11-05 ingest (engine 0.746 / docs through 2026-11-04); the text was rewritten. Was: AuthorityMode RobloxScriptSecurity; others NotScriptable / RobloxScriptSecurity / PluginOrOpenCloud.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
   },
   {
    "id": "ui-systems-022",
@@ -6855,21 +6863,21 @@
    "id": "ui-systems-025",
    "file": "references/ui-systems.md",
    "quote": "Upgraded UIGradients**. All three are `NotBrowsable` in the 0.743 API dump (hidden from the",
-   "status": "dump",
-   "kind": "number",
-   "source": "API dump 0.743.0.7431133",
-   "evidence": "UIGradient.Type, Scale, TileMode tagged NotBrowsable.",
-   "checked": "2026-10-17, engine 0.743.0.7431133"
+   "status": "false",
+   "kind": "regression",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Outdated by the 2026-11-05 ingest (engine 0.746 / docs through 2026-11-04); the text was rewritten. Was: UIGradient.Type, Scale, TileMode tagged NotBrowsable.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
   },
   {
    "id": "ui-systems-026",
    "file": "references/ui-systems.md",
    "quote": "Properties window). In Studio 0.743 a `LocalScript` set and read back `Type = Elliptical`,",
-   "status": "studio",
-   "kind": "number",
-   "source": "playtest Script/LocalScript + execute_luau, Studio 0.743.0.7431133 (place 118652544255235), 2026-10-17",
-   "evidence": "LocalScript: Type=Elliptical, Scale 1->0.25, TileMode Clamp->Mirror, no error.",
-   "checked": "2026-10-17, engine 0.743.0.7431133"
+   "status": "false",
+   "kind": "regression",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Outdated by the 2026-11-05 ingest (engine 0.746 / docs through 2026-11-04); the text was rewritten. Was: LocalScript: Type=Elliptical, Scale 1->0.25, TileMode Clamp->Mirror, no error.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
   },
   {
    "id": "ui-systems-027",
@@ -7065,11 +7073,11 @@
    "id": "legacy-migration-142",
    "file": "references/legacy-migration.md",
    "quote": "`AnalyticsService:LogJourneyEvent` **removed from the docs** (2026-10-21) | Still in the 0.743 and 0.744 dumps (`Security: None`), and a Script can still index it *(Studio)*. With no page describing it, do not add new uses",
-   "status": "studio",
-   "kind": "negative",
-   "source": "Roblox/creator-docs 65621e8c AnalyticsService.yaml (method removed); dumps 0.743/0.744; Studio 0.743.0.7431133, test place 118652544255235, 2026-10-21",
-   "evidence": "Dump: LogJourneyEvent Security None, Basic capability; server Script indexing it returned a function",
-   "checked": "2026-10-21, engine 0.743.0.7431133"
+   "status": "false",
+   "kind": "regression",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Outdated by the 2026-11-05 ingest (engine 0.746 / docs through 2026-11-04); the text was rewritten. Was: Dump: LogJourneyEvent Security None, Basic capability; server Script indexing it returned a function",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
   },
   {
    "id": "legacy-migration-143",
@@ -7175,11 +7183,11 @@
    "id": "networking-019",
    "file": "references/networking.md",
    "quote": "(page added 2026-10-20) · [TextChannelWindow](https://create.roblox.com/docs/reference/engine/classes/TextChannelWindow) ·",
-   "status": "source",
-   "kind": "number",
-   "source": "Roblox/creator-docs 3e54c1d7 2026-10-20",
-   "evidence": "content/en-us/chat/platform-integrated-chat.md added (+205)",
-   "checked": "2026-10-21, engine 0.743.0.7431133"
+   "status": "false",
+   "kind": "regression",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Outdated by the 2026-11-05 ingest (engine 0.746 / docs through 2026-11-04); the text was rewritten. Was: content/en-us/chat/platform-integrated-chat.md added (+205)",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
   },
   {
    "id": "networking-020",
@@ -7805,81 +7813,81 @@
    "id": "SKILL-052",
    "file": "SKILL.md",
    "quote": "published, engine changes up to 0.745 and Luau up to 0.744) and worked examples tested in Studio, so consult",
-   "status": "dump",
-   "kind": "number",
-   "source": "API dumps 0.744.0.7441077 and 0.745.0.7451137 (diff-api-dumps.py, 83 changes / 47 developer-visible); Luau 0.744 release 2026-10-23",
-   "evidence": "949 classes (+FeatureMatchingService, FeatureMatchingSession, IntegrityService; -BulkImportService), 654 enums (+PlayerDeviceTrustDecision, +PlayerDeviceTrustLevel), 267 *Service class files, 347 Service-tagged, 48 deprecated classes, 574 deprecated members in both dumps",
-   "checked": "2026-10-29, engine 0.745.0.7451137"
+   "status": "false",
+   "kind": "regression",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Outdated by the 2026-11-05 ingest (engine 0.746 / docs through 2026-11-04); the text was rewritten. Was: 949 classes (+FeatureMatchingService, FeatureMatchingSession, IntegrityService; -BulkImportService), 654 enums (+PlayerDeviceTrustDecision, +PlayerDeviceTrustLevel), 267 *Service c",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
   },
   {
    "id": "SKILL-053",
    "file": "SKILL.md",
    "quote": "**Engine**: Roblox Studio **0.745.0.7451137** with **Luau 0.744** (released 2026-10-23) — dump",
-   "status": "dump",
-   "kind": "number",
-   "source": "API dumps 0.744.0.7441077 and 0.745.0.7451137 (diff-api-dumps.py, 83 changes / 47 developer-visible); Luau 0.744 release 2026-10-23",
-   "evidence": "949 classes (+FeatureMatchingService, FeatureMatchingSession, IntegrityService; -BulkImportService), 654 enums (+PlayerDeviceTrustDecision, +PlayerDeviceTrustLevel), 267 *Service class files, 347 Service-tagged, 48 deprecated classes, 574 deprecated members in both dumps",
-   "checked": "2026-10-29, engine 0.745.0.7451137"
+   "status": "false",
+   "kind": "regression",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Outdated by the 2026-11-05 ingest (engine 0.746 / docs through 2026-11-04); the text was rewritten. Was: 949 classes (+FeatureMatchingService, FeatureMatchingSession, IntegrityService; -BulkImportService), 654 enums (+PlayerDeviceTrustDecision, +PlayerDeviceTrustLevel), 267 *Service c",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
   },
   {
    "id": "SKILL-059",
    "file": "SKILL.md",
    "quote": "downloaded, re-split, and diffed against 0.744 on **2026-10-29**, with every developer-visible",
-   "status": "dump",
-   "kind": "number",
-   "source": "API dumps 0.744.0.7441077 and 0.745.0.7451137 (diff-api-dumps.py, 83 changes / 47 developer-visible); Luau 0.744 release 2026-10-23",
-   "evidence": "949 classes (+FeatureMatchingService, FeatureMatchingSession, IntegrityService; -BulkImportService), 654 enums (+PlayerDeviceTrustDecision, +PlayerDeviceTrustLevel), 267 *Service class files, 347 Service-tagged, 48 deprecated classes, 574 deprecated members in both dumps",
-   "checked": "2026-10-29, engine 0.745.0.7451137"
+   "status": "false",
+   "kind": "regression",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Outdated by the 2026-11-05 ingest (engine 0.746 / docs through 2026-11-04); the text was rewritten. Was: 949 classes (+FeatureMatchingService, FeatureMatchingSession, IntegrityService; -BulkImportService), 654 enums (+PlayerDeviceTrustDecision, +PlayerDeviceTrustLevel), 267 *Service c",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
   },
   {
    "id": "SKILL-060",
    "file": "SKILL.md",
    "quote": "change run in Studio 0.745. 949 classes / 654 enums; locally, 267 class files named `*Service`",
-   "status": "dump",
-   "kind": "number",
-   "source": "API dumps 0.744.0.7441077 and 0.745.0.7451137 (diff-api-dumps.py, 83 changes / 47 developer-visible); Luau 0.744 release 2026-10-23",
-   "evidence": "949 classes (+FeatureMatchingService, FeatureMatchingSession, IntegrityService; -BulkImportService), 654 enums (+PlayerDeviceTrustDecision, +PlayerDeviceTrustLevel), 267 *Service class files, 347 Service-tagged, 48 deprecated classes, 574 deprecated members in both dumps",
-   "checked": "2026-10-29, engine 0.745.0.7451137"
+   "status": "false",
+   "kind": "regression",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Outdated by the 2026-11-05 ingest (engine 0.746 / docs through 2026-11-04); the text was rewritten. Was: 949 classes (+FeatureMatchingService, FeatureMatchingSession, IntegrityService; -BulkImportService), 654 enums (+PlayerDeviceTrustDecision, +PlayerDeviceTrustLevel), 267 *Service c",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
   },
   {
    "id": "SKILL-062",
    "file": "SKILL.md",
    "quote": "(347 classes carry the `Service` tag) and 48 deprecated classes (574 members). The official docs",
-   "status": "dump",
-   "kind": "negative",
-   "source": "API dumps 0.744.0.7441077 and 0.745.0.7451137 (diff-api-dumps.py, 83 changes / 47 developer-visible); Luau 0.744 release 2026-10-23",
-   "evidence": "949 classes (+FeatureMatchingService, FeatureMatchingSession, IntegrityService; -BulkImportService), 654 enums (+PlayerDeviceTrustDecision, +PlayerDeviceTrustLevel), 267 *Service class files, 347 Service-tagged, 48 deprecated classes, 574 deprecated members in both dumps",
-   "checked": "2026-10-29, engine 0.745.0.7451137"
+   "status": "false",
+   "kind": "regression",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Outdated by the 2026-11-05 ingest (engine 0.746 / docs through 2026-11-04); the text was rewritten. Was: 949 classes (+FeatureMatchingService, FeatureMatchingSession, IntegrityService; -BulkImportService), 654 enums (+PlayerDeviceTrustDecision, +PlayerDeviceTrustLevel), 267 *Service c",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
   },
   {
    "id": "SKILL-063",
    "file": "SKILL.md",
    "quote": "were checked through 2026-10-29. New in 0.745 and usable: `coroutine.finally`, the `Shapecast`",
-   "status": "studio",
-   "kind": "number",
-   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) (STUDIO_VERSION 0.745.0.7451137 since f7a0847 2026-10-22)",
-   "evidence": "coroutine.finally a function; Shapecast cframeOverride hit a target 1000 studs from the part (8.5) and sizeOverride 20-wide hit an off-centre target the 2-wide cast missed; DeviceTrustLevel Pending; Capsule warning; BindTo*Parallel / BakeToMeshAsync / AddFace refused",
-   "checked": "2026-10-29, engine 0.745.0.7451137"
+   "status": "false",
+   "kind": "regression",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Outdated by the 2026-11-05 ingest (engine 0.746 / docs through 2026-11-04); the text was rewritten. Was: coroutine.finally a function; Shapecast cframeOverride hit a target 1000 studs from the part (8.5) and sizeOverride 20-wide hit an off-centre target the 2-wide cast missed; DeviceT",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
   },
   {
    "id": "SKILL-065",
    "file": "SKILL.md",
    "quote": "The docs page lists **26 tools**. The build observed 2026-10-29 (Studio 0.745) exposed **31**:",
-   "status": "studio",
-   "kind": "number",
-   "source": "Live Roblox_Studio MCP tool list and schemas in this session (Studio 0.745.0.7451137), 2026-10-29; Roblox/creator-docs studio/mcp.md unchanged since 2026-08-21",
-   "evidence": "31 tools: the 28 of 2026-10-22 plus list_skills, create_skill, edit_skill (schemas read; list_skills run; create/edit not run). Other schemas unchanged",
-   "checked": "2026-10-29, engine 0.745.0.7451137"
+   "status": "false",
+   "kind": "regression",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Outdated by the 2026-11-05 ingest (engine 0.746 / docs through 2026-11-04); the text was rewritten. Was: 31 tools: the 28 of 2026-10-22 plus list_skills, create_skill, edit_skill (schemas read; list_skills run; create/edit not run). Other schemas unchanged",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
   },
   {
    "id": "SKILL-066",
    "file": "SKILL.md",
    "quote": "`list_skills`, `create_skill` and `edit_skill` (28 on 2026-10-17 to 2026-10-22, Studio",
-   "status": "studio",
-   "kind": "number",
-   "source": "Live Roblox_Studio MCP tool list and schemas in this session (Studio 0.745.0.7451137), 2026-10-29; Roblox/creator-docs studio/mcp.md unchanged since 2026-08-21",
-   "evidence": "31 tools: the 28 of 2026-10-22 plus list_skills, create_skill, edit_skill (schemas read; list_skills run; create/edit not run). Other schemas unchanged",
-   "checked": "2026-10-29, engine 0.745.0.7451137"
+   "status": "false",
+   "kind": "regression",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Outdated by the 2026-11-05 ingest (engine 0.746 / docs through 2026-11-04); the text was rewritten. Was: 31 tools: the 28 of 2026-10-22 plus list_skills, create_skill, edit_skill (schemas read; list_skills run; create/edit not run). Other schemas unchanged",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
   },
   {
    "id": "SKILL-067",
@@ -7895,21 +7903,21 @@
    "id": "SKILL-068",
    "file": "SKILL.md",
    "quote": "**How much cheaper, re-measured 2026-10-29 on 0.745.0.7451137** (an earlier \"845× smaller\" figure",
-   "status": "studio",
-   "kind": "number",
-   "source": "Command in SKILL.md run 2026-10-29 on ~/RobloxDocs 0.745.0.7451137",
-   "evidence": "dump 8677424 B; 949 class files min 101, median 2065, mean 4876, max 105774",
-   "checked": "2026-10-29, engine 0.745.0.7451137"
+   "status": "false",
+   "kind": "regression",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Outdated by the 2026-11-05 ingest (engine 0.746 / docs through 2026-11-04); the text was rewritten. Was: dump 8677424 B; 949 class files min 101, median 2065, mean 4876, max 105774",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
   },
   {
    "id": "SKILL-069",
    "file": "SKILL.md",
    "quote": "produced them): the full dump is **8,677,424 bytes**; the 949 split class files run **101 B min,",
-   "status": "studio",
-   "kind": "number",
-   "source": "Command in SKILL.md run 2026-10-29 on ~/RobloxDocs 0.745.0.7451137",
-   "evidence": "dump 8677424 B; 949 class files min 101, median 2065, mean 4876, max 105774",
-   "checked": "2026-10-29, engine 0.745.0.7451137"
+   "status": "false",
+   "kind": "regression",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Outdated by the 2026-11-05 ingest (engine 0.746 / docs through 2026-11-04); the text was rewritten. Was: dump 8677424 B; 949 class files min 101, median 2065, mean 4876, max 105774",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
   },
   {
    "id": "file-formats-and-assets-030",
@@ -8025,11 +8033,11 @@
    "id": "legacy-migration-176",
    "file": "references/legacy-migration.md",
    "quote": "`TeleportOptions.ReservedServerId` / `VipServerId` (in the dump since 0.740); the docs deprecate `TeleportService:ReserveServerAsync` and `TeleportOptions.ReservedServerAccessCode` / `ShouldReserveServer` (2026-10-27) | **The replacement refuses in Studio.** `TeleportAsync` with `ReservedServerId` fails `ReservedServerId and VipServerId require the Access Code V2 feature, which is not enabled on this server.` *(Studio)*. A live server was not tested. The dump does **not** tag `ReserveServerAsync` as deprecated, and the docs say it keeps working. See `networking.md` → *Teleporting to reserved and VIP servers*",
-   "status": "studio",
-   "kind": "negative",
-   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); dumps 0.739/0.740/0.745 (ReservedServerId first in 0.740); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) projects/teleport-private-servers.md, TeleportService.yaml",
-   "evidence": "TeleportAsync with ReservedServerId (alone or with another field) failed 'ReservedServerId and VipServerId require the Access Code V2 feature, which is not enabled on this server.'; plain TeleportAsync 'Request Context Failure'; ReserveServerAsync 'HTTP 403 (Forbidden)'; non-GUID string set ok; ReserveServerAsync has no Deprecated tag in 0.745",
-   "checked": "2026-10-29, engine 0.745.0.7451137"
+   "status": "false",
+   "kind": "regression",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Outdated by the 2026-11-05 ingest (engine 0.746 / docs through 2026-11-04); the text was rewritten. Was: TeleportAsync with ReservedServerId (alone or with another field) failed 'ReservedServerId and VipServerId require the Access Code V2 feature, which is not enabled on this server.'",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
   },
   {
    "id": "legacy-migration-177",
@@ -8185,11 +8193,11 @@
    "id": "legacy-migration-192",
    "file": "references/legacy-migration.md",
    "quote": "**Teleport to private servers** (`projects/teleport-private-servers.md`, new); `TeleportService:ReserveServerAsync`, `TeleportToPrivateServer`, `TeleportOptions.ReservedServerAccessCode` / `ShouldReserveServer` described as deprecated; `DataModel.PrivateServerId` now says \"VIP server or reserved server\" | See `networking.md` → *Teleporting to reserved and VIP servers*. The replacement fields refuse in Studio (0.745 row)",
-   "status": "studio",
-   "kind": "negative",
-   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); dumps 0.739/0.740/0.745 (ReservedServerId first in 0.740); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) projects/teleport-private-servers.md, TeleportService.yaml",
-   "evidence": "TeleportAsync with ReservedServerId (alone or with another field) failed 'ReservedServerId and VipServerId require the Access Code V2 feature, which is not enabled on this server.'; plain TeleportAsync 'Request Context Failure'; ReserveServerAsync 'HTTP 403 (Forbidden)'; non-GUID string set ok; ReserveServerAsync has no Deprecated tag in 0.745",
-   "checked": "2026-10-29, engine 0.745.0.7451137"
+   "status": "false",
+   "kind": "regression",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Outdated by the 2026-11-05 ingest (engine 0.746 / docs through 2026-11-04); the text was rewritten. Was: TeleportAsync with ReservedServerId (alone or with another field) failed 'ReservedServerId and VipServerId require the Access Code V2 feature, which is not enabled on this server.'",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
   },
   {
    "id": "legacy-migration-193",
@@ -8295,11 +8303,11 @@
    "id": "legacy-migration-203",
    "file": "references/legacy-migration.md",
    "quote": "`+TeleportOptions.ReservedServerId`, `+TeleportOptions.VipServerId`; `Enum.TeleportMethod` +`TeleportSwitchServer` | New public teleport targeting fields. **Update (0.745):** the docs now prefer them to `ReserveServerAsync`, but `TeleportAsync` with either one fails in Studio 0.745 (\"require the Access Code V2 feature\"); see the 0.745 row. The matching `TeleportService:TeleportSwitchServer()` is **`RobloxScriptSecurity`** — you cannot call it, so do not build on it",
-   "status": "studio",
-   "kind": "negative",
-   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); dumps 0.739/0.740/0.745 (ReservedServerId first in 0.740); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) projects/teleport-private-servers.md, TeleportService.yaml",
-   "evidence": "TeleportAsync with ReservedServerId (alone or with another field) failed 'ReservedServerId and VipServerId require the Access Code V2 feature, which is not enabled on this server.'; plain TeleportAsync 'Request Context Failure'; ReserveServerAsync 'HTTP 403 (Forbidden)'; non-GUID string set ok; ReserveServerAsync has no Deprecated tag in 0.745",
-   "checked": "2026-10-29, engine 0.745.0.7451137"
+   "status": "false",
+   "kind": "regression",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Outdated by the 2026-11-05 ingest (engine 0.746 / docs through 2026-11-04); the text was rewritten. Was: TeleportAsync with ReservedServerId (alone or with another field) failed 'ReservedServerId and VipServerId require the Access Code V2 feature, which is not enabled on this server.'",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
   },
   {
    "id": "legacy-migration-204",
@@ -8685,21 +8693,21 @@
    "id": "mcp-integration-091",
    "file": "references/mcp-integration.md",
    "quote": "**First-party skills exposed by the `skill` tool (2026-10-29, nine):**",
-   "status": "studio",
-   "kind": "number",
-   "source": "Live Roblox_Studio MCP tool list and schemas in this session (Studio 0.745.0.7451137), 2026-10-29; Roblox/creator-docs studio/mcp.md unchanged since 2026-08-21",
-   "evidence": "list_skills returned 9 Roblox skills: the 7 earlier plus rbx-configs-experimentation and rbx-instrument-analytics",
-   "checked": "2026-10-29, engine 0.745.0.7451137"
+   "status": "false",
+   "kind": "regression",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Outdated by the 2026-11-05 ingest (engine 0.746 / docs through 2026-11-04); the text was rewritten. Was: list_skills returned 9 Roblox skills: the 7 earlier plus rbx-configs-experimentation and rbx-instrument-analytics",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
   },
   {
    "id": "mcp-integration-092",
    "file": "references/mcp-integration.md",
    "quote": "events) were unchanged from 2026-09-25 to 2026-10-22. These are Roblox's, shipped inside",
-   "status": "studio",
-   "kind": "number",
-   "source": "Live Roblox_Studio MCP tool list and schemas in this session (Studio 0.745.0.7451137), 2026-10-29; Roblox/creator-docs studio/mcp.md unchanged since 2026-08-21",
-   "evidence": "list_skills returned 9 Roblox skills: the 7 earlier plus rbx-configs-experimentation and rbx-instrument-analytics",
-   "checked": "2026-10-29, engine 0.745.0.7451137"
+   "status": "false",
+   "kind": "regression",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Outdated by the 2026-11-05 ingest (engine 0.746 / docs through 2026-11-04); the text was rewritten. Was: list_skills returned 9 Roblox skills: the 7 earlier plus rbx-configs-experimentation and rbx-instrument-analytics",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
   },
   {
    "id": "mcp-integration-093",
@@ -8715,11 +8723,11 @@
    "id": "mcp-integration-094",
    "file": "references/mcp-integration.md",
    "quote": "`skill` and `subagent` absent from this file | Both are real and officially documented. Roblox ships 7 first-party `rbx-*` skills that partly supersede hand-rolled approaches (9 on 2026-10-29). | Official docs + live schemas",
-   "status": "studio",
-   "kind": "number",
-   "source": "Live Roblox_Studio MCP tool list and schemas in this session (Studio 0.745.0.7451137), 2026-10-29; Roblox/creator-docs studio/mcp.md unchanged since 2026-08-21",
-   "evidence": "list_skills returned 9 Roblox skills: the 7 earlier plus rbx-configs-experimentation and rbx-instrument-analytics",
-   "checked": "2026-10-29, engine 0.745.0.7451137"
+   "status": "false",
+   "kind": "regression",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Outdated by the 2026-11-05 ingest (engine 0.746 / docs through 2026-11-04); the text was rewritten. Was: list_skills returned 9 Roblox skills: the 7 earlier plus rbx-configs-experimentation and rbx-instrument-analytics",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
   },
   {
    "id": "networking-035",
@@ -8775,71 +8783,71 @@
    "id": "networking-040",
    "file": "references/networking.md",
    "quote": "**What Studio 0.745 does with them (2026-10-29):** both fields can be set and read back (a",
-   "status": "studio",
-   "kind": "number",
-   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); dumps 0.739/0.740/0.745 (ReservedServerId first in 0.740); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) projects/teleport-private-servers.md, TeleportService.yaml",
-   "evidence": "TeleportAsync with ReservedServerId (alone or with another field) failed 'ReservedServerId and VipServerId require the Access Code V2 feature, which is not enabled on this server.'; plain TeleportAsync 'Request Context Failure'; ReserveServerAsync 'HTTP 403 (Forbidden)'; non-GUID string set ok; ReserveServerAsync has no Deprecated tag in 0.745",
-   "checked": "2026-10-29, engine 0.745.0.7451137"
+   "status": "false",
+   "kind": "regression",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Outdated by the 2026-11-05 ingest (engine 0.746 / docs through 2026-11-04); the text was rewritten. Was: TeleportAsync with ReservedServerId (alone or with another field) failed 'ReservedServerId and VipServerId require the Access Code V2 feature, which is not enabled on this server.'",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
   },
   {
    "id": "networking-041",
    "file": "references/networking.md",
    "quote": "non-GUID string is accepted too), but `TeleportAsync` with either one fails `ReservedServerId and",
-   "status": "studio",
-   "kind": "negative",
-   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); dumps 0.739/0.740/0.745 (ReservedServerId first in 0.740); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) projects/teleport-private-servers.md, TeleportService.yaml",
-   "evidence": "TeleportAsync with ReservedServerId (alone or with another field) failed 'ReservedServerId and VipServerId require the Access Code V2 feature, which is not enabled on this server.'; plain TeleportAsync 'Request Context Failure'; ReserveServerAsync 'HTTP 403 (Forbidden)'; non-GUID string set ok; ReserveServerAsync has no Deprecated tag in 0.745",
-   "checked": "2026-10-29, engine 0.745.0.7451137"
+   "status": "false",
+   "kind": "regression",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Outdated by the 2026-11-05 ingest (engine 0.746 / docs through 2026-11-04); the text was rewritten. Was: TeleportAsync with ReservedServerId (alone or with another field) failed 'ReservedServerId and VipServerId require the Access Code V2 feature, which is not enabled on this server.'",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
   },
   {
    "id": "networking-042",
    "file": "references/networking.md",
    "quote": "VipServerId require the Access Code V2 feature, which is not enabled on this server.` A live",
-   "status": "studio",
-   "kind": "negative",
-   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); dumps 0.739/0.740/0.745 (ReservedServerId first in 0.740); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) projects/teleport-private-servers.md, TeleportService.yaml",
-   "evidence": "TeleportAsync with ReservedServerId (alone or with another field) failed 'ReservedServerId and VipServerId require the Access Code V2 feature, which is not enabled on this server.'; plain TeleportAsync 'Request Context Failure'; ReserveServerAsync 'HTTP 403 (Forbidden)'; non-GUID string set ok; ReserveServerAsync has no Deprecated tag in 0.745",
-   "checked": "2026-10-29, engine 0.745.0.7451137"
+   "status": "false",
+   "kind": "regression",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Outdated by the 2026-11-05 ingest (engine 0.746 / docs through 2026-11-04); the text was rewritten. Was: TeleportAsync with ReservedServerId (alone or with another field) failed 'ReservedServerId and VipServerId require the Access Code V2 feature, which is not enabled on this server.'",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
   },
   {
    "id": "networking-043",
    "file": "references/networking.md",
    "quote": "server was not tested. Studio cannot complete any teleport (a plain `TeleportAsync` fails",
-   "status": "studio",
-   "kind": "negative",
-   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); dumps 0.739/0.740/0.745 (ReservedServerId first in 0.740); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) projects/teleport-private-servers.md, TeleportService.yaml",
-   "evidence": "TeleportAsync with ReservedServerId (alone or with another field) failed 'ReservedServerId and VipServerId require the Access Code V2 feature, which is not enabled on this server.'; plain TeleportAsync 'Request Context Failure'; ReserveServerAsync 'HTTP 403 (Forbidden)'; non-GUID string set ok; ReserveServerAsync has no Deprecated tag in 0.745",
-   "checked": "2026-10-29, engine 0.745.0.7451137"
+   "status": "false",
+   "kind": "regression",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Outdated by the 2026-11-05 ingest (engine 0.746 / docs through 2026-11-04); the text was rewritten. Was: TeleportAsync with ReservedServerId (alone or with another field) failed 'ReservedServerId and VipServerId require the Access Code V2 feature, which is not enabled on this server.'",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
   },
   {
    "id": "networking-044",
    "file": "references/networking.md",
    "quote": "`Request Context Failure`, `ReserveServerAsync` fails `HTTP 403`), and the 0.745 dump has no",
-   "status": "studio",
-   "kind": "negative",
-   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); dumps 0.739/0.740/0.745 (ReservedServerId first in 0.740); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) projects/teleport-private-servers.md, TeleportService.yaml",
-   "evidence": "TeleportAsync with ReservedServerId (alone or with another field) failed 'ReservedServerId and VipServerId require the Access Code V2 feature, which is not enabled on this server.'; plain TeleportAsync 'Request Context Failure'; ReserveServerAsync 'HTTP 403 (Forbidden)'; non-GUID string set ok; ReserveServerAsync has no Deprecated tag in 0.745",
-   "checked": "2026-10-29, engine 0.745.0.7451137"
+   "status": "false",
+   "kind": "regression",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Outdated by the 2026-11-05 ingest (engine 0.746 / docs through 2026-11-04); the text was rewritten. Was: TeleportAsync with ReservedServerId (alone or with another field) failed 'ReservedServerId and VipServerId require the Access Code V2 feature, which is not enabled on this server.'",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
   },
   {
    "id": "networking-045",
    "file": "references/networking.md",
    "quote": "`Deprecated` tag on `ReserveServerAsync`. So before you ship the new fields, try them between two",
-   "status": "studio",
-   "kind": "negative",
-   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); dumps 0.739/0.740/0.745 (ReservedServerId first in 0.740); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) projects/teleport-private-servers.md, TeleportService.yaml",
-   "evidence": "TeleportAsync with ReservedServerId (alone or with another field) failed 'ReservedServerId and VipServerId require the Access Code V2 feature, which is not enabled on this server.'; plain TeleportAsync 'Request Context Failure'; ReserveServerAsync 'HTTP 403 (Forbidden)'; non-GUID string set ok; ReserveServerAsync has no Deprecated tag in 0.745",
-   "checked": "2026-10-29, engine 0.745.0.7451137"
+   "status": "false",
+   "kind": "regression",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Outdated by the 2026-11-05 ingest (engine 0.746 / docs through 2026-11-04); the text was rewritten. Was: TeleportAsync with ReservedServerId (alone or with another field) failed 'ReservedServerId and VipServerId require the Access Code V2 feature, which is not enabled on this server.'",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
   },
   {
    "id": "networking-046",
    "file": "references/networking.md",
    "quote": "places of a **published** game. Existing `ReserveServerAsync` code does not need to change yet.",
-   "status": "advice",
-   "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "status": "false",
+   "kind": "regression",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Outdated by the 2026-11-05 ingest (engine 0.746 / docs through 2026-11-04); the text was rewritten. Was: ",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
   },
   {
    "id": "project-structure-035",
@@ -8875,31 +8883,31 @@
    "id": "security-hardening-063",
    "file": "references/security-hardening.md",
    "quote": "The `Workspace` reference page lists `AuthorityMode` as `Security: None` since 2026-10-22, but in",
-   "status": "studio",
-   "kind": "number",
-   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) Workspace.yaml",
-   "evidence": "Docs: AuthorityMode read/write None (Basic). Dump 0.745 RobloxScriptSecurity. Script, LocalScript, execute_luau: 'cannot read AuthorityMode (lacking capability RobloxScript)'",
-   "checked": "2026-10-29, engine 0.745.0.7451137"
+   "status": "false",
+   "kind": "regression",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Outdated by the 2026-11-05 ingest (engine 0.746 / docs through 2026-11-04); the text was rewritten. Was: Docs: AuthorityMode read/write None (Basic). Dump 0.745 RobloxScriptSecurity. Script, LocalScript, execute_luau: 'cannot read AuthorityMode (lacking capability RobloxScript)'",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
   },
   {
    "id": "security-hardening-064",
    "file": "references/security-hardening.md",
    "quote": "Studio 0.745 a Script, a LocalScript and `execute_luau` still fail to read it (`lacking capability",
-   "status": "studio",
-   "kind": "negative",
-   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) Workspace.yaml",
-   "evidence": "Docs: AuthorityMode read/write None (Basic). Dump 0.745 RobloxScriptSecurity. Script, LocalScript, execute_luau: 'cannot read AuthorityMode (lacking capability RobloxScript)'",
-   "checked": "2026-10-29, engine 0.745.0.7451137"
+   "status": "false",
+   "kind": "regression",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Outdated by the 2026-11-05 ingest (engine 0.746 / docs through 2026-11-04); the text was rewritten. Was: Docs: AuthorityMode read/write None (Basic). Dump 0.745 RobloxScriptSecurity. Script, LocalScript, execute_luau: 'cannot read AuthorityMode (lacking capability RobloxScript)'",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
   },
   {
    "id": "security-hardening-065",
    "file": "references/security-hardening.md",
    "quote": "RobloxScript`, tested 2026-10-29), as the 0.745 dump says.",
-   "status": "studio",
-   "kind": "number",
-   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards); Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) Workspace.yaml",
-   "evidence": "Docs: AuthorityMode read/write None (Basic). Dump 0.745 RobloxScriptSecurity. Script, LocalScript, execute_luau: 'cannot read AuthorityMode (lacking capability RobloxScript)'",
-   "checked": "2026-10-29, engine 0.745.0.7451137"
+   "status": "false",
+   "kind": "regression",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Outdated by the 2026-11-05 ingest (engine 0.746 / docs through 2026-11-04); the text was rewritten. Was: Docs: AuthorityMode read/write None (Basic). Dump 0.745 RobloxScriptSecurity. Script, LocalScript, execute_luau: 'cannot read AuthorityMode (lacking capability RobloxScript)'",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
   },
   {
    "id": "security-hardening-066",
@@ -8945,11 +8953,11 @@
    "id": "security-hardening-070",
    "file": "references/security-hardening.md",
    "quote": "whether an instance is predicted. The parallel `BindToSimulationParallel` is not enabled in 0.745.",
-   "status": "studio",
-   "kind": "negative",
-   "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards)",
-   "evidence": "Actor-parented Script and plain Script: 'RunService:BindToSimulationParallel() is not enabled' / BindToAnimationParallel same; serial BindToSimulation returned RBXScriptConnection",
-   "checked": "2026-10-29, engine 0.745.0.7451137"
+   "status": "false",
+   "kind": "regression",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Outdated by the 2026-11-05 ingest (engine 0.746 / docs through 2026-11-04); the text was rewritten. Was: Actor-parented Script and plain Script: 'RunService:BindToSimulationParallel() is not enabled' / BindToAnimationParallel same; serial BindToSimulation returned RBXScriptConnection",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
   },
   {
    "id": "security-hardening-071",
@@ -9120,6 +9128,1636 @@
    "source": "Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) ContextActionService.yaml (f7a0847..142c105); dump 0.745",
    "evidence": "Page: 'aren't recommended for new work and are planned for deprecation'; BindAction has no Deprecated tag in 0.745",
    "checked": "2026-10-29, engine 0.745.0.7451137"
+  },
+  {
+   "id": "SKILL-070",
+   "file": "SKILL.md",
+   "quote": "published, engine changes up to 0.746 and Luau up to 0.745) and worked examples tested in Studio, so consult",
+   "status": "dump",
+   "kind": "number",
+   "source": "dump 0.745 -> 0.746.0.7461264 (diff-api-dumps)",
+   "evidence": "950 classes, 656 enums, 267 *Service files, 347 tagged Service, 48 deprecated classes, 577 deprecated members in the 0.746 dump; Luau 0.745 released 2026-10-30.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "SKILL-071",
+   "file": "SKILL.md",
+   "quote": "**Engine**: Roblox Studio **0.746.0.7461264** with **Luau 0.745** (released 2026-10-30) — dump",
+   "status": "dump",
+   "kind": "number",
+   "source": "dump 0.745 -> 0.746.0.7461264 (diff-api-dumps)",
+   "evidence": "Monitor run 2026-11-05: 0.746.0.7461264 dump split; 950/656/267/347/48/577 measured from the dump. Margin, Color3 methods and EnableGamepadCursor() run in Studio 0.746.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "SKILL-072",
+   "file": "SKILL.md",
+   "quote": "downloaded, re-split, and diffed against 0.745 on **2026-11-05**, with every developer-visible",
+   "status": "dump",
+   "kind": "number",
+   "source": "dump 0.745 -> 0.746.0.7461264 (diff-api-dumps)",
+   "evidence": "Monitor run 2026-11-05: 0.746.0.7461264 dump split; 950/656/267/347/48/577 measured from the dump. Margin, Color3 methods and EnableGamepadCursor() run in Studio 0.746.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "SKILL-073",
+   "file": "SKILL.md",
+   "quote": "change run in Studio 0.746. 950 classes / 656 enums; locally, 267 class files named `*Service`",
+   "status": "dump",
+   "kind": "number",
+   "source": "dump 0.745 -> 0.746.0.7461264 (diff-api-dumps)",
+   "evidence": "Monitor run 2026-11-05: 0.746.0.7461264 dump split; 950/656/267/347/48/577 measured from the dump. Margin, Color3 methods and EnableGamepadCursor() run in Studio 0.746.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "SKILL-074",
+   "file": "SKILL.md",
+   "quote": "(347 classes carry the `Service` tag) and 48 deprecated classes (577 members). The official docs",
+   "status": "dump",
+   "kind": "number",
+   "source": "dump 0.745 -> 0.746.0.7461264 (diff-api-dumps)",
+   "evidence": "Monitor run 2026-11-05: 0.746.0.7461264 dump split; 950/656/267/347/48/577 measured from the dump. Margin, Color3 methods and EnableGamepadCursor() run in Studio 0.746.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "SKILL-075",
+   "file": "SKILL.md",
+   "quote": "were checked through 2026-11-04. New and usable: `RaycastParams.Margin` / `SizeGradient`, the",
+   "status": "dump",
+   "kind": "number",
+   "source": "dump 0.745 -> 0.746.0.7461264 (diff-api-dumps)",
+   "evidence": "Monitor run 2026-11-05: 0.746.0.7461264 dump split; 950/656/267/347/48/577 measured from the dump. Margin, Color3 methods and EnableGamepadCursor() run in Studio 0.746.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "SKILL-076",
+   "file": "SKILL.md",
+   "quote": "`Color3` contrast methods, `GamepadService:EnableGamepadCursor()` with no argument.",
+   "status": "dump",
+   "kind": "number",
+   "source": "dump 0.745 -> 0.746.0.7461264 (diff-api-dumps)",
+   "evidence": "Monitor run 2026-11-05: 0.746.0.7461264 dump split; 950/656/267/347/48/577 measured from the dump. Margin, Color3 methods and EnableGamepadCursor() run in Studio 0.746.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "SKILL-077",
+   "file": "SKILL.md",
+   "quote": "The docs page lists **26 tools**. The build observed 2026-11-05 (Studio 0.746) exposed **34**:",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "34 tools in the live list 2026-11-05: the 31 of 2026-10-29 plus generate_scene, generate_avatar, auto_setup_avatar (schemas read, none run). Docs page studio/mcp.md last changed aa6c8e1, 2026-08-21.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "SKILL-078",
+   "file": "SKILL.md",
+   "quote": "those plus the undocumented `generate_texture`, `segment_mesh`, `generate_scene`, `generate_avatar`,",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "34 tools in the live list 2026-11-05: the 31 of 2026-10-29 plus generate_scene, generate_avatar, auto_setup_avatar (schemas read, none run). Docs page studio/mcp.md last changed aa6c8e1, 2026-08-21.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "SKILL-079",
+   "file": "SKILL.md",
+   "quote": "`auto_setup_avatar` and three skill-authoring tools, `list_skills`, `create_skill` and `edit_skill`",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "34 tools in the live list 2026-11-05: the 31 of 2026-10-29 plus generate_scene, generate_avatar, auto_setup_avatar (schemas read, none run). Docs page studio/mcp.md last changed aa6c8e1, 2026-08-21.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "SKILL-080",
+   "file": "SKILL.md",
+   "quote": "(31 on 2026-10-29, Studio 0.745; 28 on 2026-10-17 to 2026-10-22, Studio 0.743–0.744;",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "34 tools in the live list 2026-11-05: the 31 of 2026-10-29 plus generate_scene, generate_avatar, auto_setup_avatar (schemas read, none run). Docs page studio/mcp.md last changed aa6c8e1, 2026-08-21.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "SKILL-081",
+   "file": "SKILL.md",
+   "quote": "`list_plugin_guis` and `capture_plugin_gui`, seen on 2026-10-11 in Studio 0.742, were gone by then).",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "34 tools in the live list 2026-11-05: the 31 of 2026-10-29 plus generate_scene, generate_avatar, auto_setup_avatar (schemas read, none run). Docs page studio/mcp.md last changed aa6c8e1, 2026-08-21.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "SKILL-082",
+   "file": "SKILL.md",
+   "quote": "| `generate_scene` | Generate models and parts from a prompt or images, in an optional bounding box; **runs the generated script in the DataModel** |",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Live schemas read 2026-11-05; the tools were not run (they spend quota and create assets).",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "SKILL-083",
+   "file": "SKILL.md",
+   "quote": "| `generate_avatar` | Generate a rigged R15 avatar from a prompt, **upload it as a persistent asset** and insert it into Workspace; usually several minutes |",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Live schemas read 2026-11-05; the tools were not run (they spend quota and create assets).",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "SKILL-084",
+   "file": "SKILL.md",
+   "quote": "| `auto_setup_avatar` | Rig an existing static Workspace Model as an R15 avatar and place the result beside it; usually 3-5 minutes |",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Live schemas read 2026-11-05; the tools were not run (they spend quota and create assets).",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "SKILL-085",
+   "file": "SKILL.md",
+   "quote": "**How much cheaper, re-measured 2026-11-05 on 0.746.0.7461264** (an earlier \"845× smaller\" figure",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Measured 2026-11-05: dump 8721015 B; 950 class files min 101, median 2073.5, mean 4897, max 105756.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "SKILL-086",
+   "file": "SKILL.md",
+   "quote": "produced them): the full dump is **8,721,015 bytes**; the 950 split class files run **101 B min,",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Measured 2026-11-05: dump 8721015 B; 950 class files min 101, median 2073.5, mean 4897, max 105756.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "SKILL-087",
+   "file": "SKILL.md",
+   "quote": "2,074 B median, 4,897 B mean, 105,756 B max**.",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Measured 2026-11-05: dump 8721015 B; 950 class files min 101, median 2073.5, mean 4897, max 105756.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-208",
+   "file": "references/legacy-migration.md",
+   "quote": "Derived by diffing the **0.745 and 0.746 Full API Dumps locally** with",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-209",
+   "file": "references/legacy-migration.md",
+   "quote": "`tools/robloxdocs/diff-api-dumps.py`, 2026-11-05. **950 classes (+2, −1), 656 enums (+3, −1), 267",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-210",
+   "file": "references/legacy-migration.md",
+   "quote": "classes named `*Service` (347 tagged `Service`), 48 deprecated classes (577 members).** 111",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-211",
+   "file": "references/legacy-migration.md",
+   "quote": "changes, 85 developer-visible. Luau 0.745 (2026-10-30), see `luau-fundamentals.md`. Every row",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-212",
+   "file": "references/legacy-migration.md",
+   "quote": "marked *(Studio)* was run in Studio 0.746.0.7461264 from an ordinary server `Script`, a",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-213",
+   "file": "references/legacy-migration.md",
+   "quote": "were removed. On 2026-11-05 `WindowsPlayer` still served 0.745.0.7451137 while `WindowsStudio64`,",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-214",
+   "file": "references/legacy-migration.md",
+   "quote": "`MacStudio` and `MacPlayer` served 0.746.0.7461264.",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-215",
+   "file": "references/legacy-migration.md",
+   "quote": "**The headline is `RaycastParams.Margin`, which works** (see `performance-optimization.md`). Most of",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-216",
+   "file": "references/legacy-migration.md",
+   "quote": "the other new methods refuse, and most properties that lost `NotScriptable` are plugin-only.",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-217",
+   "file": "references/legacy-migration.md",
+   "quote": "| **`RaycastParams.Margin` / `SizeGradient`** (the `WorldRoot` cast signatures show both in 0.746; `FFlagRaycastParamsMarginAndSizeGradient` is `True` in Studio's and eve",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-218",
+   "file": "references/legacy-migration.md",
+   "quote": "| `GamepadService:EnableGamepadCursor(guiObject)` is now `(guiObject: GuiObject = nil)` | **Now optional.** A call with no argument succeeds from a LocalScript *(Studio)*",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-219",
+   "file": "references/legacy-migration.md",
+   "quote": "| `Workspace.AuthorityMode`: `RobloxScriptSecurity` → **`None`**, read `Basic`, write `PluginOrOpenCloud` | A Script and a LocalScript now **read** it (`Automatic`); writ",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-220",
+   "file": "references/legacy-migration.md",
+   "quote": "| `Workspace.PredictiveStreamingMode`, `StreamOutBehavior`, `StreamingIntegrityMode`, `StreamingMinRadius`, `StreamingTargetRadius`: `NotScriptable` dropped, + `PluginOrO",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-221",
+   "file": "references/legacy-migration.md",
+   "quote": "| `TextChatService.ChatTranslationEnabled`, `CreateDefaultCommands`, `CreateDefaultTextChannels` (write → `None` + `PluginOrOpenCloud`); `Terrain.Decoration`, `GrassLengt",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-222",
+   "file": "references/legacy-migration.md",
+   "quote": "| **`Workspace.UseInputSink` removed.** `+Workspace.InputSinkEnabled` (`RobloxScriptSecurity`), `+LayerCollector.InputSinkEnabled` (`Enum.RolloutState`, `PluginOrOpenClou",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-223",
+   "file": "references/legacy-migration.md",
+   "quote": "| **`Workspace.PrimalPhysicsSolver` and `Enum.PrimalPhysicsSolver` removed**; `+Workspace.NextGenerationPhysicsSolver` (`Enum.RolloutState`, `PluginOrOpenCloud`); `+Works",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-224",
+   "file": "references/legacy-migration.md",
+   "quote": "| `TeleportService:ReserveServerAsync`, `TeleportOptions.ReservedServerAccessCode`, `ShouldReserveServer` now tagged **`Deprecated`** in the dump | Matches the 2026-10-27",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-225",
+   "file": "references/legacy-migration.md",
+   "quote": "| `+GeometryService:SplitApartAsync(parts, options?)`, `+HapticEffect:GetWaveformKeys()`, `+SerializationService:SerializeValue` / `DeserializeValue` (`Enum.Serialization",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-226",
+   "file": "references/legacy-migration.md",
+   "quote": "| `EditableImage:DrawCircle` / `DrawImage` / `DrawLine` / `DrawRectangle` gain `alphaBlendType` (default `Default`) | Only `Default` works: any other value fails `Enum.Im",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-227",
+   "file": "references/legacy-migration.md",
+   "quote": "| `UIGradient.Type`, `Scale`, `TileMode`: `NotBrowsable` dropped | A Script reads `Linear`, `1`, `Clamp` on a new gradient *(Studio)*. Rendering not checked; see `ui-syst",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-228",
+   "file": "references/legacy-migration.md",
+   "quote": "| `AnimationNodeDefinition.NodeId`, `AnimationValueNodeDefinition.NodeId`, `StateMachineTransitionDefinition.TransitionId`: `RobloxScriptSecurity` → `None` + `Animation`",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-229",
+   "file": "references/legacy-migration.md",
+   "quote": "| Roblox-internal: `SoundService:GetInputDevice` now needs `InternalTest` (`execute_luau` also fails *(Studio)*); `+FeatureSearchParams`, `+FeatureMatchingSession:Search`",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-230",
+   "file": "references/legacy-migration.md",
+   "quote": "| **Removed:** `WrapDeformMeshProvider`, `BasePart.siz` (a stray, typo'd property; a Script gets `siz is not a valid member`), `TestFailure.GetContext`, `AnimationRigData",
+   "status": "dump",
+   "kind": "negative",
+   "source": "dump 0.745 -> 0.746.0.7461264 (diff-api-dumps)",
+   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-231",
+   "file": "references/legacy-migration.md",
+   "quote": "**Re-run in 0.746, unchanged (*Studio*):** `PartType.Capsule` (still warns, behaves as Block),",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-232",
+   "file": "references/legacy-migration.md",
+   "quote": "`BindToSimulationParallel` / `BindToAnimationParallel` (also from an Actor; serial `BindToSimulation`",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-233",
+   "file": "references/legacy-migration.md",
+   "quote": "works), `BakeToMeshAsync`, `GetLatestVersionUriAsync`, `SceneAnalysisService`, `EditableMesh:AddFace`",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-234",
+   "file": "references/legacy-migration.md",
+   "quote": "(`AddTriangle` works), `TestService:RegisterTest`, `MeshPart:GetSurfaceSlotsAsync`,",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-235",
+   "file": "references/legacy-migration.md",
+   "quote": "`GetPassOwnershipAsync`, `CanUsersTransferRobuxAsync`, `AnimationPlayer` and `PhysicsActivitySensor`",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-236",
+   "file": "references/legacy-migration.md",
+   "quote": "creation, `EasingStyle.Spring` / `Bezier`, the `integer` library (`nil`), `Player.DeviceTrustLevel`",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-237",
+   "file": "references/legacy-migration.md",
+   "quote": "(`Pending`), `User.Id ~= UserId`, and the plugin-only gates on `Lighting`, `StreamingEnabled`,",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-238",
+   "file": "references/legacy-migration.md",
+   "quote": "`CollisionFidelity`, `RunContext`, `IsEdit`, `RunState` and `CreateDefaultPlayerModule`. Still working:",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-239",
+   "file": "references/legacy-migration.md",
+   "quote": "`coroutine.finally`, `Shapecast` overrides, and 210 sequential single-use locals.",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-240",
+   "file": "references/legacy-migration.md",
+   "quote": "`Roblox/creator-docs` c8f5276..a47045f. **Several pages describe more than the engine does:** each",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-241",
+   "file": "references/legacy-migration.md",
+   "quote": "row below says which were run.",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-242",
+   "file": "references/legacy-migration.md",
+   "quote": "| Docs change | What it means for your code |",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-243",
+   "file": "references/legacy-migration.md",
+   "quote": "| **`--!native` now covers Android clients:** \"server-side scripts and client-side scripts on Android devices\" | See `luau-fundamentals.md`. Published flags agree: `FFlag",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-244",
+   "file": "references/legacy-migration.md",
+   "quote": "| **`AnalyticsService:LogJourneyEvent` is back**, with a new *Journey events* guide (`production/analytics/journey-events.md`) for branching paths: `LogJourneyEvent(playe",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-245",
+   "file": "references/legacy-migration.md",
+   "quote": "| **`Camera.ProjectionType`, `OrthographicMode`, `OrthographicSize`, `ViewStretch`** and `Enum.ProjectionType` / `OrthographicMode` documented | **Still not enabled.** Fr",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-246",
+   "file": "references/legacy-migration.md",
+   "quote": "| **`Color3:GetLuminance()`, `GetContrastRatio(other)`, `GetContrastingColor(...)`** documented | **Work** from a Script and a LocalScript *(Studio)*; see `ui-systems.md`",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-247",
+   "file": "references/legacy-migration.md",
+   "quote": "| `GuiObject.SelectionGained` / `SelectionLost` gain `inputDirection` (`Enum.GuiNavigationDirection`) | **Not in the engine:** the enum errors, and the handlers receive n",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-248",
+   "file": "references/legacy-migration.md",
+   "quote": "| `Enum.AvatarSettingsHitAndTouchDetectionMode.UseHitbox`, a `HitboxSize` property on `AvatarCollisionRules`, new `Enum.AvatarSettingsTouchAndQueryDetectionMode` | **Not",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-249",
+   "file": "references/legacy-migration.md",
+   "quote": "| `Decal.MetalnessMapContent`, `NormalMapContent`, `RoughnessMapContent` (write → `None`), `VoiceChatService` properties (`None` + `PluginOrOpenCloud`) | **The pages are",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-250",
+   "file": "references/legacy-migration.md",
+   "quote": "| `UserInputService:CreateVirtualInput(target?)`: \"passing a non-`nil` `target` currently throws\" | The 0.746 dump has no parameter, and a LocalScript passing a `ScreenGu",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-251",
+   "file": "references/legacy-migration.md",
+   "quote": "| `DataModel.ServerLowMemoryWarning` page: can fire more than once, no guarantee of shutdown or survival | See `performance-optimization.md`. The signal exists *(Studio)*",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-252",
+   "file": "references/legacy-migration.md",
+   "quote": "| **VIP server access checks** (`projects/teleport-private-servers.md`) | See `networking.md`: each player is checked at connect time, and `TeleportInitFailed` must be ha",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs c8f5276..a47045f (2026-10-30..11-04)",
+   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-253",
+   "file": "references/legacy-migration.md",
+   "quote": "| **Chat guidelines rewritten** (`chat/guidelines.md`): any player conversation in under 60 seconds must use `TextChatService`, and player-editable text needs filtering *",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs c8f5276..a47045f (2026-10-30..11-04)",
+   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-254",
+   "file": "references/legacy-migration.md",
+   "quote": "| Character Controller Library pages now carry a beta notice; `Workspace.ImprovedAnimationConstraint` and `PrimalPhysicsSolver` left the `Workspace` page (the first is st",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs c8f5276..a47045f (2026-10-30..11-04)",
+   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-255",
+   "file": "references/legacy-migration.md",
+   "quote": "The page is ahead of the engine; set it in the Properties window. **Update (0.746):** the engine caught up on reading; see the 0.746 row |",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "0.746: Script and LocalScript read Automatic; write fails PluginOrOpenCloud.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-256",
+   "file": "references/legacy-migration.md",
+   "quote": "*(Studio)*. Pass `nil` explicitly. **Update (0.746):** the call with no argument works *(Studio)* |",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "LocalScript EnableGamepadCursor() returned without error in 0.746.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-257",
+   "file": "references/legacy-migration.md",
+   "quote": "*(Studio)*. Set the mask in the Properties window. **Update (0.746):** still fails, though the page now says `None` for the other map properties |",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Script write to EmissiveMaskContent, MetalnessMapContent, NormalMapContent, RoughnessMapContent: lacking capability Plugin in 0.746.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-258",
+   "file": "references/legacy-migration.md",
+   "quote": "and a Script can still index it *(Studio)*. **Update (2026-11-03):** the page is back, with a guide; see the 2026-11-04 docs rows |",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Docs a47045f has AnalyticsService:LogJourneyEvent; Studio 0.746 call logged LogJourneyEvent event fired.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-259",
+   "file": "references/legacy-migration.md",
+   "quote": "and `OrthographicSize = 50` reads back `300` *(Studio)*. Do not build an orthographic camera on it yet. **Update (0.746):** documented now, still ignored; the default rea",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "LocalScript in 0.746: ProjectionType stays Perspective; OrthographicSize 35 before and after a write of 50.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-260",
+   "file": "references/legacy-migration.md",
+   "quote": "can read or set it. **Update (0.746):** removed; see the 0.746 row |",
+   "status": "dump",
+   "kind": "number",
+   "source": "dump 0.745 -> 0.746.0.7461264 (diff-api-dumps)",
+   "evidence": "Workspace.UseInputSink removed in 0.746; a Script gets not a valid member.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-261",
+   "file": "references/legacy-migration.md",
+   "quote": "fails in Studio 0.745 with an Access Code V2 error *(Studio)*. A live server was not tested. **Update (0.746):** that error is gone and the fields reach the teleport back",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "0.746: TeleportAsync ReservedServerId -> HTTP 403 (Forbidden); VipServerId -> Request Context Failure; plain TeleportAsync -> Request Context Failure; ReserveServerAsync -> HTTP 403. Deprecated tag in dump 0.746.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-262",
+   "file": "references/legacy-migration.md",
+   "quote": "Studio cannot complete a teleport with the replacement fields (0.745 and 0.746 rows) |",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "As above.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "legacy-migration-263",
+   "file": "references/legacy-migration.md",
+   "quote": "but `TeleportAsync` with either one failed in Studio 0.745; see the 0.745 and 0.746 rows.",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "As above.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "luau-fundamentals-099",
+   "file": "references/luau-fundamentals.md",
+   "quote": "| **0.745** | Syntax: **`while local` / `while const`** loops, one binding scoped to the condition and body | **Not usable.** Gated by `DebugLuauWhileLocalSyntax` / `Debu",
+   "status": "source",
+   "kind": "number",
+   "source": "luau-lang/luau 0.745; Studio 0.746.0.7461264",
+   "evidence": "luau-lang/luau 0.745 release notes (2026-10-30); 0.744..0.745 flag diff; clientsettingscdn PCStudioApp/MacStudioApp/PCDesktopClient/MacDesktopClient/AndroidApp/iOSApp 2026-11-05; loadstring run in Studio 0.746.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "luau-fundamentals-100",
+   "file": "references/luau-fundamentals.md",
+   "quote": "| **0.745** | `table.create` and `table.clear` are fast calls; native codegen can auto-promote hot functions by call and loop counts | No edit for the fast calls. Auto-pr",
+   "status": "source",
+   "kind": "number",
+   "source": "luau-lang/luau 0.745; Studio 0.746.0.7461264",
+   "evidence": "luau-lang/luau 0.745 release notes (2026-10-30); 0.744..0.745 flag diff; clientsettingscdn PCStudioApp/MacStudioApp/PCDesktopClient/MacDesktopClient/AndroidApp/iOSApp 2026-11-05; loadstring run in Studio 0.746.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "luau-fundamentals-101",
+   "file": "references/luau-fundamentals.md",
+   "quote": "| **0.745** | Type checking: negated intersection types normalized; class method context reset in type functions; analysis blow-up on large table-like literals fixed. C A",
+   "status": "source",
+   "kind": "number",
+   "source": "luau-lang/luau 0.745; Studio 0.746.0.7461264",
+   "evidence": "luau-lang/luau 0.745 release notes (2026-10-30); 0.744..0.745 flag diff; clientsettingscdn PCStudioApp/MacStudioApp/PCDesktopClient/MacDesktopClient/AndroidApp/iOSApp 2026-11-05; loadstring run in Studio 0.746.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "luau-fundamentals-102",
+   "file": "references/luau-fundamentals.md",
+   "quote": "(`if local x = a(); local y = b() then`) are **not** supported. `while local` arrived in Luau 0.745",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "loadstring in Studio 0.746: while local -> \"Expected identifier when parsing expression, got local\"; while const -> \"Expected do when parsing while loop\".",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "luau-fundamentals-103",
+   "file": "references/luau-fundamentals.md",
+   "quote": "behind a `Debug` flag, is not in the beta, and is a syntax error in Studio 0.746.",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "loadstring in Studio 0.746: while local -> \"Expected identifier when parsing expression, got local\"; while const -> \"Expected do when parsing while loop\".",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "luau-fundamentals-104",
+   "file": "references/luau-fundamentals.md",
+   "quote": "**Server scripts and Android clients only.** Since 2026-11-03 the docs say \"only supported for",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs c8f5276..a47045f (2026-10-30..11-04)",
+   "evidence": "luau/native-code-gen.md (3417729, 2026-11-03); FFlagLuauCodegen: AndroidApp/PCStudioApp/MacStudioApp True, PCDesktopClient/MacDesktopClient/iOSApp False on 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "luau-fundamentals-105",
+   "file": "references/luau-fundamentals.md",
+   "quote": "server-side scripts and client-side scripts on Android devices\"; the published flag agrees",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs c8f5276..a47045f (2026-10-30..11-04)",
+   "evidence": "luau/native-code-gen.md (3417729, 2026-11-03); FFlagLuauCodegen: AndroidApp/PCStudioApp/MacStudioApp True, PCDesktopClient/MacDesktopClient/iOSApp False on 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "luau-fundamentals-106",
+   "file": "references/luau-fundamentals.md",
+   "quote": "(`FFlagLuauCodegen` is `True` for Android, `False` for the Windows, Mac and iOS clients, checked",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs c8f5276..a47045f (2026-10-30..11-04)",
+   "evidence": "luau/native-code-gen.md (3417729, 2026-11-03); FFlagLuauCodegen: AndroidApp/PCStudioApp/MacStudioApp True, PCDesktopClient/MacDesktopClient/iOSApp False on 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "luau-fundamentals-107",
+   "file": "references/luau-fundamentals.md",
+   "quote": "2026-11-05). So `--!native` in a LocalScript speeds up Android players at most, and was not",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs c8f5276..a47045f (2026-10-30..11-04)",
+   "evidence": "luau/native-code-gen.md (3417729, 2026-11-03); FFlagLuauCodegen: AndroidApp/PCStudioApp/MacStudioApp True, PCDesktopClient/MacDesktopClient/iOSApp False on 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "luau-fundamentals-108",
+   "file": "references/luau-fundamentals.md",
+   "quote": "measured on a device. Only the script's *functions* are compiled; top-level code usually runs",
+   "status": "docs",
+   "kind": "negative",
+   "source": "Roblox/creator-docs c8f5276..a47045f (2026-10-30..11-04)",
+   "evidence": "luau/native-code-gen.md (3417729, 2026-11-03); FFlagLuauCodegen: AndroidApp/PCStudioApp/MacStudioApp True, PCDesktopClient/MacDesktopClient/iOSApp False on 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "luau-fundamentals-109",
+   "file": "references/luau-fundamentals.md",
+   "quote": "once and does not benefit.",
+   "status": "docs",
+   "kind": "negative",
+   "source": "Roblox/creator-docs c8f5276..a47045f (2026-10-30..11-04)",
+   "evidence": "luau/native-code-gen.md (3417729, 2026-11-03); FFlagLuauCodegen: AndroidApp/PCStudioApp/MacStudioApp True, PCDesktopClient/MacDesktopClient/iOSApp False on 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "performance-optimization-069",
+   "file": "references/performance-optimization.md",
+   "quote": "- **Native CodeGen (`--!native`)**: **server scripts and Android clients only.** Per the official",
+   "status": "docs",
+   "kind": "negative",
+   "source": "Roblox/creator-docs c8f5276..a47045f (2026-10-30..11-04)",
+   "evidence": "luau/native-code-gen.md (3417729, 2026-11-03); FFlagLuauCodegen False for PCDesktopClient, MacDesktopClient, iOSApp on 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "performance-optimization-070",
+   "file": "references/performance-optimization.md",
+   "quote": "docs (2026-11-03), it is \"only supported for server-side scripts and client-side scripts on Android",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs c8f5276..a47045f (2026-10-30..11-04)",
+   "evidence": "luau/native-code-gen.md (3417729, 2026-11-03); FFlagLuauCodegen False for PCDesktopClient, MacDesktopClient, iOSApp on 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "performance-optimization-071",
+   "file": "references/performance-optimization.md",
+   "quote": "devices\", so do not expect a gain from `--!native` in a `LocalScript` on Windows, Mac or iOS.",
+   "status": "docs",
+   "kind": "negative",
+   "source": "Roblox/creator-docs c8f5276..a47045f (2026-10-30..11-04)",
+   "evidence": "luau/native-code-gen.md (3417729, 2026-11-03); FFlagLuauCodegen False for PCDesktopClient, MacDesktopClient, iOSApp on 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "performance-optimization-072",
+   "file": "references/performance-optimization.md",
+   "quote": "Roblox publishes **no speedup multiplier**, and an earlier",
+   "status": "docs",
+   "kind": "negative",
+   "source": "Roblox/creator-docs c8f5276..a47045f (2026-10-30..11-04)",
+   "evidence": "luau/native-code-gen.md (3417729, 2026-11-03); FFlagLuauCodegen False for PCDesktopClient, MacDesktopClient, iOSApp on 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "performance-optimization-073",
+   "file": "references/performance-optimization.md",
+   "quote": "`game.ServerLowMemoryWarning` lets a server script react when Roblox detects memory pressure (documented since 2026-11-03). It can fire more than once while the pressure",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs c8f5276..a47045f (2026-10-30..11-04)",
+   "evidence": "DataModel.yaml and performance-optimization/monitor.md (3417729); typeof(game.ServerLowMemoryWarning) == RBXScriptSignal in Studio 0.746.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "performance-optimization-074",
+   "file": "references/performance-optimization.md",
+   "quote": "A ray that must be forgiving (aim assist, melee, thin targets) no longer needs a separate `Spherecast`:",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run in Studio 0.746 2026-11-05: part size 2 at (3,500,50), ray (0,500,0)+(0,0,100). margin 1.9 miss, 2.1 hit (pos 2,500,49 dist 48.36 normal -0.95,0,-0.31); margin 1000 ray/sphere/block errors; gradients as stated. Docs: RaycastParams.yaml.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "performance-optimization-075",
+   "file": "references/performance-optimization.md",
+   "quote": "a non-zero `Margin` makes `Raycast` behave as a sphere cast of that radius, and it also grows",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run in Studio 0.746 2026-11-05: part size 2 at (3,500,50), ray (0,500,0)+(0,0,100). margin 1.9 miss, 2.1 hit (pos 2,500,49 dist 48.36 normal -0.95,0,-0.31); margin 1000 ray/sphere/block errors; gradients as stated. Docs: RaycastParams.yaml.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "performance-optimization-076",
+   "file": "references/performance-optimization.md",
+   "quote": "`Spherecast`, `Blockcast` and `Shapecast` (*docs*). `SizeGradient` scales the cast's own size along",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs c8f5276..a47045f (2026-10-30..11-04)",
+   "evidence": "Run in Studio 0.746 2026-11-05: part size 2 at (3,500,50), ray (0,500,0)+(0,0,100). margin 1.9 miss, 2.1 hit (pos 2,500,49 dist 48.36 normal -0.95,0,-0.31); margin 1000 ray/sphere/block errors; gradients as stated. Docs: RaycastParams.yaml.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "performance-optimization-077",
+   "file": "references/performance-optimization.md",
+   "quote": "its length (`0.5` ends 50% larger, `-1` shrinks to nothing), so it does nothing on a plain ray.",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run in Studio 0.746 2026-11-05: part size 2 at (3,500,50), ray (0,500,0)+(0,0,100). margin 1.9 miss, 2.1 hit (pos 2,500,49 dist 48.36 normal -0.95,0,-0.31); margin 1000 ray/sphere/block errors; gradients as stated. Docs: RaycastParams.yaml.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "performance-optimization-078",
+   "file": "references/performance-optimization.md",
+   "quote": "Tested in Studio 0.746 against a part whose surface is 2 studs from the ray: `Margin = 1.9` missed",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run in Studio 0.746 2026-11-05: part size 2 at (3,500,50), ray (0,500,0)+(0,0,100). margin 1.9 miss, 2.1 hit (pos 2,500,49 dist 48.36 normal -0.95,0,-0.31); margin 1000 ray/sphere/block errors; gradients as stated. Docs: RaycastParams.yaml.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "performance-optimization-079",
+   "file": "references/performance-optimization.md",
+   "quote": "and `2.1` hit. **The result describes a sphere, not a ray:** `Position` is on the part's surface,",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run in Studio 0.746 2026-11-05: part size 2 at (3,500,50), ray (0,500,0)+(0,0,100). margin 1.9 miss, 2.1 hit (pos 2,500,49 dist 48.36 normal -0.95,0,-0.31); margin 1000 ray/sphere/block errors; gradients as stated. Docs: RaycastParams.yaml.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "performance-optimization-080",
+   "file": "references/performance-optimization.md",
+   "quote": "`Normal` points back at the sphere's centre rather than along the face, and `Distance` is how far",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run in Studio 0.746 2026-11-05: part size 2 at (3,500,50), ray (0,500,0)+(0,0,100). margin 1.9 miss, 2.1 hit (pos 2,500,49 dist 48.36 normal -0.95,0,-0.31); margin 1000 ray/sphere/block errors; gradients as stated. Docs: RaycastParams.yaml.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "performance-optimization-081",
+   "file": "references/performance-optimization.md",
+   "quote": "the sphere travelled (`48.36` where `Position` was `49.04` away). Do not use `Normal` for decal",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run in Studio 0.746 2026-11-05: part size 2 at (3,500,50), ray (0,500,0)+(0,0,100). margin 1.9 miss, 2.1 hit (pos 2,500,49 dist 48.36 normal -0.95,0,-0.31); margin 1000 ray/sphere/block errors; gradients as stated. Docs: RaycastParams.yaml.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "performance-optimization-082",
+   "file": "references/performance-optimization.md",
+   "quote": "placement or `Distance` for range checks without allowing for that. A cast-size limit still applies",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run in Studio 0.746 2026-11-05: part size 2 at (3,500,50), ray (0,500,0)+(0,0,100). margin 1.9 miss, 2.1 hit (pos 2,500,49 dist 48.36 normal -0.95,0,-0.31); margin 1000 ray/sphere/block errors; gradients as stated. Docs: RaycastParams.yaml.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "performance-optimization-083",
+   "file": "references/performance-optimization.md",
+   "quote": "to the expanded shape: a ray with `Margin = 1000` fails `The maximum radius is 256.000000`, and a",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run in Studio 0.746 2026-11-05: part size 2 at (3,500,50), ray (0,500,0)+(0,0,100). margin 1.9 miss, 2.1 hit (pos 2,500,49 dist 48.36 normal -0.95,0,-0.31); margin 1000 ray/sphere/block errors; gradients as stated. Docs: RaycastParams.yaml.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "performance-optimization-084",
+   "file": "references/performance-optimization.md",
+   "quote": "block with `Margin = 1000` fails `The maximum side length is 512.000000`.",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run in Studio 0.746 2026-11-05: part size 2 at (3,500,50), ray (0,500,0)+(0,0,100). margin 1.9 miss, 2.1 hit (pos 2,500,49 dist 48.36 normal -0.95,0,-0.31); margin 1000 ray/sphere/block errors; gradients as stated. Docs: RaycastParams.yaml.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "performance-optimization-085",
+   "file": "references/performance-optimization.md",
+   "quote": "`SizeGradient` on a 100-stud cast, same part at the halfway point (*Studio*): a plain ray missed at",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run in Studio 0.746 2026-11-05: part size 2 at (3,500,50), ray (0,500,0)+(0,0,100). margin 1.9 miss, 2.1 hit (pos 2,500,49 dist 48.36 normal -0.95,0,-0.31); margin 1000 ray/sphere/block errors; gradients as stated. Docs: RaycastParams.yaml.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "performance-optimization-086",
+   "file": "references/performance-optimization.md",
+   "quote": "every value; a 1-stud `Spherecast` missed at `1` and hit at `2`; a 2×2×2 `Blockcast` hit at `2`.",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run in Studio 0.746 2026-11-05: part size 2 at (3,500,50), ray (0,500,0)+(0,0,100). margin 1.9 miss, 2.1 hit (pos 2,500,49 dist 48.36 normal -0.95,0,-0.31); margin 1000 ray/sphere/block errors; gradients as stated. Docs: RaycastParams.yaml.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "performance-optimization-087",
+   "file": "references/performance-optimization.md",
+   "quote": "**Key properties** (Properties window or a plugin: since 0.746 all three are `PluginOrOpenCloud`",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Script in 0.746: StreamingIntegrityMode, StreamingMinRadius, StreamingTargetRadius read/write fail PluginOrOpenCloud; execute_luau reads PauseOutsideLoadedArea, 64, 1024.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "performance-optimization-088",
+   "file": "references/performance-optimization.md",
+   "quote": "instead of `NotScriptable`, and a Script reading or writing them fails `lacking capability",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Script in 0.746: StreamingIntegrityMode, StreamingMinRadius, StreamingTargetRadius read/write fail PluginOrOpenCloud; execute_luau reads PauseOutsideLoadedArea, 64, 1024.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "performance-optimization-089",
+   "file": "references/performance-optimization.md",
+   "quote": "PluginOrOpenCloud` in Studio 0.746; `execute_luau` reads them):",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Script in 0.746: StreamingIntegrityMode, StreamingMinRadius, StreamingTargetRadius read/write fail PluginOrOpenCloud; execute_luau reads PauseOutsideLoadedArea, 64, 1024.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "networking-047",
+   "file": "references/networking.md",
+   "quote": "**What Studio 0.746 does with them (2026-11-05):** both fields can be set and read back (a",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Studio 0.746 2026-11-05: ReservedServerId HTTP 403; VipServerId and plain TeleportAsync Request Context Failure; ReserveServerAsync HTTP 403. Deprecated tags in dump 0.746. VIP checks: projects/teleport-private-servers.md (3417729). FFlagAccessCodeV2Teleports4 True in all published flags.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "networking-048",
+   "file": "references/networking.md",
+   "quote": "non-GUID string is accepted too). The Access Code V2 refusal that 0.745 gave is gone, but Studio",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Studio 0.746 2026-11-05: ReservedServerId HTTP 403; VipServerId and plain TeleportAsync Request Context Failure; ReserveServerAsync HTTP 403. Deprecated tags in dump 0.746. VIP checks: projects/teleport-private-servers.md (3417729). FFlagAccessCodeV2Teleports4 True in all published flags.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "networking-049",
+   "file": "references/networking.md",
+   "quote": "still cannot complete any teleport: `ReservedServerId` fails `HTTP 403 (Forbidden)`, `VipServerId`",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Studio 0.746 2026-11-05: ReservedServerId HTTP 403; VipServerId and plain TeleportAsync Request Context Failure; ReserveServerAsync HTTP 403. Deprecated tags in dump 0.746. VIP checks: projects/teleport-private-servers.md (3417729). FFlagAccessCodeV2Teleports4 True in all published flags.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "networking-050",
+   "file": "references/networking.md",
+   "quote": "and a plain `TeleportAsync` fail `Request Context Failure`, and `ReserveServerAsync` fails `HTTP",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Studio 0.746 2026-11-05: ReservedServerId HTTP 403; VipServerId and plain TeleportAsync Request Context Failure; ReserveServerAsync HTTP 403. Deprecated tags in dump 0.746. VIP checks: projects/teleport-private-servers.md (3417729). FFlagAccessCodeV2Teleports4 True in all published flags.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "networking-051",
+   "file": "references/networking.md",
+   "quote": "403`. A live server was not tested. The 0.746 dump tags `ReserveServerAsync`,",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Studio 0.746 2026-11-05: ReservedServerId HTTP 403; VipServerId and plain TeleportAsync Request Context Failure; ReserveServerAsync HTTP 403. Deprecated tags in dump 0.746. VIP checks: projects/teleport-private-servers.md (3417729). FFlagAccessCodeV2Teleports4 True in all published flags.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "networking-052",
+   "file": "references/networking.md",
+   "quote": "`ReservedServerAccessCode` and `ShouldReserveServer` `Deprecated`, so use the new fields in new",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Studio 0.746 2026-11-05: ReservedServerId HTTP 403; VipServerId and plain TeleportAsync Request Context Failure; ReserveServerAsync HTTP 403. Deprecated tags in dump 0.746. VIP checks: projects/teleport-private-servers.md (3417729). FFlagAccessCodeV2Teleports4 True in all published flags.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "networking-053",
+   "file": "references/networking.md",
+   "quote": "code and try them between two places of a **published** game before you ship. The docs say servers",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Studio 0.746 2026-11-05: ReservedServerId HTTP 403; VipServerId and plain TeleportAsync Request Context Failure; ReserveServerAsync HTTP 403. Deprecated tags in dump 0.746. VIP checks: projects/teleport-private-servers.md (3417729). FFlagAccessCodeV2Teleports4 True in all published flags.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "networking-054",
+   "file": "references/networking.md",
+   "quote": "made with access codes keep working, so existing code still runs.",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Studio 0.746 2026-11-05: ReservedServerId HTTP 403; VipServerId and plain TeleportAsync Request Context Failure; ReserveServerAsync HTTP 403. Deprecated tags in dump 0.746. VIP checks: projects/teleport-private-servers.md (3417729). FFlagAccessCodeV2Teleports4 True in all published flags.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "networking-055",
+   "file": "references/networking.md",
+   "quote": "**VIP server access is checked per player at connect time** (*docs*, 2026-11-03): the server's",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs c8f5276..a47045f (2026-10-30..11-04)",
+   "evidence": "Studio 0.746 2026-11-05: ReservedServerId HTTP 403; VipServerId and plain TeleportAsync Request Context Failure; ReserveServerAsync HTTP 403. Deprecated tags in dump 0.746. VIP checks: projects/teleport-private-servers.md (3417729). FFlagAccessCodeV2Teleports4 True in all published flags.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "networking-056",
+   "file": "references/networking.md",
+   "quote": "Friends Allowed setting, its allowlist or a link code must grant access at that moment, and owners",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Studio 0.746 2026-11-05: ReservedServerId HTTP 403; VipServerId and plain TeleportAsync Request Context Failure; ReserveServerAsync HTTP 403. Deprecated tags in dump 0.746. VIP checks: projects/teleport-private-servers.md (3417729). FFlagAccessCodeV2Teleports4 True in all published flags.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "networking-057",
+   "file": "references/networking.md",
+   "quote": "can change them at any time. In a group teleport, players without access fail individually and the",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Studio 0.746 2026-11-05: ReservedServerId HTTP 403; VipServerId and plain TeleportAsync Request Context Failure; ReserveServerAsync HTTP 403. Deprecated tags in dump 0.746. VIP checks: projects/teleport-private-servers.md (3417729). FFlagAccessCodeV2Teleports4 True in all published flags.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "networking-058",
+   "file": "references/networking.md",
+   "quote": "rest go through. Always handle `TeleportService.TeleportInitFailed`: the player sees a \"restricted\"",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Studio 0.746 2026-11-05: ReservedServerId HTTP 403; VipServerId and plain TeleportAsync Request Context Failure; ReserveServerAsync HTTP 403. Deprecated tags in dump 0.746. VIP checks: projects/teleport-private-servers.md (3417729). FFlagAccessCodeV2Teleports4 True in all published flags.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "networking-059",
+   "file": "references/networking.md",
+   "quote": "error, and the server may also have been closed or switched.",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Studio 0.746 2026-11-05: ReservedServerId HTTP 403; VipServerId and plain TeleportAsync Request Context Failure; ReserveServerAsync HTTP 403. Deprecated tags in dump 0.746. VIP checks: projects/teleport-private-servers.md (3417729). FFlagAccessCodeV2Teleports4 True in all published flags.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "networking-060",
+   "file": "references/networking.md",
+   "quote": "-- In Studio 0.746 this is \"HTTP 403 (Forbidden)\": Studio cannot complete a teleport.",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "As above.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "networking-061",
+   "file": "references/networking.md",
+   "quote": "(page added 2026-10-20) · [Chat guidelines](https://create.roblox.com/docs/chat/guidelines)",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs c8f5276..a47045f (2026-10-30..11-04)",
+   "evidence": "chat/guidelines.md rewritten in 3417729 (2026-11-03).",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "networking-062",
+   "file": "references/networking.md",
+   "quote": "(rewritten 2026-11-03) · [TextChannelWindow](https://create.roblox.com/docs/reference/engine/classes/TextChannelWindow) ·",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs c8f5276..a47045f (2026-10-30..11-04)",
+   "evidence": "chat/guidelines.md rewritten in 3417729 (2026-11-03).",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "networking-063",
+   "file": "references/networking.md",
+   "quote": "**Which text must be chat** (*docs*): anything that lets players hold a back-and-forth conversation",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs c8f5276..a47045f (2026-10-30..11-04)",
+   "evidence": "chat/guidelines.md rewritten in 3417729 (2026-11-03).",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "networking-064",
+   "file": "references/networking.md",
+   "quote": "in under 60 seconds must go through `TextChatService`, including custom chat, radios, phones and",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs c8f5276..a47045f (2026-10-30..11-04)",
+   "evidence": "chat/guidelines.md rewritten in 3417729 (2026-11-03).",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "networking-065",
+   "file": "references/networking.md",
+   "quote": "admin tools where people can reply; otherwise Roblox \"might take your game down\". Player-editable",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs c8f5276..a47045f (2026-10-30..11-04)",
+   "evidence": "chat/guidelines.md rewritten in 3417729 (2026-11-03).",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "networking-066",
+   "file": "references/networking.md",
+   "quote": "text others can see (signs, pet names, comments) is not chat only if it is filtered **and**",
+   "status": "docs",
+   "kind": "negative",
+   "source": "Roblox/creator-docs c8f5276..a47045f (2026-10-30..11-04)",
+   "evidence": "chat/guidelines.md rewritten in 3417729 (2026-11-03).",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "networking-067",
+   "file": "references/networking.md",
+   "quote": "rate-limited to one submission per minute per player; filtering alone is not enough, and comments",
+   "status": "docs",
+   "kind": "negative",
+   "source": "Roblox/creator-docs c8f5276..a47045f (2026-10-30..11-04)",
+   "evidence": "chat/guidelines.md rewritten in 3417729 (2026-11-03).",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "networking-068",
+   "file": "references/networking.md",
+   "quote": "may not support replies. Preset phrases from a fixed list and one-way developer text are not chat.",
+   "status": "docs",
+   "kind": "negative",
+   "source": "Roblox/creator-docs c8f5276..a47045f (2026-10-30..11-04)",
+   "evidence": "chat/guidelines.md rewritten in 3417729 (2026-11-03).",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "security-hardening-085",
+   "file": "references/security-hardening.md",
+   "quote": "`UseFixedSimulation`, `StreamingEnabled`). Since 0.746 a Script and a LocalScript can **read**",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Studio 0.746: Script and LocalScript read Enum.AuthorityMode.Automatic; write fails lacking capability PluginOrOpenCloud. PlayerScriptsUseInputActionSystem read fails RobloxScript.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "security-hardening-086",
+   "file": "references/security-hardening.md",
+   "quote": "`AuthorityMode`, which helps a client branch on server authority, but writing it needs",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Studio 0.746: Script and LocalScript read Enum.AuthorityMode.Automatic; write fails lacking capability PluginOrOpenCloud. PlayerScriptsUseInputActionSystem read fails RobloxScript.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "security-hardening-087",
+   "file": "references/security-hardening.md",
+   "quote": "`PluginOrOpenCloud` (tested 2026-11-05). The others are `NotScriptable`, `RobloxScriptSecurity`",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Studio 0.746: Script and LocalScript read Enum.AuthorityMode.Automatic; write fails lacking capability PluginOrOpenCloud. PlayerScriptsUseInputActionSystem read fails RobloxScript.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "security-hardening-088",
+   "file": "references/security-hardening.md",
+   "quote": "(`PlayerScriptsUseInputActionSystem` since 0.743) or plugin-only, so a script cannot switch a place over.",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Studio 0.746: Script and LocalScript read Enum.AuthorityMode.Automatic; write fails lacking capability PluginOrOpenCloud. PlayerScriptsUseInputActionSystem read fails RobloxScript.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "security-hardening-089",
+   "file": "references/security-hardening.md",
+   "quote": "The parallel `BindToSimulationParallel` is not enabled in 0.746.",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Actor-parented Script and plain Script in 0.746: \"RunService:BindToSimulationParallel() is not enabled\"; serial BindToSimulation returned a Connection.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "monetization-033",
+   "file": "references/monetization.md",
+   "quote": "From Studio 0.743 through 0.746.0.7461264, a server Script calling it gets",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "GetPassOwnershipAsync(player, 1) in 0.746: MarketplaceService:GetPassOwnershipAsync() is not enabled.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "ui-systems-032",
+   "file": "references/ui-systems.md",
+   "quote": "Upgraded UIGradients**. All three were `NotBrowsable` in the 0.743 API dump and lost the tag in",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Dump 0.746 drops NotBrowsable; Script read Enum.GradientType.Linear, 1, Enum.GradientTileMode.Clamp in 0.746.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "ui-systems-033",
+   "file": "references/ui-systems.md",
+   "quote": "0.746 (a Script reads `Linear`, `1`, `Clamp` on a new gradient). In Studio 0.743 a `LocalScript` set and read back `Type = Elliptical`,",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Dump 0.746 drops NotBrowsable; Script read Enum.GradientType.Linear, 1, Enum.GradientTileMode.Clamp in 0.746.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "ui-systems-034",
+   "file": "references/ui-systems.md",
+   "quote": "`Color3:GetLuminance()`, `GetContrastRatio(other)` and `GetContrastingColor(...)` (documented",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run in Studio 0.746 2026-11-05 (Script and LocalScript): red luminance 0.2125999927520752, white 1, black/white ratio 20.999998092651367, orange -> black, dark blue -> white. Docs Color3.yaml (a47045f range).",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "ui-systems-035",
+   "file": "references/ui-systems.md",
+   "quote": "2026-11-03) follow the WCAG 2.1 definitions and work from a Script and a LocalScript in Studio 0.746.",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run in Studio 0.746 2026-11-05 (Script and LocalScript): red luminance 0.2125999927520752, white 1, black/white ratio 20.999998092651367, orange -> black, dark blue -> white. Docs Color3.yaml (a47045f range).",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "ui-systems-036",
+   "file": "references/ui-systems.md",
+   "quote": "With no arguments `GetContrastingColor` chooses between black and white; a tie resolves to the earliest",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run in Studio 0.746 2026-11-05 (Script and LocalScript): red luminance 0.2125999927520752, white 1, black/white ratio 20.999998092651367, orange -> black, dark blue -> white. Docs Color3.yaml (a47045f range).",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "ui-systems-037",
+   "file": "references/ui-systems.md",
+   "quote": "candidate. They return 32-bit values, so compare with a threshold: in Studio black against white gives",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run in Studio 0.746 2026-11-05 (Script and LocalScript): red luminance 0.2125999927520752, white 1, black/white ratio 20.999998092651367, orange -> black, dark blue -> white. Docs Color3.yaml (a47045f range).",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "ui-systems-038",
+   "file": "references/ui-systems.md",
+   "quote": "`20.999998…`, not the documented `21`, and pure red gives `0.2125999…`, not `0.2126`.",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Run in Studio 0.746 2026-11-05 (Script and LocalScript): red luminance 0.2125999927520752, white 1, black/white ratio 20.999998092651367, orange -> black, dark blue -> white. Docs Color3.yaml (a47045f range).",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "mcp-integration-095",
+   "file": "references/mcp-integration.md",
+   "quote": "settings such as `SandboxedInstanceMode`, `EnableSLIMAvatars` and `PlayerCharacterDestroyBehavior`",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "SandboxedInstanceMode, EnableSLIMAvatars, PlayerCharacterDestroyBehavior still NotScriptable in dump 0.746; UseInputSink removed in 0.746.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "mcp-integration-096",
+   "file": "references/mcp-integration.md",
+   "quote": "on Workspace. No Luau can read or write them, so an agent should ask the user",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "SandboxedInstanceMode, EnableSLIMAvatars, PlayerCharacterDestroyBehavior still NotScriptable in dump 0.746; UseInputSink removed in 0.746.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "mcp-integration-097",
+   "file": "references/mcp-integration.md",
+   "quote": "| `generate_scene` | **Undocumented; first seen 2026-11-05 (Studio 0.746).** Generates models and parts from `textPrompt` and/or `images`, in an optional `boundingBoxPosi",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Live schemas of generate_scene, generate_avatar, auto_setup_avatar read 2026-11-05; not in docs studio/mcp.md (aa6c8e1); not run, they spend quota and create assets.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "mcp-integration-098",
+   "file": "references/mcp-integration.md",
+   "quote": "| `generate_avatar` | **Undocumented; first seen 2026-11-05.** Generates a rigged R15 avatar from `textPrompt` (options `pipelineName` `npc` / `modesty`, `dynamicHead`, `",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Live schemas of generate_scene, generate_avatar, auto_setup_avatar read 2026-11-05; not in docs studio/mcp.md (aa6c8e1); not run, they spend quota and create assets.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "mcp-integration-099",
+   "file": "references/mcp-integration.md",
+   "quote": "| `auto_setup_avatar` | **Undocumented; first seen 2026-11-05.** Rigs a static Workspace Model (`instance_path`, or the single selected Model) as an R15 avatar and places",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Live schemas of generate_scene, generate_avatar, auto_setup_avatar read 2026-11-05; not in docs studio/mcp.md (aa6c8e1); not run, they spend quota and create assets.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "mcp-integration-100",
+   "file": "references/mcp-integration.md",
+   "quote": "**First-party skills exposed by the `skill` tool (2026-11-05, Studio 0.746, fourteen):**",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "list_skills in Studio 0.746 2026-11-05 returned these 14, all source Roblox. assistant/skills.md lists configs-experimentation and instrument-analytics among its built-ins.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "mcp-integration-101",
+   "file": "references/mcp-integration.md",
+   "quote": "`rbx-configs-experimentation`, `rbx-convert-to-streaming`, `rbx-create-skill`, `rbx-debug`,",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "list_skills in Studio 0.746 2026-11-05 returned these 14, all source Roblox. assistant/skills.md lists configs-experimentation and instrument-analytics among its built-ins.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "mcp-integration-102",
+   "file": "references/mcp-integration.md",
+   "quote": "`rbx-device-simulator-lua`, `rbx-docs-search`, `rbx-input-action-system`, `rbx-instrument-analytics`,",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "list_skills in Studio 0.746 2026-11-05 returned these 14, all source Roblox. assistant/skills.md lists configs-experimentation and instrument-analytics among its built-ins.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "mcp-integration-103",
+   "file": "references/mcp-integration.md",
+   "quote": "`rbx-luau-heap-profiling`, `rbx-network-simulator`, `rbx-perf-profiling`,",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "list_skills in Studio 0.746 2026-11-05 returned these 14, all source Roblox. assistant/skills.md lists configs-experimentation and instrument-analytics among its built-ins.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "mcp-integration-104",
+   "file": "references/mcp-integration.md",
+   "quote": "`rbx-process-receipt-misuse`, `rbx-scene-analysis`, `rbx-unit-test`. The five added since 2026-10-29:",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "list_skills in Studio 0.746 2026-11-05 returned these 14, all source Roblox. assistant/skills.md lists configs-experimentation and instrument-analytics among its built-ins.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "mcp-integration-105",
+   "file": "references/mcp-integration.md",
+   "quote": "convert a place to streaming, Input Action System work, Luau heap snapshots and leaks, simulating",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "list_skills in Studio 0.746 2026-11-05 returned these 14, all source Roblox. assistant/skills.md lists configs-experimentation and instrument-analytics among its built-ins.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "mcp-integration-106",
+   "file": "references/mcp-integration.md",
+   "quote": "latency and packet loss, and a report-only audit of `ProcessReceipt`. The `Assistant` docs page lists",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "list_skills in Studio 0.746 2026-11-05 returned these 14, all source Roblox. assistant/skills.md lists configs-experimentation and instrument-analytics among its built-ins.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "mcp-integration-107",
+   "file": "references/mcp-integration.md",
+   "quote": "fewer, so run `list_skills` for the current set. These are Roblox's, shipped inside",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "list_skills in Studio 0.746 2026-11-05 returned these 14, all source Roblox. assistant/skills.md lists configs-experimentation and instrument-analytics among its built-ins.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "mcp-integration-108",
+   "file": "references/mcp-integration.md",
+   "quote": "and LibMP analysis, `skill(\"rbx-luau-heap-profiling\")` for leaks, and `skill(\"rbx-scene-analysis\")` for SceneAnalysisService. Use this",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "list_skills in Studio 0.746 2026-11-05 returned these 14, all source Roblox. assistant/skills.md lists configs-experimentation and instrument-analytics among its built-ins.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "mcp-integration-109",
+   "file": "references/mcp-integration.md",
+   "quote": "| 31 tools (2026-10-29) | **34 on 2026-11-05** (Studio 0.746): +`generate_scene`, +`generate_avatar`, +`auto_setup_avatar`. | Live tool list |",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Live tool list 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "mcp-integration-110",
+   "file": "references/mcp-integration.md",
+   "quote": "Roblox ships 7 first-party `rbx-*` skills that partly supersede hand-rolled approaches (9 on 2026-10-29, 14 on 2026-11-05).",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "list_skills 2026-11-05.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "agent-safety-033",
+   "file": "references/agent-safety.md",
+   "quote": "`generate_scene` runs the script it generates in the DataModel, and `generate_avatar` uploads a",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Live schemas 2026-11-05. \"cannot be previewed\": neither schema has a dry-run or preview argument.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "agent-safety-034",
+   "file": "references/agent-safety.md",
+   "quote": "persistent asset: their schemas say so, and neither can be previewed first.",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
+   "evidence": "Live schemas 2026-11-05. \"cannot be previewed\": neither schema has a dry-run or preview argument.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "project-structure-038",
+   "file": "references/project-structure.md",
+   "quote": "\"[Studio Beta] Expanding the Character Controller Library\", 2026-09-10; the guide pages say so",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs c8f5276..a47045f (2026-10-30..11-04)",
+   "evidence": "characters/character-controller-library pages in a47045f: BetaAlert \"AvatarAbilities Character Controller Library\"; includes/studio/character-controller.md.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "project-structure-039",
+   "file": "references/project-structure.md",
+   "quote": "too since 2026-11-04: enable it under Beta Features, then in Avatar Settings).",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs c8f5276..a47045f (2026-10-30..11-04)",
+   "evidence": "characters/character-controller-library pages in a47045f: BetaAlert \"AvatarAbilities Character Controller Library\"; includes/studio/character-controller.md.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "performance-optimization-090",
+   "file": "references/performance-optimization.md",
+   "quote": "`luau-lsp` may report `Property Margin of type 'RaycastParams' is read-only` (1.70.1) or `Key 'Margin' not",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05; CI run of luau-lsp 1.70.1; local luau-lsp 1.69",
+   "evidence": "CI 1.70.1: Property Margin of type RaycastParams is read-only. Local 1.69: Key Margin not found. Studio: params.Margin = 1 read back 1 and changed cast results.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "performance-optimization-091",
+   "file": "references/performance-optimization.md",
+   "quote": "found` (1.69): those are gaps in its definitions, and the write works in Studio 0.746.",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05; CI run of luau-lsp 1.70.1; local luau-lsp 1.69",
+   "evidence": "CI 1.70.1: Property Margin of type RaycastParams is read-only. Local 1.69: Key Margin not found. Studio: params.Margin = 1 read back 1 and changed cast results.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
   }
  ]
 }

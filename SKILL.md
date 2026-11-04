@@ -8,7 +8,7 @@ description: >
   and anti-exploit, deprecated APIs, Rojo, and the Roblox Studio MCP tools (execute_luau,
   multi_edit, script_read). It holds facts that general knowledge gets wrong (which properties a
   game Script may set, features that exist but are not enabled, Studio betas that cannot be
-  published, engine changes up to 0.745 and Luau up to 0.744) and worked examples tested in Studio, so consult
+  published, engine changes up to 0.746 and Luau up to 0.745) and worked examples tested in Studio, so consult
   it before answering from memory. Not for Lua outside Roblox (Redis, OpenResty, WoW addons, LOVE)
   or for other game engines.
 ---
@@ -19,12 +19,12 @@ Expert development companion for building Roblox experiences with Luau. Grounded
 official Roblox documentation (https://create.roblox.com/docs), the Luau language spec
 (https://luau.org), and the Roblox Lua Style Guide (https://roblox.github.io/lua-style-guide/).
 
-> **Engine**: Roblox Studio **0.745.0.7451137** with **Luau 0.744** (released 2026-10-23) — dump
-> downloaded, re-split, and diffed against 0.744 on **2026-10-29**, with every developer-visible
-> change run in Studio 0.745. 949 classes / 654 enums; locally, 267 class files named `*Service`
-> (347 classes carry the `Service` tag) and 48 deprecated classes (574 members). The official docs
-> were checked through 2026-10-29. New in 0.745 and usable: `coroutine.finally`, the `Shapecast`
-> overrides, `Player.DeviceTrustLevel` (always `Pending` in Studio).
+> **Engine**: Roblox Studio **0.746.0.7461264** with **Luau 0.745** (released 2026-10-30) — dump
+> downloaded, re-split, and diffed against 0.745 on **2026-11-05**, with every developer-visible
+> change run in Studio 0.746. 950 classes / 656 enums; locally, 267 class files named `*Service`
+> (347 classes carry the `Service` tag) and 48 deprecated classes (577 members). The official docs
+> were checked through 2026-11-04. New and usable: `RaycastParams.Margin` / `SizeGradient`, the
+> `Color3` contrast methods, `GamepadService:EnableGamepadCursor()` with no argument.
 >
 > Roblox ships roughly weekly, so this line is stale by design — never quote it as today's version.
 > Re-derive it instead:
@@ -53,11 +53,11 @@ surface. The tools below belong to **Roblox's own MCP server, built into Studio*
 only tells you how to use them well. Official reference:
 https://create.roblox.com/docs/studio/mcp
 
-The docs page lists **26 tools**. The build observed 2026-10-29 (Studio 0.745) exposed **31**:
-those plus the undocumented `generate_texture`, `segment_mesh` and three skill-authoring tools,
-`list_skills`, `create_skill` and `edit_skill` (28 on 2026-10-17 to 2026-10-22, Studio
-0.743–0.744; `list_plugin_guis` and `capture_plugin_gui`, seen on 2026-10-11 in Studio 0.742,
-were gone by then). Detect what your host actually
+The docs page lists **26 tools**. The build observed 2026-11-05 (Studio 0.746) exposed **34**:
+those plus the undocumented `generate_texture`, `segment_mesh`, `generate_scene`, `generate_avatar`,
+`auto_setup_avatar` and three skill-authoring tools, `list_skills`, `create_skill` and `edit_skill`
+(31 on 2026-10-29, Studio 0.745; 28 on 2026-10-17 to 2026-10-22, Studio 0.743–0.744;
+`list_plugin_guis` and `capture_plugin_gui`, seen on 2026-10-11 in Studio 0.742, were gone by then). Detect what your host actually
 exposes rather than trusting this table.
 
 | Tool | Purpose |
@@ -82,6 +82,9 @@ exposes rather than trusting this table.
 | `generate_material` | Generate a `MaterialVariant`; returns the base material + variant name |
 | `generate_texture` | Re-texture an **existing** MeshPart/Model — **replaces the source in place** (duplicate it first) |
 | `segment_mesh` | Split an existing mesh into ≤5 named parts; inserts a new Model next to the source |
+| `generate_scene` | Generate models and parts from a prompt or images, in an optional bounding box; **runs the generated script in the DataModel** |
+| `generate_avatar` | Generate a rigged R15 avatar from a prompt, **upload it as a persistent asset** and insert it into Workspace; usually several minutes |
+| `auto_setup_avatar` | Rig an existing static Workspace Model as an R15 avatar and place the result beside it; usually 3-5 minutes |
 | `wait_job_finished` | Await a background `jobId` (from a tool's own `async: true`) |
 | `http_get` | Fetch Roblox docs **from an allowlist**; URL must end `.md` or be `llms.txt` |
 | `skill` | Roblox's first-party `rbx-*` references (debug, perf, scene analysis, configs, analytics, …) |
@@ -166,10 +169,10 @@ Documentation Lookup workflow below.
 **Always check local files first** — they are pre-split, far cheaper to read than the full dump, and
 require no network. If `~/RobloxDocs/RobloxAPI/` exists, use it.
 
-**How much cheaper, re-measured 2026-10-29 on 0.745.0.7451137** (an earlier "845× smaller" figure
+**How much cheaper, re-measured 2026-11-05 on 0.746.0.7461264** (an earlier "845× smaller" figure
 was not reproducible from any measurement, so here are the real numbers and the command that
-produced them): the full dump is **8,677,424 bytes**; the 949 split class files run **101 B min,
-2,065 B median, 4,876 B mean, 105,774 B max**. So a typical class lookup reads about **0.02%** of
+produced them): the full dump is **8,721,015 bytes**; the 950 split class files run **101 B min,
+2,074 B median, 4,897 B mean, 105,756 B max**. So a typical class lookup reads about **0.02%** of
 the dump, and even the largest class reads under **1.3%** of it. Re-measure with:
 
 ```bash
@@ -207,8 +210,8 @@ grep -l '"<PropertyName>"' ~/RobloxDocs/RobloxAPI/classes/*.json
 ```bash
 # Check when local data was last updated
 cat ~/RobloxDocs/RobloxAPI/.current-version
-# → {"version": "0.745.0.7451137", "platform": "MacStudio", "platformVersion": "0.745.0.7451137",
-#    "winHash": "version-7062aec9dbe74b14", "updatedAt": "2026-10-29T04:01:24Z", "checkedAt": "2026-10-29T04:01:24Z"}
+# → {"version": "0.746.0.7461264", "platform": "MacStudio", "platformVersion": "0.746.0.7461264",
+#    "winHash": "version-fee454b8e2094ba9", "updatedAt": "2026-11-04T18:00:20Z", "checkedAt": "2026-11-04T18:00:20Z"}
 ```
 
 > **Read whichever timestamp is present: `updatedAt` OR `checkedAt`.** `updatedAt` is when a dump

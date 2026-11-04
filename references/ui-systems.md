@@ -21,9 +21,10 @@
 8. [StarterGui & LocalScript Interaction](#startergui--localscript-interaction)
 9. [ProximityPrompt](#proximityprompt)
 10. [Best Practices](#best-practices)
-11. [UIShadow — Native Drop Shadows](#uishadow--native-drop-shadows)
-12. [StyleQuery — Responsive Style Queries (May 2026)](#stylequery--responsive-style-queries-may-2026)
-13. [Per-Corner UICorner Rounding](#per-corner-uicorner-rounding)
+11. [Readable Text: `Color3` Contrast Methods](#readable-text-color3-contrast-methods)
+12. [UIShadow — Native Drop Shadows](#uishadow--native-drop-shadows)
+13. [StyleQuery — Responsive Style Queries (May 2026)](#stylequery--responsive-style-queries-may-2026)
+14. [Per-Corner UICorner Rounding](#per-corner-uicorner-rounding)
 
 ---
 
@@ -379,6 +380,28 @@ end
 
 ---
 
+## Readable Text: `Color3` Contrast Methods
+
+`Color3:GetLuminance()`, `GetContrastRatio(other)` and `GetContrastingColor(...)` (documented
+2026-11-03) follow the WCAG 2.1 definitions and work from a Script and a LocalScript in Studio 0.746.
+With no arguments `GetContrastingColor` chooses between black and white; a tie resolves to the earliest
+candidate. They return 32-bit values, so compare with a threshold: in Studio black against white gives
+`20.999998…`, not the documented `21`, and pure red gives `0.2125999…`, not `0.2126`.
+
+<!-- skilltest: defs-behind; expect color3-contrast; defines-only -->
+```lua
+--!strict
+-- Pick a readable label colour for any background, keeping brand colours when they pass.
+local MIN_CONTRAST = 4.5 -- WCAG AA for normal-size text
+
+local function readableTextColor(background: Color3, preferred: Color3?): Color3
+	if preferred and preferred:GetContrastRatio(background) >= MIN_CONTRAST then
+		return preferred
+	end
+	return background:GetContrastingColor()
+end
+```
+
 ## UIShadow — Native Drop Shadows
 
 `UIShadow` renders a native drop shadow beneath its parent `GuiObject`,
@@ -469,8 +492,8 @@ shadowImage.Parent = card  -- layered behind content
 Since 2026-10-15 the UI guide (*Appearance modifiers → Gradient*) documents `UIGradient.Type`
 (`Enum.GradientType.Linear` / `Radial` / `Elliptical` / `Conical`), `Scale` and `TileMode`
 (`Enum.GradientTileMode.Clamp` / `Repeat` / `Mirror`), each behind **File ⟩ Beta Features ⟩
-Upgraded UIGradients**. All three are `NotBrowsable` in the 0.743 API dump (hidden from the
-Properties window). In Studio 0.743 a `LocalScript` set and read back `Type = Elliptical`,
+Upgraded UIGradients**. All three were `NotBrowsable` in the 0.743 API dump and lost the tag in
+0.746 (a Script reads `Linear`, `1`, `Clamp` on a new gradient). In Studio 0.743 a `LocalScript` set and read back `Type = Elliptical`,
 `Scale` and `TileMode = Mirror` without error, so a successful write does **not** mean the beta is
 on, and rendering was not checked. As with the UIShadow beta: build on the default linear gradient
 for a published game, and use these only while experimenting in Studio until the beta is released.
