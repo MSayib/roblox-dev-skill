@@ -244,13 +244,10 @@ Official guide: https://create.roblox.com/docs/projects/server-authority
 Enable it in Studio, not from code: set `Workspace.AuthorityMode` to `Server` in the Properties
 window, which also sets the other requirements the official page lists
 (`NextGenerationReplication`, `PlayerScriptsUseInputActionSystem`, `SignalBehavior = Deferred`,
-`UseFixedSimulation`, `StreamingEnabled`). `AuthorityMode` is `RobloxScriptSecurity` and the
-others are `NotScriptable`, `RobloxScriptSecurity` (`PlayerScriptsUseInputActionSystem` since 0.743)
-or plugin-only (dump 0.743), so a script cannot switch a place over.
-
-The `Workspace` reference page lists `AuthorityMode` as `Security: None` since 2026-10-22, but in
-Studio 0.745 a Script, a LocalScript and `execute_luau` still fail to read it (`lacking capability
-RobloxScript`, tested 2026-10-29), as the 0.745 dump says.
+`UseFixedSimulation`, `StreamingEnabled`). Since 0.746 a Script and a LocalScript can **read**
+`AuthorityMode`, which helps a client branch on server authority, but writing it needs
+`PluginOrOpenCloud` (tested 2026-11-05). The others are `NotScriptable`, `RobloxScriptSecurity`
+(`PlayerScriptsUseInputActionSystem` since 0.743) or plugin-only, so a script cannot switch a place over.
 
 What the guide added on 2026-10-22 (*docs*, not run here: it needs `AuthorityMode = Server`):
 prediction covers a whole **assembly**, so a sword welded to a predicted character is predicted
@@ -258,7 +255,7 @@ too, while an unwelded model parented to the character is not; inside a `BindToS
 callback `Instance.new` / `Clone` work but `Destroy()` and re-parenting error, so destroy from
 `RunService.PostSimulation`; `Humanoid:EquipTool()` / `UnequipTools()` cannot be called there,
 and Tools are "not fully supported" yet; `RunService:GetPredictionStatus()` tells a client
-whether an instance is predicted. The parallel `BindToSimulationParallel` is not enabled in 0.745.
+whether an instance is predicted. The parallel `BindToSimulationParallel` is not enabled in 0.746.
 
 Heuristic checks (rubber-banding, speed checks, below) still work without it; Server Authority
 removes the class of exploits they guess at, such as speed hacks, at the engine level.

@@ -38,6 +38,8 @@ ALLOW = {
     'placeholder':   re.compile(r"Invalid service name|Unknown type"),
     'antipattern':   re.compile(r'^TypeError'),   # a "❌ do not do this" example, kept to be recognised
     'project-tree':  re.compile(r"^TypeError: Key '\w+' not found in external type '(Workspace|ReplicatedStorage|ServerStorage|ServerScriptService|StarterGui)'"),
+    # Run in Studio 0.746; the hand-written data type definitions in luau-lsp do not list them yet (2026-11-05).
+    'defs-behind':   re.compile(r"^TypeError: Key '(Margin|SizeGradient)' not found in external type 'RaycastParams'|^TypeError: Key '(GetLuminance|GetContrastRatio|GetContrastingColor)' not found in external type 'Color3'"),
 }
 
 

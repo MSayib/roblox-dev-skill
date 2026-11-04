@@ -179,8 +179,8 @@ your host actually exposes instead of trusting this table.
 - Runs at **plugin / command-bar privilege**, not game privilege — it can reach
   `PluginSecurity` members that a Script cannot.
 - **That privilege does not reach `NotScriptable` properties.** These are Properties-window-only
-  settings such as `SandboxedInstanceMode`, `EnableSLIMAvatars`, `PlayerCharacterDestroyBehavior`
-  and `UseInputSink` on Workspace. No Luau can read or write them, so an agent should ask the user
+  settings such as `SandboxedInstanceMode`, `EnableSLIMAvatars` and `PlayerCharacterDestroyBehavior`
+  on Workspace. No Luau can read or write them, so an agent should ask the user
   to change them in Studio rather than retry. Measured in Studio 0.741.19.7411056: reading any of
   them from `execute_luau` fails with `<Name> is not a valid member of Workspace "Workspace"`. That
   message reads like a typo, and it is not one. Check the member's `Tags` in
@@ -236,6 +236,9 @@ nested.
 | `generate_mesh` | Generates a textured 3D mesh from a text prompt. |
 | `generate_procedural_model` | Builds an object from primitive parts (blocks, spheres, cylinders, wedges) as a `ProceduralModel` with configurable attributes; accepts reference images and custom part schemas. |
 | `generate_material` | Generates a material variant; returns the base material plus the variant name to apply. |
+| `generate_scene` | **Undocumented; first seen 2026-11-05 (Studio 0.746).** Generates models and parts from `textPrompt` and/or `images`, in an optional `boundingBoxPosition` / `boundingBoxSize`, and **runs the generated script in the DataModel**. Schema read, not run: review what it may change first. |
+| `generate_avatar` | **Undocumented; first seen 2026-11-05.** Generates a rigged R15 avatar from `textPrompt` (options `pipelineName` `npc` / `modesty`, `dynamicHead`, `r15Plus`), **uploads it as a persistent asset** and inserts it into Workspace. Usually several minutes; its schema prefers `async`. Schema read, not run. |
+| `auto_setup_avatar` | **Undocumented; first seen 2026-11-05.** Rigs a static Workspace Model (`instance_path`, or the single selected Model) as an R15 avatar and places the result beside it; `setup_type` `Platform` (marketplace-compatible, the default) or `Development` (experience-only NPCs). Its schema says do not set Selection with `execute_luau`. Usually 3-5 minutes. Schema read, not run. |
 | `wait_job_finished` | Waits for a background job to reach a terminal state (Completed / Failed / Cancelled) and returns its status. |
 | `store_image` | **Local file → URI.** Loads a png/jpg/jpeg from an absolute local path (**max 5 MB**) and returns an `IMAGEID_<id>` URI for other tools, e.g. as `attachedImageUri` for `generate_procedural_model`. |
 | `upload_image` | **HTTP URLs → asset IDs.** Uploads a *batch* of images **fetched from HTTP(S) URLs** and returns an imagePath→assetId map, e.g. `{"https://…/image.png": "rbxassetid://12345678"}`. |
@@ -279,15 +282,17 @@ than the whole page.
 > `raw.githubusercontent.com/Roblox/libmp/main/…` with the host's own fetch tool or `curl`
 > (that host is not on the allowlist), or use `skill("rbx-perf-profiling")`.
 
-**First-party skills exposed by the `skill` tool (2026-10-29, nine):**
-`rbx-configs-experimentation`, `rbx-create-skill`, `rbx-debug`, `rbx-device-simulator-lua`,
-`rbx-docs-search`, `rbx-instrument-analytics`, `rbx-perf-profiling`, `rbx-scene-analysis`,
-`rbx-unit-test`. The seven without `configs-experimentation` (ConfigService live values and A/B
-experiments) and `instrument-analytics` (adding `AnalyticsService` economy / funnel / custom
-events) were unchanged from 2026-09-25 to 2026-10-22. These are Roblox's, shipped inside
+**First-party skills exposed by the `skill` tool (2026-11-05, Studio 0.746, fourteen):**
+`rbx-configs-experimentation`, `rbx-convert-to-streaming`, `rbx-create-skill`, `rbx-debug`,
+`rbx-device-simulator-lua`, `rbx-docs-search`, `rbx-input-action-system`, `rbx-instrument-analytics`,
+`rbx-luau-heap-profiling`, `rbx-network-simulator`, `rbx-perf-profiling`,
+`rbx-process-receipt-misuse`, `rbx-scene-analysis`, `rbx-unit-test`. The five added since 2026-10-29:
+convert a place to streaming, Input Action System work, Luau heap snapshots and leaks, simulating
+latency and packet loss, and a report-only audit of `ProcessReceipt`. The `Assistant` docs page lists
+fewer, so run `list_skills` for the current set. These are Roblox's, shipped inside
 Studio, and they are **narrower and more current than this skill on their specific topics** —
 prefer `skill("rbx-debug")` for breakpoint work, `skill("rbx-perf-profiling")` for MicroProfiler
-and LibMP analysis, and `skill("rbx-scene-analysis")` for SceneAnalysisService. Use this
+and LibMP analysis, `skill("rbx-luau-heap-profiling")` for leaks, and `skill("rbx-scene-analysis")` for SceneAnalysisService. Use this
 repository's references for architecture, security, and Luau standards, which they do not cover.
 
 ### Session management
@@ -450,5 +455,6 @@ version does not reintroduce them.
 | `search_asset` searches "the marketplace / Toolbox" | **Creator Store + Creator Inventory**, with type / price / tag / scope filters. | Official docs |
 | 29 tools | **26 documented**, **28 in this build** (+`generate_texture`, +`segment_mesh`, both undocumented). | Official docs + live tool list |
 | 28 tools (2026-10-17 to 2026-10-22) | **31 on 2026-10-29** (Studio 0.745): +`list_skills`, +`create_skill`, +`edit_skill`. | Live tool list |
-| `skill` and `subagent` absent from this file | Both are real and officially documented. Roblox ships 7 first-party `rbx-*` skills that partly supersede hand-rolled approaches (9 on 2026-10-29). | Official docs + live schemas |
+| 31 tools (2026-10-29) | **34 on 2026-11-05** (Studio 0.746): +`generate_scene`, +`generate_avatar`, +`auto_setup_avatar`. | Live tool list |
+| `skill` and `subagent` absent from this file | Both are real and officially documented. Roblox ships 7 first-party `rbx-*` skills that partly supersede hand-rolled approaches (9 on 2026-10-29, 14 on 2026-11-05). | Official docs + live schemas |
 | `set_active_studio` is a tool | Does not exist. Targeting is per call via `studio_id`. (Corrected in v2.7.0, kept here as a guard.) | Official docs |

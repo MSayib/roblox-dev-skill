@@ -11,6 +11,92 @@ reference content was verified against at that time.
 
 ---
 
+## 2.21.0 — Nov 5, 2026
+
+**Engine 0.746.0.7461264 and Luau 0.745, with every developer-visible change run in Studio 0.746,
+every "not enabled" claim re-run, and the creator-docs of 2026-10-30 to 2026-11-04 ingested.**
+Studio went live as 0.746.0.7461264 (`WindowsPlayer` still served 0.745 when checked); Luau 0.745
+came out on 2026-10-30. Probes ran from a server `Script`, a `LocalScript`, an `Actor` Script and
+MCP `execute_luau`, and were removed afterwards. Server 103/103 (25/25 expectations), client 28/28
+(5/5), plugin 3/3 (2/2), API audit 0 defects, claims 911 → 1072 (0 unverified, 115 regression guards),
+evals 77 → 84. Static ran locally with `luau-lsp` 1.69: 143 blocks, and only the 3 `coroutine.finally`
+findings 1.69 cannot type; 1.70.1 runs in CI.
+
+### Changed: now usable
+
+- **`RaycastParams.Margin` and `SizeGradient` work (*tested*).** A ray passing 2 studs from a part
+  misses with `Margin = 1.9` and hits with `2.1`. New `performance-optimization.md` section with a
+  tested example, and the trap: the result describes a sphere, so `Normal` and `Distance` are not
+  what a thin ray would give.
+- **`Color3:GetLuminance`, `GetContrastRatio`, `GetContrastingColor` work (*tested*).** New
+  `ui-systems.md` section and example. Black against white reads `20.999998…`, not `21`.
+- **`GamepadService:EnableGamepadCursor()` with no argument works (*tested*).** It failed in 0.745.
+- **`Workspace.AuthorityMode` can be read from a Script and a LocalScript (*tested*);** writing it is
+  still plugin-only.
+
+### Corrected
+
+- **`--!native` is no longer "server-side only".** The docs (2026-11-03) add client scripts on
+  Android, and `FFlagLuauCodegen` agrees (`True` for Android, `False` for Windows, Mac and iOS
+  clients). Not measured on a device.
+- **`AnalyticsService:LogJourneyEvent` is back:** the "do not add new uses" advice is gone. A bad
+  name logs a message and does not throw (*tested*), so `pcall` does not catch it.
+- **Reserved and VIP teleports:** the Access Code V2 refusal is gone in 0.746. Studio still cannot
+  complete a teleport (`HTTP 403`, `Request Context Failure`), and the dump now tags
+  `ReserveServerAsync`, `ReservedServerAccessCode` and `ShouldReserveServer` `Deprecated`.
+- `Workspace.UseInputSink` is gone from the `NotScriptable` examples in `mcp-integration.md` (removed
+  in 0.746); the streaming properties are `PluginOrOpenCloud`, not `NotScriptable`.
+
+### Engine 0.746 (950 classes +2 −1, 656 enums +3 −1, 267 `*Service`, 48 deprecated classes, 577 members)
+
+- **Not usable yet (*tested*):** `GeometryService:SplitApartAsync`, `HapticEffect:GetWaveformKeys`,
+  `SerializationService:SerializeValue` / `DeserializeValue`, `PlaceSettings`, `EditableImage`
+  `alphaBlendType` other than `Default`.
+- **Plugin-only (*tested*):** `Workspace.PredictiveStreamingMode`, `StreamOutBehavior`,
+  `StreamingIntegrityMode`, `StreamingMinRadius`, `StreamingTargetRadius`,
+  `NextGenerationPhysicsSolver`, `LayerCollector.InputSinkEnabled`,
+  `SoundService.DefaultListenerLocation`; writes on three `TextChatService` properties and on
+  `Terrain.Decoration` / `GrassLength`.
+- **Re-run, unchanged (*tested*):** `PartType.Capsule`, the parallel `BindTo*`, `BakeToMeshAsync`,
+  `GetLatestVersionUriAsync`, `SceneAnalysisService`, `EditableMesh:AddFace`, the `TestService`
+  registry, `GetPassOwnershipAsync`, `EasingStyle.Spring` / `Bezier`, the `integer` library.
+- **Removed:** `Workspace.UseInputSink`, `Workspace.PrimalPhysicsSolver`, `WrapDeformMeshProvider`,
+  `BasePart.siz`, and internal members.
+
+### Docs 2026-10-30 to 2026-11-04
+
+- **Ahead of the engine (*tested*):** the orthographic `Camera` properties (writes silently ignored),
+  `GuiObject.SelectionGained`'s `inputDirection` and `Enum.GuiNavigationDirection`, `UseHitbox` and
+  `HitboxSize`, `Decal` map writes, `VoiceChatService` properties, `CreateVirtualInput(target)`.
+- **Chat guidelines rewritten** (`networking.md`): any conversation in under 60 seconds must use
+  `TextChatService`; editable text needs filtering and a one-minute rate limit.
+- VIP server access checks, `ServerLowMemoryWarning` page, Journey events guide, Experiments metric
+  sets, Marketplace share links, Character Controller Library beta notice.
+
+### Luau 0.745
+
+- `while local` / `while const` are behind `Debug` flags and a syntax error in Studio 0.746 (*tested*).
+  `table.create` / `table.clear` fast calls; native auto-promotion is gated and not in the flags.
+
+### MCP
+
+- **34 tools** (+`generate_scene`, +`generate_avatar`, +`auto_setup_avatar`; schemas read, not run: they
+  spend quota and create assets). **14 first-party skills** (+`rbx-convert-to-streaming`,
+  +`rbx-input-action-system`, +`rbx-luau-heap-profiling`, +`rbx-network-simulator`,
+  +`rbx-process-receipt-misuse`). `agent-safety.md` covers the new write paths.
+
+### Tooling
+
+- `run_static.py`: a `defs-behind` directive for members run in Studio that the `luau-lsp` data type
+  definitions do not list yet. `reserved-server-options` reads its deprecated fields through `any`.
+
+### Evals 77 → 84
+
+- New: thick casts, `--!native` on clients, orthographic camera, contrast colours, journey events, the
+  plugin-only 0.746 properties, the new MCP tools.
+
+---
+
 ## 2.20.0 — Oct 29, 2026
 
 **Engine 0.745.0.7451137 and Luau 0.744, with every developer-visible change run in Studio 0.745,

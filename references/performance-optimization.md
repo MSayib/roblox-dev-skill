@@ -273,10 +273,10 @@ end)
   around two times lower."* That is the whole claim — halved overhead on the call itself, not free.
   `pcall` around a DataStore call or an HTTP request is still dominated by the call, and wrapping a
   hot inner loop in `pcall` still costs something. Measure before treating it as free.
-- **Native CodeGen (`--!native`)**: **server-side only.** Per the official docs, "server-side scripts
-  in your game can be compiled directly into the machine code instructions that CPUs execute"; the
-  page describes it for server-side scripts only, so do not expect a gain from `--!native` in a
-  `LocalScript`. Roblox publishes **no speedup multiplier**, and an earlier
+- **Native CodeGen (`--!native`)**: **server scripts and Android clients only.** Per the official
+  docs (2026-11-03), it is "only supported for server-side scripts and client-side scripts on Android
+  devices", so do not expect a gain from `--!native` in a `LocalScript` on Windows, Mac or iOS.
+  Roblox publishes **no speedup multiplier**, and an earlier
   version of this file invented "2-5x"; the docs instead say to *"measure the time a script or a
   function takes with and without native compilation"* using the Script Profiler. It has real costs
   the docs name: compilation increases server startup time, native code occupies extra memory, and
@@ -297,6 +297,39 @@ end)
 
   Roblox publishes no multiplier for any of these. Do not quote one — measure with the Script
   Profiler if it matters.
+
+### Thick Casts: `RaycastParams.Margin` (Engine 0.746)
+
+A ray that must be forgiving (aim assist, melee, thin targets) no longer needs a separate `Spherecast`:
+a non-zero `Margin` makes `Raycast` behave as a sphere cast of that radius, and it also grows
+`Spherecast`, `Blockcast` and `Shapecast` (*docs*). `SizeGradient` scales the cast's own size along
+its length (`0.5` ends 50% larger, `-1` shrinks to nothing), so it does nothing on a plain ray.
+
+<!-- skilltest: defs-behind; expect raycast-margin; defines-only -->
+```lua
+--!strict
+-- A ray that also hits anything within `margin` studs of its line.
+local Workspace = game:GetService("Workspace")
+
+local function forgivingRaycast(origin: Vector3, direction: Vector3, margin: number, ignore: { Instance }): RaycastResult?
+	local params = RaycastParams.new()
+	params.FilterType = Enum.RaycastFilterType.Exclude
+	params.FilterDescendantsInstances = ignore
+	params.Margin = margin -- throws below 0; a ray over 256 fails at the cast
+	return Workspace:Raycast(origin, direction, params)
+end
+```
+
+Tested in Studio 0.746 against a part whose surface is 2 studs from the ray: `Margin = 1.9` missed
+and `2.1` hit. **The result describes a sphere, not a ray:** `Position` is on the part's surface,
+`Normal` points back at the sphere's centre rather than along the face, and `Distance` is how far
+the sphere travelled (`48.36` where `Position` was `49.04` away). Do not use `Normal` for decal
+placement or `Distance` for range checks without allowing for that. A cast-size limit still applies
+to the expanded shape: a ray with `Margin = 1000` fails `The maximum radius is 256.000000`, and a
+block with `Margin = 1000` fails `The maximum side length is 512.000000`.
+
+`SizeGradient` on a 100-stud cast, same part at the halfway point (*Studio*): a plain ray missed at
+every value; a 1-stud `Spherecast` missed at `1` and hit at `2`; a 2×2×2 `Blockcast` hit at `2`.
 
 ### Avoid Expensive Operations on RunService Events
 
@@ -355,7 +388,7 @@ end)
 
 ### Server Memory Pressure Monitoring (`ServerLowMemoryWarning`)
 
-Roblox Studio v736+ introduces `game.ServerLowMemoryWarning` allowing server scripts to react proactively when the server instance approaches memory limits:
+`game.ServerLowMemoryWarning` lets a server script react when Roblox detects memory pressure (documented since 2026-11-03). It can fire more than once while the pressure lasts, so keep the handler idempotent and cheap; it guarantees neither a shutdown nor that one can be avoided (*docs*). The signal exists in Studio 0.746, but it cannot be fired on demand, so this handler has not been seen to run:
 
 ```luau
 --!strict
@@ -579,8 +612,9 @@ Studio 0.742 (and again in 0.744.0.7441077) a game Script writing it fails with 
 write security changed from `PluginSecurity` to `None` in 0.742, but the capability keeps it
 plugin-only). A Script may read it.
 
-**Key properties** (Properties window only: all three are `NotScriptable`, and a Script indexing
-`StreamingIntegrityMode` gets "is not a valid member of Workspace" in Studio 0.742):
+**Key properties** (Properties window or a plugin: since 0.746 all three are `PluginOrOpenCloud`
+instead of `NotScriptable`, and a Script reading or writing them fails `lacking capability
+PluginOrOpenCloud` in Studio 0.746; `execute_luau` reads them):
 - `StreamingMinRadius` — minimum distance (studs) that content always streams in
 - `StreamingTargetRadius` — target distance the engine tries to maintain
 - `StreamingIntegrityMode` — behavior when required content isn't loaded yet
