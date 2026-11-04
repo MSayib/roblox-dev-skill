@@ -18,7 +18,7 @@ every "not enabled" claim re-run, and the creator-docs of 2026-10-30 to 2026-11-
 Studio went live as 0.746.0.7461264 (`WindowsPlayer` still served 0.745 when checked); Luau 0.745
 came out on 2026-10-30. Probes ran from a server `Script`, a `LocalScript`, an `Actor` Script and
 MCP `execute_luau`, and were removed afterwards. Server 103/103 (25/25 expectations), client 28/28
-(5/5), plugin 3/3 (2/2), API audit 0 defects, claims 911 → 1072 (0 unverified, 115 regression guards),
+(5/5), plugin 3/3 (2/2), API audit 0 defects, claims 911 → 1074 (0 unverified, 115 regression guards),
 evals 77 → 84. Static ran locally with `luau-lsp` 1.69: 143 blocks, and only the 3 `coroutine.finally`
 findings 1.69 cannot type; 1.70.1 runs in CI.
 

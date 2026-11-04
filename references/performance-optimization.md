@@ -328,6 +328,9 @@ placement or `Distance` for range checks without allowing for that. A cast-size 
 to the expanded shape: a ray with `Margin = 1000` fails `The maximum radius is 256.000000`, and a
 block with `Margin = 1000` fails `The maximum side length is 512.000000`.
 
+`luau-lsp` may report `Property Margin of type 'RaycastParams' is read-only` (1.70.1) or `Key 'Margin' not
+found` (1.69): those are gaps in its definitions, and the write works in Studio 0.746.
+
 `SizeGradient` on a 100-stud cast, same part at the halfway point (*Studio*): a plain ray missed at
 every value; a 1-stud `Spherecast` missed at `1` and hit at `2`; a 2×2×2 `Blockcast` hit at `2`.
 

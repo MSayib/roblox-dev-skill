@@ -10738,6 +10738,26 @@
    "source": "Roblox/creator-docs c8f5276..a47045f (2026-10-30..11-04)",
    "evidence": "characters/character-controller-library pages in a47045f: BetaAlert \"AvatarAbilities Character Controller Library\"; includes/studio/character-controller.md.",
    "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "performance-optimization-090",
+   "file": "references/performance-optimization.md",
+   "quote": "`luau-lsp` may report `Property Margin of type 'RaycastParams' is read-only` (1.70.1) or `Key 'Margin' not",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05; CI run of luau-lsp 1.70.1; local luau-lsp 1.69",
+   "evidence": "CI 1.70.1: Property Margin of type RaycastParams is read-only. Local 1.69: Key Margin not found. Studio: params.Margin = 1 read back 1 and changed cast results.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "performance-optimization-091",
+   "file": "references/performance-optimization.md",
+   "quote": "found` (1.69): those are gaps in its definitions, and the write works in Studio 0.746.",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05; CI run of luau-lsp 1.70.1; local luau-lsp 1.69",
+   "evidence": "CI 1.70.1: Property Margin of type RaycastParams is read-only. Local 1.69: Key Margin not found. Studio: params.Margin = 1 read back 1 and changed cast results.",
+   "checked": "2026-11-05, engine 0.746.0.7461264"
   }
  ]
 }

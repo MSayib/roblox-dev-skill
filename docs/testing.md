@@ -125,7 +125,7 @@ Use the HTML form for anything that only concerns the tests (`prelude`, `expect`
 | `--@skilltest: actor` | Must run inside an `Actor` (Parallel Luau) |
 | `--@skilltest: project-tree` | Uses instances from the reader's place (`workspace.SomeNPC`) |
 | `--@skilltest: placeholder` | Contains `<placeholders>` to fill in |
-| `--@skilltest: defs-behind` | Uses members run in Studio that the `luau-lsp` definitions do not list yet (`RaycastParams.Margin`, the `Color3` contrast methods) |
+| `--@skilltest: defs-behind` | Uses members run in Studio that the `luau-lsp` definitions lack or list as read-only (`RaycastParams.Margin`, the `Color3` contrast methods) |
 | `--@skilltest: prelude A B` | Supply the reader's names from `preludes/A.luau`, `preludes/B.luau` |
 | `--@skilltest: expect A` | Assert behaviour with `expect/A.luau` after the block |
 | `--@skilltest: requires X` | Needs module `X`, which the test project provides |

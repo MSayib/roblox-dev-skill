@@ -15,13 +15,13 @@ Every factual claim a reader could act on wrongly, with how it was verified. **s
 | `references/mcp-integration.md` | 64 | 16 | 2 | 2 | 9 | 0 | 10 |
 | `references/monetization.md` | 6 | 18 | 0 | 0 | 2 | 0 | 7 |
 | `references/networking.md` | 24 | 30 | 0 | 0 | 4 | 0 | 10 |
-| `references/performance-optimization.md` | 43 | 25 | 3 | 7 | 1 | 0 | 10 |
+| `references/performance-optimization.md` | 45 | 25 | 3 | 7 | 1 | 0 | 10 |
 | `references/project-structure.md` | 9 | 14 | 6 | 2 | 3 | 0 | 4 |
 | `references/security-hardening.md` | 27 | 37 | 3 | 0 | 7 | 0 | 12 |
 | `references/studio-plugins-and-limits.md` | 16 | 1 | 1 | 1 | 9 | 0 | 0 |
 | `references/ui-systems.md` | 16 | 13 | 1 | 0 | 3 | 0 | 5 |
 | `references/worked-examples.md` | 17 | 7 | 3 | 1 | 19 | 0 | 1 |
-| **total** | **434** | **237** | **88** | **90** | **108** | **0** | **115** |
+| **total** | **436** | **237** | **88** | **90** | **108** | **0** | **115** |
 
 ## Verified claims
 
@@ -992,3 +992,5 @@ Every factual claim a reader could act on wrongly, with how it was verified. **s
 | `references/agent-safety.md`: persistent asset: their schemas say so, and neither can be previewed first. | studio | Live schemas 2026-11-05. "cannot be previewed": neither schema has a dry-run or preview argument. (Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05) |
 | `references/project-structure.md`: "[Studio Beta] Expanding the Character Controller Library", 2026-09-10; the guide pages say so | docs | characters/character-controller-library pages in a47045f: BetaAlert "AvatarAbilities Character Controller Library"; includes/studio/character-controller.md. (Roblox/creator-docs c8f5276..a47045f (2026-10-30..11-04)) |
 | `references/project-structure.md`: too since 2026-11-04: enable it under Beta Features, then in Avatar Settings). | docs | characters/character-controller-library pages in a47045f: BetaAlert "AvatarAbilities Character Controller Library"; includes/studio/character-controller.md. (Roblox/creator-docs c8f5276..a47045f (2026-10-30..11-04)) |
+| `references/performance-optimization.md`: `luau-lsp` may report `Property Margin of type 'RaycastParams' is read-only` (1.70.1) or `Key 'Margin' not | studio | CI 1.70.1: Property Margin of type RaycastParams is read-only. Local 1.69: Key Margin not found. Studio: params.Margin = 1 read back 1 and changed cast results. (Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05; CI run of luau-lsp 1.70.1; local luau-lsp 1.69) |
+| `references/performance-optimization.md`: found` (1.69): those are gaps in its definitions, and the write works in Studio 0.746. | studio | CI 1.70.1: Property Margin of type RaycastParams is read-only. Local 1.69: Key Margin not found. Studio: params.Margin = 1 read back 1 and changed cast results. (Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05; CI run of luau-lsp 1.70.1; local luau-lsp 1.69) |
