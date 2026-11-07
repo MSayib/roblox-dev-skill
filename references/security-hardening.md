@@ -255,7 +255,8 @@ too, while an unwelded model parented to the character is not; inside a `BindToS
 callback `Instance.new` / `Clone` work but `Destroy()` and re-parenting error, so destroy from
 `RunService.PostSimulation`; `Humanoid:EquipTool()` / `UnequipTools()` cannot be called there,
 and Tools are "not fully supported" yet; `RunService:GetPredictionStatus()` tells a client
-whether an instance is predicted. The parallel `BindToSimulationParallel` is not enabled in 0.746.
+whether an instance is predicted. `BindToSimulationParallel` runs from a script under an `Actor`
+(*tested* 2026-11-07; see `performance-optimization.md`).
 
 Heuristic checks (rubber-banding, speed checks, below) still work without it; Server Authority
 removes the class of exploits they guess at, such as speed hacks, at the engine level.

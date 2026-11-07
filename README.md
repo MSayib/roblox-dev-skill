@@ -9,8 +9,8 @@ DataStores, UI, performance, monetization, migration, and driving Roblox Studio 
 server. Works with Claude Code, Codex, Cursor, Gemini CLI, Antigravity, GitHub Copilot, and any
 agent that reads the Agent Skills format.
 
-> **Skill 2.21.0** · verified against Roblox Studio **0.746.0.7461264** and **Luau 0.745** on
-> 2026-11-05. Every code example was type-checked under `--!strict` and run in a real Studio place,
+> **Skill 2.22.0** · verified against Roblox Studio **0.746.0.7461269** and **Luau 0.745** on
+> 2026-11-07. Every code example was type-checked under `--!strict` and run in a real Studio place,
 > and every factual statement checked against an official source or a test.
 > Roblox ships weekly, so this is *when it was last verified*, not today's version.
 
@@ -63,7 +63,7 @@ updating, uninstalling and manual install: **[docs/installation.md](docs/install
 | [ui-systems](references/ui-systems.md) | GUI layout, StyleSheets, BillboardGui / SurfaceGui, ProximityPrompt, `Color3` contrast methods |
 | [monetization](references/monetization.md) | Game passes, developer products, subscriptions, Robux transfers |
 | [legacy-migration](references/legacy-migration.md) | Deprecated APIs and replacements, what each engine release changed |
-| [mcp-integration](references/mcp-integration.md) | Studio MCP tools with their real signatures and limits |
+| [mcp-integration](references/mcp-integration.md) | Studio MCP tools with their real signatures and limits, Open Cloud and MCP Permissions, what Roblox's own skills get wrong |
 | [agent-safety](references/agent-safety.md) | What an agent with Studio access can break, and the rules that prevent it |
 | [studio-plugins-and-limits](references/studio-plugins-and-limits.md) | Plugins, `Script.Source` limits, engine limits |
 | [file-formats-and-assets](references/file-formats-and-assets.md) | `.rbxl`/`.rbxm`, meshes, importing |
@@ -84,7 +84,8 @@ How routing, lookup and the coverage dates work: **[docs/how-it-works.md](docs/h
   delayed rollout the text dated, limits off by up to 1000×, and an event that does not exist.
   **[docs/claims.md](docs/claims.md)**
 - **Every engine release is diffed** member by member against the previous API dump, and the
-  developer-visible changes are run in Studio before the skill describes them.
+  developer-visible changes are run in Studio before the skill describes them. "Not enabled"
+  statements are re-run every cycle, because a server-side flag can change them with an empty diff.
 - **It says what it does not know.** Features that exist but are not enabled, betas you cannot
   publish, and anything not yet tested are labelled as such.
 

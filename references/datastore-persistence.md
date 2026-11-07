@@ -28,6 +28,11 @@ per **experience** — every place/server in that experience shares the same dat
 it from a `LocalScript` throws an error. All DataStore calls must live in `Script`
 objects (typically in `ServerScriptService`).
 
+**From an MCP client,** use `DataStoreService` through `execute_luau`, not Open Cloud, and remember
+Studio uses the **live** stores: a write changes real player data. It takes the **Save & load data**
+scopes in MCP Permissions plus **Game Settings → Security → Enable Studio Access to API Services**.
+See `mcp-integration.md`.
+
 ```luau
 --!strict
 -- ServerScriptService/DataManager.server.luau

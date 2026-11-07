@@ -1,13 +1,21 @@
 {
   "skill_name": "roblox-dev-skill",
-  "version": "2.21.0",
-  "last_updated": "2026-11-05T14:00:00+07:00",
-  "last_updated_by": "claude-code (engine 0.746 + Luau 0.745 + creator-docs 2026-10-30..11-04 ingest; every not-enabled claim re-run in Studio 0.746)",
+  "version": "2.22.0",
+  "last_updated": "2026-11-07T17:00:00+07:00",
+  "last_updated_by": "claude-code (Studio MCP Open Cloud + MCP Permissions, 17 first-party skills cross-checked, every not-enabled claim re-run in 0.746.0.7461269, creator-docs a47045f..031a0e3)",
   "update_source": "clientsettings client-version (WindowsStudio64, MacStudio, WindowsPlayer, MacPlayer); luau-lang/luau 0.745 release + 0.744/0.745 source tarballs; clientsettingscdn PCStudioApp/MacStudioApp/PCDesktopClient/MacDesktopClient/AndroidApp/iOSApp flags; roblox-api-monitor 0.745->0.746 dump diff (111 changes, 85 developer-visible); Roblox/creator-docs c8f5276..a47045f (2026-10-30..11-04); live Roblox Studio 0.746.0.7461264 via MCP (playtest probe Script/LocalScript/Actor, execute_luau) and the Rojo 34871 harness",
-  "engine_version_at_update": "0.746.0.7461264",
+  "engine_version_at_update": "0.746.0.7461269",
   "luau_version_at_update": "0.745",
   "update_interval_days": 7,
   "update_history": [
+    {
+      "date": "2026-11-07T17:00:00+07:00",
+      "version": "2.22.0",
+      "changes": "Engine 0.746.0.7461269 (dump diff 0 events, behaviour changed), Luau 0.745. WRONG CLAIMS FIXED (tested): GetPassOwnershipAsync answers {Owned, Active}; GetLatestVersionUriAsync works for an accessible asset; BindToSimulationParallel/BindToAnimationParallel work under an Actor; only GetCollisionGeometryMemoryAsync refuses, not all of SceneAnalysisService; execute_luau is gated for HTTP and data stores, and reaches live data stores from Edit too; game-passes/v1 is not all legacy; Roblox skills are not always current. NEW: open_cloud_invoke + MCP Permissions section (35 tools), 17 first-party skills with a table of statements that failed when run, Collections and :in-radius, ConfigService, heap and scene measuring, out-of-experience receipt rules, InputContext placement measured, buffer.readvector* not in engine. Evals 84 -> 100, two that locked in a now-wrong answer corrected.",
+      "engine_version": "0.746.0.7461269",
+      "decision_by": "user (sayib) -- 2026-11-07 'mari weekly update ... di studio sekarang ada skills baru, dan akses MCP lebih banyak. pelajari dan ukur semuanya, pastikan skills kita tidak ada yang sesat, false positive/negative dan regresi'",
+      "verified_by": "Studio 0.746.0.7461269 (place MieGede NewWorld 118652544255235) via MCP: probe Scripts + LocalScripts + Actor Scripts in playtests (removed afterwards, 0 left), execute_luau (Edit/Server/Client), user_keyboard_input, open_cloud_invoke read-only GETs (no write sent; 4 scope probes refused by the Claude Code classifier, not measured), http_get, list_skills + skill on all 17 (11 read in full, 6 over 50 KB rule sections read and every API and tool name audited); Rojo 34871 harness: server 105/105 cases, 27/27 expectations, client 28/28, 5/5, plugin 3/3, 2/2; run_static --strict locally with luau-lsp 1.69: 145 blocks, only the 3 coroutine.finally findings 1.69 cannot type (1.70.1 in CI); audit-skill-examples 0 defects; check_claims --strict 1184 claims, 0 stale, 0 uncovered; run_evals.py on 51 of 100 evals: 12/12 negatives did not trigger, 39/39 positives triggered, 0 answers met a FAILS condition (49 not run); check_sources passed; test_unix.sh 48/48"
+    },
     {
       "date": "2026-11-05T14:00:00+07:00",
       "version": "2.21.0",

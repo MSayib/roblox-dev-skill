@@ -350,6 +350,10 @@ end
 Luau features high-performance native libraries for binary data and SIMD-accelerated 3D vectors.
 
 ### Buffer Library (`buffer.*`)
+
+> `buffer.readvectorf32x2`, `readvectorf32x3`, `writevectorf32x2` and `writevectorf32x3` are on the
+> `buffer` page (2026-11-05) and **`nil` in Studio 0.746.0.7461269** from a Script and a LocalScript
+> (*tested*). Do not call them yet: read three floats with `buffer.readf32` instead.
 Buffers are fixed-size, mutable byte arrays designed for fast binary serialization, networking packets, and memory storage:
 ```luau
 --!strict

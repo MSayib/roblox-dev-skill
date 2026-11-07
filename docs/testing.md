@@ -154,6 +154,18 @@ A claim that cannot be verified must say so in the text, or go.
 `evals/evals.json` holds prompts with the expected references and what a correct answer must and
 must not do. Run them against a local install with your agent (for Claude Code:
 `claude -p "<prompt>"` from any directory), and compare the answer with the `notes`.
+`tests/e2e/run_evals.py OUT_DIR ID [ID ...]` does this headless with no MCP server and read-only
+tools, and reports trigger accuracy. It exits non-zero when the ids match nothing, so a run of nothing
+cannot look like a pass. In zsh an unquoted `$IDS` stays one argument: pipe the ids through `xargs`.
+
+## Re-running refusals
+
+**Run every "not enabled" statement again each cycle, even when the dump diff is empty.** Refusals are
+often server-side flags: between 0.746.0.7461264 and 0.746.0.7461269 the diff had zero events, and
+three APIs the skill called refused had started working. Run them from a `Script`, a `LocalScript`
+and a Script under an `Actor`, and test each method: one method's error had been written up as a whole
+service being disabled. Give a probe that may hang a timed thread, because a call that yields forever
+in `execute_luau` ends in `Request timeout`.
 
 ## Contributing
 

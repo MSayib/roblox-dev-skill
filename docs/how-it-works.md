@@ -95,7 +95,7 @@ pages in `docs/` and the README are not in the register; they were checked by ha
 | Safety — agent→Studio (destructive MCP ops, injection from place content) | ✅ claims checked 2026-10-11 (undo measured) | `agent-safety.md` |
 | Worked examples (build / debug / migrate / verify / refuse / sell / migrate data / bind input) | ✅ **every Verification section run in Studio 0.742**; receipts and migrations asserted on each test run | `worked-examples.md` |
 | Performance (Parallel Luau, **RunService pipeline**, **thick casts**, plugin-only fidelity/LOD/streaming settings) | ✅ claims checked 2026-11-05 (0.742–0.746, tested in Studio) | `performance-optimization.md` |
-| MCP integration (26 documented tools / 34 observed) | ✅ **re-verified 2026-11-05** against the official docs page + live schemas (Studio 0.746) | `mcp-integration.md` |
+| MCP integration (26 documented tools + `open_cloud_invoke` / 35 observed; 17 first-party skills read) | ✅ **re-verified 2026-11-07** against the official docs pages + live schemas (Studio 0.746.0.7461269) | `mcp-integration.md` |
 | UI (**UIFlexItem**, **StyleSheet/StyleRule**, StyleQuery, UIShadow, UIGradient beta, per-corner UICorner, **`Color3` contrast**) | ✅ claims checked 2026-11-05 (`EasingStyle.Spring`/`Bezier` and contrast methods tested in 0.746) | `ui-systems.md` |
 | Legacy migration (RunService events, **0.746 additions**, per-release API tables) | ✅ claims checked 2026-11-05 against dumps 0.723–0.746 (0.746 and 2026-10-30..11-04 docs rows tested in Studio 0.746) | `legacy-migration.md` |
 | Studio plugins, `Script.Source` limits, engine limits | ✅ measured Aug 2026, source limits re-measured 2026-10-11 | `studio-plugins-and-limits.md` |

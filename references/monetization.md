@@ -52,12 +52,13 @@ end
 Players.PlayerAdded:Connect(onPlayerAdded)
 ```
 
-> **`GetPassOwnershipAsync` is not a replacement yet.** Engine 0.743 added
-> `MarketplaceService:GetPassOwnershipAsync(player: Player, gamePassId)`, which returns a dictionary.
-> From Studio 0.743 through 0.746.0.7461264, a server Script calling it gets
-> `MarketplaceService:GetPassOwnershipAsync() is not enabled`. There is no docs page, so the
-> dictionary's fields are unknown. Keep `UserOwnsGamePassAsync` (note: it takes a UserId, the new
-> one takes a `Player`).
+> **`GetPassOwnershipAsync` now answers, but it is undocumented.** Engine 0.743 added
+> `MarketplaceService:GetPassOwnershipAsync(player: Player, gamePassId)`. It refused until
+> 0.746.0.7461264; on 2026-11-07 (0.746.0.7461269) a server Script got `{ Owned, Active }`:
+> `false, false` for a pass the player does not own, and `true, true` for one they do. It takes a
+> `Player`: a UserId fails with `Unable to cast value to Object`. There is no docs page, so what
+> `Active` means is unknown, and it has not been run in a published game. Keep
+> `UserOwnsGamePassAsync` (it takes a UserId) for now.
 
 ### Developer Products
 Repeatable purchases (coins, potions, boosts).
@@ -111,6 +112,17 @@ MarketplaceService.ProcessReceipt = processReceipt
 > grant: see `worked-examples.md` §6 for the `UpdateAsync` pattern, tested in Studio 0.742. Roblox's
 > own sample checks only `if success then`, although its warning says a handler must return `true`.
 
+> **Products sold outside the game depend on `ProcessReceipt`.** The *Developer products* page: after
+> a purchase in the **Store** tab of the game details page, "you must use `ProcessReceipt` to confirm
+> their purchase and grant them their items once they enter your game". So `NotProcessedYet` for an
+> absent player is correct: the receipt comes back when they join. **Never grant from
+> `PromptProductPurchaseFinished`:** the same page says its firing "does not mean that a user has
+> successfully purchased an item", and it only concerns a prompt the player saw. Roblox checks each
+> **Listed** product's implementation on an ongoing basis; a flagged one "stops showing on surfaces
+> outside your game until you fix it", with a banner under **Creator Hub → Monetization → Shop**.
+> To audit a place, `skill("rbx-process-receipt-misuse")` reports PASS, FAIL or REVIEW without
+> editing anything.
+
 > **`BindReceiptHandler` is the newer route.** The official `MarketplaceService` reference
 > (2026-10-11) calls `ProcessReceipt` "legacy" and documents
 > `MarketplaceService:BindReceiptHandler(Enum.ReceiptType.DeveloperProduct, handler, filter?)`:
@@ -119,7 +131,10 @@ MarketplaceService.ProcessReceipt = processReceipt
 > `ProcessReceipt`, so the two can coexist while you migrate. It has been in the API dump since at
 > least 0.733 (`Security: None`), and a game Script registered both forms in Studio 0.742 without
 > error; a full purchase through it was not run here. The idempotency rule is the same: record the
-> `PurchaseId` with the grant.
+> `PurchaseId` with the grant. **Before moving a Listed product to it, check the outside-game rule:**
+> the *Developer products* page names only `ProcessReceipt` and does not mention
+> `BindReceiptHandler`, and `rbx-process-receipt-misuse` does not either, so whether a bound handler
+> satisfies that check is not documented. Keep `ProcessReceipt` as the fallback it can coexist with.
 
 ### 5. Subscriptions (Recurring In-Experience)
 
