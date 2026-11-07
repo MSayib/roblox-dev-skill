@@ -19,7 +19,9 @@
 9. [Content Streaming](#9-content-streaming-streamingenabled)
 10. [MicroProfiler Usage](#10-microprofiler-usage)
 11. [Device Testing](#11-device-testing)
-12. [LEGACY Section](#12-legacy-section)
+12. [Collections: Live Groups of Instances](#12-collections-live-groups-of-instances)
+13. [Measuring Memory and Scene Cost](#13-measuring-memory-and-scene-cost)
+14. [LEGACY Section](#14-legacy-section)
 
 ---
 
@@ -415,6 +417,15 @@ Scripts under different Actors can run on multiple CPU cores simultaneously.
 - Scripts under **different Actors** can run in true parallel
 - Actors should be placed in appropriate containers or replace top-level entities (NPCs)
 
+### Fixed-step parallel callbacks
+
+`RunService:BindToSimulationParallel(fn, frequency?, priority?)` and `BindToAnimationParallel` run a
+callback in parallel without you calling `task.desynchronize()`. They refused until 0.746.0.7461264
+and work since (*tested* 2026-11-07, Studio 0.746.0.7461269). The calling script must be under an
+`Actor`: from a plain Script they fail `The calling script must be rooted under an Actor.` Inside the
+callback, reading `part.Position` works and writing fails `Property BasePart.Transparency is not safe
+to write in parallel`, like any other parallel code.
+
 ### task.desynchronize() / task.synchronize()
 
 By default, code under Actors still runs serially. You must explicitly switch to parallel.
@@ -629,7 +640,14 @@ PluginOrOpenCloud` in Studio 0.746; `execute_luau` reads them):
 - `PersistentPerPlayer` — always loaded for specific players
 
 **Script considerations**: With streaming enabled, instances may not exist when scripts
-run. Use `WaitForChild()` or `ModelStreamingMode.Atomic` for critical models.
+run. Use `WaitForChild()` or `ModelStreamingMode.Atomic` for critical models. In a `LocalScript`,
+`workspace.Town.Door` errors when `Town` has not streamed in, and `GetChildren()` lists only what is
+streamed in now, so a search over it can silently miss an instance. To find something that may be
+far away, ask the server.
+
+To convert a place, read `skill("rbx-convert-to-streaming")`. `Workspace:ApplyRecommendedStreamingSettings()`
+sets the recommended properties in one call, and it is plugin-only: a game Script fails `lacking
+capability Plugin` (*tested*; the call itself was not run on the test place, because it changes it).
 
 ### Load (join) times
 
@@ -709,10 +727,87 @@ Always test on target devices, especially mobile and low-end hardware:
   - `PlaceScriptMemory` — per-script memory breakdown
 - Enable **Render Stats** (`Shift+F2`) to see draw calls and frame timing in-client
 - Test with lower graphics quality settings to match low-end device experience
+- From an MCP client, `skill("rbx-device-simulator-lua")` switches devices and orientation through
+  `StudioDeviceSimulatorService` (plugin-only; `GetDeviceListAsync()` returned 43 devices), and
+  `skill("rbx-network-simulator")` adds latency and packet loss to a playtest
 
 ---
 
-## 12. LEGACY Section
+## 12. Collections: Live Groups of Instances
+
+`CollectionService:CreateCollection(query, root?)` tracks every descendant of `root` (default
+`Workspace`) that matches a CSS-like query, and attaches your callbacks to each one as it joins and
+detaches them as it leaves. It was a Studio beta and is now a **full release**, and it helps with
+streaming because you never hold a list that goes stale. `Security: None`, `Basic` capability.
+
+<!-- skilltest: expect collection-lifecycle -->
+```luau
+--!strict
+-- A Script. Every BasePart tagged KillBrick under Workspace, including ones added later.
+local CollectionService = game:GetService("CollectionService")
+
+local killBricks = CollectionService:CreateCollection("BasePart.KillBrick")
+
+function killBricks.OnAdded(brick: BasePart)
+	brick.Material = Enum.Material.Neon
+end
+
+function killBricks.OnTouched(_brick: BasePart, other: BasePart)
+	local character = other.Parent
+	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+	if humanoid then
+		humanoid.Health = 0
+	end
+end
+```
+
+*Tested* from a Script in Studio 0.746.0.7461269:
+
+- **`OnAdded` runs for existing members too.** A part tagged before the assignment got it, then one
+  tagged later did. **`OnRemoved`** ran on removing the tag, on `Enabled = false`, and on `Destroy()`.
+- **Each callback can be assigned once:** a second `OnAdded` fails `Callback OnAdded already assigned`.
+  A name that is no callback fails too: `OnNotAnEvent cannot be assigned to`.
+- **`OnHeartbeat` and the other `RunService` callbacks cannot yield**, and neither can `ForEach`.
+  A `task.wait()` in `OnHeartbeat` logged `thread is not yieldable` and the rest of the callback never
+  ran; `pcall` around `ForEach` did not catch it. **`OnAdded` can yield.**
+- **The default root is `Workspace`.** A part under `ReplicatedStorage` gave a count of `0` until the
+  folder was passed as `root`.
+- `GetCount()`, `ForEach(fn)`, `Query`, `Root`, `Enabled` and `Destroy()` behave as documented, and a
+  destroyed collection errors on `GetCount()`. A bad query fails at creation: `Part[[[` gave `Expected
+  identifier for a property name`.
+- **`typeof` says `CollectionHandle`**, although the docs call the type `Collection`.
+- `CollectionService:GetCollections(instance)` returned `1` for a member of an active collection. It
+  lists collections, not tags: an instance with tags and no matching collection gets `{}`.
+
+Queries also work in `Instance:QueryDescendants()`. Numeric comparisons do: `Part[$Level >= 3]` found
+the part with `5` and not the one with `1`. So does **`:in-radius(studs, selector)`**:
+`Part.Fire:in-radius(10, #Anchor)` found the tagged part 6 studs away and not the one 100 studs away
+(*tested*), and a collection with that query gained a member when the part moved within range. Per its
+engineer on the release thread, `:in-radius` is evaluated in the post-simulation step rather than
+immediately. The Collections Debugger widget in Studio shows every active collection.
+
+---
+
+## 13. Measuring Memory and Scene Cost
+
+`SceneAnalysisService` works from a game Script (*tested* 2026-11-07, Studio 0.746.0.7461269), and
+`skill("rbx-scene-analysis")` builds a full audit on it. `GetInstanceCompositionAsync`,
+`GetScriptMemoryAsync`, `GetUnparentedInstancesAsync`, `GetAnimationMemoryAsync`,
+`GetAudioMemoryAsync` and `GetTriangleCompositionAsync` each return a table of nested
+`{ Name, Children, Size }` nodes. `GetTriangleCompositionAsync` depends on what the camera sees, and
+each of its entries holds `Sizes.Triangles` and `Sizes.Drawcalls`. Only
+**`GetCollisionGeometryMemoryAsync` still fails**, with `SceneAnalysisService is not enabled`.
+
+`HeapProfilerService` takes a full Luau heap snapshot, and it is plugin-only: a game Script fails
+`lacking capability Plugin`. Through `execute_luau` in the `Server` datamodel during a playtest,
+`ServerRequestDataAsync()` returned a JSON string of 1.6 MB with the keys `Report` and `Refs` in 0.4 s,
+so summarize it rather than returning it to the agent. **In `Edit` it never returns:** the call hangs
+until `Request timeout`. For leaks, take a snapshot before and after the action and compare them; see
+`skill("rbx-luau-heap-profiling")`.
+
+---
+
+## 14. LEGACY Section
 
 These patterns are outdated but may appear in older codebases. Migrate to modern
 alternatives.

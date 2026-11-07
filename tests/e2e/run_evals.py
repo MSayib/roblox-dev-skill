@@ -53,6 +53,10 @@ def run_one(ev, out_dir, timeout):
                 rec['cost_usd'] = e.get('total_cost_usd')
         if proc.returncode != 0 and not rec['answer']:
             rec['error'] = (proc.stderr or '')[-500:]
+        # A usage limit arrives as an ordinary "answer" and exit code. It measured nothing: say so, or it
+        # reads as a skill that failed to trigger (2026-11-07: 11 evals that never ran showed as BAD).
+        if 'hit your session limit' in rec['answer'] or 'usage limit' in rec['answer'][:200]:
+            rec['error'] = rec['answer'][:200]
     except subprocess.TimeoutExpired:
         rec['error'] = f'timeout after {timeout}s'
     with open(os.path.join(out_dir, f'{ev["id"]}.json'), 'w', encoding='utf-8') as f:
@@ -70,13 +74,16 @@ def main(argv):
     ids = {int(a) for a in argv[1:] if a.isdigit() and a not in skip}
     os.makedirs(out_dir, exist_ok=True)
     evals = [e for e in json.load(open(EVALS, encoding='utf-8'))['evals'] if e['id'] in ids]
+    if not evals or len(evals) != len(ids):
+        # A run of nothing must not look like a pass (an unsplit "3 5 8" argument once did exactly that).
+        sys.exit(f'requested ids {sorted(ids)} matched {len(evals)} evals: nothing was measured')
     with concurrent.futures.ThreadPoolExecutor(parallel) as pool:
         results = list(pool.map(lambda e: run_one(e, out_dir, timeout), evals))
     total = 0.0
     print(f'{"id":>3}  {"trigger":<16} {"refs read":<55} cost')
     for r in sorted(results, key=lambda r: r['id']):
         ok = r['triggered'] == r['should_trigger']
-        trig = ('ok ' if ok else 'BAD ') + ('triggered' if r['triggered'] else 'not triggered')
+        trig = 'NOT MEASURED' if r['error'] else ('ok ' if ok else 'BAD ') + ('triggered' if r['triggered'] else 'not triggered')
         refs = ','.join(sorted(set(r['references_read'])))[:55]
         total += r['cost_usd'] or 0
         print(f'{r["id"]:>3}  {trig:<16} {refs:<55} {r["cost_usd"] or 0:.2f}' + (f'  ERROR {r["error"][:60]}' if r['error'] else ''))

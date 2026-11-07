@@ -67,6 +67,11 @@ while `HttpService.HttpEnabled == false` on an unpublished place (`PlaceId == 0`
 This matters because **Experience Settings requires the place to be published**,
 so a plugin that needed the setting would be unusable on local files. It doesn't.
 
+**MCP `execute_luau` is not a plugin in this respect.** With `HttpEnabled` `true`, it was refused
+on 2026-11-07: `HttpService request denied: domain example.com is not in the Assistant HTTP
+allowlist`. The user adds domains under **MCP Permissions → Connect to the internet**
+(`mcp-integration.md`).
+
 ### The misleading error
 
 When the request budget is exhausted, Studio raises:

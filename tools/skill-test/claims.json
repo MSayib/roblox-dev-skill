@@ -200,16 +200,6 @@
    "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
-   "id": "SKILL-017",
-   "file": "SKILL.md",
-   "quote": "playtest first. `Client` and `Server` exist only during a playtest; check `get_studio_state`.",
-   "status": "studio",
-   "kind": "negative",
-   "source": "MCP tools of this session (Studio 0.742, place MieGede NewWorld)",
-   "evidence": "get_studio_state in Edit listed only Edit; Server/Client datamodels available only after start_stop_play.",
-   "checked": "2026-10-11, engine 0.742.0.7421053"
-  },
-  {
    "id": "SKILL-020",
    "file": "SKILL.md",
    "quote": "**There is no `run_as_job` tool.** Earlier versions of this file listed one; it does not exist",
@@ -557,16 +547,6 @@
    "kind": "number",
    "source": "store_image schema",
    "evidence": "Absolute local path, png/jpg/jpeg, max 5MB.",
-   "checked": "2026-10-11, engine 0.742.0.7421053"
-  },
-  {
-   "id": "agent-safety-008",
-   "file": "references/agent-safety.md",
-   "quote": "**`execute_luau` runs at plugin / command-bar privilege.** It is not sandboxed game code. It",
-   "status": "studio",
-   "kind": "negative",
-   "source": "run_plugin_cases.luau, 2026-10-11",
-   "evidence": "execute_luau wrote PluginOrOpenCloud properties a game Script cannot.",
    "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
@@ -2207,16 +2187,6 @@
    "kind": "negative",
    "source": "MCP tool schemas of this session (Studio 0.742)",
    "evidence": "get_studio_state lists only Edit outside a playtest; Server/Client during one.",
-   "checked": "2026-10-11, engine 0.742.0.7421053"
-  },
-  {
-   "id": "mcp-integration-009",
-   "file": "references/mcp-integration.md",
-   "quote": "`execute_luau` accepts all three, but **`multi_edit` accepts `Edit` only** — you cannot edit",
-   "status": "studio",
-   "kind": "negative",
-   "source": "MCP tool schemas of this session (Studio 0.742)",
-   "evidence": "multi_edit enum [Edit]; execute_luau [Edit, Client, Server].",
    "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
@@ -4843,11 +4813,11 @@
    "id": "legacy-migration-086",
    "file": "references/legacy-migration.md",
    "quote": "Legacy game pass / developer product **management** web endpoints (`apis.roblox.com/game-passes/v1/...` and the developer-product equivalents) deprecated | April 23 | Use the Open Cloud game pass and developer product APIs (same list, #119)",
-   "status": "docs",
+   "status": "false",
    "kind": "negative",
    "source": "DevForum topic 62889 #119 (Roblox Staff, 2026-04-10)",
-   "evidence": "\"deprecating a set of legacy game pass and developer product APIs on April 23, 2026 ... superseded by newer Open Cloud APIs\".",
-   "checked": "2026-10-11, engine 0.742.0.7421053"
+   "evidence": "Misleading: the Open Cloud API itself lives under /game-passes/v1/universes/...",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
   },
   {
    "id": "legacy-migration-087",
@@ -4877,16 +4847,6 @@
    "kind": "negative",
    "source": "Studio 0.742 playtest probe Scripts (SkillTestClaimProbe / Probe2 / client), 2026-10-11",
    "evidence": "Writes failed (PluginOrOpenCloud); reads of LevelOfDetail, LuauTypeCheckMode, OriginOffset, ReplicationFrequency failed; StreamingEnabled read OK.",
-   "checked": "2026-10-11, engine 0.742.0.7421053"
-  },
-  {
-   "id": "legacy-migration-090",
-   "file": "references/legacy-migration.md",
-   "quote": "`+MeshPart:GetSurfaceSlotsAsync()`, `+TestService` test registry (`RegisterSuite`, `ListTests`, `RunTestsAsync`, `ResetTestRegistry`, `TestRegistryChanged`, next to the older `RegisterTest`, plus `TestSuite` / `TestResult` / `TestRunResult` / `TestFailure`), `+ModerationService:BindViolationProcessor()` | **Not enabled:** they error with \"MeshPart:GetSurfaceSlotsAsync is not yet enabled\", \"TestService test registration is not available. Feature flag is disabled.\" and \"Safety callback API is not enabled\" *(Studio)*. `TestService.RegisterTestLegacy` is now **deprecated** in favour of `RegisterTest` (*dump only*); nothing to migrate while the new one is off",
-   "status": "studio",
-   "kind": "negative",
-   "source": "Studio 0.742 playtest probe Scripts (SkillTestClaimProbe / Probe2 / client), 2026-10-11",
-   "evidence": "GetSurfaceSlotsAsync \"is not yet enabled\"; RegisterTest(\"x\", {}, fn) \"TestService test registration is not available. Feature flag is disabled.\"; BindViolationProcessor(1, fn) \"Safety callback API is not enabled\". Dump: RegisterTest predates 0.733; RegisterTestLegacy Deprecated -> RegisterTest.",
    "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
@@ -5578,16 +5538,6 @@
    "source": "",
    "evidence": "",
    "checked": ""
-  },
-  {
-   "id": "mcp-integration-061",
-   "file": "references/mcp-integration.md",
-   "quote": "**Primary source (re-verified 2026-10-11):**",
-   "status": "docs",
-   "kind": "number",
-   "source": "Roblox/creator-docs studio/mcp.md (read 2026-10-11)",
-   "evidence": "Re-read the official page 2026-10-11.",
-   "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
    "id": "false-mcp-28-tools",
@@ -6560,16 +6510,6 @@
    "checked": "2026-10-17, engine 0.743.0.7431133"
   },
   {
-   "id": "legacy-migration-123",
-   "file": "references/legacy-migration.md",
-   "quote": "`+MarketplaceService:GetPassOwnershipAsync(user: Player, gamePassId: int64)` → `Dictionary`, Yields, `AssetRead` capability | **Not enabled:** a server Script gets `MarketplaceService:GetPassOwnershipAsync() is not enabled` *(Studio)*. Passing a UserId instead of the `Player` fails with \"Unable to cast value to Object\". There is no docs page and the shape of the dictionary is unknown. Keep `UserOwnsGamePassAsync(player.UserId, passId)` (`monetization.md`)",
-   "status": "studio",
-   "kind": "negative",
-   "source": "playtest Script/LocalScript + execute_luau, Studio 0.743.0.7431133 (place 118652544255235), 2026-10-17",
-   "evidence": "GetPassOwnershipAsync(player, 1) and (player, 9999999999999): 'MarketplaceService:GetPassOwnershipAsync() is not enabled'; (player.UserId, 1): 'Unable to cast value to Object'. No MarketplaceService.yaml entry.",
-   "checked": "2026-10-17, engine 0.743.0.7431133"
-  },
-  {
    "id": "legacy-migration-124",
    "file": "references/legacy-migration.md",
    "quote": "`WorldRoot:Shapecast(part, direction, params, cframeOverride?, sizeOverride?)`: two new optional parameters, documented on the `WorldRoot` page | **Not enabled:** passing either one errors `Shapecast cframeOverride and sizeOverride are not enabled yet!` *(Studio)*. Cast from a part that is already where you want it, or use `Blockcast` / `Spherecast` with an explicit `CFrame` and size",
@@ -6773,11 +6713,11 @@
    "id": "monetization-029",
    "file": "references/monetization.md",
    "quote": "**`GetPassOwnershipAsync` is not a replacement yet.** Engine 0.743 added",
-   "status": "studio",
+   "status": "false",
    "kind": "negative",
    "source": "playtest Script/LocalScript + execute_luau, Studio 0.743.0.7431133 (place 118652544255235), 2026-10-17",
-   "evidence": "GetPassOwnershipAsync present in dump 0.743 (Player, int64 -> Dictionary, Yields, AssetRead); call errors 'not enabled'.",
-   "checked": "2026-10-17, engine 0.743.0.7431133"
+   "evidence": "Outdated 2026-11-07: GetPassOwnershipAsync answers {Owned, Active} from a Script in 0.746.0.7461269.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
   },
   {
    "id": "monetization-030",
@@ -6793,11 +6733,11 @@
    "id": "monetization-031",
    "file": "references/monetization.md",
    "quote": "`MarketplaceService:GetPassOwnershipAsync() is not enabled`. There is no docs page, so the",
-   "status": "studio",
+   "status": "false",
    "kind": "negative",
    "source": "playtest Script/LocalScript + execute_luau, Studio 0.743.0.7431133 (place 118652544255235), 2026-10-17; MarketplaceService.yaml",
-   "evidence": "Exact message; no GetPassOwnershipAsync in MarketplaceService.yaml (2026-10-17).",
-   "checked": "2026-10-17, engine 0.743.0.7431133"
+   "evidence": "Outdated 2026-11-07: the call no longer refuses.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
   },
   {
    "id": "project-structure-030",
@@ -7680,16 +7620,6 @@
    "checked": "2026-10-22, engine 0.744.0.7441077"
   },
   {
-   "id": "legacy-migration-158",
-   "file": "references/legacy-migration.md",
-   "quote": "`+CollectionService:GetCollections(instance)` → `Array` | **Returns `{}`** for a part with two tags, for a character and for `workspace`, from a Script and a LocalScript *(Studio)*. It is not a tag lookup: keep `GetTags` / `GetTagged`",
-   "status": "studio",
-   "kind": "negative",
-   "source": "Studio 0.744.0.7441077, test place 118652544255235, 2026-10-22 (probe Script/LocalScript removed afterwards; execute_luau Edit)",
-   "evidence": "GetCollections(part tagged ProbeTagA,ProbeTagB) -> 0 items (GetTags returned both); character 0; workspace 0 (Script, LocalScript, execute_luau)",
-   "checked": "2026-10-22, engine 0.744.0.7441077"
-  },
-  {
    "id": "legacy-migration-159",
    "file": "references/legacy-migration.md",
    "quote": "`AnimationPlayer`: `NotCreatable` removed, `Hidden` dropped from `AnimationContent` / `Enabled` | **Still not usable:** every member is `RobloxScriptSecurity`, and `Instance.new(\"AnimationPlayer\")` now fails `lacking capability RobloxScript` from a Script and from `execute_luau` *(Studio)*",
@@ -8043,11 +7973,11 @@
    "id": "legacy-migration-177",
    "file": "references/legacy-migration.md",
    "quote": "`+RunService:BindToSimulationParallel()` / `BindToAnimationParallel()` (`Basic`) | **Not enabled:** from an `Actor`-parented Script and from a plain Script both fail `RunService:BindToSimulationParallel() is not enabled`. The serial `BindToSimulation` returned a connection from the same Actor *(Studio)*. The `RunService` page documents both",
-   "status": "studio",
+   "status": "false",
    "kind": "negative",
    "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards)",
-   "evidence": "Actor-parented Script and plain Script: 'RunService:BindToSimulationParallel() is not enabled' / BindToAnimationParallel same; serial BindToSimulation returned RBXScriptConnection",
-   "checked": "2026-10-29, engine 0.745.0.7451137"
+   "evidence": "Outdated 2026-11-07: both bind from a Script under an Actor.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
   },
   {
    "id": "legacy-migration-178",
@@ -8093,11 +8023,11 @@
    "id": "legacy-migration-182",
    "file": "references/legacy-migration.md",
    "quote": "`+GeometryService:BakeToMeshAsync(input, options?)` → `MeshPart`, `+AssetService:GetLatestVersionUriAsync(asset)` → `Content`, `+SceneAnalysisService:GetCollisionGeometryMemoryAsync()` | **Not available:** `BakeToMeshAsync: This API is not available yet`, `GetLatestVersionUriAsync is not available yet`, `SceneAnalysisService is not enabled` *(Studio)*. No docs page for any of them",
-   "status": "studio",
+   "status": "false",
    "kind": "negative",
    "source": "Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards)",
-   "evidence": "'GeometryService:BakeToMeshAsync: This API is not available yet', 'AssetService:GetLatestVersionUriAsync is not available yet', 'SceneAnalysisService is not enabled'; FluidForceSensor BuoyancyForce/Torque 0,0,0",
-   "checked": "2026-10-29, engine 0.745.0.7451137"
+   "evidence": "Overbroad and outdated: GetLatestVersionUriAsync works since 2026-11-07, and only one SceneAnalysisService method refuses.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
   },
   {
    "id": "legacy-migration-183",
@@ -8620,49 +8550,9 @@
    "checked": ""
   },
   {
-   "id": "mcp-integration-077",
-   "file": "references/mcp-integration.md",
-   "quote": "the page last changed 2026-08-21, still its latest commit on 2026-10-29). **On 2026-10-29 (Studio",
-   "status": "studio",
-   "kind": "number",
-   "source": "Live Roblox_Studio MCP tool list and schemas in this session (Studio 0.745.0.7451137), 2026-10-29; Roblox/creator-docs studio/mcp.md unchanged since 2026-08-21",
-   "evidence": "31 tools: the 28 of 2026-10-22 plus list_skills, create_skill, edit_skill (schemas read; list_skills run; create/edit not run). Other schemas unchanged",
-   "checked": "2026-10-29, engine 0.745.0.7451137"
-  },
-  {
-   "id": "mcp-integration-085",
-   "file": "references/mcp-integration.md",
-   "quote": "0.745.0.7451137) the build exposes 31**: the 28 below plus three undocumented skill-authoring",
-   "status": "studio",
-   "kind": "number",
-   "source": "Live Roblox_Studio MCP tool list and schemas in this session (Studio 0.745.0.7451137), 2026-10-29; Roblox/creator-docs studio/mcp.md unchanged since 2026-08-21",
-   "evidence": "31 tools: the 28 of 2026-10-22 plus list_skills, create_skill, edit_skill (schemas read; list_skills run; create/edit not run). Other schemas unchanged",
-   "checked": "2026-10-29, engine 0.745.0.7451137"
-  },
-  {
    "id": "mcp-integration-086",
    "file": "references/mcp-integration.md",
    "quote": "`list_skills` | Lists every available skill with its source (`Roblox` for the first-party ones) and description. Read-only. *New 2026-10-29, undocumented*",
-   "status": "studio",
-   "kind": "negative",
-   "source": "Live Roblox_Studio MCP tool list and schemas in this session (Studio 0.745.0.7451137), 2026-10-29; Roblox/creator-docs studio/mcp.md unchanged since 2026-08-21",
-   "evidence": "31 tools: the 28 of 2026-10-22 plus list_skills, create_skill, edit_skill (schemas read; list_skills run; create/edit not run). Other schemas unchanged",
-   "checked": "2026-10-29, engine 0.745.0.7451137"
-  },
-  {
-   "id": "mcp-integration-087",
-   "file": "references/mcp-integration.md",
-   "quote": "`create_skill` | Creates a **user** skill from `skill_name` (lowercase, digits, `_` and `-`; may not start with `rbx-`), a one-line `skill_description` and a markdown `skill_body`, and \"**publishes**\" it, available immediately. *New 2026-10-29, undocumented; not run here*",
-   "status": "studio",
-   "kind": "number",
-   "source": "Live Roblox_Studio MCP tool list and schemas in this session (Studio 0.745.0.7451137), 2026-10-29; Roblox/creator-docs studio/mcp.md unchanged since 2026-08-21",
-   "evidence": "31 tools: the 28 of 2026-10-22 plus list_skills, create_skill, edit_skill (schemas read; list_skills run; create/edit not run). Other schemas unchanged",
-   "checked": "2026-10-29, engine 0.745.0.7451137"
-  },
-  {
-   "id": "mcp-integration-088",
-   "file": "references/mcp-integration.md",
-   "quote": "`edit_skill` | Renames or rewrites a user-created skill (`new_name`, `new_description`, `new_skill_body` replaces the whole body). Roblox's own skills cannot be edited. *New 2026-10-29, undocumented; not run here*",
    "status": "studio",
    "kind": "negative",
    "source": "Live Roblox_Studio MCP tool list and schemas in this session (Studio 0.745.0.7451137), 2026-10-29; Roblox/creator-docs studio/mcp.md unchanged since 2026-08-21",
@@ -8683,11 +8573,11 @@
    "id": "mcp-integration-090",
    "file": "references/mcp-integration.md",
    "quote": "stored and who can see it is not documented; treat it as visible beyond this session.",
-   "status": "advice",
+   "status": "false",
    "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "The Assistant/Skills page documents it: a skill belongs to the Roblox account, and is available in every place.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
   },
   {
    "id": "mcp-integration-091",
@@ -9140,16 +9030,6 @@
    "checked": "2026-11-05, engine 0.746.0.7461264"
   },
   {
-   "id": "SKILL-071",
-   "file": "SKILL.md",
-   "quote": "**Engine**: Roblox Studio **0.746.0.7461264** with **Luau 0.745** (released 2026-10-30) — dump",
-   "status": "dump",
-   "kind": "number",
-   "source": "dump 0.745 -> 0.746.0.7461264 (diff-api-dumps)",
-   "evidence": "Monitor run 2026-11-05: 0.746.0.7461264 dump split; 950/656/267/347/48/577 measured from the dump. Margin, Color3 methods and EnableGamepadCursor() run in Studio 0.746.",
-   "checked": "2026-11-05, engine 0.746.0.7461264"
-  },
-  {
    "id": "SKILL-072",
    "file": "SKILL.md",
    "quote": "downloaded, re-split, and diffed against 0.745 on **2026-11-05**, with every developer-visible",
@@ -9200,39 +9080,9 @@
    "checked": "2026-11-05, engine 0.746.0.7461264"
   },
   {
-   "id": "SKILL-077",
-   "file": "SKILL.md",
-   "quote": "The docs page lists **26 tools**. The build observed 2026-11-05 (Studio 0.746) exposed **34**:",
-   "status": "studio",
-   "kind": "number",
-   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
-   "evidence": "34 tools in the live list 2026-11-05: the 31 of 2026-10-29 plus generate_scene, generate_avatar, auto_setup_avatar (schemas read, none run). Docs page studio/mcp.md last changed aa6c8e1, 2026-08-21.",
-   "checked": "2026-11-05, engine 0.746.0.7461264"
-  },
-  {
-   "id": "SKILL-078",
-   "file": "SKILL.md",
-   "quote": "those plus the undocumented `generate_texture`, `segment_mesh`, `generate_scene`, `generate_avatar`,",
-   "status": "studio",
-   "kind": "number",
-   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
-   "evidence": "34 tools in the live list 2026-11-05: the 31 of 2026-10-29 plus generate_scene, generate_avatar, auto_setup_avatar (schemas read, none run). Docs page studio/mcp.md last changed aa6c8e1, 2026-08-21.",
-   "checked": "2026-11-05, engine 0.746.0.7461264"
-  },
-  {
    "id": "SKILL-079",
    "file": "SKILL.md",
    "quote": "`auto_setup_avatar` and three skill-authoring tools, `list_skills`, `create_skill` and `edit_skill`",
-   "status": "studio",
-   "kind": "number",
-   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
-   "evidence": "34 tools in the live list 2026-11-05: the 31 of 2026-10-29 plus generate_scene, generate_avatar, auto_setup_avatar (schemas read, none run). Docs page studio/mcp.md last changed aa6c8e1, 2026-08-21.",
-   "checked": "2026-11-05, engine 0.746.0.7461264"
-  },
-  {
-   "id": "SKILL-080",
-   "file": "SKILL.md",
-   "quote": "(31 on 2026-10-29, Studio 0.745; 28 on 2026-10-17 to 2026-10-22, Studio 0.743–0.744;",
    "status": "studio",
    "kind": "number",
    "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
@@ -9553,21 +9403,21 @@
    "id": "legacy-migration-232",
    "file": "references/legacy-migration.md",
    "quote": "`BindToSimulationParallel` / `BindToAnimationParallel` (also from an Actor; serial `BindToSimulation`",
-   "status": "studio",
+   "status": "false",
    "kind": "number",
    "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
-   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
-   "checked": "2026-11-05, engine 0.746.0.7461264"
+   "evidence": "Outdated 2026-11-07: works from an Actor.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
   },
   {
    "id": "legacy-migration-233",
    "file": "references/legacy-migration.md",
    "quote": "works), `BakeToMeshAsync`, `GetLatestVersionUriAsync`, `SceneAnalysisService`, `EditableMesh:AddFace`",
-   "status": "studio",
+   "status": "false",
    "kind": "number",
    "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
-   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
-   "checked": "2026-11-05, engine 0.746.0.7461264"
+   "evidence": "Overbroad: named the whole SceneAnalysisService as refused; only GetCollisionGeometryMemoryAsync does. GetLatestVersionUriAsync now works.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
   },
   {
    "id": "legacy-migration-234",
@@ -9583,11 +9433,11 @@
    "id": "legacy-migration-235",
    "file": "references/legacy-migration.md",
    "quote": "`GetPassOwnershipAsync`, `CanUsersTransferRobuxAsync`, `AnimationPlayer` and `PhysicsActivitySensor`",
-   "status": "studio",
+   "status": "false",
    "kind": "number",
    "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
-   "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
-   "checked": "2026-11-05, engine 0.746.0.7461264"
+   "evidence": "Outdated 2026-11-07: GetPassOwnershipAsync answers.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
   },
   {
    "id": "legacy-migration-236",
@@ -10453,21 +10303,11 @@
    "id": "security-hardening-089",
    "file": "references/security-hardening.md",
    "quote": "The parallel `BindToSimulationParallel` is not enabled in 0.746.",
-   "status": "studio",
+   "status": "false",
    "kind": "number",
    "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
-   "evidence": "Actor-parented Script and plain Script in 0.746: \"RunService:BindToSimulationParallel() is not enabled\"; serial BindToSimulation returned a Connection.",
-   "checked": "2026-11-05, engine 0.746.0.7461264"
-  },
-  {
-   "id": "monetization-033",
-   "file": "references/monetization.md",
-   "quote": "From Studio 0.743 through 0.746.0.7461264, a server Script calling it gets",
-   "status": "studio",
-   "kind": "number",
-   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
-   "evidence": "GetPassOwnershipAsync(player, 1) in 0.746: MarketplaceService:GetPassOwnershipAsync() is not enabled.",
-   "checked": "2026-11-05, engine 0.746.0.7461264"
+   "evidence": "Outdated 2026-11-07: BindToSimulationParallel runs under an Actor.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
   },
   {
    "id": "ui-systems-032",
@@ -10590,71 +10430,11 @@
    "checked": "2026-11-05, engine 0.746.0.7461264"
   },
   {
-   "id": "mcp-integration-100",
-   "file": "references/mcp-integration.md",
-   "quote": "**First-party skills exposed by the `skill` tool (2026-11-05, Studio 0.746, fourteen):**",
-   "status": "studio",
-   "kind": "number",
-   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
-   "evidence": "list_skills in Studio 0.746 2026-11-05 returned these 14, all source Roblox. assistant/skills.md lists configs-experimentation and instrument-analytics among its built-ins.",
-   "checked": "2026-11-05, engine 0.746.0.7461264"
-  },
-  {
    "id": "mcp-integration-101",
    "file": "references/mcp-integration.md",
    "quote": "`rbx-configs-experimentation`, `rbx-convert-to-streaming`, `rbx-create-skill`, `rbx-debug`,",
    "status": "studio",
    "kind": "number",
-   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
-   "evidence": "list_skills in Studio 0.746 2026-11-05 returned these 14, all source Roblox. assistant/skills.md lists configs-experimentation and instrument-analytics among its built-ins.",
-   "checked": "2026-11-05, engine 0.746.0.7461264"
-  },
-  {
-   "id": "mcp-integration-102",
-   "file": "references/mcp-integration.md",
-   "quote": "`rbx-device-simulator-lua`, `rbx-docs-search`, `rbx-input-action-system`, `rbx-instrument-analytics`,",
-   "status": "studio",
-   "kind": "number",
-   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
-   "evidence": "list_skills in Studio 0.746 2026-11-05 returned these 14, all source Roblox. assistant/skills.md lists configs-experimentation and instrument-analytics among its built-ins.",
-   "checked": "2026-11-05, engine 0.746.0.7461264"
-  },
-  {
-   "id": "mcp-integration-103",
-   "file": "references/mcp-integration.md",
-   "quote": "`rbx-luau-heap-profiling`, `rbx-network-simulator`, `rbx-perf-profiling`,",
-   "status": "studio",
-   "kind": "number",
-   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
-   "evidence": "list_skills in Studio 0.746 2026-11-05 returned these 14, all source Roblox. assistant/skills.md lists configs-experimentation and instrument-analytics among its built-ins.",
-   "checked": "2026-11-05, engine 0.746.0.7461264"
-  },
-  {
-   "id": "mcp-integration-104",
-   "file": "references/mcp-integration.md",
-   "quote": "`rbx-process-receipt-misuse`, `rbx-scene-analysis`, `rbx-unit-test`. The five added since 2026-10-29:",
-   "status": "studio",
-   "kind": "number",
-   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
-   "evidence": "list_skills in Studio 0.746 2026-11-05 returned these 14, all source Roblox. assistant/skills.md lists configs-experimentation and instrument-analytics among its built-ins.",
-   "checked": "2026-11-05, engine 0.746.0.7461264"
-  },
-  {
-   "id": "mcp-integration-105",
-   "file": "references/mcp-integration.md",
-   "quote": "convert a place to streaming, Input Action System work, Luau heap snapshots and leaks, simulating",
-   "status": "studio",
-   "kind": "number",
-   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
-   "evidence": "list_skills in Studio 0.746 2026-11-05 returned these 14, all source Roblox. assistant/skills.md lists configs-experimentation and instrument-analytics among its built-ins.",
-   "checked": "2026-11-05, engine 0.746.0.7461264"
-  },
-  {
-   "id": "mcp-integration-106",
-   "file": "references/mcp-integration.md",
-   "quote": "latency and packet loss, and a report-only audit of `ProcessReceipt`. The `Assistant` docs page lists",
-   "status": "studio",
-   "kind": "negative",
    "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
    "evidence": "list_skills in Studio 0.746 2026-11-05 returned these 14, all source Roblox. assistant/skills.md lists configs-experimentation and instrument-analytics among its built-ins.",
    "checked": "2026-11-05, engine 0.746.0.7461264"
@@ -10670,16 +10450,6 @@
    "checked": "2026-11-05, engine 0.746.0.7461264"
   },
   {
-   "id": "mcp-integration-108",
-   "file": "references/mcp-integration.md",
-   "quote": "and LibMP analysis, `skill(\"rbx-luau-heap-profiling\")` for leaks, and `skill(\"rbx-scene-analysis\")` for SceneAnalysisService. Use this",
-   "status": "studio",
-   "kind": "number",
-   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
-   "evidence": "list_skills in Studio 0.746 2026-11-05 returned these 14, all source Roblox. assistant/skills.md lists configs-experimentation and instrument-analytics among its built-ins.",
-   "checked": "2026-11-05, engine 0.746.0.7461264"
-  },
-  {
    "id": "mcp-integration-109",
    "file": "references/mcp-integration.md",
    "quote": "| 31 tools (2026-10-29) | **34 on 2026-11-05** (Studio 0.746): +`generate_scene`, +`generate_avatar`, +`auto_setup_avatar`. | Live tool list |",
@@ -10687,16 +10457,6 @@
    "kind": "number",
    "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
    "evidence": "Live tool list 2026-11-05.",
-   "checked": "2026-11-05, engine 0.746.0.7461264"
-  },
-  {
-   "id": "mcp-integration-110",
-   "file": "references/mcp-integration.md",
-   "quote": "Roblox ships 7 first-party `rbx-*` skills that partly supersede hand-rolled approaches (9 on 2026-10-29, 14 on 2026-11-05).",
-   "status": "studio",
-   "kind": "number",
-   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
-   "evidence": "list_skills 2026-11-05.",
    "checked": "2026-11-05, engine 0.746.0.7461264"
   },
   {
@@ -10758,6 +10518,1346 @@
    "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05; CI run of luau-lsp 1.70.1; local luau-lsp 1.69",
    "evidence": "CI 1.70.1: Property Margin of type RaycastParams is read-only. Local 1.69: Key Margin not found. Studio: params.Margin = 1 read back 1 and changed cast results.",
    "checked": "2026-11-05, engine 0.746.0.7461264"
+  },
+  {
+   "id": "SKILL-088",
+   "file": "SKILL.md",
+   "quote": "**Engine**: Roblox Studio **0.746.0.7461269** with **Luau 0.745** (released 2026-10-30) — dump",
+   "status": "source",
+   "kind": "number",
+   "source": "clientsettings MacStudio/WindowsStudio64 2026-11-07; luau-lang releases",
+   "evidence": "0.746.0.7461269 served for Studio; latest Luau release still 0.745 (2026-10-30).",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "SKILL-089",
+   "file": "SKILL.md",
+   "quote": "The docs page lists **26 tools**. The build observed 2026-11-07 (Studio 0.746.0.7461269) exposed",
+   "status": "studio",
+   "kind": "number",
+   "source": "Live MCP tool list and schemas, Studio 0.746.0.7461269, 2026-11-07",
+   "evidence": "35 tools listed in this session: the 34 of 2026-11-05 plus open_cloud_invoke. Earlier counts from earlier registers.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "SKILL-090",
+   "file": "SKILL.md",
+   "quote": "(34 on 2026-11-05; 31 on 2026-10-29, Studio 0.745; 28 on 2026-10-17 to 2026-10-22, Studio 0.743–0.744;",
+   "status": "studio",
+   "kind": "number",
+   "source": "Live MCP tool list and schemas, Studio 0.746.0.7461269, 2026-11-07",
+   "evidence": "35 tools listed in this session: the 34 of 2026-11-05 plus open_cloud_invoke. Earlier counts from earlier registers.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "SKILL-091",
+   "file": "SKILL.md",
+   "quote": "playtest first. `Client` and `Server` exist only during a playtest, and `Edit` is refused during",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "search_game_tree with datamodel_type Edit during a playtest returned 'Edit datamodel is not available in Play mode'; get_studio_state listed Client, Server.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "SKILL-092",
+   "file": "SKILL.md",
+   "quote": "one (`Edit datamodel is not available in Play mode`); check `get_studio_state`.",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "search_game_tree with datamodel_type Edit during a playtest returned 'Edit datamodel is not available in Play mode'; get_studio_state listed Client, Server.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "SKILL-093",
+   "file": "SKILL.md",
+   "quote": "fail when run (`mcp-integration.md` lists the ones measured)",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "Statements in rbx-device-simulator-lua, rbx-scene-analysis and rbx-input-action-system were run and failed; the table in mcp-integration.md gives each result.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "SKILL-094",
+   "file": "SKILL.md",
+   "quote": "Open Cloud from an MCP client (`open_cloud_invoke`), MCP Permissions, permission errors, uploads | `references/mcp-integration.md` + `references/agent-safety.md`",
+   "status": "advice",
+   "kind": "negative",
+   "source": "",
+   "evidence": "Routing row.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "agent-safety-035",
+   "file": "references/agent-safety.md",
+   "quote": "Live DataStore data | With API access enabled and the **Save & load data** scopes on, `execute_luau` reaches **production DataStores**, in `Edit` as well as in a playtest (a read was run in `Edit`, 2026-11-07)",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "execute_luau in Edit: GetDataStore(...):GetAsync returned nil with no error, MemoryStore GetSortedMap GetAsync returned nil. Scope and setting requirements from the mcp-open-cloud page.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "agent-safety-036",
+   "file": "references/agent-safety.md",
+   "quote": "Roblox account resources | `insert_asset`, `upload_image` and the `generate_*` tools act against the user's account and consume real quota. `open_cloud_invoke` can do far more where its scope is on: change game settings, publish, set prices, ban players, and upload **assets that Open Cloud cannot delete**",
+   "status": "docs",
+   "kind": "negative",
+   "source": "https://create.roblox.com/docs/studio/mcp-open-cloud (creator-docs b032c6b, 2026-11-05)",
+   "evidence": "Permission sections list settings, publishing, prices and bans; warning: \"Open Cloud can't archive or delete them\".",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "agent-safety-037",
+   "file": "references/agent-safety.md",
+   "quote": "to real DataStores from `Edit` too, not only from a playtest. A \"test\" that writes a key can",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "execute_luau in Edit: GetDataStore(...):GetAsync returned nil with no error, MemoryStore GetSortedMap GetAsync returned nil. Scope and setting requirements from the mcp-open-cloud page.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "agent-safety-038",
+   "file": "references/agent-safety.md",
+   "quote": "**Any `open_cloud_invoke` call that changes something.** A `GET` probe is safe; a write is not",
+   "status": "advice",
+   "kind": "negative",
+   "source": "",
+   "evidence": "Standard of care for a write; rbx-permissions: never bundle sensitive toggles.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "agent-safety-039",
+   "file": "references/agent-safety.md",
+   "quote": "undone by reverting the place. An upload creates an asset only the Creator Dashboard can remove,",
+   "status": "docs",
+   "kind": "negative",
+   "source": "https://create.roblox.com/docs/studio/mcp-open-cloud (creator-docs b032c6b, 2026-11-05)",
+   "evidence": "Permission sections list settings, publishing, prices and bans; warning: \"Open Cloud can't archive or delete them\".",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "agent-safety-040",
+   "file": "references/agent-safety.md",
+   "quote": "so say whose account it lands on. Never bundle a scope that costs Robux, affects players, handles",
+   "status": "advice",
+   "kind": "negative",
+   "source": "",
+   "evidence": "Standard of care for a write; rbx-permissions: never bundle sensitive toggles.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "agent-safety-041",
+   "file": "references/agent-safety.md",
+   "quote": "**Never route around a permission the user set.** Do not start a playtest to run from game code",
+   "status": "advice",
+   "kind": "negative",
+   "source": "",
+   "evidence": "rbx-permissions, \"Don't circumvent permission controls\".",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "legacy-migration-264",
+   "file": "references/legacy-migration.md",
+   "quote": "Legacy game pass / developer product **management** web endpoints deprecated | April 23 | Use the Open Cloud game pass and developer product APIs (same list, #119). Read the path, not the prefix: the Open Cloud API itself lives at `/game-passes/v1/universes/{universeId}/game-passes` and `/developer-products/v2/universes/{universeId}/developer-products` (`openapi.json`, marked BETA; their `GET …/creator` answered `200` through `open_cloud_invoke`, 2026-11-07)",
+   "status": "source",
+   "kind": "negative",
+   "source": "openapi.json from Roblox/creator-docs (2026-11-07), staff post 62889 #119",
+   "evidence": "openapi lists GET /game-passes/v1/universes/{universeId}/game-passes/creator and /developer-products/v2/... as BETA; both returned 200 through open_cloud_invoke with their read scope. The staff post names no paths this file can quote.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "legacy-migration-265",
+   "file": "references/legacy-migration.md",
+   "quote": "**The dump diff from 0.746.0.7461264 to 0.746.0.7461269 has zero events, yet these results changed",
+   "status": "studio",
+   "kind": "number",
+   "source": "~/RobloxDocs/RobloxAPI/diffs/0.746.0.7461264-to-0.746.0.7461269.json; Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "Diff total 0, developer_visible 0. Results below differ from the 2026-11-05 register.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "legacy-migration-266",
+   "file": "references/legacy-migration.md",
+   "quote": "from two days earlier.** An empty diff does not mean nothing changed: re-run what you rely on. Each",
+   "status": "studio",
+   "kind": "negative",
+   "source": "~/RobloxDocs/RobloxAPI/diffs/0.746.0.7461264-to-0.746.0.7461269.json; Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "Diff total 0, developer_visible 0. Results below differ from the 2026-11-05 register.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "legacy-migration-267",
+   "file": "references/legacy-migration.md",
+   "quote": "row ran in Studio 0.746.0.7461269 from a server `Script`, a `LocalScript`, a Script under an `Actor`,",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "Probes _WeeklyProbeS..S5, Actor, LocalScript; a GetDescendants scan for the probe names found 0 afterwards.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "legacy-migration-268",
+   "file": "references/legacy-migration.md",
+   "quote": "or MCP `execute_luau`, and the probes were removed afterwards.",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "Probes _WeeklyProbeS..S5, Actor, LocalScript; a GetDescendants scan for the probe names found 0 afterwards.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "legacy-migration-269",
+   "file": "references/legacy-migration.md",
+   "quote": "**`AssetService:GetLatestVersionUriAsync(content)`** | **Works** from a Script and a LocalScript for the place's own asset, returning a `Content` whose `Uri` is `rbxassetid://<id>&version=<n>`. Asset `1818`, owned by someone else, fails `request failed: HTTP 403`",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "Script and LocalScript: GetLatestVersionUriAsync(Content.fromAssetId(game.PlaceId)) returned Content{SourceType=Uri, Uri=rbxassetid://<place>&version=4}; asset 1818: request failed: HTTP 403.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "legacy-migration-270",
+   "file": "references/legacy-migration.md",
+   "quote": "**`SceneAnalysisService`: a correction.** Earlier versions of this file listed the whole service as refused | Only `GetCollisionGeometryMemoryAsync` refuses. The other six methods work, also from a game Script. See `performance-optimization.md`",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "Script: GetInstanceComposition, GetScriptMemory, GetUnparentedInstances, GetAnimationMemory, GetAudioMemory returned tables; LocalScript and execute_luau: GetTriangleComposition returned Sizes.Triangles/Drawcalls; GetCollisionGeometryMemoryAsync: SceneAnalysisService is not enabled.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "legacy-migration-271",
+   "file": "references/legacy-migration.md",
+   "quote": "`TestService:RegisterTest`, `ModerationService:BindViolationProcessor(int, fn)` | Still refused, the first with a new message: `TestService test registration isn't enabled in this session yet.`",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "RegisterTest: TestService test registration isn't enabled in this session yet. BindViolationProcessor(1, fn): Safety callback API is not enabled. GetSurfaceSlotsAsync: is not yet enabled.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "legacy-migration-272",
+   "file": "references/legacy-migration.md",
+   "quote": "**Unchanged:** `BakeToMeshAsync`, `CanUsersTransferRobuxAsync`, `EditableMesh:AddFace`, `GetSurfaceSlotsAsync`, `SplitApartAsync`, `GetWaveformKeys`, `SerializationService`, `PlaceSettings`, `TweenInfo` with `Spring`, orthographic `Camera` writes, `AnimationPlayer` and `PhysicsActivitySensor` creation, `integer` (`nil`), `DeviceTrustLevel` (`Pending`), `Enum.GuiNavigationDirection`, `UseHitbox`, `Decal` map writes, and the plugin-only gates on `StreamingEnabled`, `CollisionFidelity`, `RunContext`, `IsEdit` and `RunState` | Same results as 2026-11-05",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "Re-run from a Script, LocalScript and execute_luau; each returned the same refusal as 2026-11-05 (messages in the probe log of this date).",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "legacy-migration-273",
+   "file": "references/legacy-migration.md",
+   "quote": "**New page `studio/mcp-open-cloud`:** Open Cloud from an MCP client, with no API key | See `mcp-integration.md`. Run in Studio: `open_cloud_invoke`, the permission errors, and the HTTP gate on `execute_luau`",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07; https://create.roblox.com/docs/studio/mcp-open-cloud (creator-docs b032c6b, 2026-11-05)",
+   "evidence": "open_cloud_invoke probes and execute_luau HTTP denial run on this date.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "legacy-migration-274",
+   "file": "references/legacy-migration.md",
+   "quote": "**`buffer.readvectorf32x2`, `readvectorf32x3`, `writevectorf32x2`, `writevectorf32x3`** documented | **Not in the engine:** all four are `nil` from a Script and a LocalScript *(Studio 0.746.0.7461269)*",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "typeof(buffer.readvectorf32x3) and writevectorf32x2 are nil from a Script, a LocalScript and execute_luau; on the buffer page since b032c6b.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "legacy-migration-275",
+   "file": "references/legacy-migration.md",
+   "quote": "`GeometryService:SplitApartAsync`, `HapticEffect:GetWaveformKeys` documented | **Still refused:** `This API is not yet released!` and `GetWaveformKeys() is not yet enabled!` *(Studio)*",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "SplitApartAsync: This API is not yet released! GetWaveformKeys: HapticEffect:GetWaveformKeys() is not yet enabled! Documented in b032c6b.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "legacy-migration-276",
+   "file": "references/legacy-migration.md",
+   "quote": "`Player.DeviceTrustLevel` loses `Hidden` on its page; `UIGradient.Type` / `Scale` / `TileMode` and the `Workspace` streaming properties lose tags | These match the 0.746 dump. Nothing to migrate",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs a47045f..031a0e3, commits b032c6b and 031a0e3",
+   "evidence": "Reference yaml tag changes in b032c6b; the 0.746 dump has the same tags.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "legacy-migration-277",
+   "file": "references/legacy-migration.md",
+   "quote": "Place publishing (`cloud/guides/usage-place-publishing`) now uses the **Assets API** `Update Asset`: an API key with **assets** Read and Write, the Place ID as the asset ID, and an **Operation ID** to poll instead of an immediate version number | *Docs only.* Update a CI script that calls the old place publishing endpoint",
+   "status": "docs",
+   "kind": "negative",
+   "source": "https://create.roblox.com/docs/cloud/guides/usage-place-publishing (commit 031a0e3)",
+   "evidence": "Guide rewritten to Assets API Update Asset, API key with assets Read and Write, Operation ID.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "legacy-migration-278",
+   "file": "references/legacy-migration.md",
+   "quote": "New guide `cloud/guides/experience-icons-and-thumbnails` | *Docs only.* Place icons and thumbnails through Open Cloud",
+   "status": "docs",
+   "kind": "negative",
+   "source": "https://create.roblox.com/docs/cloud/guides/experience-icons-and-thumbnails (commit 031a0e3)",
+   "evidence": "New guide, 210 lines.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "legacy-migration-279",
+   "file": "references/legacy-migration.md",
+   "quote": "`+RunService:BindToSimulationParallel()` / `BindToAnimationParallel()` (`Basic`) | **Work since 2026-11-07** from a script under an `Actor`; see the re-run of that date. The `RunService` page documents both",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "Script under an Actor: BindToSimulationParallel ticks=11 and BindToAnimationParallel ticks=2 in 0.4 s; plain Script: The calling script must be rooted under an Actor. Handler: read OK, Transparency write not safe in parallel.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "legacy-migration-280",
+   "file": "references/legacy-migration.md",
+   "quote": "`+GeometryService:BakeToMeshAsync(input, options?)` → `MeshPart`, `+AssetService:GetLatestVersionUriAsync(asset)` → `Content`, `+SceneAnalysisService:GetCollisionGeometryMemoryAsync()` | **Not available:** `BakeToMeshAsync: This API is not available yet` and, on that one method, `SceneAnalysisService is not enabled` *(Studio)*. The other `SceneAnalysisService` methods work, and so does `GetLatestVersionUriAsync` since 2026-11-07; see the re-run of that date. No docs page for any of the three",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "BakeToMeshAsync: This API is not available yet; GetCollisionGeometryMemoryAsync: SceneAnalysisService is not enabled; the other two work (see this date's re-run).",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "legacy-migration-281",
+   "file": "references/legacy-migration.md",
+   "quote": "`+CollectionService:GetCollections(instance)` → `Array` | **Returns `{}`** for a part with two tags, for a character and for `workspace`, from a Script and a LocalScript, when no collection matches them *(Studio)*. It is not a tag lookup: keep `GetTags` / `GetTagged`",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "Script: GetCollections(late) returned 1 for a member of an active collection; earlier register: {} when no collection matches.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "legacy-migration-282",
+   "file": "references/legacy-migration.md",
+   "quote": "`+MarketplaceService:GetPassOwnershipAsync(user: Player, gamePassId: int64)` → `Dictionary`, Yields, `AssetRead` capability | **Answers since 2026-11-07,** with `{ Owned, Active }` *(Studio)*; see the re-run of that date. Passing a UserId instead of the `Player` fails with \"Unable to cast value to Object\". There is no docs page. Keep `UserOwnsGamePassAsync(player.UserId, passId)` for now (`monetization.md`)",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "Script and execute_luau Server: GetPassOwnershipAsync(player, 1) = {Owned=false, Active=false}; an owned pass = {Owned=true, Active=true}; player.UserId: Unable to cast value to Object. http_get on MarketplaceService.md: no match for the name.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "legacy-migration-283",
+   "file": "references/legacy-migration.md",
+   "quote": "`+MeshPart:GetSurfaceSlotsAsync()`, `+TestService` test registry (`RegisterSuite`, `ListTests`, `RunTestsAsync`, `ResetTestRegistry`, `TestRegistryChanged`, next to the older `RegisterTest`, plus `TestSuite` / `TestResult` / `TestRunResult` / `TestFailure`), `+ModerationService:BindViolationProcessor()` | **Not enabled:** they error with \"MeshPart:GetSurfaceSlotsAsync is not yet enabled\", \"TestService test registration isn't enabled in this session yet.\" and \"Safety callback API is not enabled\" *(Studio)*. `TestService.RegisterTestLegacy` is now **deprecated** in favour of `RegisterTest` (*dump only*); nothing to migrate while the new one is off. **Update (0.745):** `RegisterTest` now fails `TestService test registration isn't enabled in this session yet.`; `GetSurfaceSlotsAsync` and `BindViolationProcessor(1, fn)` (\"Safety callback API is not enabled\") are unchanged *(Studio)*",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "RegisterTest: TestService test registration isn't enabled in this session yet. BindViolationProcessor(1, fn): Safety callback API is not enabled. GetSurfaceSlotsAsync: is not yet enabled.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "luau-fundamentals-110",
+   "file": "references/luau-fundamentals.md",
+   "quote": "`buffer` page (2026-11-05) and **`nil` in Studio 0.746.0.7461269** from a Script and a LocalScript",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "typeof(buffer.readvectorf32x3) and writevectorf32x2 are nil from a Script, a LocalScript and execute_luau; on the buffer page since b032c6b.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-111",
+   "file": "references/mcp-integration.md",
+   "quote": "**Primary source (re-verified 2026-11-07):**",
+   "status": "studio",
+   "kind": "number",
+   "source": "creator-docs b032c6b + Live MCP tool list and schemas, Studio 0.746.0.7461269, 2026-11-07",
+   "evidence": "mcp.md gained one link to mcp-open-cloud.md; the live tool list has open_cloud_invoke.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-112",
+   "file": "references/mcp-integration.md",
+   "quote": "and, since 2026-11-05, https://create.roblox.com/docs/studio/mcp-open-cloud for Open Cloud and",
+   "status": "studio",
+   "kind": "number",
+   "source": "creator-docs b032c6b + Live MCP tool list and schemas, Studio 0.746.0.7461269, 2026-11-07",
+   "evidence": "mcp.md gained one link to mcp-open-cloud.md; the live tool list has open_cloud_invoke.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-113",
+   "file": "references/mcp-integration.md",
+   "quote": "`execute_luau` and `search_game_tree` accept all three, but **`multi_edit` accepts `Edit` only** —",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Live MCP tool list and schemas, Studio 0.746.0.7461269, 2026-11-07",
+   "evidence": "datamodel_type enums read: execute_luau and search_game_tree Edit/Client/Server, multi_edit Edit, character_navigation and user_*_input Client.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-114",
+   "file": "references/mcp-integration.md",
+   "quote": "you cannot edit scripts through MCP while a playtest is running — and `character_navigation`,",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Live MCP tool list and schemas, Studio 0.746.0.7461269, 2026-11-07",
+   "evidence": "datamodel_type enums read: execute_luau and search_game_tree Edit/Client/Server, multi_edit Edit, character_navigation and user_*_input Client.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-115",
+   "file": "references/mcp-integration.md",
+   "quote": "`user_keyboard_input` and `user_mouse_input` accept `Client` only. During a playtest `Edit` is",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "search_game_tree with datamodel_type Edit during a playtest returned 'Edit datamodel is not available in Play mode'; get_studio_state listed Client, Server.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-116",
+   "file": "references/mcp-integration.md",
+   "quote": "refused: `Edit datamodel is not available in Play mode` (tested 2026-11-07).",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "search_game_tree with datamodel_type Edit during a playtest returned 'Edit datamodel is not available in Play mode'; get_studio_state listed Client, Server.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-117",
+   "file": "references/mcp-integration.md",
+   "quote": "only later change, on 2026-11-05, links the Open Cloud page). **On 2026-11-07 (Studio",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Live MCP tool list and schemas, Studio 0.746.0.7461269, 2026-11-07",
+   "evidence": "35 tools listed in this session: the 34 of 2026-11-05 plus open_cloud_invoke. Earlier counts from earlier registers.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-118",
+   "file": "references/mcp-integration.md",
+   "quote": "0.746.0.7461269) the build exposes 35**: the 34 of 2026-11-05 plus `open_cloud_invoke`, the one",
+   "status": "studio",
+   "kind": "number",
+   "source": "Live MCP tool list and schemas, Studio 0.746.0.7461269, 2026-11-07",
+   "evidence": "35 tools listed in this session: the 34 of 2026-11-05 plus open_cloud_invoke. Earlier counts from earlier registers.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-119",
+   "file": "references/mcp-integration.md",
+   "quote": "addition that has a docs page of its own. **On 2026-10-29 (Studio",
+   "status": "studio",
+   "kind": "number",
+   "source": "Live MCP tool list and schemas, Studio 0.746.0.7461269, 2026-11-07",
+   "evidence": "35 tools listed in this session: the 34 of 2026-11-05 plus open_cloud_invoke. Earlier counts from earlier registers.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-120",
+   "file": "references/mcp-integration.md",
+   "quote": "0.745.0.7451137) the build exposed 31**: the 28 below plus three undocumented skill-authoring",
+   "status": "studio",
+   "kind": "number",
+   "source": "Live MCP tool list and schemas, Studio 0.746.0.7461269, 2026-11-07",
+   "evidence": "35 tools listed in this session: the 34 of 2026-11-05 plus open_cloud_invoke. Earlier counts from earlier registers.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-121",
+   "file": "references/mcp-integration.md",
+   "quote": "chunks of about 1000 items with one `task.wait()` per chunk, build each chunk outside the",
+   "status": "docs",
+   "kind": "number",
+   "source": "Live MCP tool list and schemas, Studio 0.746.0.7461269, 2026-11-07",
+   "evidence": "execute_luau schema: \"split it into logical chunks ... batches of ~1000 items\" and \"call task.wait() once per chunk\".",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-122",
+   "file": "references/mcp-integration.md",
+   "quote": "**A call that yields forever ends in `Request timeout`.** Measured 2026-11-07: an `execute_luau`",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "Composite execute_luau in Edit returned Request timeout; re-run with a timed thread: only ServerRequestDataAsync was still waiting at 4 s. Server datamodel in a playtest: returned in 0.4 s.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-123",
+   "file": "references/mcp-integration.md",
+   "quote": "(the same call in a timed thread was still waiting after 4 s; in the `Server` datamodel during a",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "Composite execute_luau in Edit returned Request timeout; re-run with a timed thread: only ServerRequestDataAsync was still waiting at 4 s. Server datamodel in a playtest: returned in 0.4 s.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-124",
+   "file": "references/mcp-integration.md",
+   "quote": "playtest it returned in 0.4 s). If a call times out, check what it had already changed before you",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "Composite execute_luau in Edit returned Request timeout; re-run with a timed thread: only ServerRequestDataAsync was still waiting at 4 s. Server datamodel in a playtest: returned in 0.4 s.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-125",
+   "file": "references/mcp-integration.md",
+   "quote": "`create_skill` | Creates a **user** skill from `skill_name` (lowercase, digits, `_` and `-`; may not start with `rbx-`), a one-line `skill_description` and a markdown `skill_body`, and \"**publishes**\" it, available immediately. *New 2026-10-29; not run here*",
+   "status": "docs",
+   "kind": "number",
+   "source": "Live MCP tool list and schemas, Studio 0.746.0.7461269, 2026-11-07",
+   "evidence": "create_skill and edit_skill schemas read; not called, because a skill persists on the account.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-126",
+   "file": "references/mcp-integration.md",
+   "quote": "`edit_skill` | Renames or rewrites a user-created skill (`new_name`, `new_description`, `new_skill_body` replaces the whole body). Roblox's own skills cannot be edited. *New 2026-10-29; not run here*",
+   "status": "docs",
+   "kind": "negative",
+   "source": "Live MCP tool list and schemas, Studio 0.746.0.7461269, 2026-11-07",
+   "evidence": "create_skill and edit_skill schemas read; not called, because a skill persists on the account.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-127",
+   "file": "references/mcp-integration.md",
+   "quote": "**First-party skills exposed by the `skill` tool (2026-11-07, Studio 0.746.0.7461269, seventeen):**",
+   "status": "studio",
+   "kind": "number",
+   "source": "skill tool output read 2026-11-07, Studio 0.746.0.7461269",
+   "evidence": "list_skills returned 17, all source Roblox; the three not listed on 2026-11-05 are rbx-import-asset, rbx-open-cloud-usage, rbx-permissions.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-128",
+   "file": "references/mcp-integration.md",
+   "quote": "`rbx-scene-analysis`, `rbx-unit-test`. The three added since 2026-11-05 are the Open Cloud set:",
+   "status": "studio",
+   "kind": "number",
+   "source": "skill tool output read 2026-11-07, Studio 0.746.0.7461269",
+   "evidence": "list_skills returned 17, all source Roblox; the three not listed on 2026-11-05 are rbx-import-asset, rbx-open-cloud-usage, rbx-permissions.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-129",
+   "file": "references/mcp-integration.md",
+   "quote": "**Read them, then check them: first-party does not mean current.** On 2026-11-07, eleven were read",
+   "status": "studio",
+   "kind": "negative",
+   "source": "skill tool output read 2026-11-07, Studio 0.746.0.7461269",
+   "evidence": "Read in full: 11 skills. Six over 50 KB: rule sections read; every Class.Member, Enum and tool name audited against the dump and tool list.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-130",
+   "file": "references/mcp-integration.md",
+   "quote": "in full; for the six long ones (input, streaming, network, analytics, scene, profiling, 50–120 KB",
+   "status": "studio",
+   "kind": "number",
+   "source": "skill tool output read 2026-11-07, Studio 0.746.0.7461269",
+   "evidence": "Read in full: 11 skills. Six over 50 KB: rule sections read; every Class.Member, Enum and tool name audited against the dump and tool list.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-131",
+   "file": "references/mcp-integration.md",
+   "quote": "A Roblox skill says | What happened (Studio 0.746.0.7461269)",
+   "status": "studio",
+   "kind": "number",
+   "source": "skill tool output read 2026-11-07, Studio 0.746.0.7461269",
+   "evidence": "Read in full: 11 skills. Six over 50 KB: rule sections read; every Class.Member, Enum and tool name audited against the dump and tool list.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-132",
+   "file": "references/mcp-integration.md",
+   "quote": "`rbx-device-simulator-lua`: `execute_luau` \"cannot access `PlayerGui`, `LocalPlayer`, or live `AbsolutePosition`/`AbsoluteSize` during Play mode\" | With `datamodel_type: \"Client\"` it read `LocalPlayer.PlayerGui`, a `ScreenGui`'s `AbsoluteSize` and the viewport",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "execute_luau Client: LocalPlayer.PlayerGui 18 children, ScreenGui AbsoluteSize 1019,450, viewport 1019,508.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-133",
+   "file": "references/mcp-integration.md",
+   "quote": "`rbx-device-simulator-lua`, `rbx-network-simulator`: call `list_roblox_studios` + `set_active_studio` | `set_active_studio` is not a tool. Pass `studio_id` on each call",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Live MCP tool list and schemas, Studio 0.746.0.7461269, 2026-11-07; skill tool output read 2026-11-07, Studio 0.746.0.7461269",
+   "evidence": "set_active_studio appears in both skills and is not in the tool list.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-134",
+   "file": "references/mcp-integration.md",
+   "quote": "`rbx-scene-analysis`: `SceneAnalysisService` \"doesn't work in edit mode\" | `GetInstanceCompositionAsync()` returned a table in `Edit`. Runtime numbers still need a playtest",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "execute_luau Edit: GetInstanceCompositionAsync returned a table.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-135",
+   "file": "references/mcp-integration.md",
+   "quote": "`rbx-input-action-system`: `StarterGui` \"Never registers\" an `InputContext` | True of the template. The copy the engine places in `PlayerGui` fired on a real key press (`project-structure.md`)",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "One InputContext per location with a Bool action; user_keyboard_input key presses: Press_RS, Press_WS, Press_PlayerGui, Press_PlayerScripts = 1; templates in StarterGui and StarterPlayerScripts: no attribute written.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-136",
+   "file": "references/mcp-integration.md",
+   "quote": "Also check what a skill leaves out. `rbx-process-receipt-misuse` audits `ProcessReceipt` and never",
+   "status": "source",
+   "kind": "negative",
+   "source": "skill tool output read 2026-11-07, Studio 0.746.0.7461269",
+   "evidence": "rbx-process-receipt-misuse has no BindReceiptHandler; rbx-luau-heap-profiling says Play mode but not that Edit hangs.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-137",
+   "file": "references/mcp-integration.md",
+   "quote": "mentions `BindReceiptHandler` (see `monetization.md`), and `rbx-luau-heap-profiling` does not warn",
+   "status": "source",
+   "kind": "negative",
+   "source": "skill tool output read 2026-11-07, Studio 0.746.0.7461269",
+   "evidence": "rbx-process-receipt-misuse has no BindReceiptHandler; rbx-luau-heap-profiling says Play mode but not that Edit hangs.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-138",
+   "file": "references/mcp-integration.md",
+   "quote": "read back `500`. A game Script fails on `settings()` with `lacking capability Plugin`.",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "Script: settings() fails lacking capability Plugin. execute_luau: loss 200 -> 0.5, delay 5000 -> 500; originals restored and read back 0.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-139",
+   "file": "references/mcp-integration.md",
+   "quote": "`open_cloud_invoke` (first seen 2026-11-07; docs page 2026-11-05) calls a path under",
+   "status": "studio",
+   "kind": "number",
+   "source": "creator-docs b032c6b + Live MCP tool list and schemas, Studio 0.746.0.7461269, 2026-11-07",
+   "evidence": "mcp.md gained one link to mcp-open-cloud.md; the live tool list has open_cloud_invoke.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-140",
+   "file": "references/mcp-integration.md",
+   "quote": "unpublished local place cannot use them. Levels: **Safe**, **Balanced** (the default),",
+   "status": "docs",
+   "kind": "negative",
+   "source": "https://create.roblox.com/docs/studio/mcp-open-cloud (creator-docs b032c6b, 2026-11-05)",
+   "evidence": "Access levels table: Safe, Balanced (each game starts here), Full access, Custom. \"Permissions are saved per game, so unpublished local places can't use them.\" \"Your client can't enable them on its own.\"",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-141",
+   "file": "references/mcp-integration.md",
+   "quote": "**Full access**, and **Custom**. The client cannot change them.",
+   "status": "docs",
+   "kind": "negative",
+   "source": "https://create.roblox.com/docs/studio/mcp-open-cloud (creator-docs b032c6b, 2026-11-05)",
+   "evidence": "Access levels table: Safe, Balanced (each game starts here), Full access, Custom. \"Permissions are saved per game, so unpublished local places can't use them.\" \"Your client can't enable them on its own.\"",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-142",
+   "file": "references/mcp-integration.md",
+   "quote": "**Uploads create permanent assets** owned by the game's owner. Open Cloud cannot archive or delete",
+   "status": "docs",
+   "kind": "negative",
+   "source": "https://create.roblox.com/docs/studio/mcp-open-cloud (creator-docs b032c6b, 2026-11-05)",
+   "evidence": "Permission sections list settings, publishing, prices and bans; warning: \"Open Cloud can't archive or delete them\".",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-143",
+   "file": "references/mcp-integration.md",
+   "quote": "them; only the Creator Dashboard can. Files must be in a folder the user approved.",
+   "status": "docs",
+   "kind": "negative",
+   "source": "https://create.roblox.com/docs/studio/mcp-open-cloud (creator-docs b032c6b, 2026-11-05)",
+   "evidence": "Permission sections list settings, publishing, prices and bans; warning: \"Open Cloud can't archive or delete them\".",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-144",
+   "file": "references/mcp-integration.md",
+   "quote": "These cannot be granted to MCP at all: badge scopes, `universe-datastores.control:*`,",
+   "status": "docs",
+   "kind": "negative",
+   "source": "https://create.roblox.com/docs/studio/mcp-open-cloud (creator-docs b032c6b, 2026-11-05)",
+   "evidence": "Unavailable permissions section, same list.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-145",
+   "file": "references/mcp-integration.md",
+   "quote": "Measured 2026-11-07 on a published test place, with read-only calls (no write was sent):",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "Calls of this date through open_cloud_invoke; all GET except the files probe, which was refused before sending.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-146",
+   "file": "references/mcp-integration.md",
+   "quote": "Same, `scopes: [\"legacy-universe.badge:read\"]` | The same error: an ungrantable scope looks disabled too",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "scopes [legacy-universe.badge:read]: Could not acquire an Open Cloud access token: Scope ... has not been granted.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-147",
+   "file": "references/mcp-integration.md",
+   "quote": "`GET /cloud/v2/universes/<id>/data-stores` with `scopes: [\"universe-datastores.objects:read\"]` | `403 Forbidden`, `Scope not authorized`. The scope probe passes and the call still fails, while the tool's text suggests asking for a grant: this listing needs `universe-datastores.control:*`, which cannot be granted",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "GET data-stores with objects:read: 403 Forbidden, The token lacks permission for this endpoint ... Scope not authorized. The control scope is on the docs list of ungrantable ones.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-148",
+   "file": "references/mcp-integration.md",
+   "quote": "A `files` path outside an approved folder | Refused before any request: `… is not inside a directory approved for uploads. Ask the creator to add the file's directory…`",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "POST to a nonexistent endpoint with files /private/tmp/nonexistent-probe.png: refused with this text.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-149",
+   "file": "references/mcp-integration.md",
+   "quote": "missing scope fails before anything is sent, so this is safe even for a write scope. Probe one at a",
+   "status": "docs",
+   "kind": "negative",
+   "source": "skill tool output read 2026-11-07, Studio 0.746.0.7461269",
+   "evidence": "rbx-permissions section 2: \"the token request fails before anything is sent, so this is safe even for write scopes\".",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-150",
+   "file": "references/mcp-integration.md",
+   "quote": "**Your host has its own gate.** In Claude Code on 2026-11-07, the permission classifier refused probes",
+   "status": "studio",
+   "kind": "number",
+   "source": "Claude Code session 2026-11-07",
+   "evidence": "Those four GET probes returned the auto mode classifier denial; no other probe did.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-151",
+   "file": "references/mcp-integration.md",
+   "quote": "**What `execute_luau` does with the same gates** (measured 2026-11-07, `Edit`, `HttpEnabled` `true`):",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "execute_luau Edit, HttpService.HttpEnabled true.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-152",
+   "file": "references/mcp-integration.md",
+   "quote": "`HttpService:GetAsync` / `RequestAsync` to a domain not on the list | `HttpService request denied: domain example.com is not in the Assistant HTTP allowlist`",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "GetAsync and RequestAsync to https://example.com returned this text.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-153",
+   "file": "references/mcp-integration.md",
+   "quote": "`DataStoreService:GetDataStore(…):GetAsync(…)`, and `MemoryStoreService:GetSortedMap(…):GetAsync(…)` | Returned `nil` (scopes granted). **`Edit` reaches the live stores; a playtest is not required**",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "execute_luau in Edit: GetDataStore(...):GetAsync returned nil with no error, MemoryStore GetSortedMap GetAsync returned nil. Scope and setting requirements from the mcp-open-cloud page.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-154",
+   "file": "references/mcp-integration.md",
+   "quote": "`MessagingService:PublishAsync` | `MessagingService can only be executed by game server`: there is no Studio route",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "execute_luau Edit: MessagingService can only be executed by game server.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-155",
+   "file": "references/mcp-integration.md",
+   "quote": "The docs list the other errors: `502 … Access forbidden` (the matching **Save & load data** scope is",
+   "status": "docs",
+   "kind": "negative",
+   "source": "https://create.roblox.com/docs/studio/mcp-open-cloud (creator-docs b032c6b, 2026-11-05)",
+   "evidence": "Troubleshooting table.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-156",
+   "file": "references/mcp-integration.md",
+   "quote": "off), `Studio access to APIs is not allowed` (the game setting), `InternalError` from a memory store",
+   "status": "docs",
+   "kind": "negative",
+   "source": "https://create.roblox.com/docs/studio/mcp-open-cloud (creator-docs b032c6b, 2026-11-05)",
+   "evidence": "Troubleshooting table.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-157",
+   "file": "references/mcp-integration.md",
+   "quote": "(its scopes are off), and `lacking capability <capability>` (only `Network` can be granted).",
+   "status": "docs",
+   "kind": "negative",
+   "source": "https://create.roblox.com/docs/studio/mcp-open-cloud (creator-docs b032c6b, 2026-11-05)",
+   "evidence": "Troubleshooting table.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-158",
+   "file": "references/mcp-integration.md",
+   "quote": "ones `rbx-permissions` says never to bundle into a general request: name each and get a clear yes.",
+   "status": "advice",
+   "kind": "negative",
+   "source": "",
+   "evidence": "Standard of care for a write; rbx-permissions: never bundle sensitive toggles.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-159",
+   "file": "references/mcp-integration.md",
+   "quote": "analysis, Open Cloud, or a permission error, call `skill` with the matching `rbx-*` name before",
+   "status": "advice",
+   "kind": "negative",
+   "source": "",
+   "evidence": "Workflow advice.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-160",
+   "file": "references/mcp-integration.md",
+   "quote": "34 tools (2026-11-05) | **35 on 2026-11-07** (Studio 0.746.0.7461269): +`open_cloud_invoke`. | Live tool list",
+   "status": "studio",
+   "kind": "number",
+   "source": "Live MCP tool list and schemas, Studio 0.746.0.7461269, 2026-11-07",
+   "evidence": "35 tools listed in this session: the 34 of 2026-11-05 plus open_cloud_invoke. Earlier counts from earlier registers.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-161",
+   "file": "references/mcp-integration.md",
+   "quote": "`execute_luau` has only plugin privilege to think about | HTTP goes through the Assistant allowlist and data stores through the **Save & load data** scopes, in addition to plugin privilege. | Run 2026-11-07 + docs",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07; https://create.roblox.com/docs/studio/mcp-open-cloud (creator-docs b032c6b, 2026-11-05)",
+   "evidence": "HTTP denial run; data store gating from the page.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-162",
+   "file": "references/mcp-integration.md",
+   "quote": "Roblox's `rbx-*` skills are \"more current than this skill\" | They go deeper, and some steps in them are stale. Run them. | Run 2026-11-07",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "See the table of statements run against the skills.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-163",
+   "file": "references/mcp-integration.md",
+   "quote": "`skill` and `subagent` absent from this file | Both are real and officially documented. Roblox ships 7 first-party `rbx-*` skills that partly supersede hand-rolled approaches (9 on 2026-10-29, 14 on 2026-11-05, 17 on 2026-11-07). | Official docs + live schemas",
+   "status": "studio",
+   "kind": "number",
+   "source": "skill tool output read 2026-11-07, Studio 0.746.0.7461269",
+   "evidence": "list_skills 2026-11-07: 17.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "monetization-034",
+   "file": "references/monetization.md",
+   "quote": "**`GetPassOwnershipAsync` now answers, but it is undocumented.** Engine 0.743 added",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "Script and execute_luau Server: GetPassOwnershipAsync(player, 1) = {Owned=false, Active=false}; an owned pass = {Owned=true, Active=true}; player.UserId: Unable to cast value to Object. http_get on MarketplaceService.md: no match for the name.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "monetization-035",
+   "file": "references/monetization.md",
+   "quote": "0.746.0.7461264; on 2026-11-07 (0.746.0.7461269) a server Script got `{ Owned, Active }`:",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "Script and execute_luau Server: GetPassOwnershipAsync(player, 1) = {Owned=false, Active=false}; an owned pass = {Owned=true, Active=true}; player.UserId: Unable to cast value to Object. http_get on MarketplaceService.md: no match for the name.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "monetization-036",
+   "file": "references/monetization.md",
+   "quote": "`false, false` for a pass the player does not own, and `true, true` for one they do. It takes a",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "Script and execute_luau Server: GetPassOwnershipAsync(player, 1) = {Owned=false, Active=false}; an owned pass = {Owned=true, Active=true}; player.UserId: Unable to cast value to Object. http_get on MarketplaceService.md: no match for the name.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "monetization-037",
+   "file": "references/monetization.md",
+   "quote": "`Player`: a UserId fails with `Unable to cast value to Object`. There is no docs page, so what",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "Script and execute_luau Server: GetPassOwnershipAsync(player, 1) = {Owned=false, Active=false}; an owned pass = {Owned=true, Active=true}; player.UserId: Unable to cast value to Object. http_get on MarketplaceService.md: no match for the name.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "monetization-038",
+   "file": "references/monetization.md",
+   "quote": "absent player is correct: the receipt comes back when they join. **Never grant from",
+   "status": "docs",
+   "kind": "negative",
+   "source": "https://create.roblox.com/docs/production/monetization/developer-products (http_get 2026-11-07)",
+   "evidence": "Outside your game: \"you must use ProcessReceipt...\"; warning on PromptProductPurchaseFinished; \"does not mean that a user has successfully purchased an item\".",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "monetization-039",
+   "file": "references/monetization.md",
+   "quote": "`PromptProductPurchaseFinished`:** the same page says its firing \"does not mean that a user has",
+   "status": "docs",
+   "kind": "negative",
+   "source": "https://create.roblox.com/docs/production/monetization/developer-products (http_get 2026-11-07)",
+   "evidence": "Outside your game: \"you must use ProcessReceipt...\"; warning on PromptProductPurchaseFinished; \"does not mean that a user has successfully purchased an item\".",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "monetization-040",
+   "file": "references/monetization.md",
+   "quote": "successfully purchased an item\", and it only concerns a prompt the player saw. Roblox checks each",
+   "status": "docs",
+   "kind": "negative",
+   "source": "https://create.roblox.com/docs/production/monetization/developer-products (http_get 2026-11-07)",
+   "evidence": "Outside your game: \"you must use ProcessReceipt...\"; warning on PromptProductPurchaseFinished; \"does not mean that a user has successfully purchased an item\".",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "monetization-041",
+   "file": "references/monetization.md",
+   "quote": "To audit a place, `skill(\"rbx-process-receipt-misuse\")` reports PASS, FAIL or REVIEW without",
+   "status": "source",
+   "kind": "negative",
+   "source": "skill tool output read 2026-11-07, Studio 0.746.0.7461269",
+   "evidence": "rbx-process-receipt-misuse: report only, verdict PASS / FAIL / REVIEW.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "monetization-042",
+   "file": "references/monetization.md",
+   "quote": "the *Developer products* page names only `ProcessReceipt` and does not mention",
+   "status": "docs",
+   "kind": "negative",
+   "source": "https://create.roblox.com/docs/production/monetization/developer-products (http_get 2026-11-07)",
+   "evidence": "http_get with query BindReceiptHandler: no match on the page; rbx-process-receipt-misuse has none either.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "monetization-043",
+   "file": "references/monetization.md",
+   "quote": "`BindReceiptHandler`, and `rbx-process-receipt-misuse` does not either, so whether a bound handler",
+   "status": "docs",
+   "kind": "negative",
+   "source": "https://create.roblox.com/docs/production/monetization/developer-products (http_get 2026-11-07)",
+   "evidence": "http_get with query BindReceiptHandler: no match on the page; rbx-process-receipt-misuse has none either.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "monetization-044",
+   "file": "references/monetization.md",
+   "quote": "satisfies that check is not documented. Keep `ProcessReceipt` as the fallback it can coexist with.",
+   "status": "docs",
+   "kind": "negative",
+   "source": "https://create.roblox.com/docs/production/monetization/developer-products (http_get 2026-11-07)",
+   "evidence": "http_get with query BindReceiptHandler: no match on the page; rbx-process-receipt-misuse has none either.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "performance-optimization-092",
+   "file": "references/performance-optimization.md",
+   "quote": "callback in parallel without you calling `task.desynchronize()`. They refused until 0.746.0.7461264",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "Script under an Actor: BindToSimulationParallel ticks=11 and BindToAnimationParallel ticks=2 in 0.4 s; plain Script: The calling script must be rooted under an Actor. Handler: read OK, Transparency write not safe in parallel.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "performance-optimization-093",
+   "file": "references/performance-optimization.md",
+   "quote": "and work since (*tested* 2026-11-07, Studio 0.746.0.7461269). The calling script must be under an",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "Script under an Actor: BindToSimulationParallel ticks=11 and BindToAnimationParallel ticks=2 in 0.4 s; plain Script: The calling script must be rooted under an Actor. Handler: read OK, Transparency write not safe in parallel.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "performance-optimization-094",
+   "file": "references/performance-optimization.md",
+   "quote": "`Actor`: from a plain Script they fail `The calling script must be rooted under an Actor.` Inside the",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "Script under an Actor: BindToSimulationParallel ticks=11 and BindToAnimationParallel ticks=2 in 0.4 s; plain Script: The calling script must be rooted under an Actor. Handler: read OK, Transparency write not safe in parallel.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "performance-optimization-095",
+   "file": "references/performance-optimization.md",
+   "quote": "callback, reading `part.Position` works and writing fails `Property BasePart.Transparency is not safe",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "Script under an Actor: BindToSimulationParallel ticks=11 and BindToAnimationParallel ticks=2 in 0.4 s; plain Script: The calling script must be rooted under an Actor. Handler: read OK, Transparency write not safe in parallel.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "performance-optimization-096",
+   "file": "references/performance-optimization.md",
+   "quote": "`workspace.Town.Door` errors when `Town` has not streamed in, and `GetChildren()` lists only what is",
+   "status": "docs",
+   "kind": "negative",
+   "source": "skill tool output read 2026-11-07, Studio 0.746.0.7461269",
+   "evidence": "rbx-convert-to-streaming, anti-pattern reference: direct hierarchy indexing, GetChildren lists only what is streamed in. Not run here.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "performance-optimization-097",
+   "file": "references/performance-optimization.md",
+   "quote": "sets the recommended properties in one call, and it is plugin-only: a game Script fails `lacking",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "Script: ApplyRecommendedStreamingSettings fails lacking capability Plugin; dump PluginSecurity. Not called at plugin level, because it changes the place.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "performance-optimization-098",
+   "file": "references/performance-optimization.md",
+   "quote": "`StudioDeviceSimulatorService` (plugin-only; `GetDeviceListAsync()` returned 43 devices), and",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "execute_luau Edit: #GetDeviceListAsync() = 43; dump PluginSecurity.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "performance-optimization-099",
+   "file": "references/performance-optimization.md",
+   "quote": "streaming because you never hold a list that goes stale. `Security: None`, `Basic` capability.",
+   "status": "dump",
+   "kind": "negative",
+   "source": "API dump 0.746.0.7461269; DevForum topic 4809228 \"[Full Release] Collections\"",
+   "evidence": "CreateCollection Security None, Capabilities Basic.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "performance-optimization-100",
+   "file": "references/performance-optimization.md",
+   "quote": "*Tested* from a Script in Studio 0.746.0.7461269:",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "Probe and harness case performance-optimization__L745 with expect/collection-lifecycle.luau.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "performance-optimization-101",
+   "file": "references/performance-optimization.md",
+   "quote": "**Each callback can be assigned once:** a second `OnAdded` fails `Callback OnAdded already assigned`.",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "Reassigning OnAdded: Callback OnAdded already assigned. function c.OnNotAnEvent: OnNotAnEvent cannot be assigned to.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "performance-optimization-102",
+   "file": "references/performance-optimization.md",
+   "quote": "A name that is no callback fails too: `OnNotAnEvent cannot be assigned to`.",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "Reassigning OnAdded: Callback OnAdded already assigned. function c.OnNotAnEvent: OnNotAnEvent cannot be assigned to.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "performance-optimization-103",
+   "file": "references/performance-optimization.md",
+   "quote": "**`OnHeartbeat` and the other `RunService` callbacks cannot yield**, and neither can `ForEach`.",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "OnHeartbeat with task.wait: before=14 after=0, log thread is not yieldable; ForEach with task.wait: pcall true, one more such log; OnAdded with task.wait: 1/1. Release post: these callbacks can no longer yield.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "performance-optimization-104",
+   "file": "references/performance-optimization.md",
+   "quote": "A `task.wait()` in `OnHeartbeat` logged `thread is not yieldable` and the rest of the callback never",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "OnHeartbeat with task.wait: before=14 after=0, log thread is not yieldable; ForEach with task.wait: pcall true, one more such log; OnAdded with task.wait: 1/1. Release post: these callbacks can no longer yield.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "performance-optimization-105",
+   "file": "references/performance-optimization.md",
+   "quote": "destroyed collection errors on `GetCount()`. A bad query fails at creation: `Part[[[` gave `Expected",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "c:GetCount() after Destroy failed; CreateCollection(\"Part[[[\") failed Expected identifier for a property name.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "performance-optimization-106",
+   "file": "references/performance-optimization.md",
+   "quote": "`Part.Fire:in-radius(10, #Anchor)` found the tagged part 6 studs away and not the one 100 studs away",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "Script: QueryDescendants(\"Part.WPFire:in-radius(10, #WPB)\") 1, with radius 200: 2. Part 6 and 100 studs from the anchor.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "performance-optimization-107",
+   "file": "references/performance-optimization.md",
+   "quote": "`SceneAnalysisService` works from a game Script (*tested* 2026-11-07, Studio 0.746.0.7461269), and",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "Script: GetInstanceComposition, GetScriptMemory, GetUnparentedInstances, GetAnimationMemory, GetAudioMemory returned tables; LocalScript and execute_luau: GetTriangleComposition returned Sizes.Triangles/Drawcalls; GetCollisionGeometryMemoryAsync: SceneAnalysisService is not enabled.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "performance-optimization-108",
+   "file": "references/performance-optimization.md",
+   "quote": "each of its entries holds `Sizes.Triangles` and `Sizes.Drawcalls`. Only",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "Script: GetInstanceComposition, GetScriptMemory, GetUnparentedInstances, GetAnimationMemory, GetAudioMemory returned tables; LocalScript and execute_luau: GetTriangleComposition returned Sizes.Triangles/Drawcalls; GetCollisionGeometryMemoryAsync: SceneAnalysisService is not enabled.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "performance-optimization-109",
+   "file": "references/performance-optimization.md",
+   "quote": "**`GetCollisionGeometryMemoryAsync` still fails**, with `SceneAnalysisService is not enabled`.",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "Script: GetInstanceComposition, GetScriptMemory, GetUnparentedInstances, GetAnimationMemory, GetAudioMemory returned tables; LocalScript and execute_luau: GetTriangleComposition returned Sizes.Triangles/Drawcalls; GetCollisionGeometryMemoryAsync: SceneAnalysisService is not enabled.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "performance-optimization-110",
+   "file": "references/performance-optimization.md",
+   "quote": "`HeapProfilerService` takes a full Luau heap snapshot, and it is plugin-only: a game Script fails",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "Script: lacking capability Plugin. execute_luau Server: string of 1617527 bytes, keys Report, Refs, 0.4 s.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "performance-optimization-111",
+   "file": "references/performance-optimization.md",
+   "quote": "`ServerRequestDataAsync()` returned a JSON string of 1.6 MB with the keys `Report` and `Refs` in 0.4 s,",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "Composite execute_luau in Edit returned Request timeout; re-run with a timed thread: only ServerRequestDataAsync was still waiting at 4 s. Server datamodel in a playtest: returned in 0.4 s.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "performance-optimization-112",
+   "file": "references/performance-optimization.md",
+   "quote": "so summarize it rather than returning it to the agent. **In `Edit` it never returns:** the call hangs",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "Composite execute_luau in Edit returned Request timeout; re-run with a timed thread: only ServerRequestDataAsync was still waiting at 4 s. Server datamodel in a playtest: returned in 0.4 s.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "project-structure-040",
+   "file": "references/project-structure.md",
+   "quote": "Measured 2026-11-07 (Studio 0.746.0.7461269) with one context per location, a Bool action in each, and",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "One InputContext per location with a Bool action; user_keyboard_input key presses: Press_RS, Press_WS, Press_PlayerGui, Press_PlayerScripts = 1; templates in StarterGui and StarterPlayerScripts: no attribute written.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "project-structure-041",
+   "file": "references/project-structure.md",
+   "quote": "The template left in `StarterPlayerScripts` or `StarterGui` | **No.** A script that connects to the template never hears anything",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "One InputContext per location with a Bool action; user_keyboard_input key presses: Press_RS, Press_WS, Press_PlayerGui, Press_PlayerScripts = 1; templates in StarterGui and StarterPlayerScripts: no attribute written.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "project-structure-042",
+   "file": "references/project-structure.md",
+   "quote": "`InputContext.Priority` defaults to `1000`; only the order between contexts matters. A mouse button is",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "execute_luau: Instance.new(\"InputContext\").Priority 1000; Enum.KeyCode.MouseButton1 errors with this text; MouseLeftButton valid.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "project-structure-043",
+   "file": "references/project-structure.md",
+   "quote": "`Enum.KeyCode.MouseLeftButton`, not `Enum.KeyCode.MouseButton1`, which errors (`MouseButton1 is not a",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "execute_luau: Instance.new(\"InputContext\").Priority 1000; Enum.KeyCode.MouseButton1 errors with this text; MouseLeftButton valid.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "project-structure-044",
+   "file": "references/project-structure.md",
+   "quote": "*Tested* from a Script in Studio 0.746.0.7461269: a key that was never published returns `nil`, so",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "Probe and harness case project-structure__L735 with expect/config-service.luau.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "project-structure-045",
+   "file": "references/project-structure.md",
+   "quote": "A `LocalScript`, and `execute_luau` in `Edit`, both get `ConfigService is only available in the game",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "LocalScript and execute_luau Edit: ConfigService is only available in the game server.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "security-hardening-090",
+   "file": "references/security-hardening.md",
+   "quote": "(*tested* 2026-11-07; see `performance-optimization.md`).",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "Script under an Actor: BindToSimulationParallel ticks=11 and BindToAnimationParallel ticks=2 in 0.4 s; plain Script: The calling script must be rooted under an Actor. Handler: read OK, Transparency write not safe in parallel.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "studio-plugins-and-limits-029",
+   "file": "references/studio-plugins-and-limits.md",
+   "quote": "**MCP `execute_luau` is not a plugin in this respect.** With `HttpEnabled` `true`, it was refused",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "GetAsync and RequestAsync to https://example.com returned this text.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "studio-plugins-and-limits-030",
+   "file": "references/studio-plugins-and-limits.md",
+   "quote": "on 2026-11-07: `HttpService request denied: domain example.com is not in the Assistant HTTP",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "GetAsync and RequestAsync to https://example.com returned this text.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "guard-20261107-1",
+   "file": "references/mcp-integration.md",
+   "quote": "and they are **narrower and more current than this skill on their specific topics**",
+   "status": "false",
+   "kind": "behaviour",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "Measured 2026-11-07: rbx-device-simulator-lua, rbx-network-simulator, rbx-scene-analysis and rbx-create-skill hold steps that fail.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "guard-20261107-2",
+   "file": "references/agent-safety.md",
+   "quote": "**`Server` datamodel is production-adjacent.** A playtest with Studio API access enabled talks",
+   "status": "false",
+   "kind": "behaviour",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "Measured 2026-11-07: a data store read works from Edit too.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "guard-20261107-3",
+   "file": "references/agent-safety.md",
+   "quote": "During a playtest with API access enabled, `execute_luau` in the `Server` datamodel reaches **production DataStores**",
+   "status": "false",
+   "kind": "behaviour",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "Measured 2026-11-07: Edit reaches them as well.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-164",
+   "file": "references/mcp-integration.md",
+   "quote": "nested. `explore` answered a read-only question correctly during a playtest (run 2026-11-07).",
+   "status": "studio",
+   "kind": "behaviour",
+   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
+   "evidence": "subagent explore returned the child count of ServerScriptService and its first name alphabetically.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "mcp-integration-165",
+   "file": "references/mcp-integration.md",
+   "quote": "rotation, colours and anchoring, so it records what to expect before uploading.",
+   "status": "docs",
+   "kind": "behaviour",
+   "source": "skill tool output read 2026-11-07, Studio 0.746.0.7461269",
+   "evidence": "rbx-import-asset: \"regularly changes scale, rotation, colours and sometimes textures\"; record verification targets before uploading.",
+   "checked": "2026-11-07, engine 0.746.0.7461269"
   }
  ]
 }
