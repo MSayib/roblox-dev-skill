@@ -20,6 +20,20 @@ sample onto a task it does not fit:
 2. **Read the routing table in `SKILL.md` first.** These examples show sequence, not facts. Where an
    example and a reference file disagree, the reference file wins.
 
+## Table of Contents
+
+1. [Add a server-authoritative feature](#1-add-a-server-authoritative-feature)
+2. [Debug a runtime error through MCP](#2-debug-a-runtime-error-through-mcp)
+3. [Migrate a deprecated API](#3-migrate-a-deprecated-api)
+4. [Look up an API you are not certain about](#4-look-up-an-api-you-are-not-certain-about)
+5. [Refuse and redirect a request that breaks the trust boundary](#5-refuse-and-redirect-a-request-that-breaks-the-trust-boundary)
+6. [Grant a developer product purchase](#6-grant-a-developer-product-purchase)
+7. [Change the shape of saved player data](#7-change-the-shape-of-saved-player-data)
+8. [Open a menu from an Input Action](#8-open-a-menu-from-an-input-action)
+9. [Concept Image to 3D Asset, Physics Contraption, and Playtest](#9-concept-image-to-3d-asset-physics-contraption-and-playtest)
+10. [Auto-Route to Built-in Studio Skills and Verify Stale Steps](#10-auto-route-to-built-in-studio-skills-and-verify-stale-steps)
+11. [Anti-patterns these examples exist to prevent](#anti-patterns-these-examples-exist-to-prevent)
+
 ---
 
 ## 1. Add a server-authoritative feature
@@ -149,19 +163,23 @@ coin rejected, no errors.)
 - "It works in Studio but not in the live game" → suspect `StreamingEnabled` or a client/server
   assumption, not a syntax bug
 
-**Routing:** `mcp-integration.md` for signatures, `agent-safety.md` before the first write.
+**Routing:** `mcp-integration.md` for signatures, `agent-safety.md` before the first write. For
+breakpoints, thread stacks, and variable inspection beyond `print()` debugging, call
+`get_roblox_skill("rbx-debug")` first (`ScriptDebuggerService` is `PluginSecurity`, so it runs via
+`execute_luau`, not game scripts).
 
 **Sequence:**
 
 ```text
 1. list_roblox_studios   → resolve studio_id, and say out loud which place it is
 2. get_console_output    → read the actual error and stack trace, do not guess from the description
-3. script_read           → read the offending script; line numbers here are real
-4. execute_luau          → inspect live state (datamodel_type: Server or Client)
-5. start_stop_play       → STOP the playtest — multi_edit cannot write during one
-6. multi_edit            → apply the fix (datamodel_type: Edit only)
-7. start_stop_play       → restart
-8. get_console_output    → confirm the error is gone AND no new warnings appeared
+3. get_roblox_skill      → load "rbx-debug" if breakpoints / stack inspection are needed
+4. script_read           → read the offending script; line numbers here are real
+5. execute_luau          → inspect live state (datamodel_type: Server or Client)
+6. start_stop_play       → STOP the playtest — multi_edit cannot write during one
+7. multi_edit            → apply the fix (datamodel_type: Edit only)
+8. start_stop_play       → restart
+9. get_console_output    → confirm the error is gone AND no new warnings appeared
 ```
 
 **Failure modes, with the real cause:**
@@ -572,6 +590,179 @@ view first) and read `shopGui.Enabled` from `execute_luau` (Client) after each p
 and `PlayerScriptsUseInputActionSystem` left at its default.) If nothing toggles, check that the
 `InputContext` is `Enabled` and that a higher-`Priority` context with `Sink` is not consuming the
 key.
+
+---
+
+## 9. Concept Image to 3D Asset, Physics Contraption, and Playtest
+
+**Trigger:** "Turn this concept image into a 3D hover crate / checkpoint pad and make it work",
+"generate a 3D prop from an image, attach physics, and verify it in a playtest".
+
+**Not this:**
+- Importing an already-modeled `.fbx`/`.gltf` from Blender or Maya → `file-formats-and-assets.md` +
+  `get_roblox_skill("rbx-import-asset")`
+- Multiplayer vehicle replication or client-authority anti-exploit design → `networking.md` +
+  `security-hardening.md`
+- Generating a static decorative prop with no runtime behavior → stop after generation +
+  `screen_capture` (no playtest loop needed)
+
+**Routing:** `mcp-integration.md` (Workflows #6 & #7) + `agent-safety.md` before generating or
+replacing existing assets.
+
+**Sequence:**
+
+1. **Stage the local concept image first.** Call `store_image` with an absolute path to a local
+   `.png` / `.jpg` / `.jpeg` (≤5 MB) → returns `IMAGEID_<id>`. (Never call `upload_image` for a
+   local file; `upload_image` fetches HTTP(S) URLs.)
+2. **Generate the 3D asset and poll until completion.** Call `generate_procedural_model` with
+   `attachedImageUri`, `async: true`, and either `segmentation: "auto"` or `"explicit"` (≤8
+   `partNames`) — or `generate_mesh` / `generate_material`. Because external MCP clients cap
+   `wait_job_finished` at **45 s** per call while Studio 0.748 jobs run ~24–107 s, loop
+   `wait_job_finished(jobId)` while `status == "Running"`.
+3. **Post-process safely.** Before `generate_texture`, duplicate the target (it replaces in place).
+   If calling `segment_mesh`, pass a **single `MeshPart`** (`instance_path`), never a
+   multi-MeshPart `Model` (fails with `SegmentRequiresSingleMeshPart` in Studio 0.748).
+4. **Add the `--!strict` physics & sensor logic** and record telemetry on `ServerStorage`
+   attributes so playtest assertions do not depend on `LogService` (512-line truncation).
+
+<!-- skilltest: defs-behind; prelude hover-crate; expect hover-crate -->
+```luau
+--!strict
+-- ServerScriptService/HoverCrateContraption.server.luau
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local ServerStorage = game:GetService("ServerStorage")
+local Workspace = game:GetService("Workspace")
+
+local crate = Workspace:WaitForChild("HoverCrate") :: Model
+local body = crate:WaitForChild("Body") :: BasePart
+local checkpoint = Workspace:WaitForChild("MarginCheckpoint") :: BasePart
+
+local attachment = Instance.new("Attachment")
+attachment.Parent = body
+
+local alignPos = Instance.new("AlignPosition")
+alignPos.Mode = Enum.PositionAlignmentMode.OneAttachment
+alignPos.Attachment0 = attachment
+alignPos.MaxForce = 40_000
+alignPos.Responsiveness = 18
+alignPos.Position = body.Position + Vector3.new(0, 2, 0)
+alignPos.Parent = body
+
+local alignOri = Instance.new("AlignOrientation")
+alignOri.Mode = Enum.OrientationAlignmentMode.OneAttachment
+alignOri.Attachment0 = attachment
+alignOri.MaxTorque = 25_000
+alignOri.Responsiveness = 15
+alignOri.CFrame = CFrame.identity
+alignOri.Parent = body
+
+local thinParams = RaycastParams.new()
+thinParams.FilterType = Enum.RaycastFilterType.Include
+thinParams.FilterDescendantsInstances = { checkpoint }
+
+local thickParams = RaycastParams.new()
+thickParams.FilterType = Enum.RaycastFilterType.Include
+thickParams.FilterDescendantsInstances = { checkpoint }
+thickParams.Margin = 2.0
+
+local minY = math.huge
+local maxY = -math.huge
+local thinHits = 0
+local thickHits = 0
+
+local heartbeatConn: RBXScriptConnection
+heartbeatConn = RunService.Heartbeat:Connect(function()
+	if not crate.Parent then
+		heartbeatConn:Disconnect()
+		return
+	end
+
+	local y = body.Position.Y
+	if y < minY then
+		minY = y
+	end
+	if y > maxY then
+		maxY = y
+	end
+
+	local origin = checkpoint.Position + Vector3.new(1.2, 5, 0)
+	local direction = Vector3.new(0, -10, 0)
+	if Workspace:Raycast(origin, direction, thinParams) then
+		thinHits += 1
+	end
+	if Workspace:Raycast(origin, direction, thickParams) then
+		thickHits += 1
+	end
+
+	local triggered = false
+	for _, player in Players:GetPlayers() do
+		local character = player.Character
+		local root = character and character:FindFirstChild("HumanoidRootPart")
+		if root and root:IsA("BasePart") then
+			if (root.Position - checkpoint.Position).Magnitude <= 6 then
+				triggered = true
+				break
+			end
+		end
+	end
+
+	ServerStorage:SetAttribute("HoverMinY", minY)
+	ServerStorage:SetAttribute("HoverMaxY", maxY)
+	ServerStorage:SetAttribute("ThinHits", thinHits)
+	ServerStorage:SetAttribute("ThickHits", thickHits)
+	if triggered then
+		ServerStorage:SetAttribute("PlayerTriggered", true)
+	end
+end)
+```
+
+5. **Run the automated playtest loop.** Call `start_stop_play` → drive inputs (`user_keyboard_input`
+   and/or `character_navigation` to a navmesh-reachable floor coordinate near the checkpoint) →
+   assert `ServerStorage` attributes via `execute_luau` (`Server`) → capture the live view with
+   `screen_capture` (keep primary over `video_capture`, which failed with `Target is not reachable`
+   in Studio 0.748.0.7481526 Play `Client`) → `start_stop_play` to stop.
+
+**Verification:** `execute_luau` (`Server`) confirms `HoverMinY < HoverMaxY`, `ThinHits == 0`,
+`ThickHits > 0`, and `PlayerTriggered == true`; `get_console_output` reports 0 errors;
+`screen_capture` shows the generated crate hovering cleanly above the floor.
+
+---
+
+## 10. Auto-Route to Built-in Studio Skills and Verify Stale Steps
+
+**Trigger:** Any Studio task that overlaps Roblox's 17 built-in `rbx-*` skills — device-size UI
+testing, network latency/loss simulation, MicroProfiler or Luau heap leaks, `SceneAnalysisService`,
+streaming conversion, `InputActionSystem`, analytics, `ProcessReceipt` auditing, Open Cloud,
+permissions, unit tests, or `ConfigService`.
+
+**Not this:**
+- `--!strict` Luau type errors, DataStore session locking, or server-authoritative `RemoteEvent`
+  design → read this repo's `references/*.md` directly (`rbx-*` skills do not cover them)
+- A host whose live tool list still exposes `list_skills` / `skill` (Studio 0.745–0.746) → use
+  those names instead when `list_roblox_skills` / `get_roblox_skill` are absent
+
+**Routing:** `mcp-integration.md` (17-skill matrix) + the paired `roblox-dev-skill` reference for
+the domain.
+
+**Sequence:**
+
+```text
+1. list_roblox_studios  → pin studio_id once
+2. list_roblox_skills   → inspect the live 17 rbx-* skills before improvising
+3. get_roblox_skill     → load each matching rbx-* skill (e.g., rbx-device-simulator-lua, rbx-network-simulator)
+4. Cross-check steps    → patch stale tool/API advice against mcp-integration.md before running:
+                          • pass studio_id on every call (never phantom set_active_studio)
+                          • call get_roblox_skill (never old skill) and ask user directly (never ask_questions)
+                          • use Client execute_luau for LocalPlayer.PlayerGui / AbsoluteSize (works in Play)
+                          • run SceneAnalysisService in Edit when static counts suffice; run HeapProfiler in Play Server
+                          • record & restore settings().Network (persists across restarts and clamps silently)
+5. Run & verify         → execute_luau / get_console_output / screen_capture, then restore persistent Studio settings
+```
+
+**Verification:** Confirm the target inspection or test succeeded with 0 errors in
+`get_console_output`, and if `rbx-network-simulator` touched `settings().Network`, read the
+properties back via `execute_luau` to confirm they are restored to `0`.
 
 ---
 

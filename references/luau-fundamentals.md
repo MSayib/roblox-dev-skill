@@ -1,6 +1,6 @@
 # Luau Language Fundamentals
 
-> Reference for AI coding skill — verified against official Roblox documentation and Luau language release specs (**v0.744**, released 2026-10-23; engine 0.745.0.7451137, re-tested 2026-10-29).
+> Reference for AI coding skill — verified against official Roblox documentation and Luau language release specs (**v0.748**, released 2026-11-20; engine `0.748.0.7481526`, re-tested 2026-11-23).
 > Sources: https://create.roblox.com/docs/luau, https://luau.org, https://roblox.github.io/lua-style-guide/
 
 ## Table of Contents
@@ -35,9 +35,9 @@ typed language **derived from Lua 5.1**. Key additions over Lua 5.1:
 - Native code generation (`--!native`) and fast `pcall`/`xpcall` VM execution (`LOP_FASTPCALL`)
 - No `goto` statement
 
-### What landed in 0.736 through 0.744 (source: luau-lang/luau release notes)
+### What landed in 0.736 through 0.748 (source: luau-lang/luau release notes)
 
-All nine releases are **fixes and internals, not new syntax you can ship today**. Nothing here changes
+All releases below are **fixes, VM internals, and flag-gated prototypes, not new syntax you can ship today**. Nothing here changes
 how you write Luau for Roblox; it is here so nobody mistakes an internal change for a new feature.
 
 | Release | Change | What it means for your code |
@@ -72,9 +72,12 @@ how you write Luau for Roblox; it is here so nobody mistakes an internal change 
 | **0.744** | Correctness fixes to `bit32.lrotate` and the `integer` library's `lrotate` / `extract` / `replace`; a dead-store-elimination bug, an Arm64 crash on functions with more than 256 constants, a `FORGLOOP` register bug and a compiler `uint8_t`→`int8_t` cast fixed | No edit. In Studio 0.745 `bit32.lrotate(0x80000001, 1)` is `3`, `lrotate(1, 33)` is `2`, `lrotate(0xF0000000, -4)` is `0x0F000000` and `lrotate(0x12345678, 8)` is `0x34567812` *(Studio)*. The `integer` library is still `nil` in Roblox |
 | **0.744** | Type system: width subtyping no longer injects `nil` for a stand-in property; type-pack handling in a call's tail argument fixed in nonstrict | Inference fixes, no edit |
 | **0.744** | Prototype: runtime support for **private class fields** | Part of the classes prototype, still behind `DebugLuauUserDefinedClasses` (off). Not usable |
-| **0.745** | Syntax: **`while local` / `while const`** loops, one binding scoped to the condition and body | **Not usable.** Gated by `DebugLuauWhileLocalSyntax` / `DebugLuauWhileLocalAnalysis`, absent from Studio's and every client's published flags. In Studio 0.746 `loadstring` rejects both forms with a syntax error *(Studio)* |
-| **0.745** | `table.create` and `table.clear` are fast calls; native codegen can auto-promote hot functions by call and loop counts | No edit for the fast calls. Auto-promotion is gated by `LuauRuntimeFeedback`, absent from the published flags, and the docs still say `--!native` is required: keep the comment |
+| **0.745** | Syntax: **`while local` / `while const`** loops, one binding scoped to the condition and body | **Not usable.** Gate renamed `DebugLuauWhileLocal*` → `LuauExperimentalWhileLocalSyntax` / `LuauExperimentalWhileLocalAnalysis` in 0.746; still absent from Studio's and every client's published flags, and fails to compile in Studio 0.746/0.748 *(Studio)* |
+| **0.745** | `table.create` and `table.clear` are fast calls; native codegen can auto-promote hot functions by call and loop counts | No edit for the fast calls. Auto-promotion was gated by `LuauRuntimeFeedback` (absent in 0.746) and replaced in 0.747 by **`LuauCodegenRuntimeFeedback`** + **`LuauPromoteProto`**, which are now **`True` across Studio and all player clients** (`clientsettingscdn`, 2026-11-23). Keep `--!native` / `@native` explicit where guaranteed native compilation is needed, as the docs still require the pragma |
 | **0.745** | Type checking: negated intersection types normalized; class method context reset in type functions; analysis blow-up on large table-like literals fixed. C API: `lua_EmbedderGc` returns `int` | Inference fixes, no edit. The C API change does not reach game code |
+| **0.746** | Analysis: globals read and never assigned no longer leak a blocked type; globals in type functions no longer affect outer inference; iteration over unions containing non-table tables errors. Runtime: string-table hash salting (`lua_setpointerencodekey`); functions calling `require` skipped from runtime inlining. NCG: tag-guided runtime recompilation. Classes RFC fixes (`DebugLuauUserDefinedClasses*`, off) | Inference and runtime internals, no edit. `while local` remains off |
+| **0.747** | `buffer.readvectorf32x2/x3` and `buffer.writevectorf32x2/x3` (RFC #198); **all in-progress `integer` library/type code clipped** (RFC #269); `luau_loadlazy`; analysis rejects iterating over non-iterable unions (`boolean \| number \| vector \| {}`); NCG direct userdata access, frozen metatable cache, lower promotion thresholds (`LuauCodegenRuntimeFeedback` / `LuauPromoteProto`); Classes `local`/nested classes | `buffer.readvector*f32` / `writevector*f32` are behind `DebugLuauBufferVectorLibrary` / `DebugLuauBufferVectorFastcalls` and still **`nil` in Studio 0.748** *(Studio)*. `integer` remains `nil` and its prototype flags were removed from Luau |
+| **0.748** | Embedded builtin definitions refactored (`LuauEZAddBuiltins`); `LuauDecomposeIntersectionOfFreeType` reverted; type functions no longer leak expression globals (`X = 42` inside `type function`); inlined captured-call clobber fix; NCG constant-load sinking | Inference, runtime, and NCG fixes; no edit |
 
 ### `if local` / `if const` — a Studio beta, NOT usable in published games
 
@@ -98,11 +101,12 @@ What makes this *not* shippable yet:
   for players**. Team members without the beta enabled cannot compile it either.
 - Beta limits: one name, one value. `if local ok, err = pcall(f) then` and compound conditions
   (`if local x = a(); local y = b() then`) are **not** supported. `while local` arrived in Luau 0.745
-  behind a `Debug` flag, is not in the beta, and is a syntax error in Studio 0.746.
-- Studio's published flags (checked 2026-10-07) set `FFlagLuauIfLocalBetaFeature = True` with
-  `FIntLuauIfLocalBetaFeatureRolloutPercent = 0` — it is opt-in, not on by default. The open-source
-  gates in 0.743 are still `LuauExperimentalIfLocalSyntax` / `LuauExperimentalIfLocalAnalysis` (re-checked
-  2026-10-17, with the Studio beta flags unchanged).
+  (`LuauExperimentalWhileLocalSyntax` / `Analysis`), is not in the beta, and fails in Studio 0.748.
+- Studio's published flags (re-checked 2026-11-23) still set `FFlagLuauIfLocalBetaFeature = True` with
+  `FIntLuauIfLocalBetaFeatureRolloutPercent = 0` (`RoleSet = 4`) — opt-in Studio beta only, not on by default.
+  A second opt-in Studio beta, **Luau Modularity** (`FFlagLuauModularityBetaFeature = True`, `RolloutPercent = 0`,
+  `RoleSet = 4`, DevForum topic `4988432` — export values and cyclic requires), is likewise Studio-only and must not be
+  relied upon in published games yet.
 
 **Default: write the plain `local x = ...` / `if x then` form in game code.** Show `if local` only
 when the user explicitly wants to try the beta in Studio, and then say it must be rewritten
@@ -111,19 +115,18 @@ disappearing because the syntax is on for everyone — not a release note that m
 
 ### Other experimental features — NOT usable in Roblox
 
-Checked 2026-10-17 against the 0.743 source and Studio's published client settings
-(`clientsettingscdn.roblox.com/v2/settings/application/PCStudioApp` and `MacStudioApp`), and
-re-checked 2026-10-21, 2026-10-22 (Studio 0.744; ~25,600 flags each) and 2026-10-29 against the 0.744 source and
-Studio 0.745 (~26,100 flags each). None of the flags below is set there, and a Luau `FASTFLAGVARIABLE` defaults to **off**.
+Checked against the Luau **0.748** source and Studio/client published settings
+(`clientsettingscdn.roblox.com/v2/settings/application/*` for `PCStudioApp`, `MacStudioApp`, `PCDesktopClient`, `MacDesktopClient`, `AndroidApp`, `iOSApp`; re-checked **2026-11-23** on Studio `0.748.0.7481526`, ~27,800 Studio flags each). None of the flags below is set there, and a Luau `FASTFLAGVARIABLE` defaults to **off**.
 `coroutine.finally` was in this table until its flag was switched on for the 0.745 build (see the
 next section):
 
-| Prototype | Gate in 0.744 | Notes |
+| Prototype | Gate in 0.748 | Notes |
 |---|---|---|
 | **Exact tables by default** — `{ x: number }` rejects extra fields, `{ x: number, ... }` allows them (RFC luau-lang/rfcs#11), 0.740 | `DebugLuauParseExactTables`, `DebugLuauExactTableTypes` | The release note calls it "an experimental feature". Do not write `...` in a table type for Roblox |
-| **Classes** RFC prototype | `DebugLuauUserDefinedClasses`, `DebugLuauUserDefinedClassesRuntime` (both in the source since at least 0.737) | 0.744 added runtime support for private class fields, behind the same gate |
-| Require top-level functions to be annotated, 0.738 | none in 0.744 (`DebugLuauWarnOnUnannotatedTopLevelFunctions` until 0.743) | A lint experiment; its flag and check are gone from the 0.744 source |
-| An **`integer`** library (`integer.idiv` was fixed in 0.740) | `LuauIntegerLibrary` | Present in the open-source VM since at least 0.737, not enabled in Studio. Not a Roblox API |
+| **Classes** RFC prototype | `DebugLuauUserDefinedClasses`, `DebugLuauUserDefinedClassesRuntime` (in source since at least 0.737) | 0.744 added private class fields, 0.747 added `local`/nested classes, still behind the same off gate |
+| **`while local` / `while const`** syntax, 0.745 | `LuauExperimentalWhileLocalSyntax`, `LuauExperimentalWhileLocalAnalysis` (renamed from `DebugLuauWhileLocal*` in 0.746) | Not in the `if local` Studio beta; absent from published flags |
+| **`buffer.readvector*f32` / `writevector*f32`**, 0.747 | `DebugLuauBufferVectorLibrary`, `DebugLuauBufferVectorFastcalls` | Documented on `buffer`, but **`nil` in Studio 0.748** *(Studio)* |
+| **`integer`** library (`LuauIntegerLibrary`) | **Clipped in 0.747** (RFC #269); flags removed from open-source Luau | Still `nil` in Studio 0.748 *(Studio)*. Not a Roblox API |
 
 **Apart from `coroutine.finally`, none of these is enabled in Roblox Studio.** Do not write them
 into game code, and do not tell a user they can — they look like shipped features in a release note
@@ -352,8 +355,9 @@ Luau features high-performance native libraries for binary data and SIMD-acceler
 ### Buffer Library (`buffer.*`)
 
 > `buffer.readvectorf32x2`, `readvectorf32x3`, `writevectorf32x2` and `writevectorf32x3` are on the
-> `buffer` page (2026-11-05) and **`nil` in Studio 0.746.0.7461269** from a Script and a LocalScript
-> (*tested*). Do not call them yet: read three floats with `buffer.readf32` instead.
+> `buffer` page (added 2026-11-05, landed in Luau 0.747 behind `DebugLuauBufferVectorLibrary`) and
+> remain **`nil` in Studio `0.748.0.7481526`** from Script, LocalScript, Actor, and `execute_luau`
+> (*tested* 2026-11-23). Do not call them yet: read three floats with `buffer.readf32` instead.
 Buffers are fixed-size, mutable byte arrays designed for fast binary serialization, networking packets, and memory storage:
 ```luau
 --!strict

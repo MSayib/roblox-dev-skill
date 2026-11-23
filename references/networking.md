@@ -427,8 +427,11 @@ createRemote("UnreliableRemoteEvent", "MousePosition", unreliableFolder)
 
 **Which text must be chat** (*docs*): anything that lets players hold a back-and-forth conversation
 in under 60 seconds must go through `TextChatService`, including custom chat, radios, phones and
-admin tools where people can reply; otherwise Roblox "might take your game down". Player-editable
-text others can see (signs, pet names, comments) is not chat only if it is filtered **and**
+admin tools where people can reply; otherwise Roblox "might take your game down". Since November 2026
+(`ui/temporary-limits.md`), Roblox also applies a game-wide **temporary text limit** (minimum 24 hours,
+requiring a published update to lift) when it detects player conversations outside `TextChatService` —
+every filtered player-text surface drops to one submission per 60 seconds and shows `⏱️⏱️⏱️` in between.
+Player-editable text others can see (signs, pet names, comments) is not chat only if it is filtered **and**
 rate-limited to one submission per minute per player; filtering alone is not enough, and comments
 may not support replies. Preset phrases from a fixed list and one-way developer text are not chat.
 
@@ -534,9 +537,10 @@ and describe `TeleportService:ReserveServerAsync()`, `TeleportToPrivateServer()`
 |---|---|---|
 | `ReservedServerId` | Any GUID you generate on the server, `HttpService:GenerateGUID(false)` | The first teleport with a new ID creates the reserved server; the same ID later routes to the same server. On arrival `game.PrivateServerId` equals that ID |
 | `VipServerId` | The `game.PrivateServerId` of a player-bought VIP server | Joins that VIP server; works with any place of the same experience, not another experience's |
+| `ForcePublicServer` | `true` (added in 0.748; `Teleport` capability) | Forces a public server for a single-player teleport when no other routing field is set, skipping automatic VIP-server return inference |
 
-Only **one** routing field (`ReservedServerId`, `VipServerId`, `ReservedServerAccessCode`,
-`ShouldReserveServer`, `ServerInstanceId`) may be set per teleport. `ReserveServerAsync` "does not
+Only **one** routing field (`ReservedServerId`, `VipServerId`, `ForcePublicServer`, `ReservedServerAccessCode`,
+`ShouldReserveServer`, `ServerInstanceId`) may be set per teleport (`ForcePublicServer` is mutually exclusive with all of them). `ReserveServerAsync` "does not
 actually reserve a server in advance, but simply generates a random GUID", and servers made with
 access codes keep working. Persist a reserved ID (a data store keyed by lobby or party) if more
 players must reach that server later. `TeleportAsyncResult.ReservedServerAccessCode` is empty for
@@ -587,9 +591,14 @@ end
 ```
 
 On the destination, `game.PrivateServerId ~= "" and game.PrivateServerOwnerId == 0` means a
-reserved server (in Studio both read `""` and `0`). To keep players in the same VIP server across
-places, set `options.VipServerId = game.PrivateServerId` on every teleport from it. A teleport with
-no routing field can also land a player in a VIP server they recently joined (*docs*).
+reserved server (in Studio both read `""` and `0`). Since November 2026 (`projects/teleport.md#test-teleports-in-studio`),
+`TeleportAsync` teleports between places in the same experience also work in Studio **Test** and **Team Test**
+modes (opening the destination as a new test server; deprecated `Teleport()` / `TeleportPartyAsync()` /
+`TeleportToPlaceAsync()` are not supported). Note `DataModel.ServerRegion` (0.748, `ReadOnly`, `NotReplicated`)
+reports the server datacenter's three-letter IATA code on live servers and `""` in Studio/client.
+To keep players in the same VIP server across places, set `options.VipServerId = game.PrivateServerId` on
+every teleport from it. A teleport with no routing field (unless `ForcePublicServer = true`) can also land
+a player in a VIP server they recently joined (*docs*).
 
 ---
 

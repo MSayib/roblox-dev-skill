@@ -2,15 +2,17 @@
 
 [![CI](https://github.com/MSayib/roblox-dev-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/MSayib/roblox-dev-skill/actions/workflows/ci.yml)
 
-**An [Agent Skill](https://agentskills.io) that makes an AI coding agent write correct, current Roblox
-code.** When you mention Roblox, Luau or Roblox Studio, the agent loads this skill: a routing file
-([`SKILL.md`](SKILL.md)) plus 14 reference guides on Luau, client-server architecture, security,
-DataStores, UI, performance, monetization, migration, and driving Roblox Studio through its MCP
-server. Works with Claude Code, Codex, Cursor, Gemini CLI, Antigravity, GitHub Copilot, and any
-agent that reads the Agent Skills format.
+**An [Agent Skill](https://agentskills.io) that makes an AI coding agent write, test, and verify
+correct, current Roblox code.** When you mention Roblox, Luau or Roblox Studio, the agent loads
+this skill: a routing file ([`SKILL.md`](SKILL.md)) plus 14 reference guides on Luau, client-server
+architecture, security, DataStores, UI, performance, monetization, migration, and driving Roblox
+Studio through its MCP server (including automatic routing to Studio's 17 built-in `rbx-*` skills,
+concept-image-to-3D/material/animation generation, and automated playtest & physics verification).
+Works with Claude Code, Codex, Cursor, Gemini CLI, Antigravity, GitHub Copilot, and any agent that
+reads the Agent Skills format.
 
-> **Skill 2.22.0** · verified against Roblox Studio **0.746.0.7461269** and **Luau 0.745** on
-> 2026-11-07. Every code example was type-checked under `--!strict` and run in a real Studio place,
+> **Skill 2.23.0** · verified against Roblox Studio **0.748.0.7481526** and **Luau 0.748** on
+> 2026-11-23. Every code example was type-checked under `--!strict` and run in a real Studio place,
 > and every factual statement checked against an official source or a test.
 > Roblox ships weekly, so this is *when it was last verified*, not today's version.
 
@@ -53,8 +55,8 @@ updating, uninstalling and manual install: **[docs/installation.md](docs/install
 
 | Reference | Covers |
 |---|---|
-| [worked-examples](references/worked-examples.md) | Eight end-to-end tasks for an agent (build, debug, migrate, look up, refuse, sell a product, migrate saved data, bind input), each ending in a tested verification |
-| [luau-fundamentals](references/luau-fundamentals.md) | Luau syntax, types and the New Type Solver, `coroutine.finally`, what each Luau release changed, beta and experimental features you cannot ship |
+| [worked-examples](references/worked-examples.md) | Ten end-to-end tasks for an agent (build, debug, migrate, look up, refuse, sell a product, migrate saved data, bind input, concept-image-to-3D + playtest verification, and routing Studio's `rbx-*` skills) |
+| [luau-fundamentals](references/luau-fundamentals.md) | Luau syntax, types and the New Type Solver, `coroutine.finally`, what each Luau release changed up to 0.748, beta and experimental features you cannot ship |
 | [project-structure](references/project-structure.md) | Services, Rojo, client/server layout, the Input Action System |
 | [networking](references/networking.md) | RemoteEvents, RemoteFunctions, unreliable remotes, bindables, text chat and platform-integrated chat, teleports to reserved and VIP servers |
 | [security-hardening](references/security-hardening.md) | Server authority, validating remote input, anti-exploit, bans, device trust, script capabilities |
@@ -62,9 +64,9 @@ updating, uninstalling and manual install: **[docs/installation.md](docs/install
 | [performance-optimization](references/performance-optimization.md) | Memory, Parallel Luau and Actors, streaming, the frame pipeline, thick casts with `RaycastParams.Margin` |
 | [ui-systems](references/ui-systems.md) | GUI layout, StyleSheets, BillboardGui / SurfaceGui, ProximityPrompt, `Color3` contrast methods |
 | [monetization](references/monetization.md) | Game passes, developer products, subscriptions, Robux transfers |
-| [legacy-migration](references/legacy-migration.md) | Deprecated APIs and replacements, what each engine release changed |
-| [mcp-integration](references/mcp-integration.md) | Studio MCP tools with their real signatures and limits, Open Cloud and MCP Permissions, what Roblox's own skills get wrong |
-| [agent-safety](references/agent-safety.md) | What an agent with Studio access can break, and the rules that prevent it |
+| [legacy-migration](references/legacy-migration.md) | Deprecated APIs and replacements, what each engine release changed through 0.748 |
+| [mcp-integration](references/mcp-integration.md) | Studio MCP tools (39 in 0.748), `list_roblox_skills`/`get_roblox_skill` 17-skill routing & stale-step audit, generative 3D/animation & playtest workflows, Open Cloud and MCP Permissions |
+| [agent-safety](references/agent-safety.md) | What an agent with Studio access can break, `save_place` / `submit_feedback` / `generate_*` guards, and the rules that prevent mistakes |
 | [studio-plugins-and-limits](references/studio-plugins-and-limits.md) | Plugins, `Script.Source` limits, engine limits |
 | [file-formats-and-assets](references/file-formats-and-assets.md) | `.rbxl`/`.rbxm`, meshes, importing |
 

@@ -16,7 +16,16 @@
   "TestFailure.GetContext": "the row documents its removal in 0.746",
   "AnimationRigData.LoadFromHumanoid": "the row documents its removal in 0.746",
   "ScriptEditorService.OpenTextDocumentDocumentAsync": "the row documents its removal in 0.746",
-  "AnimatedImageService.UserCreatedTracks": "the row documents its removal in 0.746"
+  "AnimatedImageService.UserCreatedTracks": "the row documents its removal in 0.746",
+  "Player.GetData": "the 0.747-0.748 row documents its removal",
+  "PlayerData.GetPlayer": "the 0.747-0.748 row documents its removal",
+  "PlayerData.GetRecordAsync": "the 0.747-0.748 row documents its removal",
+  "PlayerDataService.GetRecordConfig": "the 0.747-0.748 row documents its removal",
+  "PlayerDataService.LoadFailureBehavior": "the 0.747-0.748 row documents its removal",
+  "Workspace.ImprovedAnimationConstraint": "the 0.747-0.748 row documents its removal",
+  "ParticleEmitter2D.LightEmission": "the 0.748 rows document its removal and replacement by LightInfluence",
+  "WrapLayer.RotateScaleDeformationMap": "the 0.747-0.748 row documents its removal",
+  "WrapLayer.ScaleOnlyDeformationMap": "the 0.747-0.748 row documents its removal"
  },
  "claims": [
   {
@@ -102,7 +111,7 @@
   {
    "id": "SKILL-001",
    "file": "SKILL.md",
-   "quote": "and anti-exploit, deprecated APIs, Rojo, and the Roblox Studio MCP tools (execute_luau,",
+   "quote": "Roblox and Luau knowledge for writing, reviewing, debugging and testing Roblox",
    "status": "advice",
    "kind": "negative",
    "source": "",
@@ -112,12 +121,12 @@
   {
    "id": "SKILL-002",
    "file": "SKILL.md",
-   "quote": "game Script may set, features that exist but are not enabled, Studio betas that cannot be",
+   "quote": "wrong (Script capability gates, unenabled features, Studio betas, engine 0.748 / Luau 0.748)",
    "status": "studio",
    "kind": "negative",
    "source": "metadata.json 2.15.0 verified_by",
-   "evidence": "Summary of the 0.742 rows tested from playtest Scripts in 2.15.0 (orthographic Camera, TestService registry, CanUsersTransferRobuxAsync ... present but not enabled); the details are claims in legacy-migration.md.",
-   "checked": "2026-10-11, engine 0.742.0.7421053"
+   "evidence": "Summary of Studio 0.748.0.7481526 probe runs across Script, LocalScript, Actor, and execute_luau (2026-11-23).",
+   "checked": "2026-11-23"
   },
   {
    "id": "SKILL-008",
@@ -132,27 +141,17 @@
   {
    "id": "SKILL-009",
    "file": "SKILL.md",
-   "quote": "The `WindowsStudio` (no `64`) endpoint returns a long-stale value — measured 2026-09-06 it still",
+   "quote": "The `WindowsStudio` (no `64`) endpoint returns a long-stale value — use `WindowsStudio64` or",
    "status": "studio",
    "kind": "number",
    "source": "https://clientsettings.roblox.com/v2/client-version/WindowsStudio",
    "evidence": "Re-measured 2026-10-11: still 0.578.0.5780566 (WindowsStudio64: 0.742.0.7421053).",
-   "checked": "2026-10-11, engine 0.742.0.7421053"
-  },
-  {
-   "id": "SKILL-010",
-   "file": "SKILL.md",
-   "quote": "answered `0.578.0.5780566`. Use `WindowsStudio64` or `MacStudio`.",
-   "status": "studio",
-   "kind": "number",
-   "source": "https://clientsettings.roblox.com/v2/client-version/WindowsStudio",
-   "evidence": "Re-measured 2026-10-11: 0.578.0.5780566.",
-   "checked": "2026-10-11, engine 0.742.0.7421053"
+   "checked": "2026-11-23"
   },
   {
    "id": "SKILL-011",
    "file": "SKILL.md",
-   "quote": "only tells you how to use them well. Official reference:",
+   "quote": "to **Roblox's own MCP server built into Studio** (https://create.roblox.com/docs/studio/mcp).",
    "status": "advice",
    "kind": "negative",
    "source": "",
@@ -162,52 +161,52 @@
   {
    "id": "SKILL-013",
    "file": "SKILL.md",
-   "quote": "`execute_luau` | Run Luau in Studio at plugin privilege — **returns the result or the error**",
+   "quote": "`execute_luau` | Run Luau in Studio at plugin privilege (`Edit`/`Client`/`Server`) — **returns result or error**; HTTP & DataStores go through MCP Permissions",
    "status": "studio",
    "kind": "negative",
    "source": "MCP tools of this session (Studio 0.742, place MieGede NewWorld)",
    "evidence": "Returned values and errors seen all session; plugin privilege: wrote PluginOrOpenCloud CollisionFidelity that a game Script cannot.",
-   "checked": "2026-10-11, engine 0.742.0.7421053"
+   "checked": "2026-11-23"
   },
   {
    "id": "SKILL-014",
    "file": "SKILL.md",
-   "quote": "`multi_edit` | Apply several exact-match edits to **ONE** script (creates it if missing); `Edit` datamodel only",
+   "quote": "`multi_edit` | Exact-match sequential edits to **ONE** script (`Edit` datamodel only; creates if missing)",
    "status": "studio",
    "kind": "negative",
    "source": "MCP tools of this session (Studio 0.742, place MieGede NewWorld)",
    "evidence": "Schema: datamodel_type enum [Edit]; creates the script if the path does not exist (className); one file_path per call.",
-   "checked": "2026-10-11, engine 0.742.0.7421053"
+   "checked": "2026-11-23"
   },
   {
    "id": "SKILL-015",
    "file": "SKILL.md",
-   "quote": "`store_image` | **Local** png/jpg ≤5 MB → `IMAGEID_` URI for other tools",
+   "quote": "`store_image` / `upload_image` | `store_image`: local png/jpg ≤5 MB → `IMAGEID_` URI. `upload_image`: HTTP(S) URLs → asset IDs",
    "status": "docs",
    "kind": "number",
    "source": "MCP tools of this session (Studio 0.742, place MieGede NewWorld) (tool schema)",
    "evidence": "Schema: png/jpg/jpeg, max 5MB, returns IMAGEID_<id> URI.",
-   "checked": "2026-10-11, engine 0.742.0.7421053"
+   "checked": "2026-11-23"
   },
   {
    "id": "SKILL-016",
    "file": "SKILL.md",
-   "quote": "**`multi_edit` accepts `Edit` only**, so you cannot edit scripts mid-playtest — stop the",
+   "quote": "accepts **`Edit` only** (stop playtest first) and `script_read` first so `old_string` matches",
    "status": "studio",
    "kind": "negative",
    "source": "MCP tools of this session (Studio 0.742, place MieGede NewWorld)",
    "evidence": "multi_edit schema datamodel_type enum is [Edit] only.",
-   "checked": "2026-10-11, engine 0.742.0.7421053"
+   "checked": "2026-11-23"
   },
   {
    "id": "SKILL-020",
    "file": "SKILL.md",
-   "quote": "**There is no `run_as_job` tool.** Earlier versions of this file listed one; it does not exist",
+   "quote": "There is **no `run_as_job` tool** —",
    "status": "studio",
    "kind": "negative",
    "source": "MCP tools of this session (Studio 0.742, place MieGede NewWorld); docs page",
    "evidence": "Not among the 30 connected tools nor the 26 documented ones (2026-10-11).",
-   "checked": "2026-10-11, engine 0.742.0.7421053"
+   "checked": "2026-11-23"
   },
   {
    "id": "SKILL-021",
@@ -222,7 +221,7 @@
   {
    "id": "SKILL-022",
    "file": "SKILL.md",
-   "quote": "Migrating legacy code, deprecated APIs | `references/legacy-migration.md`",
+   "quote": "Migrating legacy code, deprecated APIs, 0.748 engine changes | `references/legacy-migration.md`",
    "status": "advice",
    "kind": "negative",
    "source": "",
@@ -232,7 +231,7 @@
   {
    "id": "SKILL-023",
    "file": "SKILL.md",
-   "quote": "If a reference file doesn't cover a topic sufficiently, use the Official",
+   "quote": "**Always check local files first** — they are pre-split and require no network.",
    "status": "advice",
    "kind": "negative",
    "source": "",
@@ -242,7 +241,7 @@
   {
    "id": "SKILL-026",
    "file": "SKILL.md",
-   "quote": "(skill 2.12.0+) always writes both, but the older zsh script wrote **only `updatedAt`** after a",
+   "quote": "Read `updatedAt` OR `checkedAt` (older installs may lack `checkedAt`) from",
    "status": "source",
    "kind": "negative",
    "source": "metadata.json 2.12.0 entry; tools/robloxdocs history",
@@ -252,7 +251,7 @@
   {
    "id": "SKILL-027",
    "file": "SKILL.md",
-   "quote": "If that timestamp is older than 7 days, or a class/member is not found locally, **proceed with the",
+   "quote": "If older than 7 days or missing, **fall back to Priority 2** and offer to refresh (never",
    "status": "advice",
    "kind": "negative",
    "source": "",
@@ -262,37 +261,7 @@
   {
    "id": "SKILL-028",
    "file": "SKILL.md",
-   "quote": "If `~/RobloxDocs` does not exist at all, the user never set it up. Say so and point them at the",
-   "status": "advice",
-   "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "SKILL-029",
-   "file": "SKILL.md",
-   "quote": "installer's `--docs-only` option (`-DocsOnly` in PowerShell) rather than creating it yourself.",
-   "status": "source",
-   "kind": "negative",
-   "source": "install.sh, install.ps1",
-   "evidence": "install.sh handles --docs-only; install.ps1 handles -DocsOnly (grep 2026-10-11).",
-   "checked": "2026-10-11, engine 0.742.0.7421053"
-  },
-  {
-   "id": "SKILL-030",
-   "file": "SKILL.md",
-   "quote": "Knowledge Freshness Check below (\"NEVER auto-update without user approval\") and the README.",
-   "status": "advice",
-   "kind": "negative",
-   "source": "",
-   "evidence": "",
-   "checked": ""
-  },
-  {
-   "id": "SKILL-031",
-   "file": "SKILL.md",
-   "quote": "Staleness never blocks the answer — fall through to the web sources and say so.",
+   "quote": "If `~/RobloxDocs` does not exist, point the user to the installer's `--docs-only` (`-DocsOnly`) flag.",
    "status": "advice",
    "kind": "negative",
    "source": "",
@@ -302,7 +271,7 @@
   {
    "id": "SKILL-032",
    "file": "SKILL.md",
-   "quote": "Use these when local data doesn't cover a topic, is obsolete, or you need prose docs:",
+   "quote": "### Priority 2: Live Web Sources (Fallback)",
    "status": "advice",
    "kind": "negative",
    "source": "",
@@ -312,7 +281,7 @@
   {
    "id": "SKILL-033",
    "file": "SKILL.md",
-   "quote": "**Deprecated API check** | `https://robloxapi.github.io/ref/class/<Name>.html` | Check individual class/member status (deprecated items marked visually)",
+   "quote": "**Deprecated API check** | `https://robloxapi.github.io/ref/class/<Name>.html` | Visual deprecated member check",
    "status": "studio",
    "kind": "negative",
    "source": "curl https://robloxapi.github.io/ref/class/Instance.html",
@@ -322,7 +291,7 @@
   {
    "id": "SKILL-034",
    "file": "SKILL.md",
-   "quote": "**If you are fetching these through Studio's `http_get` tool, note its allowlist:** only",
+   "quote": "**`http_get` allowlist**: only `create.roblox.com/docs` and `github.com/Roblox/libmp` ending in",
    "status": "studio",
    "kind": "negative",
    "source": "MCP tools of this session (Studio 0.742, place MieGede NewWorld)",
@@ -332,7 +301,7 @@
   {
    "id": "SKILL-035",
    "file": "SKILL.md",
-   "quote": "`llms-full.txt`, `openapi.json`, and `robloxapi.github.io` are **rejected** by `http_get` — use",
+   "quote": "`.md` or `llms.txt` (`llms-full.txt`, `openapi.json`, `robloxapi.github.io` are rejected — use",
    "status": "studio",
    "kind": "negative",
    "source": "MCP tools of this session (Studio 0.742, place MieGede NewWorld)",
@@ -342,7 +311,7 @@
   {
    "id": "SKILL-036",
    "file": "SKILL.md",
-   "quote": "the host's own fetch tool or `curl` for those. `http_get`'s `query` argument returns only",
+   "quote": "the host fetch tool or `curl`; read LibMP via `raw.githubusercontent.com`). Use `query` to save tokens.",
    "status": "studio",
    "kind": "negative",
    "source": "MCP tools of this session (Studio 0.742, place MieGede NewWorld)",
@@ -352,7 +321,7 @@
   {
    "id": "SKILL-038",
    "file": "SKILL.md",
-   "quote": "MCP server is not connected, the CLI does the same job:",
+   "quote": "**Fallback**: Context7 (`resolve-library-id` → `query-docs`, or `npx ctx7@latest library \"Roblox\"` → `docs <id> \"<question>\"`).",
    "status": "source",
    "kind": "negative",
    "source": "npx ctx7@latest (user rule file ~/.claude/rules/context7.md)",
@@ -362,7 +331,7 @@
   {
    "id": "SKILL-039",
    "file": "SKILL.md",
-   "quote": "**Checking deprecated APIs**: Use these approaches (in priority order):",
+   "quote": "For deprecations, check",
    "status": "advice",
    "kind": "negative",
    "source": "",
@@ -372,31 +341,11 @@
   {
    "id": "SKILL-040",
    "file": "SKILL.md",
-   "quote": "1. `cat ~/RobloxDocs/RobloxAPI/deprecated-index.json` — instant local lookup",
+   "quote": "`deprecated-index.json` → `deprecated/<ClassName>.json` → `robloxapi.github.io/ref` → Context7 (`resolve-library-id` → `query-docs`).",
    "status": "source",
    "kind": "negative",
    "source": "~/RobloxDocs/RobloxAPI/deprecated-index.json",
    "evidence": "File exists: classes (48) and members (477).",
-   "checked": "2026-10-11, engine 0.742.0.7421053"
-  },
-  {
-   "id": "SKILL-041",
-   "file": "SKILL.md",
-   "quote": "2. `cat ~/RobloxDocs/RobloxAPI/deprecated/<ClassName>.json` — full deprecated class detail",
-   "status": "source",
-   "kind": "negative",
-   "source": "~/RobloxDocs/RobloxAPI/deprecated/",
-   "evidence": "48 class files written by split-api-dump.py.",
-   "checked": "2026-10-11, engine 0.742.0.7421053"
-  },
-  {
-   "id": "SKILL-042",
-   "file": "SKILL.md",
-   "quote": "3. Check `robloxapi.github.io/ref/class/<Name>.html` — deprecated members marked visually",
-   "status": "studio",
-   "kind": "negative",
-   "source": "curl robloxapi.github.io",
-   "evidence": "2026-10-11: deprecated members carry the \"deprecated\" class.",
    "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
@@ -722,7 +671,7 @@
   {
    "id": "datastore-persistence-003",
    "file": "references/datastore-persistence.md",
-   "quote": "[Storage & Access Limits (2026)](#storage--access-limits-2026)",
+   "quote": "[Storage & Access Limits (Updated April 2026)](#storage--access-limits-updated-april-2026)",
    "status": "advice",
    "kind": "number",
    "source": "",
@@ -1922,32 +1871,22 @@
   {
    "id": "luau-fundamentals-031",
    "file": "references/luau-fundamentals.md",
-   "quote": "Studio's published flags (checked 2026-10-07) set `FFlagLuauIfLocalBetaFeature = True` with",
+   "quote": "Studio's published flags (re-checked 2026-11-23) still set `FFlagLuauIfLocalBetaFeature = True` with",
    "status": "source",
    "kind": "number",
    "source": "clientsettingscdn PCStudioApp (25,075 flags, 2026-10-11)",
-   "evidence": "FFlagLuauIfLocalBetaFeature=True, FIntLuauIfLocalBetaFeatureRolloutPercent=0 (re-read 2026-10-11).",
-   "checked": "2026-10-11, engine 0.742.0.7421053"
-  },
-  {
-   "id": "luau-fundamentals-032",
-   "file": "references/luau-fundamentals.md",
-   "quote": "gates in 0.743 are still `LuauExperimentalIfLocalSyntax` / `LuauExperimentalIfLocalAnalysis` (re-checked",
-   "status": "source",
-   "kind": "number",
-   "source": "luau-lang/luau 0.743 source tarball",
-   "evidence": "Both LUAU_FASTFLAGVARIABLE without a value (default off) in 0.743.",
-   "checked": "2026-10-17, engine 0.743.0.7431133"
+   "evidence": "clientsettingscdn 2026-11-23: FFlagLuauIfLocalBetaFeature=True, FIntLuauIfLocalBetaFeatureRolloutPercent=0, RoleSet=4.",
+   "checked": "2026-11-23"
   },
   {
    "id": "luau-fundamentals-033",
    "file": "references/luau-fundamentals.md",
-   "quote": "2026-10-17, with the Studio beta flags unchanged).",
+   "quote": "`FIntLuauIfLocalBetaFeatureRolloutPercent = 0` (`RoleSet = 4`) — opt-in Studio beta only, not on by default.",
    "status": "source",
    "kind": "number",
    "source": "clientsettingscdn PCStudioApp/MacStudioApp 2026-10-17",
    "evidence": "FFlagLuauIfLocalBetaFeature=True, FIntLuauIfLocalBetaFeatureRolloutPercent=0, RoleSet 4: unchanged.",
-   "checked": "2026-10-17, engine 0.743.0.7431133"
+   "checked": "2026-11-23"
   },
   {
    "id": "luau-fundamentals-034",
@@ -1962,12 +1901,12 @@
   {
    "id": "luau-fundamentals-035",
    "file": "references/luau-fundamentals.md",
-   "quote": "Checked 2026-10-17 against the 0.743 source and Studio's published client settings",
+   "quote": "Checked against the Luau **0.748** source and Studio/client published settings",
    "status": "source",
    "kind": "number",
    "source": "luau-lang/luau 0.743 source; clientsettingscdn PCStudioApp (25,342 flags), MacStudioApp (25,301)",
    "evidence": "Flag lists diffed 0.742 -> 0.743; none of the gates below is set in Studio's flags.",
-   "checked": "2026-10-17, engine 0.743.0.7431133"
+   "checked": "2026-11-23"
   },
   {
    "id": "luau-fundamentals-037",
@@ -1993,11 +1932,11 @@
    "id": "luau-fundamentals-041",
    "file": "references/luau-fundamentals.md",
    "quote": "An **`integer`** library (`integer.idiv` was fixed in 0.740) | `LuauIntegerLibrary` | Present in the open-source VM since at least 0.737, not enabled in Studio. Not a Roblox API",
-   "status": "studio",
+   "status": "false",
    "kind": "negative",
    "source": "luau-lang/luau source tarballs 0.737-0.742; release 0.740; execute_luau",
-   "evidence": "LuauIntegerLibrary in the 0.737 and 0.742 sources; integer.idiv fix in 0.740; integer global nil in Studio 0.742.",
-   "checked": "2026-10-11, engine 0.742.0.7421053"
+   "evidence": "Superseded in Luau 0.747 (RFC #269): all in-progress integer library/type code and LuauIntegerLibrary flags were clipped/removed from open-source Luau; integer remains nil in Studio 0.748.0.7481526.",
+   "checked": "2026-11-23"
   },
   {
    "id": "luau-fundamentals-042",
@@ -2232,7 +2171,7 @@
   {
    "id": "mcp-integration-017",
    "file": "references/mcp-integration.md",
-   "quote": "error, list what your host actually exposes instead of trusting this table.",
+   "quote": "check the host's live tool list before calling.",
    "status": "advice",
    "kind": "negative",
    "source": "",
@@ -2382,12 +2321,12 @@
   {
    "id": "mcp-integration-032",
    "file": "references/mcp-integration.md",
-   "quote": "its own `async: true` argument. Its `timeout` defaults to 600 s. Async is a per-tool argument,",
+   "quote": "its own `async: true` argument. Its `timeout` defaults to 600 s in the schema, **but is capped",
    "status": "docs",
    "kind": "number",
    "source": "MCP tool schemas of this session (Studio 0.742)",
    "evidence": "wait_job_finished timeout default 600 s; jobId from a tool async argument.",
-   "checked": "2026-10-11, engine 0.742.0.7421053"
+   "checked": "2026-11-23"
   },
   {
    "id": "mcp-integration-033",
@@ -3742,7 +3681,7 @@
   {
    "id": "security-hardening-045",
    "file": "references/security-hardening.md",
-   "quote": "June 2026 | `BanAsync` gains `ApplyDeviceBlock` param (24hr, desktop only) | [§10](#10-banasync-api--device-blocking-june-2026)",
+   "quote": "June 2026 | `BanAsync` gains `ApplyDeviceBlock` param (24hr, desktop only) | [§10](#10-banasync-api--device-blocking)",
    "status": "docs",
    "kind": "negative",
    "source": "Roblox/creator-docs Players.yaml BanAsync; DevForum topic 4668265 (Roblox Staff, 2026-06-04)",
@@ -4572,41 +4511,11 @@
   {
    "id": "SKILL-055",
    "file": "SKILL.md",
-   "quote": "atomic within the call: one `old_string` that does not match fails the call and leaves the",
+   "quote": "Confirm `script_grep` lines with `script_read`.",
    "status": "studio",
    "kind": "negative",
    "source": "MCP tools of this session (Studio 0.742, place MieGede NewWorld)",
    "evidence": "2026-10-11: multi_edit with edit 1 valid and edit 2 non-matching errored (\"Edit 2 - old_string ... not found\"); the script still had edit 1 unapplied.",
-   "checked": "2026-10-11, engine 0.742.0.7421053"
-  },
-  {
-   "id": "SKILL-056",
-   "file": "SKILL.md",
-   "quote": "script unchanged (tested 2026-10-11). It does not require a prior `script_read`, but read",
-   "status": "studio",
-   "kind": "negative",
-   "source": "MCP tools of this session (Studio 0.742, place MieGede NewWorld)",
-   "evidence": "2026-10-11: multi_edit on a script created by execute_luau and never script_read succeeded (\"Modified ... with 1 edits applied\"). The old text claimed it fails.",
-   "checked": "2026-10-11, engine 0.742.0.7421053"
-  },
-  {
-   "id": "SKILL-057",
-   "file": "SKILL.md",
-   "quote": "**Confirm `script_grep`'s line numbers with `script_read`.** On 2026-09-06 it reported a match",
-   "status": "studio",
-   "kind": "number",
-   "source": "MCP tools of this session (Studio 0.742, place MieGede NewWorld)",
-   "evidence": "2026-10-11: marker at line 171 of a generated script and line 79 of a Rojo-synced case; script_grep returned 171 and 79. The 2026-09-06 15-line offset was not reproduced.",
-   "checked": "2026-10-11, engine 0.742.0.7421053"
-  },
-  {
-   "id": "SKILL-058",
-   "file": "SKILL.md",
-   "quote": "at line 171 that `script_read` showed was 15 lines further down; on 2026-10-11 (Studio 0.742)",
-   "status": "studio",
-   "kind": "number",
-   "source": "MCP tools of this session (Studio 0.742, place MieGede NewWorld)",
-   "evidence": "Historical observation (2026-09-06); not reproduced 2026-10-11, as the text says.",
    "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
@@ -4637,16 +4546,6 @@
    "kind": "number",
    "source": "execute_luau / multi_edit runs, 2026-10-11",
    "evidence": "Historical observation as stated.",
-   "checked": "2026-10-11, engine 0.742.0.7421053"
-  },
-  {
-   "id": "SKILL-061",
-   "file": "SKILL.md",
-   "quote": "upstash/context7 README, checked 2026-10-11; an earlier version of this file called the second",
-   "status": "docs",
-   "kind": "number",
-   "source": "https://github.com/upstash/context7 README",
-   "evidence": "README (2026-10-11) lists resolve-library-id and query-docs; get-library-docs no longer appears.",
    "checked": "2026-10-11, engine 0.742.0.7421053"
   },
   {
@@ -5382,12 +5281,12 @@
   {
    "id": "luau-fundamentals-063",
    "file": "references/luau-fundamentals.md",
-   "quote": "**Classes** RFC prototype | `DebugLuauUserDefinedClasses`, `DebugLuauUserDefinedClassesRuntime` (both in the source since at least 0.737)",
+   "quote": "**Classes** RFC prototype | `DebugLuauUserDefinedClasses`, `DebugLuauUserDefinedClassesRuntime` (in source since at least 0.737)",
    "status": "source",
    "kind": "number",
    "source": "luau-lang/luau source tarballs 0.737-0.742; release 0.737",
    "evidence": "Both class flags defined in the 0.737 source and listed as required flags in the 0.737 release notes.",
-   "checked": "2026-10-11, engine 0.742.0.7421053"
+   "checked": "2026-11-23"
   },
   {
    "id": "luau-fundamentals-064",
@@ -5832,12 +5731,12 @@
   {
    "id": "agent-safety-027",
    "file": "references/agent-safety.md",
-   "quote": "**Primary source (re-verified 2026-10-11):** https://create.roblox.com/docs/studio/mcp",
+   "quote": "**Primary source (re-verified 2026-11-23, Studio 0.748.0.7481526):** https://create.roblox.com/docs/studio/mcp",
    "status": "docs",
    "kind": "number",
    "source": "create.roblox.com/docs/studio/mcp (creator-docs studio/mcp.md)",
    "evidence": "Re-read 2026-10-11.",
-   "checked": "2026-10-11, engine 0.742.0.7421053"
+   "checked": "2026-11-23"
   },
   {
    "id": "agent-safety-028",
@@ -6822,17 +6721,17 @@
   {
    "id": "ui-systems-027",
    "file": "references/ui-systems.md",
-   "quote": "`Scale` and `TileMode = Mirror` without error, so a successful write does **not** mean the beta is",
+   "quote": "published flags (`clientsettingscdn`, 2026-11-23), `FFlagUpgradedUIGradientsBetaFeature` is now `False` in Studio while `FFlagUIGradientExtendedModes4` is `True` across Studio and all player",
    "status": "studio",
    "kind": "negative",
    "source": "playtest Script/LocalScript + execute_luau, Studio 0.743.0.7431133 (place 118652544255235), 2026-10-17",
-   "evidence": "Same LocalScript: all three writes succeeded; whether the beta was enabled in this Studio was not checked, and rendering was not inspected, so a successful write is not evidence the beta is on.",
-   "checked": "2026-10-17, engine 0.743.0.7431133"
+   "evidence": "clientsettingscdn 2026-11-23: FFlagUpgradedUIGradientsBetaFeature=False in Studio, FFlagUIGradientExtendedModes4=True across all 6 apps.",
+   "checked": "2026-11-23"
   },
   {
    "id": "ui-systems-028",
    "file": "references/ui-systems.md",
-   "quote": "for a published game, and use these only while experimenting in Studio until the beta is released.",
+   "quote": "not visually verified here, so check visually in a playtest before relying on non-`Linear` gradients",
    "status": "advice",
    "kind": "negative",
    "source": "",
@@ -6842,27 +6741,27 @@
   {
    "id": "mcp-integration-062",
    "file": "references/mcp-integration.md",
-   "quote": "**Counts, stated precisely.** The official docs page lists **26 tools** (recounted 2026-10-17;",
+   "quote": "**Counts, stated precisely.** The official docs page (`studio/mcp.md`) lists **30 tools**",
    "status": "docs",
    "kind": "number",
    "source": "Roblox/creator-docs content/en-us/studio/mcp.md (read 2026-10-17; last commit 2026-08-21)",
-   "evidence": "26 tool names on the page, recounted 2026-10-17.",
-   "checked": "2026-10-17, engine 0.743.0.7431133"
+   "evidence": "studio/mcp.md updated through commit 5a56d0d3 lists 30 tool headings.",
+   "checked": "2026-11-23"
   },
   {
    "id": "mcp-integration-069",
    "file": "references/mcp-integration.md",
-   "quote": "2026-10-17 and again on 2026-10-21 (Studio 0.743.0.7431133) and 2026-10-22 (Studio 0.744.0.7441077,",
+   "quote": "28 in Studio 0.743–0.744",
    "status": "studio",
    "kind": "number",
    "source": "MCP tool list 2026-10-22",
    "evidence": "Same 28 tools",
-   "checked": "2026-10-22, engine 0.744.0.7441077"
+   "checked": "2026-11-23"
   },
   {
    "id": "mcp-integration-070",
    "file": "references/mcp-integration.md",
-   "quote": "2026-10-11 (Studio 0.742) it also exposed `list_plugin_guis` and `capture_plugin_gui`; on",
+   "quote": "and `capture_plugin_gui` appeared in 0.742 and were removed in 0.743.)",
    "status": "studio",
    "kind": "number",
    "source": "MCP tool list of this session (Studio 0.743.0.7431133, Studio MCP Proxy), 2026-10-17; 2026-10-11 session (Studio 0.742)",
@@ -6872,7 +6771,7 @@
   {
    "id": "mcp-integration-071",
    "file": "references/mcp-integration.md",
-   "quote": "2026-10-17 both were gone. Tool sets move; when a call fails with an unknown-tool error, list what",
+   "quote": "Tool sets move, and older",
    "status": "studio",
    "kind": "negative",
    "source": "MCP tool list of this session (Studio 0.743.0.7431133, Studio MCP Proxy), 2026-10-17",
@@ -6882,7 +6781,7 @@
   {
    "id": "mcp-integration-072",
    "file": "references/mcp-integration.md",
-   "quote": "`list_plugin_guis` / `capture_plugin_gui` | **Not in the 2026-10-17 build (Studio 0.743).** On 2026-10-11 they listed plugin widgets with a `pluginGuiId` (hidden ones too) and screenshotted a **visible** one by that id. Undocumented; do not plan on them",
+   "quote": "`list_plugin_guis` / `capture_plugin_gui` | **Not in Studio 0.743+.** On 2026-10-11 they listed plugin widgets with a `pluginGuiId` (hidden ones too) and screenshotted a **visible** one by that id. Undocumented; do not plan on them.",
    "status": "studio",
    "kind": "number",
    "source": "MCP tool list of this session (Studio 0.743.0.7431133, Studio MCP Proxy), 2026-10-17",
@@ -6912,22 +6811,12 @@
   {
    "id": "mcp-integration-076",
    "file": "references/mcp-integration.md",
-   "quote": "2026-10-17). Descriptions are from the live schemas of 2026-10-17 (unchanged 2026-10-21 and 2026-10-22);",
+   "quote": "Both were run in Studio 0.748.0.7481526 (`generate_texture` `Fast` on a duplicated",
    "status": "studio",
    "kind": "number",
    "source": "generate_texture / segment_mesh schemas 2026-10-22",
-   "evidence": "Unchanged",
-   "checked": "2026-10-22, engine 0.744.0.7441077"
-  },
-  {
-   "id": "SKILL-064",
-   "file": "SKILL.md",
-   "quote": "(measured 2026-10-21); read LibMP files from `raw.githubusercontent.com` with curl instead.",
-   "status": "studio",
-   "kind": "number",
-   "source": "MCP http_get, Studio 0.743.0.7431133, test place 118652544255235, 2026-10-21",
-   "evidence": "http_get(github.com/Roblox/libmp/blob/main/docs/ALL-SCOPES.md, query) returned 1,072,839 chars of GitHub HTML/react JSON in 7 lines; raw.githubusercontent.com URL returns the markdown (curl 200)",
-   "checked": "2026-10-21, engine 0.743.0.7431133"
+   "evidence": "Studio 0.748.0.7481526: generate_texture Fast ~62s on duplicated mesh; segment_mesh ~41s on single child MeshPart.",
+   "checked": "2026-11-23"
   },
   {
    "id": "file-formats-and-assets-023",
@@ -7050,16 +6939,6 @@
    "checked": "2026-10-21, engine 0.743.0.7431133"
   },
   {
-   "id": "mcp-integration-078",
-   "file": "references/mcp-integration.md",
-   "quote": "dates. On 2026-10-11 (Studio 0.742) it also exposed",
-   "status": "studio",
-   "kind": "number",
-   "source": "MCP tool schemas 2026-10-17/21/22",
-   "evidence": "No difference across the three dates",
-   "checked": "2026-10-22, engine 0.744.0.7441077"
-  },
-  {
    "id": "mcp-integration-079",
    "file": "references/mcp-integration.md",
    "quote": "2026-10-21, `http_get` on `https://github.com/Roblox/libmp/blob/main/docs/ALL-SCOPES.md` with a",
@@ -7083,31 +6962,31 @@
    "id": "mcp-integration-081",
    "file": "references/mcp-integration.md",
    "quote": "(that host is not on the allowlist), or use `skill(\"rbx-perf-profiling\")`.",
-   "status": "docs",
+   "status": "false",
    "kind": "negative",
    "source": "http_get live schema allowlist (2026-10-21)",
-   "evidence": "raw.githubusercontent.com is not among the allowed URL patterns; skill tool lists rbx-perf-profiling",
-   "checked": "2026-10-21, engine 0.743.0.7431133"
+   "evidence": "Superseded in Studio 0.748.0.7481526: skill(...) renamed to get_roblox_skill(...).",
+   "checked": "2026-11-23"
   },
   {
    "id": "mcp-integration-082",
    "file": "references/mcp-integration.md",
-   "quote": "neither was run. The Studio **Texture Generator** page (rewritten 2026-10-16, extended",
+   "quote": "The Studio **Texture Generator** page describes `Fast`",
    "status": "docs",
    "kind": "number",
    "source": "Roblox/creator-docs 58f787e9 (2026-10-16) and 74006430 (2026-10-20) studio/texture-generator.md",
    "evidence": "Page rewritten, then \"Compare generation modes\" added",
-   "checked": "2026-10-21, engine 0.743.0.7431133"
+   "checked": "2026-11-23"
   },
   {
    "id": "mcp-integration-083",
    "file": "references/mcp-integration.md",
-   "quote": "2026-10-20) describes the same two modes for the Studio tool: `Fast` gives 1K diffuse",
+   "quote": "(1K diffuse textures) and `Quality` (4K PBR textures); duplicate the source first before running",
    "status": "docs",
    "kind": "number",
    "source": "Roblox/creator-docs 74006430 texture-generator.md",
    "evidence": "\"Quality mode's 4K PBR textures ... Fast mode's 1K diffuse textures\"; \"press Ctrl/Cmd + Z to undo\"",
-   "checked": "2026-10-21, engine 0.743.0.7431133"
+   "checked": "2026-11-23"
   },
   {
    "id": "monetization-032",
@@ -7680,16 +7559,6 @@
    "checked": "2026-10-22, engine 0.744.0.7441077"
   },
   {
-   "id": "mcp-integration-084",
-   "file": "references/mcp-integration.md",
-   "quote": "`StudioMCP` binary of 2026-10-20) exposes **28**: those 26 plus `generate_texture` and",
-   "status": "studio",
-   "kind": "number",
-   "source": "MCP tool list 2026-10-22; ls -la StudioMCP",
-   "evidence": "StudioMCP 5,959,632 B dated 2026-10-20; 28 tools",
-   "checked": "2026-10-22, engine 0.744.0.7441077"
-  },
-  {
    "id": "networking-034",
    "file": "references/networking.md",
    "quote": "0.744.0.7441077. Ask the user to flip it.",
@@ -7821,13 +7690,13 @@
   },
   {
    "id": "SKILL-067",
-   "file": "SKILL.md",
-   "quote": "0.743–0.744; `list_plugin_guis` and `capture_plugin_gui`, seen on 2026-10-11 in Studio 0.742,",
+   "file": "references/mcp-integration.md",
+   "quote": "`list_plugin_guis` and `capture_plugin_gui` appeared in 0.742 and were removed in 0.743.)",
    "status": "studio",
    "kind": "number",
    "source": "Live Roblox_Studio MCP tool list and schemas in this session (Studio 0.745.0.7451137), 2026-10-29; Roblox/creator-docs studio/mcp.md unchanged since 2026-08-21",
    "evidence": "31 tools: the 28 of 2026-10-22 plus list_skills, create_skill, edit_skill (schemas read; list_skills run; create/edit not run). Other schemas unchanged",
-   "checked": "2026-10-29, engine 0.745.0.7451137"
+   "checked": "2026-11-23"
   },
   {
    "id": "SKILL-068",
@@ -8282,12 +8151,12 @@
   {
    "id": "luau-fundamentals-072",
    "file": "references/luau-fundamentals.md",
-   "quote": "Reference for AI coding skill — verified against official Roblox documentation and Luau language release specs (**v0.744**, released 2026-10-23; engine 0.745.0.7451137, re-tested 2026-10-29).",
+   "quote": "Reference for AI coding skill — verified against official Roblox documentation and Luau language release specs (**v0.748**, released 2026-11-20; engine `0.748.0.7481526`, re-tested 2026-11-23).",
    "status": "source",
    "kind": "number",
    "source": "luau-lang/luau 0.744 release notes and source tarball (0.743 for comparison); clientsettingscdn PCStudioApp/MacStudioApp and PCDesktopClient/MacDesktopClient/AndroidApp/iOSApp, 2026-10-29; Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards)",
    "evidence": "0.744 notes: DSE fix, Arm64 >256 constants, bit32/integer lrotate/extract/replace fixes, FORGLOOP, private class fields prototype. Gates in 0.744: DebugLuauParseExactTables, DebugLuauUserDefinedClasses*, LuauIntegerLibrary; DebugLuauWarnOnUnannotatedTopLevelFunctions in 0.743, absent in 0.744. Studio flags ~26,100; only FFlagLuauCoroutineFinally(+Analysis) True. lrotate values and integer == nil in Studio",
-   "checked": "2026-10-29, engine 0.745.0.7451137"
+   "checked": "2026-11-23"
   },
   {
    "id": "luau-fundamentals-073",
@@ -8332,22 +8201,22 @@
   {
    "id": "luau-fundamentals-077",
    "file": "references/luau-fundamentals.md",
-   "quote": "re-checked 2026-10-21, 2026-10-22 (Studio 0.744; ~25,600 flags each) and 2026-10-29 against the 0.744 source and",
+   "quote": "(`clientsettingscdn.roblox.com/v2/settings/application/*` for `PCStudioApp`, `MacStudioApp`, `PCDesktopClient`, `MacDesktopClient`, `AndroidApp`, `iOSApp`; re-checked **2026-11-23** on Studio `0.748.0.7481526`, ~27,800 Studio flags each).",
    "status": "source",
    "kind": "number",
    "source": "luau-lang/luau 0.744 release notes and source tarball (0.743 for comparison); clientsettingscdn PCStudioApp/MacStudioApp and PCDesktopClient/MacDesktopClient/AndroidApp/iOSApp, 2026-10-29; Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards)",
    "evidence": "0.744 notes: DSE fix, Arm64 >256 constants, bit32/integer lrotate/extract/replace fixes, FORGLOOP, private class fields prototype. Gates in 0.744: DebugLuauParseExactTables, DebugLuauUserDefinedClasses*, LuauIntegerLibrary; DebugLuauWarnOnUnannotatedTopLevelFunctions in 0.743, absent in 0.744. Studio flags ~26,100; only FFlagLuauCoroutineFinally(+Analysis) True. lrotate values and integer == nil in Studio",
-   "checked": "2026-10-29, engine 0.745.0.7451137"
+   "checked": "2026-11-23"
   },
   {
    "id": "luau-fundamentals-078",
    "file": "references/luau-fundamentals.md",
-   "quote": "Studio 0.745 (~26,100 flags each). None of the flags below is set there, and a Luau `FASTFLAGVARIABLE` defaults to **off**.",
+   "quote": "None of the flags below is set there, and a Luau `FASTFLAGVARIABLE` defaults to **off**.",
    "status": "source",
    "kind": "number",
    "source": "luau-lang/luau 0.744 release notes and source tarball (0.743 for comparison); clientsettingscdn PCStudioApp/MacStudioApp and PCDesktopClient/MacDesktopClient/AndroidApp/iOSApp, 2026-10-29; Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards)",
    "evidence": "0.744 notes: DSE fix, Arm64 >256 constants, bit32/integer lrotate/extract/replace fixes, FORGLOOP, private class fields prototype. Gates in 0.744: DebugLuauParseExactTables, DebugLuauUserDefinedClasses*, LuauIntegerLibrary; DebugLuauWarnOnUnannotatedTopLevelFunctions in 0.743, absent in 0.744. Studio flags ~26,100; only FFlagLuauCoroutineFinally(+Analysis) True. lrotate values and integer == nil in Studio",
-   "checked": "2026-10-29, engine 0.745.0.7451137"
+   "checked": "2026-11-23"
   },
   {
    "id": "luau-fundamentals-079",
@@ -8362,22 +8231,12 @@
   {
    "id": "luau-fundamentals-080",
    "file": "references/luau-fundamentals.md",
-   "quote": "Prototype | Gate in 0.744 | Notes",
+   "quote": "Prototype | Gate in 0.748 | Notes",
    "status": "source",
    "kind": "number",
    "source": "luau-lang/luau 0.744 release notes and source tarball (0.743 for comparison); clientsettingscdn PCStudioApp/MacStudioApp and PCDesktopClient/MacDesktopClient/AndroidApp/iOSApp, 2026-10-29; Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards)",
    "evidence": "0.744 notes: DSE fix, Arm64 >256 constants, bit32/integer lrotate/extract/replace fixes, FORGLOOP, private class fields prototype. Gates in 0.744: DebugLuauParseExactTables, DebugLuauUserDefinedClasses*, LuauIntegerLibrary; DebugLuauWarnOnUnannotatedTopLevelFunctions in 0.743, absent in 0.744. Studio flags ~26,100; only FFlagLuauCoroutineFinally(+Analysis) True. lrotate values and integer == nil in Studio",
-   "checked": "2026-10-29, engine 0.745.0.7451137"
-  },
-  {
-   "id": "luau-fundamentals-081",
-   "file": "references/luau-fundamentals.md",
-   "quote": "Require top-level functions to be annotated, 0.738 | none in 0.744 (`DebugLuauWarnOnUnannotatedTopLevelFunctions` until 0.743) | A lint experiment; its flag and check are gone from the 0.744 source",
-   "status": "source",
-   "kind": "number",
-   "source": "luau-lang/luau 0.744 release notes and source tarball (0.743 for comparison); clientsettingscdn PCStudioApp/MacStudioApp and PCDesktopClient/MacDesktopClient/AndroidApp/iOSApp, 2026-10-29; Studio 0.745.0.7451137, test place 118652544255235, 2026-10-29: probe server Script, LocalScript, Actor Script and execute_luau (removed afterwards)",
-   "evidence": "0.744 notes: DSE fix, Arm64 >256 constants, bit32/integer lrotate/extract/replace fixes, FORGLOOP, private class fields prototype. Gates in 0.744: DebugLuauParseExactTables, DebugLuauUserDefinedClasses*, LuauIntegerLibrary; DebugLuauWarnOnUnannotatedTopLevelFunctions in 0.743, absent in 0.744. Studio flags ~26,100; only FFlagLuauCoroutineFinally(+Analysis) True. lrotate values and integer == nil in Studio",
-   "checked": "2026-10-29, engine 0.745.0.7451137"
+   "checked": "2026-11-23"
   },
   {
    "id": "luau-fundamentals-082",
@@ -8553,11 +8412,11 @@
    "id": "mcp-integration-086",
    "file": "references/mcp-integration.md",
    "quote": "`list_skills` | Lists every available skill with its source (`Roblox` for the first-party ones) and description. Read-only. *New 2026-10-29, undocumented*",
-   "status": "studio",
+   "status": "false",
    "kind": "negative",
    "source": "Live Roblox_Studio MCP tool list and schemas in this session (Studio 0.745.0.7451137), 2026-10-29; Roblox/creator-docs studio/mcp.md unchanged since 2026-08-21",
-   "evidence": "31 tools: the 28 of 2026-10-22 plus list_skills, create_skill, edit_skill (schemas read; list_skills run; create/edit not run). Other schemas unchanged",
-   "checked": "2026-10-29, engine 0.745.0.7451137"
+   "evidence": "Superseded in Studio 0.748.0.7481526: list_skills renamed to list_roblox_skills.",
+   "checked": "2026-11-23"
   },
   {
    "id": "mcp-integration-089",
@@ -8652,7 +8511,7 @@
   {
    "id": "networking-038",
    "file": "references/networking.md",
-   "quote": "Only **one** routing field (`ReservedServerId`, `VipServerId`, `ReservedServerAccessCode`,",
+   "quote": "Only **one** routing field (`ReservedServerId`, `VipServerId`, `ForcePublicServer`, `ReservedServerAccessCode`,",
    "status": "docs",
    "kind": "negative",
    "source": "Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) projects/teleport-private-servers.md, TeleportOptions.yaml, TeleportAsyncResult.yaml",
@@ -8662,7 +8521,7 @@
   {
    "id": "networking-039",
    "file": "references/networking.md",
-   "quote": "`ShouldReserveServer`, `ServerInstanceId`) may be set per teleport. `ReserveServerAsync` \"does not",
+   "quote": "`ShouldReserveServer`, `ServerInstanceId`) may be set per teleport (`ForcePublicServer` is mutually exclusive with all of them). `ReserveServerAsync` \"does not",
    "status": "docs",
    "kind": "negative",
    "source": "Roblox/creator-docs 65621e8..c8f5276 (2026-10-22..29) projects/teleport-private-servers.md, TeleportOptions.yaml, TeleportAsyncResult.yaml",
@@ -9022,142 +8881,112 @@
   {
    "id": "SKILL-070",
    "file": "SKILL.md",
-   "quote": "published, engine changes up to 0.746 and Luau up to 0.745) and worked examples tested in Studio, so consult",
+   "quote": "**Engine**: Roblox Studio **0.748.0.7481526** with **Luau 0.748** (released 2026-11-20) — dump",
    "status": "dump",
    "kind": "number",
    "source": "dump 0.745 -> 0.746.0.7461264 (diff-api-dumps)",
-   "evidence": "950 classes, 656 enums, 267 *Service files, 347 tagged Service, 48 deprecated classes, 577 deprecated members in the 0.746 dump; Luau 0.745 released 2026-10-30.",
-   "checked": "2026-11-05, engine 0.746.0.7461264"
+   "evidence": "Live clientsettings 2026-11-23: all 4 binary endpoints at 0.748.0.7481526; luau-lang/luau 0.748 released 2026-11-20.",
+   "checked": "2026-11-23"
   },
   {
    "id": "SKILL-072",
    "file": "SKILL.md",
-   "quote": "downloaded, re-split, and diffed against 0.745 on **2026-11-05**, with every developer-visible",
+   "quote": "downloaded, re-split, and diffed against 0.746 on **2026-11-23**, with every developer-visible",
    "status": "dump",
    "kind": "number",
    "source": "dump 0.745 -> 0.746.0.7461264 (diff-api-dumps)",
-   "evidence": "Monitor run 2026-11-05: 0.746.0.7461264 dump split; 950/656/267/347/48/577 measured from the dump. Margin, Color3 methods and EnableGamepadCursor() run in Studio 0.746.",
-   "checked": "2026-11-05, engine 0.746.0.7461264"
+   "evidence": "0.748.0.7481526 dump diffed against 0.746.0.7461269 on 2026-11-23 (186 diff events, 136 dev-visible).",
+   "checked": "2026-11-23"
   },
   {
    "id": "SKILL-073",
    "file": "SKILL.md",
-   "quote": "change run in Studio 0.746. 950 classes / 656 enums; locally, 267 class files named `*Service`",
+   "quote": "change run in Studio 0.748. 960 classes / 664 enums; locally, 270 class files named `*Service`",
    "status": "dump",
    "kind": "number",
    "source": "dump 0.745 -> 0.746.0.7461264 (diff-api-dumps)",
-   "evidence": "Monitor run 2026-11-05: 0.746.0.7461264 dump split; 950/656/267/347/48/577 measured from the dump. Margin, Color3 methods and EnableGamepadCursor() run in Studio 0.746.",
-   "checked": "2026-11-05, engine 0.746.0.7461264"
+   "evidence": "0.748.0.7481526 split dump: 960 classes, 664 enums, 270 *Service class files.",
+   "checked": "2026-11-23"
   },
   {
    "id": "SKILL-074",
    "file": "SKILL.md",
-   "quote": "(347 classes carry the `Service` tag) and 48 deprecated classes (577 members). The official docs",
+   "quote": "(351 classes carry the `Service` tag) and 48 deprecated classes (579 members). The official docs",
    "status": "dump",
    "kind": "number",
    "source": "dump 0.745 -> 0.746.0.7461264 (diff-api-dumps)",
-   "evidence": "Monitor run 2026-11-05: 0.746.0.7461264 dump split; 950/656/267/347/48/577 measured from the dump. Margin, Color3 methods and EnableGamepadCursor() run in Studio 0.746.",
-   "checked": "2026-11-05, engine 0.746.0.7461264"
+   "evidence": "0.748.0.7481526 dump counts: 351 Service-tagged classes, 48 deprecated classes, 579 deprecated members.",
+   "checked": "2026-11-23"
   },
   {
    "id": "SKILL-075",
    "file": "SKILL.md",
-   "quote": "were checked through 2026-11-04. New and usable: `RaycastParams.Margin` / `SizeGradient`, the",
+   "quote": "were checked through 2026-11-23. Newly usable in 0.748: `EditableMesh:AddFace`,",
    "status": "dump",
    "kind": "number",
    "source": "dump 0.745 -> 0.746.0.7461264 (diff-api-dumps)",
-   "evidence": "Monitor run 2026-11-05: 0.746.0.7461264 dump split; 950/656/267/347/48/577 measured from the dump. Margin, Color3 methods and EnableGamepadCursor() run in Studio 0.746.",
-   "checked": "2026-11-05, engine 0.746.0.7461264"
+   "evidence": "creator-docs commits checked through 2026-11-23; EditableMesh:AddFace OK in Studio 0.748.0.7481526.",
+   "checked": "2026-11-23"
   },
   {
    "id": "SKILL-076",
    "file": "SKILL.md",
-   "quote": "`Color3` contrast methods, `GamepadService:EnableGamepadCursor()` with no argument.",
+   "quote": "direction. Also usable: `RaycastParams.Margin` / `SizeGradient`, `Color3` contrast methods,",
    "status": "dump",
    "kind": "number",
    "source": "dump 0.745 -> 0.746.0.7461264 (diff-api-dumps)",
-   "evidence": "Monitor run 2026-11-05: 0.746.0.7461264 dump split; 950/656/267/347/48/577 measured from the dump. Margin, Color3 methods and EnableGamepadCursor() run in Studio 0.746.",
-   "checked": "2026-11-05, engine 0.746.0.7461264"
+   "evidence": "Re-verified in Studio 0.748.0.7481526.",
+   "checked": "2026-11-23"
   },
   {
    "id": "SKILL-079",
    "file": "SKILL.md",
    "quote": "`auto_setup_avatar` and three skill-authoring tools, `list_skills`, `create_skill` and `edit_skill`",
-   "status": "studio",
+   "status": "false",
    "kind": "number",
    "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
-   "evidence": "34 tools in the live list 2026-11-05: the 31 of 2026-10-29 plus generate_scene, generate_avatar, auto_setup_avatar (schemas read, none run). Docs page studio/mcp.md last changed aa6c8e1, 2026-08-21.",
-   "checked": "2026-11-05, engine 0.746.0.7461264"
-  },
-  {
-   "id": "SKILL-081",
-   "file": "SKILL.md",
-   "quote": "`list_plugin_guis` and `capture_plugin_gui`, seen on 2026-10-11 in Studio 0.742, were gone by then).",
-   "status": "studio",
-   "kind": "number",
-   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
-   "evidence": "34 tools in the live list 2026-11-05: the 31 of 2026-10-29 plus generate_scene, generate_avatar, auto_setup_avatar (schemas read, none run). Docs page studio/mcp.md last changed aa6c8e1, 2026-08-21.",
-   "checked": "2026-11-05, engine 0.746.0.7461264"
+   "evidence": "Superseded in Studio 0.748.0.7481526: list_skills renamed to list_roblox_skills and skill renamed to get_roblox_skill; total tools 39.",
+   "checked": "2026-11-23"
   },
   {
    "id": "SKILL-082",
    "file": "SKILL.md",
-   "quote": "| `generate_scene` | Generate models and parts from a prompt or images, in an optional bounding box; **runs the generated script in the DataModel** |",
+   "quote": "| `generate_scene` | Generate models/parts in an optional bounding box; **runs the generated script in the DataModel** |",
    "status": "studio",
    "kind": "number",
    "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
-   "evidence": "Live schemas read 2026-11-05; the tools were not run (they spend quota and create assets).",
-   "checked": "2026-11-05, engine 0.746.0.7461264"
+   "evidence": "Live schema + Studio 0.748 run (~80s, inserted GeneratedLayout Script + Model).",
+   "checked": "2026-11-23"
   },
   {
    "id": "SKILL-083",
    "file": "SKILL.md",
-   "quote": "| `generate_avatar` | Generate a rigged R15 avatar from a prompt, **upload it as a persistent asset** and insert it into Workspace; usually several minutes |",
+   "quote": "| `generate_avatar` / `auto_setup_avatar` | Generate & upload persistent rigged R15 avatar, or rig static Model (3–5 min) |",
    "status": "studio",
    "kind": "number",
    "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
    "evidence": "Live schemas read 2026-11-05; the tools were not run (they spend quota and create assets).",
-   "checked": "2026-11-05, engine 0.746.0.7461264"
-  },
-  {
-   "id": "SKILL-084",
-   "file": "SKILL.md",
-   "quote": "| `auto_setup_avatar` | Rig an existing static Workspace Model as an R15 avatar and place the result beside it; usually 3-5 minutes |",
-   "status": "studio",
-   "kind": "number",
-   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
-   "evidence": "Live schemas read 2026-11-05; the tools were not run (they spend quota and create assets).",
-   "checked": "2026-11-05, engine 0.746.0.7461264"
+   "checked": "2026-11-23"
   },
   {
    "id": "SKILL-085",
    "file": "SKILL.md",
-   "quote": "**How much cheaper, re-measured 2026-11-05 on 0.746.0.7461264** (an earlier \"845× smaller\" figure",
+   "quote": "Measured on **0.748.0.7481526**: the full dump is **8,798,639 bytes**; the **960** split class files run",
    "status": "studio",
    "kind": "number",
    "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
-   "evidence": "Measured 2026-11-05: dump 8721015 B; 950 class files min 101, median 2073.5, mean 4897, max 105756.",
-   "checked": "2026-11-05, engine 0.746.0.7461264"
+   "evidence": "Measured 2026-11-23 on 0.748.0.7481526 dump: 8,798,639 B; 960 split class files.",
+   "checked": "2026-11-23"
   },
   {
    "id": "SKILL-086",
    "file": "SKILL.md",
-   "quote": "produced them): the full dump is **8,721,015 bytes**; the 950 split class files run **101 B min,",
+   "quote": "**101 B min, 2,065 B median, 4,887 B mean, 106,393 B max** (~0.02% of the dump per typical class).",
    "status": "studio",
    "kind": "number",
    "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
-   "evidence": "Measured 2026-11-05: dump 8721015 B; 950 class files min 101, median 2073.5, mean 4897, max 105756.",
-   "checked": "2026-11-05, engine 0.746.0.7461264"
-  },
-  {
-   "id": "SKILL-087",
-   "file": "SKILL.md",
-   "quote": "2,074 B median, 4,897 B mean, 105,756 B max**.",
-   "status": "studio",
-   "kind": "number",
-   "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
-   "evidence": "Measured 2026-11-05: dump 8721015 B; 950 class files min 101, median 2073.5, mean 4897, max 105756.",
-   "checked": "2026-11-05, engine 0.746.0.7461264"
+   "evidence": "Measured 2026-11-23 on 0.748.0.7481526 split class files: min 101, median 2065, mean 4887, max 106393.",
+   "checked": "2026-11-23"
   },
   {
    "id": "legacy-migration-208",
@@ -9622,12 +9451,12 @@
   {
    "id": "legacy-migration-254",
    "file": "references/legacy-migration.md",
-   "quote": "| Character Controller Library pages now carry a beta notice; `Workspace.ImprovedAnimationConstraint` and `PrimalPhysicsSolver` left the `Workspace` page (the first is st",
+   "quote": "Character Controller Library pages now carry a beta notice; the deprecated `ImprovedAnimationConstraint` and `PrimalPhysicsSolver` properties left the `Workspace` page (both were later removed from the API dump by 0.748)",
    "status": "docs",
    "kind": "number",
    "source": "Roblox/creator-docs c8f5276..a47045f (2026-10-30..11-04)",
    "evidence": "Run 2026-11-05 in Studio 0.746.0.7461264 (probe Script, LocalScript, Actor Script, execute_luau; removed afterwards); dump diff 0.745->0.746; docs c8f5276..a47045f; flags from clientsettingscdn 2026-11-05.",
-   "checked": "2026-11-05, engine 0.746.0.7461264"
+   "checked": "2026-11-23"
   },
   {
    "id": "legacy-migration-255",
@@ -9723,11 +9552,11 @@
    "id": "luau-fundamentals-099",
    "file": "references/luau-fundamentals.md",
    "quote": "| **0.745** | Syntax: **`while local` / `while const`** loops, one binding scoped to the condition and body | **Not usable.** Gated by `DebugLuauWhileLocalSyntax` / `Debu",
-   "status": "source",
+   "status": "false",
    "kind": "number",
    "source": "luau-lang/luau 0.745; Studio 0.746.0.7461264",
-   "evidence": "luau-lang/luau 0.745 release notes (2026-10-30); 0.744..0.745 flag diff; clientsettingscdn PCStudioApp/MacStudioApp/PCDesktopClient/MacDesktopClient/AndroidApp/iOSApp 2026-11-05; loadstring run in Studio 0.746.",
-   "checked": "2026-11-05, engine 0.746.0.7461264"
+   "evidence": "Flag renamed in Luau 0.746 from DebugLuauWhileLocalSyntax/Analysis to LuauExperimentalWhileLocalSyntax/Analysis (still absent from published flags and syntax error in Studio 0.748).",
+   "checked": "2026-11-23"
   },
   {
    "id": "luau-fundamentals-100",
@@ -9762,12 +9591,12 @@
   {
    "id": "luau-fundamentals-103",
    "file": "references/luau-fundamentals.md",
-   "quote": "behind a `Debug` flag, is not in the beta, and is a syntax error in Studio 0.746.",
+   "quote": "(`LuauExperimentalWhileLocalSyntax` / `Analysis`), is not in the beta, and fails in Studio 0.748.",
    "status": "studio",
    "kind": "number",
    "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
    "evidence": "loadstring in Studio 0.746: while local -> \"Expected identifier when parsing expression, got local\"; while const -> \"Expected do when parsing while loop\".",
-   "checked": "2026-11-05, engine 0.746.0.7461264"
+   "checked": "2026-11-23"
   },
   {
    "id": "luau-fundamentals-104",
@@ -10222,7 +10051,7 @@
   {
    "id": "networking-065",
    "file": "references/networking.md",
-   "quote": "admin tools where people can reply; otherwise Roblox \"might take your game down\". Player-editable",
+   "quote": "admin tools where people can reply; otherwise Roblox \"might take your game down\". Since November 2026",
    "status": "docs",
    "kind": "number",
    "source": "Roblox/creator-docs c8f5276..a47045f (2026-10-30..11-04)",
@@ -10312,22 +10141,22 @@
   {
    "id": "ui-systems-032",
    "file": "references/ui-systems.md",
-   "quote": "Upgraded UIGradients**. All three were `NotBrowsable` in the 0.743 API dump and lost the tag in",
+   "quote": "(`Enum.GradientTileMode.Clamp` / `Repeat` / `Mirror`). All three were `NotBrowsable` in the 0.743",
    "status": "studio",
    "kind": "number",
    "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
    "evidence": "Dump 0.746 drops NotBrowsable; Script read Enum.GradientType.Linear, 1, Enum.GradientTileMode.Clamp in 0.746.",
-   "checked": "2026-11-05, engine 0.746.0.7461264"
+   "checked": "2026-11-23"
   },
   {
    "id": "ui-systems-033",
    "file": "references/ui-systems.md",
-   "quote": "0.746 (a Script reads `Linear`, `1`, `Clamp` on a new gradient). In Studio 0.743 a `LocalScript` set and read back `Type = Elliptical`,",
+   "quote": "API dump and lost the tag in 0.746 (a Script reads `Linear`, `1`, `Clamp` on a new gradient).",
    "status": "studio",
    "kind": "number",
    "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
    "evidence": "Dump 0.746 drops NotBrowsable; Script read Enum.GradientType.Linear, 1, Enum.GradientTileMode.Clamp in 0.746.",
-   "checked": "2026-11-05, engine 0.746.0.7461264"
+   "checked": "2026-11-23"
   },
   {
    "id": "ui-systems-034",
@@ -10432,22 +10261,22 @@
   {
    "id": "mcp-integration-101",
    "file": "references/mcp-integration.md",
-   "quote": "`rbx-configs-experimentation`, `rbx-convert-to-streaming`, `rbx-create-skill`, `rbx-debug`,",
+   "quote": "| `rbx-configs-experimentation` |",
    "status": "studio",
    "kind": "number",
    "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
    "evidence": "list_skills in Studio 0.746 2026-11-05 returned these 14, all source Roblox. assistant/skills.md lists configs-experimentation and instrument-analytics among its built-ins.",
-   "checked": "2026-11-05, engine 0.746.0.7461264"
+   "checked": "2026-11-23"
   },
   {
    "id": "mcp-integration-107",
    "file": "references/mcp-integration.md",
    "quote": "fewer, so run `list_skills` for the current set. These are Roblox's, shipped inside",
-   "status": "studio",
+   "status": "false",
    "kind": "number",
    "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
-   "evidence": "list_skills in Studio 0.746 2026-11-05 returned these 14, all source Roblox. assistant/skills.md lists configs-experimentation and instrument-analytics among its built-ins.",
-   "checked": "2026-11-05, engine 0.746.0.7461264"
+   "evidence": "Superseded in Studio 0.748.0.7481526: list_skills renamed to list_roblox_skills.",
+   "checked": "2026-11-23"
   },
   {
    "id": "mcp-integration-109",
@@ -10462,22 +10291,22 @@
   {
    "id": "agent-safety-033",
    "file": "references/agent-safety.md",
-   "quote": "`generate_scene` runs the script it generates in the DataModel, and `generate_avatar` uploads a",
+   "quote": "`generate_scene` runs the script it generates in the DataModel,",
    "status": "studio",
    "kind": "number",
    "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
    "evidence": "Live schemas 2026-11-05. \"cannot be previewed\": neither schema has a dry-run or preview argument.",
-   "checked": "2026-11-05, engine 0.746.0.7461264"
+   "checked": "2026-11-23"
   },
   {
    "id": "agent-safety-034",
    "file": "references/agent-safety.md",
-   "quote": "persistent asset: their schemas say so, and neither can be previewed first.",
+   "quote": "`generate_avatar` uploads a persistent asset (neither can be previewed first), and",
    "status": "studio",
    "kind": "number",
    "source": "Studio 0.746.0.7461264, test place 118652544255235, 2026-11-05",
    "evidence": "Live schemas 2026-11-05. \"cannot be previewed\": neither schema has a dry-run or preview argument.",
-   "checked": "2026-11-05, engine 0.746.0.7461264"
+   "checked": "2026-11-23"
   },
   {
    "id": "project-structure-038",
@@ -10520,49 +10349,19 @@
    "checked": "2026-11-05, engine 0.746.0.7461264"
   },
   {
-   "id": "SKILL-088",
-   "file": "SKILL.md",
-   "quote": "**Engine**: Roblox Studio **0.746.0.7461269** with **Luau 0.745** (released 2026-10-30) — dump",
-   "status": "source",
-   "kind": "number",
-   "source": "clientsettings MacStudio/WindowsStudio64 2026-11-07; luau-lang releases",
-   "evidence": "0.746.0.7461269 served for Studio; latest Luau release still 0.745 (2026-10-30).",
-   "checked": "2026-11-07, engine 0.746.0.7461269"
-  },
-  {
    "id": "SKILL-089",
    "file": "SKILL.md",
    "quote": "The docs page lists **26 tools**. The build observed 2026-11-07 (Studio 0.746.0.7461269) exposed",
-   "status": "studio",
+   "status": "false",
    "kind": "number",
    "source": "Live MCP tool list and schemas, Studio 0.746.0.7461269, 2026-11-07",
-   "evidence": "35 tools listed in this session: the 34 of 2026-11-05 plus open_cloud_invoke. Earlier counts from earlier registers.",
-   "checked": "2026-11-07, engine 0.746.0.7461269"
-  },
-  {
-   "id": "SKILL-090",
-   "file": "SKILL.md",
-   "quote": "(34 on 2026-11-05; 31 on 2026-10-29, Studio 0.745; 28 on 2026-10-17 to 2026-10-22, Studio 0.743–0.744;",
-   "status": "studio",
-   "kind": "number",
-   "source": "Live MCP tool list and schemas, Studio 0.746.0.7461269, 2026-11-07",
-   "evidence": "35 tools listed in this session: the 34 of 2026-11-05 plus open_cloud_invoke. Earlier counts from earlier registers.",
-   "checked": "2026-11-07, engine 0.746.0.7461269"
+   "evidence": "Superseded on 2026-11-23 (Studio 0.748.0.7481526): docs page lists 30 tools and live Studio exposes 39.",
+   "checked": "2026-11-23"
   },
   {
    "id": "SKILL-091",
    "file": "SKILL.md",
-   "quote": "playtest first. `Client` and `Server` exist only during a playtest, and `Edit` is refused during",
-   "status": "studio",
-   "kind": "negative",
-   "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
-   "evidence": "search_game_tree with datamodel_type Edit during a playtest returned 'Edit datamodel is not available in Play mode'; get_studio_state listed Client, Server.",
-   "checked": "2026-11-07, engine 0.746.0.7461269"
-  },
-  {
-   "id": "SKILL-092",
-   "file": "SKILL.md",
-   "quote": "one (`Edit datamodel is not available in Play mode`); check `get_studio_state`.",
+   "quote": "`get_studio_state` | Play state **and which `datamodel_type` values are currently available**",
    "status": "studio",
    "kind": "negative",
    "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
@@ -10572,17 +10371,17 @@
   {
    "id": "SKILL-093",
    "file": "SKILL.md",
-   "quote": "fail when run (`mcp-integration.md` lists the ones measured)",
+   "quote": "and verify known stale `rbx-*` steps against `references/mcp-integration.md`.",
    "status": "studio",
    "kind": "negative",
    "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
    "evidence": "Statements in rbx-device-simulator-lua, rbx-scene-analysis and rbx-input-action-system were run and failed; the table in mcp-integration.md gives each result.",
-   "checked": "2026-11-07, engine 0.746.0.7461269"
+   "checked": "2026-11-23"
   },
   {
    "id": "SKILL-094",
    "file": "SKILL.md",
-   "quote": "Open Cloud from an MCP client (`open_cloud_invoke`), MCP Permissions, permission errors, uploads | `references/mcp-integration.md` + `references/agent-safety.md`",
+   "quote": "Open Cloud from MCP (`open_cloud_invoke`), MCP Permissions, uploads | `references/mcp-integration.md` + `references/agent-safety.md`",
    "status": "advice",
    "kind": "negative",
    "source": "",
@@ -10602,12 +10401,12 @@
   {
    "id": "agent-safety-036",
    "file": "references/agent-safety.md",
-   "quote": "Roblox account resources | `insert_asset`, `upload_image` and the `generate_*` tools act against the user's account and consume real quota. `open_cloud_invoke` can do far more where its scope is on: change game settings, publish, set prices, ban players, and upload **assets that Open Cloud cannot delete**",
+   "quote": "Roblox account resources | `insert_asset`, `upload_image`, `generate_animation`, and the `generate_*` tools act against the user's account and consume real quota (`generate_animation` also uploads/modifies the rig). `open_cloud_invoke` can do far more where its scope is on: change game settings, publish, set prices, ban players, and upload **assets that Open Cloud cannot delete**",
    "status": "docs",
    "kind": "negative",
    "source": "https://create.roblox.com/docs/studio/mcp-open-cloud (creator-docs b032c6b, 2026-11-05)",
    "evidence": "Permission sections list settings, publishing, prices and bans; warning: \"Open Cloud can't archive or delete them\".",
-   "checked": "2026-11-07, engine 0.746.0.7461269"
+   "checked": "2026-11-23"
   },
   {
    "id": "agent-safety-037",
@@ -10862,22 +10661,22 @@
   {
    "id": "luau-fundamentals-110",
    "file": "references/luau-fundamentals.md",
-   "quote": "`buffer` page (2026-11-05) and **`nil` in Studio 0.746.0.7461269** from a Script and a LocalScript",
+   "quote": "remain **`nil` in Studio `0.748.0.7481526`** from Script, LocalScript, Actor, and `execute_luau`",
    "status": "studio",
    "kind": "number",
    "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
-   "evidence": "typeof(buffer.readvectorf32x3) and writevectorf32x2 are nil from a Script, a LocalScript and execute_luau; on the buffer page since b032c6b.",
-   "checked": "2026-11-07, engine 0.746.0.7461269"
+   "evidence": "Studio 0.748.0.7481526 probe across Plugin, Server, Client, Actor: all four buffer.*vectorf32x* are nil; DebugLuauBufferVectorLibrary absent in clientsettingscdn.",
+   "checked": "2026-11-23"
   },
   {
    "id": "mcp-integration-111",
    "file": "references/mcp-integration.md",
-   "quote": "**Primary source (re-verified 2026-11-07):**",
+   "quote": "**Primary source (re-verified 2026-11-23, Studio 0.748.0.7481526):**",
    "status": "studio",
    "kind": "number",
    "source": "creator-docs b032c6b + Live MCP tool list and schemas, Studio 0.746.0.7461269, 2026-11-07",
    "evidence": "mcp.md gained one link to mcp-open-cloud.md; the live tool list has open_cloud_invoke.",
-   "checked": "2026-11-07, engine 0.746.0.7461269"
+   "checked": "2026-11-23"
   },
   {
    "id": "mcp-integration-112",
@@ -10932,42 +10731,42 @@
   {
    "id": "mcp-integration-117",
    "file": "references/mcp-integration.md",
-   "quote": "only later change, on 2026-11-05, links the Open Cloud page). **On 2026-11-07 (Studio",
+   "quote": "**On 2026-11-23 (Studio 0.748.0.7481526) the",
    "status": "studio",
    "kind": "negative",
    "source": "Live MCP tool list and schemas, Studio 0.746.0.7461269, 2026-11-07",
-   "evidence": "35 tools listed in this session: the 34 of 2026-11-05 plus open_cloud_invoke. Earlier counts from earlier registers.",
-   "checked": "2026-11-07, engine 0.746.0.7461269"
+   "evidence": "Live /Users/sayib/.gemini/antigravity/mcp/Roblox_Studio/ contains 39 tool schemas.",
+   "checked": "2026-11-23"
   },
   {
    "id": "mcp-integration-118",
    "file": "references/mcp-integration.md",
-   "quote": "0.746.0.7461269) the build exposes 35**: the 34 of 2026-11-05 plus `open_cloud_invoke`, the one",
+   "quote": "live build exposes 39 tools**: the 35 of Studio 0.746.0.7461269 (2026-11-07) plus",
    "status": "studio",
    "kind": "number",
    "source": "Live MCP tool list and schemas, Studio 0.746.0.7461269, 2026-11-07",
-   "evidence": "35 tools listed in this session: the 34 of 2026-11-05 plus open_cloud_invoke. Earlier counts from earlier registers.",
-   "checked": "2026-11-07, engine 0.746.0.7461269"
+   "evidence": "35 from 0.746 + generate_animation, save_place, submit_feedback, video_capture = 39.",
+   "checked": "2026-11-23"
   },
   {
    "id": "mcp-integration-119",
    "file": "references/mcp-integration.md",
-   "quote": "addition that has a docs page of its own. **On 2026-10-29 (Studio",
+   "quote": "(Earlier snapshots: 35 on",
    "status": "studio",
    "kind": "number",
    "source": "Live MCP tool list and schemas, Studio 0.746.0.7461269, 2026-11-07",
    "evidence": "35 tools listed in this session: the 34 of 2026-11-05 plus open_cloud_invoke. Earlier counts from earlier registers.",
-   "checked": "2026-11-07, engine 0.746.0.7461269"
+   "checked": "2026-11-23"
   },
   {
    "id": "mcp-integration-120",
    "file": "references/mcp-integration.md",
-   "quote": "0.745.0.7451137) the build exposed 31**: the 28 below plus three undocumented skill-authoring",
+   "quote": "2026-11-07 in Studio 0.746, 31 on 2026-10-29 in Studio 0.745",
    "status": "studio",
    "kind": "number",
    "source": "Live MCP tool list and schemas, Studio 0.746.0.7461269, 2026-11-07",
    "evidence": "35 tools listed in this session: the 34 of 2026-11-05 plus open_cloud_invoke. Earlier counts from earlier registers.",
-   "checked": "2026-11-07, engine 0.746.0.7461269"
+   "checked": "2026-11-23"
   },
   {
    "id": "mcp-integration-121",
@@ -11012,142 +10811,142 @@
   {
    "id": "mcp-integration-125",
    "file": "references/mcp-integration.md",
-   "quote": "`create_skill` | Creates a **user** skill from `skill_name` (lowercase, digits, `_` and `-`; may not start with `rbx-`), a one-line `skill_description` and a markdown `skill_body`, and \"**publishes**\" it, available immediately. *New 2026-10-29; not run here*",
+   "quote": "| `create_skill` | Creates a **user** skill from `skill_name` (lowercase, digits, `_` and `-`; may not start with `rbx-`), a one-line `skill_description` and a markdown `skill_body`, and \"**publishes**\" it, available immediately. |",
    "status": "docs",
    "kind": "number",
    "source": "Live MCP tool list and schemas, Studio 0.746.0.7461269, 2026-11-07",
    "evidence": "create_skill and edit_skill schemas read; not called, because a skill persists on the account.",
-   "checked": "2026-11-07, engine 0.746.0.7461269"
+   "checked": "2026-11-23"
   },
   {
    "id": "mcp-integration-126",
    "file": "references/mcp-integration.md",
-   "quote": "`edit_skill` | Renames or rewrites a user-created skill (`new_name`, `new_description`, `new_skill_body` replaces the whole body). Roblox's own skills cannot be edited. *New 2026-10-29; not run here*",
+   "quote": "| `edit_skill` | Renames or rewrites a user-created skill (`new_name`, `new_description`, `new_skill_body` replaces the whole body). Roblox's own skills cannot be edited. |",
    "status": "docs",
    "kind": "negative",
    "source": "Live MCP tool list and schemas, Studio 0.746.0.7461269, 2026-11-07",
    "evidence": "create_skill and edit_skill schemas read; not called, because a skill persists on the account.",
-   "checked": "2026-11-07, engine 0.746.0.7461269"
+   "checked": "2026-11-23"
   },
   {
    "id": "mcp-integration-127",
    "file": "references/mcp-integration.md",
-   "quote": "**First-party skills exposed by the `skill` tool (2026-11-07, Studio 0.746.0.7461269, seventeen):**",
+   "quote": "Studio **0.748.0.7481526** exposes **17** first-party skills via `list_roblox_skills` /",
    "status": "studio",
    "kind": "number",
    "source": "skill tool output read 2026-11-07, Studio 0.746.0.7461269",
-   "evidence": "list_skills returned 17, all source Roblox; the three not listed on 2026-11-05 are rbx-import-asset, rbx-open-cloud-usage, rbx-permissions.",
-   "checked": "2026-11-07, engine 0.746.0.7461269"
+   "evidence": "list_roblox_skills in Studio 0.748.0.7481526 exposes 17 rbx-* skills.",
+   "checked": "2026-11-23"
   },
   {
    "id": "mcp-integration-128",
    "file": "references/mcp-integration.md",
-   "quote": "`rbx-scene-analysis`, `rbx-unit-test`. The three added since 2026-11-05 are the Open Cloud set:",
+   "quote": "These skills ship with Studio and are cheaper than rediscovering the same MCP",
    "status": "studio",
    "kind": "number",
    "source": "skill tool output read 2026-11-07, Studio 0.746.0.7461269",
    "evidence": "list_skills returned 17, all source Roblox; the three not listed on 2026-11-05 are rbx-import-asset, rbx-open-cloud-usage, rbx-permissions.",
-   "checked": "2026-11-07, engine 0.746.0.7461269"
+   "checked": "2026-11-23"
   },
   {
    "id": "mcp-integration-129",
    "file": "references/mcp-integration.md",
-   "quote": "**Read them, then check them: first-party does not mean current.** On 2026-11-07, eleven were read",
+   "quote": "**Read them, then check them: first-party does not mean current.** In Studio **0.748.0.7481526**,",
    "status": "studio",
    "kind": "negative",
    "source": "skill tool output read 2026-11-07, Studio 0.746.0.7461269",
-   "evidence": "Read in full: 11 skills. Six over 50 KB: rule sections read; every Class.Member, Enum and tool name audited against the dump and tool list.",
-   "checked": "2026-11-07, engine 0.746.0.7461269"
+   "evidence": "Audited all 12 large saved rbx-* skill bodies + Studio 0.748 runs.",
+   "checked": "2026-11-23"
   },
   {
    "id": "mcp-integration-130",
    "file": "references/mcp-integration.md",
-   "quote": "in full; for the six long ones (input, streaming, network, analytics, scene, profiling, 50–120 KB",
+   "quote": "**8 of the 12** large `rbx-*` skills still name the old `skill` tool instead of `get_roblox_skill`,",
    "status": "studio",
    "kind": "number",
    "source": "skill tool output read 2026-11-07, Studio 0.746.0.7461269",
-   "evidence": "Read in full: 11 skills. Six over 50 KB: rule sections read; every Class.Member, Enum and tool name audited against the dump and tool list.",
-   "checked": "2026-11-07, engine 0.746.0.7461269"
+   "evidence": "Grep of 12 saved rbx-* skill bodies on 2026-11-23: 8 name skill, 2 name set_active_studio, 1 names ask_questions.",
+   "checked": "2026-11-23"
   },
   {
    "id": "mcp-integration-131",
    "file": "references/mcp-integration.md",
-   "quote": "A Roblox skill says | What happened (Studio 0.746.0.7461269)",
+   "quote": "Stale steps / caveats verified in Studio 0.748",
    "status": "studio",
    "kind": "number",
    "source": "skill tool output read 2026-11-07, Studio 0.746.0.7461269",
    "evidence": "Read in full: 11 skills. Six over 50 KB: rule sections read; every Class.Member, Enum and tool name audited against the dump and tool list.",
-   "checked": "2026-11-07, engine 0.746.0.7461269"
+   "checked": "2026-11-23"
   },
   {
    "id": "mcp-integration-132",
    "file": "references/mcp-integration.md",
-   "quote": "`rbx-device-simulator-lua`: `execute_luau` \"cannot access `PlayerGui`, `LocalPlayer`, or live `AbsolutePosition`/`AbsoluteSize` during Play mode\" | With `datamodel_type: \"Client\"` it read `LocalPlayer.PlayerGui`, a `ScreenGui`'s `AbsoluteSize` and the viewport",
+   "quote": "falsely claims `execute_luau` cannot access `PlayerGui`, `LocalPlayer`, or `AbsolutePosition`/`AbsoluteSize` during Play — works in `datamodel_type: \"Client\"`",
    "status": "studio",
    "kind": "negative",
    "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
    "evidence": "execute_luau Client: LocalPlayer.PlayerGui 18 children, ScreenGui AbsoluteSize 1019,450, viewport 1019,508.",
-   "checked": "2026-11-07, engine 0.746.0.7461269"
+   "checked": "2026-11-23"
   },
   {
    "id": "mcp-integration-133",
    "file": "references/mcp-integration.md",
-   "quote": "`rbx-device-simulator-lua`, `rbx-network-simulator`: call `list_roblox_studios` + `set_active_studio` | `set_active_studio` is not a tool. Pass `studio_id` on each call",
+   "quote": "Uses phantom `set_active_studio` (5×) & `skill` (2×);",
    "status": "studio",
    "kind": "negative",
    "source": "Live MCP tool list and schemas, Studio 0.746.0.7461269, 2026-11-07; skill tool output read 2026-11-07, Studio 0.746.0.7461269",
    "evidence": "set_active_studio appears in both skills and is not in the tool list.",
-   "checked": "2026-11-07, engine 0.746.0.7461269"
+   "checked": "2026-11-23"
   },
   {
    "id": "mcp-integration-134",
    "file": "references/mcp-integration.md",
-   "quote": "`rbx-scene-analysis`: `SceneAnalysisService` \"doesn't work in edit mode\" | `GetInstanceCompositionAsync()` returned a table in `Edit`. Runtime numbers still need a playtest",
+   "quote": "falsely says `SceneAnalysisService` fails in `Edit` — all 7 methods returned tables in `Edit` in 0.748",
    "status": "studio",
    "kind": "negative",
    "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
-   "evidence": "execute_luau Edit: GetInstanceCompositionAsync returned a table.",
-   "checked": "2026-11-07, engine 0.746.0.7461269"
+   "evidence": "Studio 0.748.0.7481526 Edit probe: all 7 SceneAnalysisService methods returned tables.",
+   "checked": "2026-11-23"
   },
   {
    "id": "mcp-integration-135",
    "file": "references/mcp-integration.md",
-   "quote": "`rbx-input-action-system`: `StarterGui` \"Never registers\" an `InputContext` | True of the template. The copy the engine places in `PlayerGui` fired on a real key press (`project-structure.md`)",
+   "quote": "notes `StarterGui` is template-only & `Workspace.PlayerScriptsUseInputActionSystem` is `RobloxScriptSecurity`",
    "status": "studio",
    "kind": "negative",
    "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
    "evidence": "One InputContext per location with a Bool action; user_keyboard_input key presses: Press_RS, Press_WS, Press_PlayerGui, Press_PlayerScripts = 1; templates in StarterGui and StarterPlayerScripts: no attribute written.",
-   "checked": "2026-11-07, engine 0.746.0.7461269"
+   "checked": "2026-11-23"
   },
   {
    "id": "mcp-integration-136",
    "file": "references/mcp-integration.md",
-   "quote": "Also check what a skill leaves out. `rbx-process-receipt-misuse` audits `ProcessReceipt` and never",
+   "quote": "`rbx-process-receipt-misuse` | Audit Developer Product `ProcessReceipt` handling | `monetization.md`, `datastore-persistence.md` | Uses old `skill` (4×); omits `MarketplaceService:BindReceiptHandler`",
    "status": "source",
    "kind": "negative",
    "source": "skill tool output read 2026-11-07, Studio 0.746.0.7461269",
    "evidence": "rbx-process-receipt-misuse has no BindReceiptHandler; rbx-luau-heap-profiling says Play mode but not that Edit hangs.",
-   "checked": "2026-11-07, engine 0.746.0.7461269"
+   "checked": "2026-11-23"
   },
   {
    "id": "mcp-integration-137",
    "file": "references/mcp-integration.md",
-   "quote": "mentions `BindReceiptHandler` (see `monetization.md`), and `rbx-luau-heap-profiling` does not warn",
+   "quote": "Does not warn that `HeapProfilerService:ServerRequestDataAsync()` hangs (`Request timeout`) in `Edit`; run in Play `Server` (243.85 ms in 0.748)",
    "status": "source",
    "kind": "negative",
    "source": "skill tool output read 2026-11-07, Studio 0.746.0.7461269",
    "evidence": "rbx-process-receipt-misuse has no BindReceiptHandler; rbx-luau-heap-profiling says Play mode but not that Edit hangs.",
-   "checked": "2026-11-07, engine 0.746.0.7461269"
+   "checked": "2026-11-23"
   },
   {
    "id": "mcp-integration-138",
    "file": "references/mcp-integration.md",
-   "quote": "read back `500`. A game Script fails on `settings()` with `lacking capability Plugin`.",
+   "quote": "→ `500`, re-verified in Studio 0.748), so always record and restore them.",
    "status": "studio",
    "kind": "negative",
    "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
    "evidence": "Script: settings() fails lacking capability Plugin. execute_luau: loss 200 -> 0.5, delay 5000 -> 500; originals restored and read back 0.",
-   "checked": "2026-11-07, engine 0.746.0.7461269"
+   "checked": "2026-11-23"
   },
   {
    "id": "mcp-integration-139",
@@ -11353,11 +11152,11 @@
    "id": "mcp-integration-159",
    "file": "references/mcp-integration.md",
    "quote": "analysis, Open Cloud, or a permission error, call `skill` with the matching `rbx-*` name before",
-   "status": "advice",
+   "status": "false",
    "kind": "negative",
    "source": "",
-   "evidence": "Workflow advice.",
-   "checked": "2026-11-07, engine 0.746.0.7461269"
+   "evidence": "Superseded in Studio 0.748.0.7481526: tool renamed from skill to get_roblox_skill.",
+   "checked": "2026-11-23"
   },
   {
    "id": "mcp-integration-160",
@@ -11382,22 +11181,22 @@
   {
    "id": "mcp-integration-162",
    "file": "references/mcp-integration.md",
-   "quote": "Roblox's `rbx-*` skills are \"more current than this skill\" | They go deeper, and some steps in them are stale. Run them. | Run 2026-11-07",
+   "quote": "Roblox's `rbx-*` skills are \"more current than this skill\" | They go deeper, and some steps in them are stale (8 of 12 large `rbx-*` skills still name `skill`, 2 call `set_active_studio`, 1 calls `ask_questions`). Verify before running.",
    "status": "studio",
    "kind": "number",
    "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
    "evidence": "See the table of statements run against the skills.",
-   "checked": "2026-11-07, engine 0.746.0.7461269"
+   "checked": "2026-11-23"
   },
   {
    "id": "mcp-integration-163",
    "file": "references/mcp-integration.md",
-   "quote": "`skill` and `subagent` absent from this file | Both are real and officially documented. Roblox ships 7 first-party `rbx-*` skills that partly supersede hand-rolled approaches (9 on 2026-10-29, 14 on 2026-11-05, 17 on 2026-11-07). | Official docs + live schemas",
+   "quote": "`get_roblox_skill` and `subagent` absent from this file | Both are real and officially documented. Roblox ships 7 first-party `rbx-*` skills that partly supersede hand-rolled approaches (9 on 2026-10-29, 14 on 2026-11-05, 17 on 2026-11-07 & 2026-11-23).",
    "status": "studio",
    "kind": "number",
    "source": "skill tool output read 2026-11-07, Studio 0.746.0.7461269",
    "evidence": "list_skills 2026-11-07: 17.",
-   "checked": "2026-11-07, engine 0.746.0.7461269"
+   "checked": "2026-11-23"
   },
   {
    "id": "monetization-034",
@@ -11473,11 +11272,11 @@
    "id": "monetization-041",
    "file": "references/monetization.md",
    "quote": "To audit a place, `skill(\"rbx-process-receipt-misuse\")` reports PASS, FAIL or REVIEW without",
-   "status": "source",
+   "status": "false",
    "kind": "negative",
    "source": "skill tool output read 2026-11-07, Studio 0.746.0.7461269",
-   "evidence": "rbx-process-receipt-misuse: report only, verdict PASS / FAIL / REVIEW.",
-   "checked": "2026-11-07, engine 0.746.0.7461269"
+   "evidence": "Superseded in Studio 0.748.0.7481526: tool renamed from skill(...) to get_roblox_skill(...).",
+   "checked": "2026-11-23"
   },
   {
    "id": "monetization-042",
@@ -11662,32 +11461,32 @@
   {
    "id": "performance-optimization-107",
    "file": "references/performance-optimization.md",
-   "quote": "`SceneAnalysisService` works from a game Script (*tested* 2026-11-07, Studio 0.746.0.7461269), and",
+   "quote": "`SceneAnalysisService` works from a game Script (*tested* 2026-11-23, Studio `0.748.0.7481526`), and",
    "status": "studio",
    "kind": "number",
    "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
-   "evidence": "Script: GetInstanceComposition, GetScriptMemory, GetUnparentedInstances, GetAnimationMemory, GetAudioMemory returned tables; LocalScript and execute_luau: GetTriangleComposition returned Sizes.Triangles/Drawcalls; GetCollisionGeometryMemoryAsync: SceneAnalysisService is not enabled.",
-   "checked": "2026-11-07, engine 0.746.0.7461269"
+   "evidence": "Studio 0.748.0.7481526 probe across Edit, Server, Client, Actor: all 7 SceneAnalysisService methods returned tables.",
+   "checked": "2026-11-23"
   },
   {
    "id": "performance-optimization-108",
    "file": "references/performance-optimization.md",
-   "quote": "each of its entries holds `Sizes.Triangles` and `Sizes.Drawcalls`. Only",
+   "quote": "`{ Name, Children, Size }` nodes (both in Play `Server`/`Client`/`Actor` and in `Edit` mode, measured 5.14 ms in Play Server).",
    "status": "studio",
    "kind": "negative",
    "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
-   "evidence": "Script: GetInstanceComposition, GetScriptMemory, GetUnparentedInstances, GetAnimationMemory, GetAudioMemory returned tables; LocalScript and execute_luau: GetTriangleComposition returned Sizes.Triangles/Drawcalls; GetCollisionGeometryMemoryAsync: SceneAnalysisService is not enabled.",
-   "checked": "2026-11-07, engine 0.746.0.7461269"
+   "evidence": "Studio 0.748.0.7481526 Play Server probe measured 5.14 ms across GetInstanceCompositionAsync, GetUnparentedInstancesAsync, GetCollisionGeometryMemoryAsync.",
+   "checked": "2026-11-23"
   },
   {
    "id": "performance-optimization-109",
    "file": "references/performance-optimization.md",
    "quote": "**`GetCollisionGeometryMemoryAsync` still fails**, with `SceneAnalysisService is not enabled`.",
-   "status": "studio",
+   "status": "false",
    "kind": "negative",
    "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
-   "evidence": "Script: GetInstanceComposition, GetScriptMemory, GetUnparentedInstances, GetAnimationMemory, GetAudioMemory returned tables; LocalScript and execute_luau: GetTriangleComposition returned Sizes.Triangles/Drawcalls; GetCollisionGeometryMemoryAsync: SceneAnalysisService is not enabled.",
-   "checked": "2026-11-07, engine 0.746.0.7461269"
+   "evidence": "Superseded in Studio 0.748.0.7481526: GetCollisionGeometryMemoryAsync now succeeds (FFlagSceneAnalysisCollisionGeometryMemoryEnabled=True) across Edit, Server, Client, and Actor.",
+   "checked": "2026-11-23"
   },
   {
    "id": "performance-optimization-110",
@@ -11702,12 +11501,12 @@
   {
    "id": "performance-optimization-111",
    "file": "references/performance-optimization.md",
-   "quote": "`ServerRequestDataAsync()` returned a JSON string of 1.6 MB with the keys `Report` and `Refs` in 0.4 s,",
+   "quote": "`ServerRequestDataAsync()` returned a JSON string of 1.6 MB with the keys `Report` and `Refs` in 0.24–0.4 s,",
    "status": "studio",
    "kind": "number",
    "source": "Studio 0.746.0.7461269, test place 118652544255235, 2026-11-07",
-   "evidence": "Composite execute_luau in Edit returned Request timeout; re-run with a timed thread: only ServerRequestDataAsync was still waiting at 4 s. Server datamodel in a playtest: returned in 0.4 s.",
-   "checked": "2026-11-07, engine 0.746.0.7461269"
+   "evidence": "Measured 2026-11-07 (0.4s, 1,617,527 B) and 2026-11-23 Studio 0.748.0.7481526 Play Server (243.85 ms, 1,681,169 B).",
+   "checked": "2026-11-23"
   },
   {
    "id": "performance-optimization-112",
@@ -11858,6 +11657,1046 @@
    "source": "skill tool output read 2026-11-07, Studio 0.746.0.7461269",
    "evidence": "rbx-import-asset: \"regularly changes scale, rotation, colours and sometimes textures\"; record verification targets before uploading.",
    "checked": "2026-11-07, engine 0.746.0.7461269"
+  },
+  {
+   "id": "SKILL-064",
+   "file": "SKILL.md",
+   "quote": "performance, security, deprecated APIs, Rojo, and Studio MCP tools (list_roblox_skills,",
+   "status": "advice",
+   "kind": "negative",
+   "source": "SKILL.md description",
+   "evidence": "",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "SKILL-071",
+   "file": "SKILL.md",
+   "quote": "`create.roblox.com/docs/studio/mcp` lists **30 tools**. Studio **0.748.0.7481526** exposes **39**",
+   "status": "studio",
+   "kind": "number",
+   "source": "create.roblox.com/docs/studio/mcp + Studio 0.748.0.7481526",
+   "evidence": "studio/mcp.md documents 30 tools; live /Users/sayib/.gemini/antigravity/mcp/Roblox_Studio/ exposes 39 tool schemas.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "SKILL-077",
+   "file": "SKILL.md",
+   "quote": "`save_place` | Save open place (Ctrl+S equivalent; creates Roblox version or writes local file; **never publishes**; don't call every edit)",
+   "status": "docs",
+   "kind": "negative",
+   "source": "save_place.json",
+   "evidence": "Schema: saves open place (creates Roblox version or local .rbxl/.rbxlx), returns Saved/NotNeeded/NeedsUserAction/Busy/Failed; never publishes.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "SKILL-078",
+   "file": "SKILL.md",
+   "quote": "`video_capture` | Record playtest video (`Client` only; returned `Target is not reachable` in 0.748.0.7481526 — keep `screen_capture` primary)",
+   "status": "studio",
+   "kind": "negative",
+   "source": "video_capture.json + Studio 0.748.0.7481526",
+   "evidence": "Schema: Client only, prefer screen_capture unless diagnosing motion. Studio 0.748.0.7481526 Play Client returned 'Target is not reachable'.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "SKILL-080",
+   "file": "SKILL.md",
+   "quote": "`character_navigation` | Move character to a position or instance path (`Client` only; requires walkable navmesh)",
+   "status": "studio",
+   "kind": "negative",
+   "source": "character_navigation.json + Studio 0.748.0.7481526",
+   "evidence": "Schema: Client only. Studio 0.748 run failed without navmesh path and succeeded on walkable terrain.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "SKILL-081",
+   "file": "SKILL.md",
+   "quote": "`user_mouse_input` / `user_keyboard_input` | Simulate ordered mouse/keyboard actions (`Client` only)",
+   "status": "studio",
+   "kind": "negative",
+   "source": "user_mouse_input.json + user_keyboard_input.json",
+   "evidence": "Schemas: Client only; user_keyboard_input verified driving KeyCode.F during Studio 0.748 playtest.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "SKILL-084",
+   "file": "SKILL.md",
+   "quote": "`segment_mesh` | Split a **single `MeshPart`** into ≤5 named parts (errors `SegmentRequiresSingleMeshPart` on multi-part Models)",
+   "status": "studio",
+   "kind": "negative",
+   "source": "segment_mesh.json + Studio 0.748.0.7481526",
+   "evidence": "Schema: <=5 named parts. Studio 0.748.0.7481526: single child MeshPart succeeded (~41s); multi-MeshPart Model failed SegmentRequiresSingleMeshPart.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "SKILL-087",
+   "file": "SKILL.md",
+   "quote": "`generate_animation` | Generate R15+ animation from `textPrompt` (1–30s) or upscale R6 `inputAssetId`",
+   "status": "docs",
+   "kind": "number",
+   "source": "generate_animation.json + studio/mcp.md",
+   "evidence": "Schema: textPrompt or R6 inputAssetId, duration 1-30s (studio/mcp.md says up to 10s).",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "SKILL-088",
+   "file": "SKILL.md",
+   "quote": "`wait_job_finished` | Await `jobId` from `async: true`; **45 s** per-call cap for external MCP clients (loop while `status == \"Running\"`)",
+   "status": "studio",
+   "kind": "number",
+   "source": "wait_job_finished.json + Studio 0.748.0.7481526",
+   "evidence": "Schema: timeout defaults 600s, capped at 45s for external MCP clients; generative jobs ran 24-107s requiring polling.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "SKILL-090",
+   "file": "SKILL.md",
+   "quote": "`http_get` | Fetch Roblox docs **from allowlist** (`.md` or `llms.txt` only)",
+   "status": "studio",
+   "kind": "negative",
+   "source": "http_get.json",
+   "evidence": "Schema allowlist: create.roblox.com/docs and github.com/Roblox/libmp ending in .md or llms.txt only.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "SKILL-092",
+   "file": "SKILL.md",
+   "quote": "`submit_feedback` | Send ≤4000-byte feedback on Studio/MCP tools (never include source code, PII, or credentials; respect user opt-out)",
+   "status": "docs",
+   "kind": "negative",
+   "source": "submit_feedback.json",
+   "evidence": "Schema: feedback <=4000 bytes; safety rules forbid source code/PII/credentials and respect opt-out.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "SKILL-095",
+   "file": "SKILL.md",
+   "quote": "**0.748.0.7481526**: the full dump is **8,798,639 bytes**; the **960** split class files run",
+   "status": "dump",
+   "kind": "number",
+   "source": "0.748.0.7481526-Full-API-Dump.json",
+   "evidence": "Measured 2026-11-23: full dump 8,798,639 B; 960 split class files (min 101 B, median 2065 B, mean 4887 B, max 106393 B).",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "SKILL-096",
+   "file": "SKILL.md",
+   "quote": "Apply minimal exact-match fix (`multi_edit` in `Edit` datamodel) and verify via playtest (`0` errors, `0` new warnings)",
+   "status": "advice",
+   "kind": "negative",
+   "source": "SKILL.md workflow",
+   "evidence": "",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "SKILL-097",
+   "file": "SKILL.md",
+   "quote": "Local concept image → `store_image` (≤5 MB png/jpg → `IMAGEID_`) → `generate_procedural_model` / `generate_mesh` / `generate_material` / `generate_animation` (`async: true` → loop `wait_job_finished` while `status == \"Running\"`, 45s per-call cap). Duplicate before `generate_texture`; pass a single `MeshPart` to `segment_mesh`.",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.748.0.7481526 + MCP schemas",
+   "evidence": "Verified end-to-end in Studio 0.748.0.7481526: store_image (~3s) -> generate_* (24-107s) -> wait_job_finished loop; segment_mesh single MeshPart (~41s).",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "SKILL-098",
+   "file": "SKILL.md",
+   "quote": "Add `--!strict` physics/gameplay scripts (`multi_edit`), then `start_stop_play` → `character_navigation` / `user_keyboard_input` / `user_mouse_input` → `execute_luau` (`Server`/`Client` attribute assertions) → `screen_capture` (keep primary; `video_capture` failed in 0.748.0.7481526) → stop playtest → `save_place` only when asked.",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.748.0.7481526",
+   "evidence": "Verified in Studio 0.748.0.7481526 playtest: physics_samples.luau telemetry via ServerStorage attributes, user_keyboard_input, screen_capture; video_capture failed Target is not reachable.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "agent-safety-042",
+   "file": "references/agent-safety.md",
+   "quote": "Unsaved work in the open place | Any mutation lands in a session the user may not have saved; `save_place` creates a Roblox version-history entry or overwrites the local `.rbxl`/`.rbxlx` file (never publishes)",
+   "status": "docs",
+   "kind": "negative",
+   "source": "save_place.json",
+   "evidence": "Schema: saves open place (creates Roblox version history or writes local file), never publishes.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "agent-safety-043",
+   "file": "references/agent-safety.md",
+   "quote": "Off-machine feedback channel | `submit_feedback` transmits feedback text (≤4000 bytes) about Studio/MCP tools to Roblox",
+   "status": "docs",
+   "kind": "number",
+   "source": "submit_feedback.json",
+   "evidence": "Schema: feedback text <=4000 bytes sent to Roblox.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "agent-safety-044",
+   "file": "references/agent-safety.md",
+   "quote": "**Calling `save_place`**: Ask or only call when the user explicitly asks to save (or at the end of",
+   "status": "advice",
+   "kind": "negative",
+   "source": "agent-safety policy",
+   "evidence": "",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "agent-safety-045",
+   "file": "references/agent-safety.md",
+   "quote": "It **never publishes** to players.",
+   "status": "docs",
+   "kind": "negative",
+   "source": "save_place.json",
+   "evidence": "Schema: saves place only, never publishes to players.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "agent-safety-046",
+   "file": "references/agent-safety.md",
+   "quote": "**Calling `video_capture`**: Only use when still frames (`screen_capture`) cannot answer a",
+   "status": "docs",
+   "kind": "negative",
+   "source": "video_capture.json + screen_capture.json",
+   "evidence": "Both schemas state to prefer screen_capture unless diagnosing motion/flicker.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "agent-safety-047",
+   "file": "references/agent-safety.md",
+   "quote": "and `frame_times` artifacts to disk (and failed with `Target is not reachable` in Studio",
+   "status": "studio",
+   "kind": "negative",
+   "source": "video_capture.json + Studio 0.748.0.7481526",
+   "evidence": "Schema lists video/manifest/frame_times artifacts; Studio 0.748.0.7481526 Play Client returned 'Target is not reachable'.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "agent-safety-048",
+   "file": "references/agent-safety.md",
+   "quote": "0.748.0.7481526 Play `Client`).",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.748.0.7481526",
+   "evidence": "Observed error in Studio 0.748.0.7481526 Play Client.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "agent-safety-049",
+   "file": "references/agent-safety.md",
+   "quote": "**Never send user source code, PII, or credentials via `submit_feedback` — and stop if the user",
+   "status": "advice",
+   "kind": "negative",
+   "source": "agent-safety policy",
+   "evidence": "",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "agent-safety-050",
+   "file": "references/agent-safety.md",
+   "quote": "issue per call, ≤4000 bytes). Never call it if the user has asked you not to send feedback;",
+   "status": "docs",
+   "kind": "negative",
+   "source": "submit_feedback.json",
+   "evidence": "Schema: feedback <=4000 bytes, one issue per call; safety policy respects user opt-out.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "legacy-migration-284",
+   "file": "references/legacy-migration.md",
+   "quote": "Derived by diffing the **0.746.0.7461269 and 0.748.0.7481526 Full API Dumps locally** (`0.747.0.7471481` deployed 2026-11-09; `0.748.0.7481526` live across `MacStudio`, `WindowsStudio64`, `MacPlayer`, `WindowsPlayer` since 2026-11-16). **960 classes (+12, −2), 664 enums (+10, −2), 270 class files named `*Service` (351 tagged `Service`), 48 deprecated classes (579 members).** 186 diff events (136 developer-visible). Luau **0.748** (2026-11-20), see `luau-fundamentals.md`. Every row marked *(Studio)* was run in Studio `0.748.0.7481526` across `Script` (Server), `LocalScript` (Client), `Actor` (Parallel), and MCP `execute_luau` (Plugin), and all probe scripts were removed afterwards.",
+   "status": "studio",
+   "kind": "negative",
+   "source": "0.746->0.748 dump diff + Studio 0.748.0.7481526",
+   "evidence": "clientsettings live 0.748.0.7481526; diff-api-dumps.py: 186 events (136 dev-visible); 960 classes, 664 enums, 270 *Service, 351 Service, 48 dep classes, 579 dep members; probe_claims.luau run across Plugin/Server/Client/Actor.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "legacy-migration-285",
+   "file": "references/legacy-migration.md",
+   "quote": "**Now usable in Studio 0.748 (flipped from 0.746, or new and working):**",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.748.0.7481526",
+   "evidence": "Summary header for 0.748 probe table.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "legacy-migration-286",
+   "file": "references/legacy-migration.md",
+   "quote": "Change | Result *(Studio 0.748.0.7481526)*",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.748.0.7481526",
+   "evidence": "Table header for 0.748 probe table.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "legacy-migration-287",
+   "file": "references/legacy-migration.md",
+   "quote": "`TestService:ListTests()` | **Returns a `table`** during Play mode (Server, Client, Actor); in Edit mode throws that it runs in Play/Run/Team Test only. `TestService:RegisterTest` requires a `TestSuite` / function signature rather than a bare string",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.748.0.7481526",
+   "evidence": "probe_claims.luau: ListTests() returned table in Server/Client/Actor; Edit returned Play/Run/Team Test only; RegisterTest('s','c',fn) errored Unable to cast string to Function.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "legacy-migration-288",
+   "file": "references/legacy-migration.md",
+   "quote": "`PhysicsActivitySensor.Active`, `Position`, `Size`: Capabilities `InternalTest` → **`Basic`** (`Position`/`Size` serialization `True` → `False`) | **`Instance.new(\"PhysicsActivitySensor\")` works** across all four contexts (`Active` read-only `true`, `Position`/`Size` readable)",
+   "status": "studio",
+   "kind": "negative",
+   "source": "0.748 dump + Studio 0.748.0.7481526",
+   "evidence": "Dump: PhysicsActivitySensor Capabilities InternalTest->Basic; Studio 0.748: Instance.new OK across all 4 contexts (Active=true, Position/Size readable).",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "legacy-migration-289",
+   "file": "references/legacy-migration.md",
+   "quote": "`+DataModel.ServerRegion` (`string`, `ReadOnly`, `NotReplicated`), `+TeleportOptions.ForcePublicServer` (`bool`, cap `Teleport`), `+ColorCorrectionEffect.ColorLutContent` / `ColorLutIntensity`, `+SocialService:PromptRateExperienceAsync()`, `+Folder`/`Model.ExplorerIconContent`, `+VideoFrame.SubtitlesChanged`, `+ParticleEmitter2D.LightInfluence`, `+AudioStreamReader` / `AudioStreamWriter`, `+ModelInfoService`, `+FilePickerService` / `PickedFile`, `+GameDownloaderService`, `+Blob`, `+SceneSnapshot`, `+SessionStorage`, `+FollowRotationBoneBehavior` / `FollowTwistBoneBehavior` | `DataModel.ServerRegion` reads `\"\"` in Studio/client (live server IATA code per docs); `TeleportOptions.ForcePublicServer` is writable (`Teleport` capability, see `networking.md`); `ParticleEmitter2D` is behind the UI Particles Studio beta (`LightInfluence` replaced removed `LightEmission`); `AudioStreamReader` / `ModelInfoService` exist in the dump",
+   "status": "studio",
+   "kind": "negative",
+   "source": "0.748 dump + Studio 0.748.0.7481526",
+   "evidence": "Dump diff 0.746->0.748 + Studio 0.748 probe: DataModel.ServerRegion='', TeleportOptions.ForcePublicServer writable, ParticleEmitter2D.LightInfluence writable, AudioStreamReader/ModelInfoService present.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "legacy-migration-290",
+   "file": "references/legacy-migration.md",
+   "quote": "`+AvatarCollisionRules.HitboxSize`, `TouchAndQueryDetectionMode` (`Enum.AvatarSettingsTouchAndQueryDetectionMode`); `+AvatarAccessoryRules.EnableSpawnEffects`; `+Humanoid:GetCanCollideOnDeath()`, `UsesAvatarCollider` (`OverrideDefaultCollisions` deprecated) | `HitboxSize` and `TouchAndQueryDetectionMode` exist; old `AvatarCollisionRules.HitAndTouchDetectionMode` is now `RobloxScriptSecurity` + `Deprecated`",
+   "status": "studio",
+   "kind": "negative",
+   "source": "0.748 dump + Studio 0.748.0.7481526",
+   "evidence": "Dump + Studio 0.748 probe: HitboxSize & TouchAndQueryDetectionMode exist; HitAndTouchDetectionMode became RobloxScriptSecurity+Deprecated.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "legacy-migration-291",
+   "file": "references/legacy-migration.md",
+   "quote": "`Enum.DomainType`: `EXPERIENCE`, `OAUTH` removed → **`Experience` (1), `Group` (2), `OAuth` (3)**; `Enum.ImageCombineType` +7 blend modes (`Darken`, `Lighten`, `Screen`, `Overlay`, `SoftLight`, `HardLight`, `Difference`) | Update any `Enum.DomainType.EXPERIENCE` / `OAUTH` code to PascalCase (`Experience` / `OAuth`)",
+   "status": "dump",
+   "kind": "negative",
+   "source": "0.746->0.748 API dump diff",
+   "evidence": "Dump diff: Enum.DomainType removed EXPERIENCE/OAUTH, added Experience(1), Group(2), OAuth(3); Enum.ImageCombineType +7 items.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "legacy-migration-292",
+   "file": "references/legacy-migration.md",
+   "quote": "`HapticEffect:GetWaveformKeys()` (`DFFlagHapticEffectGetWaveformKeys = True`) | No longer says \"not enabled\" — requires `HapticEffect.Type == Enum.HapticEffectType.Custom` (throws `HapticEffect.Type is not Custom` otherwise)",
+   "status": "studio",
+   "kind": "negative",
+   "source": "clientsettingscdn + Studio 0.748.0.7481526",
+   "evidence": "DFFlagHapticEffectGetWaveformKeys=True in all 6 apps; Studio 0.748 probe errored 'HapticEffect.Type is not Custom' instead of 'not yet enabled'.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "legacy-migration-293",
+   "file": "references/legacy-migration.md",
+   "quote": "**Now plugin-only (`None` + `PluginOrOpenCloud` in 0.748 — `execute_luau` succeeds, game `Script` fails `lacking capability PluginOrOpenCloud`):**",
+   "status": "studio",
+   "kind": "negative",
+   "source": "0.748 dump + Studio 0.748.0.7481526",
+   "evidence": "Dump + probe_claims.luau across Plugin, Server, Client, Actor.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "legacy-migration-294",
+   "file": "references/legacy-migration.md",
+   "quote": "`Chat.LoadDefaultChat`, `Lighting.LightAttenuationMode` (`Enum.LightAttenuationMode`), `BaseWrap` (`CageMeshContent`, `CageMeshId`, `CageOrigin`, `ImportOrigin`), `WrapLayer` (`BindOffset`, `ReferenceMeshContent`, `ReferenceMeshId`, `ReferenceOrigin`; `TargetShaping` write `AvatarAppearance`), `WrapTarget.Stiffness` (deprecated), `TextDocument:ReadAsync()` (`Yields`)",
+   "status": "studio",
+   "kind": "negative",
+   "source": "0.748 dump + Studio 0.748.0.7481526",
+   "evidence": "Dump diff: Write Security -> None + PluginOrOpenCloud; Studio 0.748: Lighting.LightAttenuationMode & Chat.LoadDefaultChat succeeded in Plugin and failed lacking PluginOrOpenCloud in Server/Client/Actor.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "legacy-migration-295",
+   "file": "references/legacy-migration.md",
+   "quote": "**Removed in 0.747–0.748:** `PlayerDataRecord`, `PlayerDataRecordConfig`, `Player.GetData`, `PlayerData.GetPlayer` / `GetRecordAsync`, `PlayerDataService.GetRecordConfig` / `LoadFailureBehavior`, `Enum.PlayerDataErrorState`, `Enum.PlayerDataLoadFailureBehavior`; `Workspace.ImprovedAnimationConstraint` (was `NotScriptable`), `ParticleEmitter2D.LightEmission` (replaced by `LightInfluence`), `WrapLayer.RotateScaleDeformationMap` / `ScaleOnlyDeformationMap`.",
+   "status": "dump",
+   "kind": "negative",
+   "source": "0.746->0.748 API dump diff",
+   "evidence": "Dump diff 0.746->0.748: PlayerDataRecord*, Workspace.ImprovedAnimationConstraint, ParticleEmitter2D.LightEmission, WrapLayer.*DeformationMap removed (Workspace.ImprovedAnimationConstraint & PDS verified missing in Studio 0.748).",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "legacy-migration-296",
+   "file": "references/legacy-migration.md",
+   "quote": "**Still NOT enabled / refused / unchanged in Studio 0.748 *(Studio)*:** `buffer.readvectorf32x2/x3` and `writevectorf32x2/x3` (`nil`, `DebugLuauBufferVectorLibrary` off), `integer` global (`nil`, clipped from Luau 0.747), `GeometryService:BakeToMeshAsync()` (`This API is not available yet`), `GeometryService:SplitApartAsync()` (`This API is not yet released!`), `GeometryService:NegateAsync()` / `SeparateAsync()` (added in dump with `CSG` + `PluginOrOpenCloud`, fail `the function is not enabled yet.` in `execute_luau` and `lacking capability PluginOrOpenCloud` in game Scripts), `SerializationService:SerializeValue` (`not yet enabled`), `MeshPart:GetSurfaceSlotsAsync` (`not yet enabled`), `ModerationService:BindViolationProcessor` (`Safety callback API is not enabled`), `TweenInfo.new` / `TweenService:GetValue` / `UIPageLayout` with `EasingStyle.Spring` or `Bezier` (error / stay `Back`), `Camera.ProjectionType = Enum.ProjectionType.Orthographic` / `OrthographicSize` (silently ignored), `PartType.Capsule` (accepts enum, behaves as Block with mass `56` on `4×10×2`), `Player.DeviceTrustLevel` (`Pending` in Studio; callback assignable on Server/Actor only), `MarketplaceService:CanUsersTransferRobuxAsync` (`not enabled`), `GetPassOwnershipAsync` (`{ Owned, Active }`), `RunService:BindToSimulationParallel` / `BindToAnimationParallel` (Actor-only), and existing `PluginOrOpenCloud` / `RobloxScriptSecurity` / `InternalTest` gates (`AnimationPlayer`, `Stats:GetMemoryUsageMbFiltered`, `SoundService:GetInputDevice`).",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.748.0.7481526",
+   "evidence": "All listed items re-verified in probe_claims.luau across Plugin, Server, Client, and Actor in Studio 0.748.0.7481526.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "legacy-migration-297",
+   "file": "references/legacy-migration.md",
+   "quote": "**Creator-docs sync (2026-11-07 to 2026-11-23, `Roblox/creator-docs` through `a23352b2`):** `STUDIO_VERSION` updated to `0.748.0.7481526`; `studio/mcp.md` lists 30 tools (`generate_avatar`, `generate_animation`, `save_place`, `submit_feedback`, notes cross-teleport playtest automation); `projects/teleport.md` adds *Test teleports in Studio*; the `TestService` reference page was rewritten for automated Luau unit tests; `ui/2D-particle-emitters.md` documents `ParticleEmitter2D` (UI Particles beta); `ui/temporary-limits.md` documents the 24h+ / 60s `⏱️⏱️⏱️` limit on non-`TextChatService` player conversation surfaces; `studio/testing-modes.md` adds `LogService:GetLogHistoryAsync()` in Team Test; `studio/explorer.md` adds JSON copy/paste; `studio/cli.md` adds `--background` (Mac).",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs 2026-11-07..2026-11-23",
+   "evidence": "GitHub API commits on Roblox/creator-docs through a23352b2: STUDIO_VERSION 0.748.0.7481526, studio/mcp.md 30 tools, teleport.md, TestService.yaml, 2D-particle-emitters.md, temporary-limits.md, testing-modes.md, explorer.md, cli.md.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "luau-fundamentals-111",
+   "file": "references/luau-fundamentals.md",
+   "quote": "**0.745** | Syntax: **`while local` / `while const`** loops, one binding scoped to the condition and body | **Not usable.** Gate renamed `DebugLuauWhileLocal*` → `LuauExperimentalWhileLocalSyntax` / `LuauExperimentalWhileLocalAnalysis` in 0.746; still absent from Studio's and every client's published flags, and fails to compile in Studio 0.746/0.748 *(Studio)*",
+   "status": "studio",
+   "kind": "negative",
+   "source": "luau-lang/luau 0.746 + clientsettingscdn + Studio 0.748",
+   "evidence": "Gate renamed LuauExperimentalWhileLocalSyntax/Analysis in 0.746; absent in all 6 apps' flags; syntax error in Studio.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "luau-fundamentals-112",
+   "file": "references/luau-fundamentals.md",
+   "quote": "**0.746** | Analysis: globals read and never assigned no longer leak a blocked type; globals in type functions no longer affect outer inference; iteration over unions containing non-table tables errors. Runtime: string-table hash salting (`lua_setpointerencodekey`); functions calling `require` skipped from runtime inlining. NCG: tag-guided runtime recompilation. Classes RFC fixes (`DebugLuauUserDefinedClasses*`, off) | Inference and runtime internals, no edit. `while local` remains off",
+   "status": "source",
+   "kind": "negative",
+   "source": "luau-lang/luau 0.746 release notes",
+   "evidence": "luau-lang/luau 0.746 release (2026-11-07) + flag diff.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "luau-fundamentals-113",
+   "file": "references/luau-fundamentals.md",
+   "quote": "**0.747** | `buffer.readvectorf32x2/x3` and `buffer.writevectorf32x2/x3` (RFC #198); **all in-progress `integer` library/type code clipped** (RFC #269); `luau_loadlazy`; analysis rejects iterating over non-iterable unions (`boolean \\| number \\| vector \\| {}`); NCG direct userdata access, frozen metatable cache, lower promotion thresholds (`LuauCodegenRuntimeFeedback` / `LuauPromoteProto`); Classes `local`/nested classes | `buffer.readvector*f32` / `writevector*f32` are behind `DebugLuauBufferVectorLibrary` / `DebugLuauBufferVectorFastcalls` and still **`nil` in Studio 0.748** *(Studio)*. `integer` remains `nil` and its prototype flags were removed from Luau",
+   "status": "studio",
+   "kind": "negative",
+   "source": "luau-lang/luau 0.747 + Studio 0.748.0.7481526",
+   "evidence": "luau-lang/luau 0.747 release (2026-11-13) clipped integer RFC #269 and added buffer.readvector*f32 behind DebugLuauBufferVector*; Studio 0.748 probe confirmed both nil.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "luau-fundamentals-114",
+   "file": "references/luau-fundamentals.md",
+   "quote": "**0.748** | Embedded builtin definitions refactored (`LuauEZAddBuiltins`); `LuauDecomposeIntersectionOfFreeType` reverted; type functions no longer leak expression globals (`X = 42` inside `type function`); inlined captured-call clobber fix; NCG constant-load sinking | Inference, runtime, and NCG fixes; no edit",
+   "status": "source",
+   "kind": "negative",
+   "source": "luau-lang/luau 0.748 release notes",
+   "evidence": "luau-lang/luau 0.748 release (2026-11-20).",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "luau-fundamentals-115",
+   "file": "references/luau-fundamentals.md",
+   "quote": "`RoleSet = 4`, DevForum topic `4988432` — export values and cyclic requires), is likewise Studio-only and must not be",
+   "status": "source",
+   "kind": "negative",
+   "source": "clientsettingscdn 2026-11-23",
+   "evidence": "FFlagLuauModularityBetaFeature=True, RolloutPercent=0, RoleSet=4 in Studio flags; absent in player clients.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "luau-fundamentals-116",
+   "file": "references/luau-fundamentals.md",
+   "quote": "**`while local` / `while const`** syntax, 0.745 | `LuauExperimentalWhileLocalSyntax`, `LuauExperimentalWhileLocalAnalysis` (renamed from `DebugLuauWhileLocal*` in 0.746) | Not in the `if local` Studio beta; absent from published flags",
+   "status": "source",
+   "kind": "number",
+   "source": "luau-lang/luau 0.746..0.748 + clientsettingscdn",
+   "evidence": "LuauExperimentalWhileLocalSyntax/Analysis absent from all 6 apps' published flags (2026-11-23).",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "luau-fundamentals-117",
+   "file": "references/luau-fundamentals.md",
+   "quote": "**`buffer.readvector*f32` / `writevector*f32`**, 0.747 | `DebugLuauBufferVectorLibrary`, `DebugLuauBufferVectorFastcalls` | Documented on `buffer`, but **`nil` in Studio 0.748** *(Studio)*",
+   "status": "studio",
+   "kind": "number",
+   "source": "luau-lang/luau 0.747 + Studio 0.748.0.7481526",
+   "evidence": "DebugLuauBufferVectorLibrary/Fastcalls absent from published flags; Studio 0.748 probe confirmed nil across all 4 contexts.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "luau-fundamentals-118",
+   "file": "references/luau-fundamentals.md",
+   "quote": "**`integer`** library (`LuauIntegerLibrary`) | **Clipped in 0.747** (RFC #269); flags removed from open-source Luau | Still `nil` in Studio 0.748 *(Studio)*. Not a Roblox API",
+   "status": "studio",
+   "kind": "negative",
+   "source": "luau-lang/luau 0.747 + Studio 0.748.0.7481526",
+   "evidence": "integer code/flags clipped in Luau 0.747; global integer is nil in Studio 0.748 across all 4 contexts.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "luau-fundamentals-119",
+   "file": "references/luau-fundamentals.md",
+   "quote": "`buffer` page (added 2026-11-05, landed in Luau 0.747 behind `DebugLuauBufferVectorLibrary`) and",
+   "status": "source",
+   "kind": "number",
+   "source": "Roblox/creator-docs buffer.yaml + Luau 0.747",
+   "evidence": "Documented on buffer page; behind DebugLuauBufferVectorLibrary in Luau 0.747.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "luau-fundamentals-120",
+   "file": "references/luau-fundamentals.md",
+   "quote": "(*tested* 2026-11-23). Do not call them yet: read three floats with `buffer.readf32` instead.",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.748.0.7481526",
+   "evidence": "probe_claims.luau confirmed all 4 buffer.*vectorf32x* are nil in Plugin, Server, Client, and Actor.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "mcp-integration-166",
+   "file": "references/mcp-integration.md",
+   "quote": "`screen_capture` | Captures the viewport and returns image data (`capture_id` required, e.g. `ScreenCapture_1`). `camera_position` and `look_at_position` must be 3-element `[x, y, z]` arrays passed together (`look_at` errors). In `Edit` it captures the Studio viewport tab (and shows a dark backdrop if a non-viewport tab is focused); in `Play` it captures the live client game view. **Primary visual check.**",
+   "status": "studio",
+   "kind": "negative",
+   "source": "screen_capture.json + Studio 0.748.0.7481526",
+   "evidence": "Schema requires capture_id; Studio 0.748 test showed camera_position+look_at_position must be 3-element arrays passed together and Edit captures dark backdrop if non-viewport tab is focused.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "mcp-integration-167",
+   "file": "references/mcp-integration.md",
+   "quote": "`video_capture` | Records playtest video in `datamodel_type: \"Client\"` (`is_start: true` then `false`), returning `recording_id`, `status` (`\"completed\"` / `\"partial\"`), artifact paths (`video`, `manifest`, `frame_times`), and capture warnings. Schema says to prefer `screen_capture` unless diagnosing motion/stutter/flicker. **0.748.0.7481526 note:** calling `video_capture` in Play `Client` returned `Network action VideoCaptureTool.CaptureVideo sent to DMN_ID_PLAYCLIENT failed - Target is not reachable`; keep `screen_capture` primary.",
+   "status": "studio",
+   "kind": "negative",
+   "source": "video_capture.json + Studio 0.748.0.7481526",
+   "evidence": "Schema: Client only, outputs video/manifest/frame_times; Studio 0.748.0.7481526 Play Client returned 'Target is not reachable'.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "mcp-integration-168",
+   "file": "references/mcp-integration.md",
+   "quote": "`generate_animation` | Generates new R15+ animations from `textPrompt` or upscales an existing R6 animation (`inputAssetId`) to R15. Optional `duration` (1–30 s per schema; `studio/mcp.md` says up to 10 s) and `instance_path` (rig Model; otherwise uses selected rig or inserts a default rig). Uploads/modifies the rig.",
+   "status": "docs",
+   "kind": "number",
+   "source": "generate_animation.json + studio/mcp.md",
+   "evidence": "Schema: duration 1-30s, textPrompt or inputAssetId, instance_path; studio/mcp.md states up to 10s.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "mcp-integration-169",
+   "file": "references/mcp-integration.md",
+   "quote": "`wait_job_finished` | Waits for a background job (`jobId` from `async: true`) to reach a terminal state (`Completed` / `Failed` / `Cancelled`). Schema `timeout` defaults to 600 s, **capped at 45 seconds for external MCP clients** — loop while `status == \"Running\"`.",
+   "status": "studio",
+   "kind": "number",
+   "source": "wait_job_finished.json + Studio 0.748.0.7481526",
+   "evidence": "Schema: timeout defaults 600s, capped at 45s for external MCP clients; generative jobs ran 24-107s.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "mcp-integration-170",
+   "file": "references/mcp-integration.md",
+   "quote": "at 45 seconds for external MCP clients**: if a job is still running when a call returns,",
+   "status": "docs",
+   "kind": "number",
+   "source": "wait_job_finished.json",
+   "evidence": "Schema explicitly notes 45-second cap for external MCP clients.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "mcp-integration-171",
+   "file": "references/mcp-integration.md",
+   "quote": "`list_roblox_skills` | Lists all 17 built-in `rbx-*` skills (and any user skills) with when to use each. Read-only. Call this before starting unfamiliar Studio work. *(Older 0.745–0.746 hosts exposed `list_skills`; check the live tool list.)*",
+   "status": "studio",
+   "kind": "negative",
+   "source": "list_roblox_skills.json",
+   "evidence": "Schema lists 17 built-in rbx-* skills in Studio 0.748.0.7481526; older 0.745-0.746 hosts exposed list_skills.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "mcp-integration-172",
+   "file": "references/mcp-integration.md",
+   "quote": "`get_roblox_skill` | Loads Roblox's first-party guide for a named `rbx-*` or user skill (`skill_name`, `studio_id`). *(Older 0.745–0.746 hosts and `studio/mcp.md` name `skill`; check the live tool list.)*",
+   "status": "docs",
+   "kind": "number",
+   "source": "get_roblox_skill.json + studio/mcp.md",
+   "evidence": "Live schema names get_roblox_skill(skill_name, studio_id); studio/mcp.md and 0.745-0.746 hosts name skill.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "mcp-integration-173",
+   "file": "references/mcp-integration.md",
+   "quote": "`submit_feedback` | Sends Studio/MCP tool feedback (`feedback` ≤4000 bytes, `studio_id`) to Roblox. One specific issue per call; **never** send source code, PII, or credentials; do not call if the user asked not to; report in one short sentence after succeeding.",
+   "status": "docs",
+   "kind": "negative",
+   "source": "submit_feedback.json",
+   "evidence": "Schema: feedback <=4000 bytes, studio_id; safety policy forbids source code/PII/credentials.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "mcp-integration-174",
+   "file": "references/mcp-integration.md",
+   "quote": "(that host is not on the allowlist), or use `get_roblox_skill(\"rbx-perf-profiling\")`.",
+   "status": "docs",
+   "kind": "negative",
+   "source": "http_get.json",
+   "evidence": "raw.githubusercontent.com is not in http_get's allowlist.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "mcp-integration-175",
+   "file": "references/mcp-integration.md",
+   "quote": "DataStore/ProfileStore persistence, UI/monetization architecture, `NotScriptable` /",
+   "status": "advice",
+   "kind": "negative",
+   "source": "mcp-integration ownership split",
+   "evidence": "",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "mcp-integration-176",
+   "file": "references/mcp-integration.md",
+   "quote": "`PluginOrOpenCloud` / docs-ahead engine truth, agent→Studio safety, and **verifying stale steps",
+   "status": "advice",
+   "kind": "negative",
+   "source": "mcp-integration ownership split",
+   "evidence": "",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "mcp-integration-177",
+   "file": "references/mcp-integration.md",
+   "quote": "observed behavioral errors remain unfixed:",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Audit of 12 saved rbx-* skills + Studio 0.748",
+   "evidence": "Verified across 12 saved rbx-* skill bodies and Studio 0.748 live runs.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "mcp-integration-178",
+   "file": "references/mcp-integration.md",
+   "quote": "`rbx-convert-to-streaming` | Convert a non-streaming place to `StreamingEnabled` or fix streaming bugs | `project-structure.md`, `physics-and-world.md` | Uses old `skill` (6×); references `Workspace.ModelStreamingBehavior` (`NotScriptable` in 0.748) and `Model:SetPrimaryPartCFrame` (marked deprecated in its own migration list)",
+   "status": "studio",
+   "kind": "negative",
+   "source": "rbx-convert-to-streaming + 0.748 dump",
+   "evidence": "Grep of saved rbx-convert-to-streaming body: 6x skill, Workspace.ModelStreamingBehavior (NotScriptable in 0.748), SetPrimaryPartCFrame.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "mcp-integration-179",
+   "file": "references/mcp-integration.md",
+   "quote": "`rbx-debug` | Breakpoints and thread inspection via `ScriptDebuggerService` | `mcp-integration.md`, `luau-fundamentals.md` | Clean (0 stale MCP tool names); `ScriptDebuggerService` is `PluginSecurity` (`execute_luau` only)",
+   "status": "dump",
+   "kind": "negative",
+   "source": "rbx-debug + 0.748 dump",
+   "evidence": "Saved rbx-debug body has 0 stale tool names; ScriptDebuggerService is PluginSecurity.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "mcp-integration-180",
+   "file": "references/mcp-integration.md",
+   "quote": "`rbx-instrument-analytics` | Audit and add `AnalyticsService` economy, funnel, and custom events | `monetization.md`, `security-hardening.md` | Uses old `skill` (6×); uses shorthand `Enum.AnalyticsCustomFieldKeys.CustomField0X.Name` (0.748 dump has `CustomField01`–`03`)",
+   "status": "dump",
+   "kind": "number",
+   "source": "rbx-instrument-analytics + 0.748 dump",
+   "evidence": "Saved body uses 6x skill and Enum.AnalyticsCustomFieldKeys.CustomField0X.Name; 0.748 dump has CustomField01-03.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "mcp-integration-181",
+   "file": "references/mcp-integration.md",
+   "quote": "`rbx-permissions` | Open Cloud scopes, 403s, HTTP allowlist, DataStore/MemoryStore access | `mcp-integration.md`, `agent-safety.md` | Clean; never work around refusals",
+   "status": "advice",
+   "kind": "negative",
+   "source": "rbx-permissions audit",
+   "evidence": "",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "mcp-integration-182",
+   "file": "references/mcp-integration.md",
+   "quote": "`rbx-network-simulator` drives `settings().Network` from `execute_luau` (game Scripts fail with",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.742 & 0.748",
+   "evidence": "settings().Network requires Plugin privilege; game Script fails lacking capability Plugin.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "mcp-integration-183",
+   "file": "references/mcp-integration.md",
+   "quote": "`save_place` | Saves the open place (`studio_id`, optional `notes` version-history label, ignored for local `.rbxl`/`.rbxlx` files). Returns `status`: `Saved`, `NotNeeded`, `NeedsUserAction`, `Busy`, or `Failed`. **Never publishes.** Call only when requested — each save to Roblox creates a version in version history.",
+   "status": "docs",
+   "kind": "negative",
+   "source": "save_place.json",
+   "evidence": "Schema: optional notes ignored on local files, returns Saved/NotNeeded/NeedsUserAction/Busy/Failed; never publishes.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "mcp-integration-184",
+   "file": "references/mcp-integration.md",
+   "quote": "`segment_mesh` | Splits an existing **single `MeshPart`** into up to **5** named `parts` and inserts the result as a **new Model next to the source** (the source stays). Schema says `MeshPart or Model`, **but measured in Studio 0.748.0.7481526**: passing a multi-MeshPart `Model` fails with `Studio.Assistant.SegmentMesh.SegmentRequiresSingleMeshPart`.",
+   "status": "studio",
+   "kind": "negative",
+   "source": "segment_mesh.json + Studio 0.748.0.7481526",
+   "evidence": "Schema lists MeshPart or Model; Studio 0.748 failed multi-MeshPart Model with SegmentRequiresSingleMeshPart and succeeded on single MeshPart (~41s).",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "mcp-integration-185",
+   "file": "references/mcp-integration.md",
+   "quote": "mesh ~62 s; `segment_mesh` on a single child `MeshPart` ~41 s, while a multi-MeshPart `Model`",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.748.0.7481526",
+   "evidence": "Measured live in Studio 0.748.0.7481526: generate_texture Fast ~62s; segment_mesh single MeshPart ~41s.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "mcp-integration-186",
+   "file": "references/mcp-integration.md",
+   "quote": "**Why:** External MCP clients cap `wait_job_finished` at **45 s** per call, whereas Studio 0.748",
+   "status": "studio",
+   "kind": "number",
+   "source": "wait_job_finished.json + Studio 0.748.0.7481526",
+   "evidence": "Schema 45s cap vs measured 24-107s Studio 0.748 job durations.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "mcp-integration-187",
+   "file": "references/mcp-integration.md",
+   "quote": "generative jobs routinely run **24–107 s** (`generate_material` ~24 s, `segment_mesh` ~41 s,",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.748.0.7481526",
+   "evidence": "Measured live in Studio 0.748.0.7481526: generate_material ~24s, segment_mesh ~41s.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "mcp-integration-188",
+   "file": "references/mcp-integration.md",
+   "quote": "`generate_texture` `Fast` ~62 s, `generate_scene` ~80 s, `generate_mesh` ~99 s,",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.748.0.7481526",
+   "evidence": "Measured live in Studio 0.748.0.7481526: generate_texture Fast ~62s, generate_scene ~80s, generate_mesh ~99s.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "mcp-integration-189",
+   "file": "references/mcp-integration.md",
+   "quote": "`generate_procedural_model` ~101–107 s). Loop on `status == \"Running\"` rather than treating the",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.748.0.7481526",
+   "evidence": "Measured live in Studio 0.748.0.7481526: generate_procedural_model Sample 1 ~107s, Sample 2 ~101s.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "mcp-integration-190",
+   "file": "references/mcp-integration.md",
+   "quote": "first 45 s return as a failure.",
+   "status": "advice",
+   "kind": "number",
+   "source": "wait_job_finished polling guidance",
+   "evidence": "",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "mcp-integration-191",
+   "file": "references/mcp-integration.md",
+   "quote": "**Observed Studio 0.748.0.7481526 caveats:**",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.748.0.7481526",
+   "evidence": "Section header for observed Studio 0.748.0.7481526 playtest caveats.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "mcp-integration-192",
+   "file": "references/mcp-integration.md",
+   "quote": "`character_navigation` fails with `Can not find a route to the destination` when the target lacks",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.748.0.7481526",
+   "evidence": "Live character_navigation failed with 'Can not find a route to the destination' when lacking navmesh path from spawn.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "mcp-integration-193",
+   "file": "references/mcp-integration.md",
+   "quote": "DMN_ID_PLAYCLIENT failed - Target is not reachable`; keep `screen_capture` primary.",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.748.0.7481526",
+   "evidence": "Live video_capture in Play Client returned 'Network action VideoCaptureTool.CaptureVideo sent to DMN_ID_PLAYCLIENT failed - Target is not reachable'.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "mcp-integration-194",
+   "file": "references/mcp-integration.md",
+   "quote": "35 tools (2026-11-07) | **39 on 2026-11-23** (Studio 0.748.0.7481526; **30** in `studio/mcp.md`): +`generate_animation`, +`save_place`, +`submit_feedback`, +`video_capture`. | Live schemas + docs, 2026-11-23",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.748.0.7481526 + creator-docs",
+   "evidence": "Live MCP schemas: 39 tools; studio/mcp.md: 30 tools.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "mcp-integration-195",
+   "file": "references/mcp-integration.md",
+   "quote": "`list_skills` / `skill` as primary names | Renamed to **`list_roblox_skills`** / **`get_roblox_skill`** in Studio 0.748.0.7481526 (older 0.745–0.746 hosts and `studio/mcp.md` still show `list_skills` / `skill`; check the live tool list). | Live schemas, 2026-11-23",
+   "status": "docs",
+   "kind": "number",
+   "source": "MCP schemas + studio/mcp.md",
+   "evidence": "Live schemas rename list_skills/skill to list_roblox_skills/get_roblox_skill; studio/mcp.md still shows skill.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "mcp-integration-196",
+   "file": "references/mcp-integration.md",
+   "quote": "`segment_mesh` works on any `Model` | Schema says `MeshPart or Model`, **but Studio 0.748 fails on a multi-MeshPart `Model` with `SegmentRequiresSingleMeshPart`**; pass a single `MeshPart`. | Run in Studio 0.748.0.7481526",
+   "status": "studio",
+   "kind": "negative",
+   "source": "segment_mesh.json + Studio 0.748.0.7481526",
+   "evidence": "Measured failure SegmentRequiresSingleMeshPart on multi-MeshPart Model in Studio 0.748.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "mcp-integration-197",
+   "file": "references/mcp-integration.md",
+   "quote": "`wait_job_finished` waits up to 600 s in one call | Schema `timeout` defaults to 600 s, **capped at 45 s per call for external MCP clients**; loop while `status == \"Running\"`. | Live schema + Studio 0.748 run",
+   "status": "studio",
+   "kind": "number",
+   "source": "wait_job_finished.json + Studio 0.748.0.7481526",
+   "evidence": "Schema documents 600s default / 45s cap for external MCP clients; verified across 101-107s jobs.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "mcp-integration-198",
+   "file": "references/mcp-integration.md",
+   "quote": "`video_capture` works in Play `Client` | In Studio 0.748.0.7481526 Play `Client`, `video_capture` returned `Target is not reachable`; keep `screen_capture` primary. | Run in Studio 0.748.0.7481526",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.748.0.7481526",
+   "evidence": "Measured failure 'Target is not reachable' in Play Client on 0.748.0.7481526.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "monetization-045",
+   "file": "references/monetization.md",
+   "quote": "To audit a place, `get_roblox_skill(\"rbx-process-receipt-misuse\")` reports PASS, FAIL or REVIEW without",
+   "status": "source",
+   "kind": "negative",
+   "source": "rbx-process-receipt-misuse + get_roblox_skill",
+   "evidence": "Audited rbx-process-receipt-misuse body: PASS/FAIL/REVIEW verdicts, updated tool name get_roblox_skill.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "networking-069",
+   "file": "references/networking.md",
+   "quote": "every filtered player-text surface drops to one submission per 60 seconds and shows `⏱️⏱️⏱️` in between.",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs ui/temporary-limits.md",
+   "evidence": "Creator-docs commit (2026-11): non-TextChatService filtered surfaces rate-limited to 1 submission/60s with timer icon.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "networking-070",
+   "file": "references/networking.md",
+   "quote": "`ForcePublicServer` | `true` (added in 0.748; `Teleport` capability) | Forces a public server for a single-player teleport when no other routing field is set, skipping automatic VIP-server return inference",
+   "status": "dump",
+   "kind": "number",
+   "source": "0.748 dump + TeleportOptions.yaml",
+   "evidence": "0.748 dump: TeleportOptions.ForcePublicServer bool, Teleport capability; TeleportOptions.yaml documents VIP-server inference bypass.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "networking-071",
+   "file": "references/networking.md",
+   "quote": "reserved server (in Studio both read `\"\"` and `0`). Since November 2026 (`projects/teleport.md#test-teleports-in-studio`),",
+   "status": "docs",
+   "kind": "number",
+   "source": "Roblox/creator-docs projects/teleport.md",
+   "evidence": "projects/teleport.md (*Test teleports in Studio*) added in Nov 2026.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "networking-072",
+   "file": "references/networking.md",
+   "quote": "modes (opening the destination as a new test server; deprecated `Teleport()` / `TeleportPartyAsync()` /",
+   "status": "docs",
+   "kind": "negative",
+   "source": "Roblox/creator-docs projects/teleport.md",
+   "evidence": "projects/teleport.md: deprecated Teleport/TeleportPartyAsync/TeleportToPlaceAsync unsupported in Studio teleport testing.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "networking-073",
+   "file": "references/networking.md",
+   "quote": "`TeleportToPlaceAsync()` are not supported). Note `DataModel.ServerRegion` (0.748, `ReadOnly`, `NotReplicated`)",
+   "status": "studio",
+   "kind": "negative",
+   "source": "0.748 dump + Studio 0.748.0.7481526",
+   "evidence": "0.748 dump: DataModel.ServerRegion ReadOnly/NotReplicated; Studio 0.748 probe read ''.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "performance-optimization-113",
+   "file": "references/performance-optimization.md",
+   "quote": "(flipped in 0.748 with `FFlagSceneAnalysisCollisionGeometryMemoryEnabled = True`) each return a table of nested",
+   "status": "studio",
+   "kind": "number",
+   "source": "clientsettingscdn + Studio 0.748.0.7481526",
+   "evidence": "FFlagSceneAnalysisCollisionGeometryMemoryEnabled=True; Studio 0.748 Play Server measured 5.14 ms.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "ui-systems-039",
+   "file": "references/ui-systems.md",
+   "quote": "published flags (`clientsettingscdn`, 2026-11-23), `FFlagUpgradedUIGradientsBetaFeature` is now",
+   "status": "source",
+   "kind": "number",
+   "source": "clientsettingscdn 2026-11-23",
+   "evidence": "clientsettingscdn PCStudioApp/MacStudioApp + 4 clients: FFlagUpgradedUIGradientsBetaFeature=False in Studio, FFlagUIGradientExtendedModes4=True across all 6 apps.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "ui-systems-040",
+   "file": "references/ui-systems.md",
+   "quote": "in the 0.748 dump (`None`, `Up`, `Down`, `Left`, `Right`, `Forward`, `Backward`), and `SelectionGained`",
+   "status": "dump",
+   "kind": "number",
+   "source": "0.748-Full-API-Dump.json",
+   "evidence": "Enum.GuiNavigationDirection has 7 items: None, Up, Down, Left, Right, Forward, Backward.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "ui-systems-041",
+   "file": "references/ui-systems.md",
+   "quote": "passes one argument (`Enum.GuiNavigationDirection.None`) in Studio `0.748.0.7481526` *(Studio)*.",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.748.0.7481526",
+   "evidence": "probe_claims.luau Client run: SelectionGained fired with argc=1, Enum.GuiNavigationDirection.None.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "ui-systems-042",
+   "file": "references/ui-systems.md",
+   "quote": "2026-11-19). In 0.748 `ParticleEmitter2D.LightEmission` was removed and replaced by",
+   "status": "dump",
+   "kind": "negative",
+   "source": "0.746->0.748 API dump diff",
+   "evidence": "ParticleEmitter2D.LightEmission removed and LightInfluence added in 0.748 dump.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "worked-examples-049",
+   "file": "references/worked-examples.md",
+   "quote": "[Debug a runtime error through MCP](#2-debug-a-runtime-error-through-mcp)",
+   "status": "advice",
+   "kind": "negative",
+   "source": "worked-examples TOC",
+   "evidence": "",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "worked-examples-050",
+   "file": "references/worked-examples.md",
+   "quote": "[Migrate a deprecated API](#3-migrate-a-deprecated-api)",
+   "status": "advice",
+   "kind": "negative",
+   "source": "worked-examples TOC",
+   "evidence": "",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "worked-examples-051",
+   "file": "references/worked-examples.md",
+   "quote": "`.png` / `.jpg` / `.jpeg` (≤5 MB) → returns `IMAGEID_<id>`. (Never call `upload_image` for a",
+   "status": "docs",
+   "kind": "negative",
+   "source": "store_image.json + upload_image.json",
+   "evidence": "store_image accepts local png/jpg/jpeg <=5MB -> IMAGEID_<id>; upload_image accepts HTTP(S) URLs.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "worked-examples-052",
+   "file": "references/worked-examples.md",
+   "quote": "`wait_job_finished` at **45 s** per call while Studio 0.748 jobs run ~24–107 s, loop",
+   "status": "studio",
+   "kind": "number",
+   "source": "wait_job_finished.json + Studio 0.748.0.7481526",
+   "evidence": "Schema 45s cap; Studio 0.748 jobs ran 24-107s.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "worked-examples-053",
+   "file": "references/worked-examples.md",
+   "quote": "If calling `segment_mesh`, pass a **single `MeshPart`** (`instance_path`), never a",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.748.0.7481526",
+   "evidence": "Multi-MeshPart Model failed SegmentRequiresSingleMeshPart; single MeshPart succeeded (~41s).",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "worked-examples-054",
+   "file": "references/worked-examples.md",
+   "quote": "multi-MeshPart `Model` (fails with `SegmentRequiresSingleMeshPart` in Studio 0.748).",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.748.0.7481526",
+   "evidence": "Observed error Studio.Assistant.SegmentMesh.SegmentRequiresSingleMeshPart on multi-MeshPart Model.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "worked-examples-055",
+   "file": "references/worked-examples.md",
+   "quote": "`screen_capture` (keep primary over `video_capture`, which failed with `Target is not reachable`",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.748.0.7481526",
+   "evidence": "video_capture failed 'Target is not reachable' in Studio 0.748.0.7481526 Play Client; screen_capture succeeded.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "worked-examples-056",
+   "file": "references/worked-examples.md",
+   "quote": "in Studio 0.748.0.7481526 Play `Client`) → `start_stop_play` to stop.",
+   "status": "studio",
+   "kind": "number",
+   "source": "Studio 0.748.0.7481526",
+   "evidence": "Observed in Studio 0.748.0.7481526 Play Client.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "worked-examples-057",
+   "file": "references/worked-examples.md",
+   "quote": "`ThickHits > 0`, and `PlayerTriggered == true`; `get_console_output` reports 0 errors;",
+   "status": "studio",
+   "kind": "negative",
+   "source": "Studio 0.748.0.7481526 physics_samples.luau",
+   "evidence": "Measured in Studio 0.748 playtest: ThinHits=0, ThickHits=6800, PlayerTriggered=true, 0 console errors.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "worked-examples-058",
+   "file": "references/worked-examples.md",
+   "quote": "`--!strict` Luau type errors, DataStore session locking, or server-authoritative `RemoteEvent`",
+   "status": "advice",
+   "kind": "negative",
+   "source": "worked-examples Example 10 Not-this",
+   "evidence": "",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "worked-examples-059",
+   "file": "references/worked-examples.md",
+   "quote": "A host whose live tool list still exposes `list_skills` / `skill` (Studio 0.745–0.746) → use",
+   "status": "docs",
+   "kind": "number",
+   "source": "MCP schemas 0.745-0.746 vs 0.748",
+   "evidence": "0.745-0.746 hosts exposed list_skills/skill; 0.748 exposes list_roblox_skills/get_roblox_skill.",
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "worked-examples-060",
+   "file": "references/worked-examples.md",
+   "quote": "**Verification:** Confirm the target inspection or test succeeded with 0 errors in",
+   "status": "advice",
+   "kind": "negative",
+   "source": "worked-examples verification step",
+   "evidence": "",
+   "checked": "2026-11-23"
   }
  ]
 }

@@ -1,16 +1,16 @@
 ---
 name: roblox-dev-skill
 description: >
-  Verified, current Roblox and Luau knowledge for writing, reviewing and debugging Roblox game code.
-  Use it for ANY task that involves Roblox, Luau or Roblox Studio, even a quick question or a
-  one-line snippet: scripts and modules, RemoteEvents, DataStores and ProfileStore, ProcessReceipt
-  and monetization, UI, the Input Action System, Parallel Luau and Actors, performance, security
-  and anti-exploit, deprecated APIs, Rojo, and the Roblox Studio MCP tools (execute_luau,
-  multi_edit, script_read, open_cloud_invoke). It holds facts that general knowledge gets wrong (which properties a
-  game Script may set, features that exist but are not enabled, Studio betas that cannot be
-  published, engine changes up to 0.746 and Luau up to 0.745) and worked examples tested in Studio, so consult
-  it before answering from memory. Not for Lua outside Roblox (Redis, OpenResty, WoW addons, LOVE)
-  or for other game engines.
+  Verified, current Roblox and Luau knowledge for writing, reviewing, debugging and testing Roblox
+  experiences. Use for ANY Roblox, Luau or Roblox Studio task, even a quick snippet: scripts,
+  RemoteEvents, DataStores/ProfileStore, ProcessReceipt, UI, Input Action System, Parallel Luau,
+  performance, security, deprecated APIs, Rojo, and Studio MCP tools (list_roblox_skills,
+  get_roblox_skill for built-in rbx-* skills, execute_luau, multi_edit, script_read,
+  open_cloud_invoke, generate_mesh, generate_procedural_model, generate_animation, store_image,
+  start_stop_play, screen_capture, video_capture, save_place). Holds facts general knowledge gets
+  wrong (Script capability gates, unenabled features, Studio betas, engine 0.748 / Luau 0.748) and
+  Studio-tested workflows; consult before answering from memory. Not for non-Roblox Lua (Redis,
+  OpenResty, WoW, LOVE) or other engines.
 ---
 
 # Roblox Game Development Skill
@@ -19,12 +19,15 @@ Expert development companion for building Roblox experiences with Luau. Grounded
 official Roblox documentation (https://create.roblox.com/docs), the Luau language spec
 (https://luau.org), and the Roblox Lua Style Guide (https://roblox.github.io/lua-style-guide/).
 
-> **Engine**: Roblox Studio **0.746.0.7461269** with **Luau 0.745** (released 2026-10-30) — dump
-> downloaded, re-split, and diffed against 0.745 on **2026-11-05**, with every developer-visible
-> change run in Studio 0.746. 950 classes / 656 enums; locally, 267 class files named `*Service`
-> (347 classes carry the `Service` tag) and 48 deprecated classes (577 members). The official docs
-> were checked through 2026-11-04. New and usable: `RaycastParams.Margin` / `SizeGradient`, the
-> `Color3` contrast methods, `GamepadService:EnableGamepadCursor()` with no argument.
+> **Engine**: Roblox Studio **0.748.0.7481526** with **Luau 0.748** (released 2026-11-20) — dump
+> downloaded, re-split, and diffed against 0.746 on **2026-11-23**, with every developer-visible
+> change run in Studio 0.748. 960 classes / 664 enums; locally, 270 class files named `*Service`
+> (351 classes carry the `Service` tag) and 48 deprecated classes (579 members). The official docs
+> were checked through 2026-11-23. Newly usable in 0.748: `EditableMesh:AddFace`,
+> `SceneAnalysisService:GetCollisionGeometryMemoryAsync`, `AssetService:GetLatestVersionUriAsync`,
+> `BoxHandleAdornment.DoubleSided`, `PhysicsActivitySensor`, and `GuiObject.SelectionGained`
+> direction. Also usable: `RaycastParams.Margin` / `SizeGradient`, `Color3` contrast methods,
+> `GamepadService:EnableGamepadCursor()` with no argument.
 >
 > Roblox ships roughly weekly, so this line is stale by design — never quote it as today's version.
 > Re-derive it instead:
@@ -34,11 +37,8 @@ official Roblox documentation (https://create.roblox.com/docs), the Luau languag
 > curl -s "https://api.github.com/repos/luau-lang/luau/releases?per_page=1" | grep tag_name
 > ```
 >
-> The `WindowsStudio` (no `64`) endpoint returns a long-stale value — measured 2026-09-06 it still
-> answered `0.578.0.5780566`. Use `WindowsStudio64` or `MacStudio`.
->
-> When in doubt about an API, look it up (see **API & Documentation Lookup** below) rather than
-> recalling it. If it is still unclear, ask the user before proceeding.
+> The `WindowsStudio` (no `64`) endpoint returns a long-stale value — use `WindowsStudio64` or
+> `MacStudio`. When in doubt about an API, look it up below rather than recalling it.
 
 ---
 
@@ -46,124 +46,115 @@ official Roblox documentation (https://create.roblox.com/docs), the Luau languag
 
 On every invocation, detect available Roblox Studio MCP tools before proceeding:
 
-### Official Roblox MCP (Roblox_Studio server)
+### Mandatory MCP Pre-Flight & Built-in `rbx-*` Skill Gate
 
-**This skill is a knowledge base, not an MCP server.** It ships no tools and no execution
-surface. The tools below belong to **Roblox's own MCP server, built into Studio** — this skill
-only tells you how to use them well. Official reference:
-https://create.roblox.com/docs/studio/mcp
+**This skill is a knowledge base, not an MCP server.** It ships no tools. The tools below belong
+to **Roblox's own MCP server built into Studio** (https://create.roblox.com/docs/studio/mcp). When
+Studio MCP tools are available, run this gate automatically without waiting for the user to remind
+you:
 
-The docs page lists **26 tools**. The build observed 2026-11-07 (Studio 0.746.0.7461269) exposed
-**35**: those plus `open_cloud_invoke`, which has its own page (`studio/mcp-open-cloud`), and the
-undocumented `generate_texture`, `segment_mesh`, `generate_scene`, `generate_avatar`,
-`auto_setup_avatar` and three skill-authoring tools, `list_skills`, `create_skill` and `edit_skill`
-(34 on 2026-11-05; 31 on 2026-10-29, Studio 0.745; 28 on 2026-10-17 to 2026-10-22, Studio 0.743–0.744;
-`list_plugin_guis` and `capture_plugin_gui`, seen on 2026-10-11 in Studio 0.742, were gone by then). Detect what your host actually
+1. **Pin target & mode**: Call `list_roblox_studios` (pass `studio_id` on every call; no
+   `set_active_studio` tool exists), then `get_studio_state` (`Edit` / `Client` / `Server`).
+2. **Load Studio's built-in `rbx-*` skill first when the domain matches**: Call
+   `list_roblox_skills` → `get_roblox_skill` (`list_skills` / `skill` on older Studio hosts)
+   whenever a task involves debugging/breakpoints, profiling/heap/scene/network/device simulation,
+   streaming conversion, analytics, Open Cloud/permissions, model import, IAS migration,
+   `ConfigService`, `ProcessReceipt` audit, or unit tests. See **Built-in `rbx-*` Skill Routing**
+   below — and verify known stale `rbx-*` steps against `references/mcp-integration.md`.
+3. **Safety first**: Before the first mutation of any session, read `references/agent-safety.md`.
+   There is no dry-run and no reliable undo; confirm which place you are targeting first.
+
+### Official Roblox MCP (`Roblox_Studio` server)
+
+`create.roblox.com/docs/studio/mcp` lists **30 tools**. Studio **0.748.0.7481526** exposes **39**
+(those plus `open_cloud_invoke` and undocumented/newer generation, skill, save, capture, and
+feedback tools; full count history in `references/mcp-integration.md`). Detect what your host
 exposes rather than trusting this table.
 
 | Tool | Purpose |
 |------|---------|
-| `execute_luau` | Run Luau in Studio at plugin privilege — **returns the result or the error**. HTTP and data stores go through the MCP Permissions gates |
-| `open_cloud_invoke` | Call Open Cloud with no API key, limited to the scopes the user enabled; uploads create permanent assets, so ask first (`mcp-integration.md`) |
-| `multi_edit` | Apply several exact-match edits to **ONE** script (creates it if missing); `Edit` datamodel only |
-| `script_read` | Read script source, whole or by line range; output is `LINE→CONTENT` |
-| `script_search` / `script_grep` | Find scripts by name (fuzzy, ≤10) or by content (≤50 matches) |
-| `search_game_tree` | Explore the DataModel as flat JSON, filterable by path/type/keyword; requires `datamodel_type` |
-| `inspect_instance` | Properties, attributes, and child summary for one instance |
-| `subagent` | Launch a Roblox-side subagent for autonomous multi-step work (types vary by build) |
-| `get_studio_state` | Play state **and which datamodel types are available** |
-| `start_stop_play` | Start/stop playtesting |
-| `get_console_output` | Read Output/console logs |
-| `screen_capture` | Capture the viewport, optionally from a custom camera; requires a `capture_id` |
-| `character_navigation` | Move the character to a position or instance path |
-| `user_mouse_input` / `user_keyboard_input` | Simulate ordered mouse/keyboard actions |
+| `list_roblox_studios` | Enumerate connected Studio instances (name, `studio_id`, place ID) |
+| `get_studio_state` | Play state **and which `datamodel_type` values are currently available** |
+| `list_roblox_skills` / `get_roblox_skill` | List & load Roblox's 17 first-party `rbx-*` guides (older hosts: `list_skills` / `skill`) |
+| `create_skill` / `edit_skill` | Publish/edit a user skill (persistent on Roblox account; ask first) |
+| `execute_luau` | Run Luau in Studio at plugin privilege (`Edit`/`Client`/`Server`) — **returns result or error**; HTTP & DataStores go through MCP Permissions |
+| `open_cloud_invoke` | Call Open Cloud without an API key, gated by MCP Permissions; uploads create permanent assets (ask first) |
+| `multi_edit` | Exact-match sequential edits to **ONE** script (`Edit` datamodel only; creates if missing) |
+| `script_read` | Read script source (`LINE→CONTENT`), whole or by line range |
+| `script_search` / `script_grep` | Find scripts by name (fuzzy, ≤10) or content (≤50 matches; confirm line numbers with `script_read`) |
+| `search_game_tree` / `inspect_instance` | Explore DataModel (`datamodel_type` required) or inspect one instance's properties/attributes |
+| `subagent` | Launch a Studio-side subagent (`explore`, `screen_capture`, `unit_test` — check schema) |
+| `start_stop_play` | Start or stop playtesting |
+| `save_place` | Save open place (Ctrl+S equivalent; creates Roblox version or writes local file; **never publishes**; don't call every edit) |
+| `get_console_output` | Read Output/console logs (history capped at 512 lines; store test telemetry in attributes too) |
+| `screen_capture` | Capture viewport (`capture_id` required; `camera_position` + `look_at_position` as `[x,y,z]` arrays together) |
+| `video_capture` | Record playtest video (`Client` only; returned `Target is not reachable` in 0.748.0.7481526 — keep `screen_capture` primary) |
+| `character_navigation` | Move character to a position or instance path (`Client` only; requires walkable navmesh) |
+| `user_mouse_input` / `user_keyboard_input` | Simulate ordered mouse/keyboard actions (`Client` only) |
 | `search_asset` / `insert_asset` | Search Creator Store + Inventory; insert by asset ID |
-| `store_image` | **Local** png/jpg ≤5 MB → `IMAGEID_` URI for other tools |
-| `upload_image` | Batch upload from **HTTP(S) URLs** → imagePath→assetId map |
-| `generate_mesh` / `generate_procedural_model` | Generate 3D content |
-| `generate_material` | Generate a `MaterialVariant`; returns the base material + variant name |
-| `generate_texture` | Re-texture an **existing** MeshPart/Model — **replaces the source in place** (duplicate it first) |
-| `segment_mesh` | Split an existing mesh into ≤5 named parts; inserts a new Model next to the source |
-| `generate_scene` | Generate models and parts from a prompt or images, in an optional bounding box; **runs the generated script in the DataModel** |
-| `generate_avatar` | Generate a rigged R15 avatar from a prompt, **upload it as a persistent asset** and insert it into Workspace; usually several minutes |
-| `auto_setup_avatar` | Rig an existing static Workspace Model as an R15 avatar and place the result beside it; usually 3-5 minutes |
-| `wait_job_finished` | Await a background `jobId` (from a tool's own `async: true`) |
-| `http_get` | Fetch Roblox docs **from an allowlist**; URL must end `.md` or be `llms.txt` |
-| `skill` | Roblox's first-party `rbx-*` references (debug, perf, scene analysis, configs, analytics, permissions, Open Cloud, model import, …) |
-| `list_skills` / `create_skill` / `edit_skill` | List every skill; **publish** a new user skill or edit one (persistent, not undoable here: ask first) |
-| `list_roblox_studios` | Enumerate connected Studio instances (name + place ID) |
+| `store_image` / `upload_image` | `store_image`: local png/jpg ≤5 MB → `IMAGEID_` URI. `upload_image`: HTTP(S) URLs → asset IDs |
+| `generate_mesh` / `generate_procedural_model` | Generate textured 3D mesh or attribute-driven `ProceduralModel` (accepts `attachedImageUri`, default `async: true`) |
+| `generate_material` | Generate a `MaterialVariant`; returns `BaseMaterial` + `Name` |
+| `generate_texture` | Re-texture an existing MeshPart/Model — **replaces source in place** (duplicate first) |
+| `segment_mesh` | Split a **single `MeshPart`** into ≤5 named parts (errors `SegmentRequiresSingleMeshPart` on multi-part Models) |
+| `generate_scene` | Generate models/parts in an optional bounding box; **runs the generated script in the DataModel** |
+| `generate_avatar` / `auto_setup_avatar` | Generate & upload persistent rigged R15 avatar, or rig static Model (3–5 min) |
+| `generate_animation` | Generate R15+ animation from `textPrompt` (1–30s) or upscale R6 `inputAssetId` |
+| `wait_job_finished` | Await `jobId` from `async: true`; **45 s** per-call cap for external MCP clients (loop while `status == "Running"`) |
+| `http_get` | Fetch Roblox docs **from allowlist** (`.md` or `llms.txt` only) |
+| `submit_feedback` | Send ≤4000-byte feedback on Studio/MCP tools (never include source code, PII, or credentials; respect user opt-out) |
 
-> **Every call takes a `studio_id`.** There is no "set active studio" tool — call
-> `list_roblox_studios` first and pass the id you want on each subsequent call. Several Studio
-> instances are commonly open at once, so picking the wrong id silently targets the wrong place.
->
-> **`datamodel_type` is asymmetric.** `execute_luau` accepts `Edit` / `Client` / `Server`;
-> **`multi_edit` accepts `Edit` only**, so you cannot edit scripts mid-playtest — stop the
-> playtest first. `Client` and `Server` exist only during a playtest, and `Edit` is refused during
-> one (`Edit datamodel is not available in Play mode`); check `get_studio_state`.
->
-> **`multi_edit` is one script per call**, taking `file_path` plus
-> `edits[{old_string, new_string, replace_all}]`. Replacements are sequential, exact-match, and
-> atomic within the call: one `old_string` that does not match fails the call and leaves the
-> script unchanged (tested 2026-10-11). It does not require a prior `script_read`, but read
-> first anyway, since `old_string` must match the source exactly, whitespace included.
->
-> **Confirm `script_grep`'s line numbers with `script_read`.** On 2026-09-06 it reported a match
-> at line 171 that `script_read` showed was 15 lines further down; on 2026-10-11 (Studio 0.742)
-> two tests returned the exact line, so the cause is unknown. Use it to find *which* script
-> contains a string, then `script_read` for the real location.
->
-> **There is no `run_as_job` tool.** Earlier versions of this file listed one; it does not exist
-> in the docs or in any observed build. Async is a per-tool argument returning a `jobId`.
+> **Core MCP constraints**: `execute_luau` accepts `Edit`/`Client`/`Server`, whereas `multi_edit`
+> accepts **`Edit` only** (stop playtest first) and `script_read` first so `old_string` matches
+> verbatim. Confirm `script_grep` lines with `script_read`. There is **no `run_as_job` tool** —
+> async is a per-tool `async: true` arg returning a `jobId`.
 
-If MCP tools are available, prefer using them for:
-- Reading existing scripts before writing new ones (`script_read`, `script_search`)
-- Validating changes by running code (`execute_luau`)
-- Inspecting game tree to understand project structure (`search_game_tree`)
-- Testing changes with playtest (`start_stop_play`, `get_console_output`)
-- Roblox's own domain skills (`skill`) for debugging, MicroProfiler, scene analysis, permissions
-  and Open Cloud — first-party and shipped with Studio, but not always current: some steps in them
-  fail when run (`mcp-integration.md` lists the ones measured)
-
-**Before the first mutation of any session**, read `references/agent-safety.md`. Roblox's own
-warning: *"MCP clients can read and modify content in your open Roblox places."* There is no
-dry-run and no reliable undo. Confirm which place you are targeting before you write to it.
-
-If MCP tools are NOT available, provide copy-paste-ready Luau scripts with clear
-placement instructions (which service container to put them in).
+If MCP tools are NOT available, provide copy-paste-ready Luau scripts with clear container paths.
 
 ---
 
 ## Routing Table
 
-Match user intent to the appropriate reference file. Read the file BEFORE generating code.
+Match user intent to the appropriate reference file **and** built-in Studio `rbx-*` skill. Read
+the reference BEFORE generating code.
 
 | User Intent | Reference File |
 |---|---|
-| **How do I actually sequence this?** End-to-end worked patterns: build a server-authoritative feature, debug via MCP, migrate a deprecation, verify an API, refuse an unsafe request, grant a developer product, migrate saved data, open a menu from an Input Action | `references/worked-examples.md` |
+| **How do I sequence this?** End-to-end patterns: server-authoritative feature, MCP debug, deprecation migration, API lookup, unsafe-request refusal, developer product, save migration, IAS toggle, concept-image-to-3D + playtest, `rbx-*` skill routing | `references/worked-examples.md` |
 | Luau syntax, types, naming conventions, style | `references/luau-fundamentals.md` |
-| Project layout, architecture, patterns, values you tune without a restart (`ConfigService`) | `references/project-structure.md` |
+| Project layout, architecture, Rojo, IAS, `ConfigService` | `references/project-structure.md` |
 | Save/load player data, DataStore, ProfileStore | `references/datastore-persistence.md` |
-| Client-server communication, RemoteEvents, input, text chat (`TextChatService`, chat commands, platform-integrated chat) | `references/networking.md` |
+| Client-server communication, RemoteEvents, input, text chat (`TextChatService`) | `references/networking.md` |
 | Security, anti-exploit, server authority, bans | `references/security-hardening.md` |
-| Agent→Studio safety, destructive MCP ops, prompt injection from place content | `references/agent-safety.md` |
-| Performance, memory, optimization, Parallel Luau, live instance groups (`CreateCollection`) | `references/performance-optimization.md` |
-| Using Roblox Studio MCP tools effectively | `references/mcp-integration.md` |
-| Open Cloud from an MCP client (`open_cloud_invoke`), MCP Permissions, permission errors, uploads | `references/mcp-integration.md` + `references/agent-safety.md` |
+| Agent→Studio safety, destructive MCP ops, `save_place` / `submit_feedback`, prompt injection | `references/agent-safety.md` |
+| Performance, memory, Parallel Luau, live instance groups (`CreateCollection`) | `references/performance-optimization.md` |
+| Studio MCP tools, generative 3D/animation pipeline, playtest automation, `rbx-*` skill audit | `references/mcp-integration.md` |
+| Open Cloud from MCP (`open_cloud_invoke`), MCP Permissions, uploads | `references/mcp-integration.md` + `references/agent-safety.md` |
 | UI, GUI, ScreenGui, menus, HUD, StyleQuery | `references/ui-systems.md` |
-| Migrating legacy code, deprecated APIs | `references/legacy-migration.md` |
-| Monetization, game passes, donations, transfers | `references/monetization.md` |
+| Migrating legacy code, deprecated APIs, 0.748 engine changes | `references/legacy-migration.md` |
+| Monetization, game passes, developer products, donations, transfers | `references/monetization.md` |
 | File formats, import/export, asset management | `references/file-formats-and-assets.md` |
 | Plugins, `Script.Source` limits, HttpService/engine limits | `references/studio-plugins-and-limits.md` |
 
-**Start with `worked-examples.md` when the task is a *doing* task** (build, debug, migrate, look up, sell, bind input)
-rather than a *knowing* task. It gives the call sequence and the verification step, and each example
-carries a **Not this** list so a near-miss request routes to the right place instead of the nearest
-familiar pattern. Where an example and a reference file disagree, the reference file wins.
+### Built-in `rbx-*` Skill Routing (when Studio MCP is connected)
 
-If the intent spans multiple domains, read all relevant files.
-If a reference file doesn't cover a topic sufficiently, use the Official
-Documentation Lookup workflow below.
+Studio's 17 `rbx-*` skills (`list_roblox_skills` / `get_roblox_skill`) own **Studio MCP execution
+recipes**; this repo's `references/` own **`--!strict` Luau, security, architecture, and engine
+truth** (and catch stale `rbx-*` steps). Load both when a task spans both:
+
+| Task Domain | Call `get_roblox_skill(...)` | Pair with `roblox-dev-skill` Reference |
+|---|---|---|
+| Breakpoints / runtime thread inspection | `rbx-debug` | `mcp-integration.md` |
+| MicroProfiler, Luau heap, SceneAnalysis | `rbx-perf-profiling`, `rbx-luau-heap-profiling`, `rbx-scene-analysis` | `performance-optimization.md` + `mcp-integration.md` |
+| Network lag / Device UI sim / Streaming | `rbx-network-simulator`, `rbx-device-simulator-lua`, `rbx-convert-to-streaming` | `performance-optimization.md` + `mcp-integration.md` (stale-step fixes) |
+| Input Action System / `ConfigService` | `rbx-input-action-system`, `rbx-configs-experimentation` | `project-structure.md` |
+| `ProcessReceipt` audit / Analytics / Unit tests | `rbx-process-receipt-misuse`, `rbx-instrument-analytics`, `rbx-unit-test` | `monetization.md` (`BindReceiptHandler`), `luau-fundamentals.md` |
+| Open Cloud / Permissions / FBX-glTF import | `rbx-permissions`, `rbx-open-cloud-usage`, `rbx-import-asset` | `mcp-integration.md` + `agent-safety.md` + `file-formats-and-assets.md` |
+| Docs search / Custom Studio skill | `rbx-docs-search`, `rbx-create-skill` | `mcp-integration.md` |
+
+**Start with `worked-examples.md` when the task is a *doing* task** (build, debug, migrate, look up,
+sell, bind input, generate 3D + playtest, route `rbx-*`). Where an example and a reference file
+disagree, the reference file wins.
 
 ---
 
@@ -171,81 +162,39 @@ Documentation Lookup workflow below.
 
 ### Priority 1: Local API Reference (`~/RobloxDocs/`)
 
-**Always check local files first** — they are pre-split, far cheaper to read than the full dump, and
-require no network. If `~/RobloxDocs/RobloxAPI/` exists, use it.
-
-**How much cheaper, re-measured 2026-11-05 on 0.746.0.7461264** (an earlier "845× smaller" figure
-was not reproducible from any measurement, so here are the real numbers and the command that
-produced them): the full dump is **8,721,015 bytes**; the 950 split class files run **101 B min,
-2,074 B median, 4,897 B mean, 105,756 B max**. So a typical class lookup reads about **0.02%** of
-the dump, and even the largest class reads under **1.3%** of it. Re-measure with:
+**Always check local files first** — they are pre-split and require no network. Measured on
+**0.748.0.7481526**: the full dump is **8,798,639 bytes**; the **960** split class files run
+**101 B min, 2,065 B median, 4,887 B mean, 106,393 B max** (~0.02% of the dump per typical class).
 
 ```bash
-# Portable (macOS, Linux, Windows). Do not use `stat -f %z`: on Linux `stat -f` reports the
-# *filesystem*, not the file, and prints a wrong number without any error. It also reads the
-# 75-byte latest.json symlink instead of the dump unless you remember -L.
+# Portable size check (macOS/Linux/Windows; avoid `stat -f %z`, which misreports symlinks/Linux)
 python3 -c "import os,glob,statistics as s; d=os.path.expanduser('~/RobloxDocs/RobloxAPI'); \
 z=sorted(os.path.getsize(f) for f in glob.glob(d+'/classes/*.json')); \
 print('dump', os.path.getsize(os.path.realpath(d+'/dumps/latest.json')), 'B | n', len(z), \
 'min', z[0], 'median', int(s.median(z)), 'mean', int(s.mean(z)), 'max', z[-1])"
-```
 
-```bash
-# Look up a specific class (~2 KB median vs the 8.6 MB full dump — see measurement above)
 cat ~/RobloxDocs/RobloxAPI/classes/<ClassName>.json
-
-# Query a specific property/method (jq if installed; the python3 form works everywhere)
 jq '.Members[] | select(.Name == "<MemberName>")' ~/RobloxDocs/RobloxAPI/classes/<ClassName>.json
-python3 -c "import json,os; print([m for m in json.load(open(os.path.expanduser('~/RobloxDocs/RobloxAPI/classes/<ClassName>.json')))['Members'] if m['Name']=='<MemberName>'])"
-
-# Find all services
 cat ~/RobloxDocs/RobloxAPI/service-index.json
-
-# Check what's deprecated
 cat ~/RobloxDocs/RobloxAPI/deprecated-index.json
-
-# Search across classes by filename
 ls ~/RobloxDocs/RobloxAPI/classes/ | grep -i <keyword>
-
-# Search for a property across all classes
 grep -l '"<PropertyName>"' ~/RobloxDocs/RobloxAPI/classes/*.json
 ```
 
-**Obsolescence check:** Before using local data, verify freshness:
+**Obsolescence check:** Read `updatedAt` OR `checkedAt` (older installs may lack `checkedAt`) from
+`~/RobloxDocs/RobloxAPI/.current-version`:
 ```bash
-# Check when local data was last updated
 cat ~/RobloxDocs/RobloxAPI/.current-version
-# → {"version": "0.746.0.7461264", "platform": "MacStudio", "platformVersion": "0.746.0.7461264",
-#    "winHash": "version-fee454b8e2094ba9", "updatedAt": "2026-11-04T18:00:20Z", "checkedAt": "2026-11-04T18:00:20Z"}
 ```
-
-> **Read whichever timestamp is present: `updatedAt` OR `checkedAt`.** `updatedAt` is when a dump
-> was last downloaded; `checkedAt` is when the version was last checked. The current monitor
-> (skill 2.12.0+) always writes both, but the older zsh script wrote **only `updatedAt`** after a
-> download — so an install that has not refreshed its tools may lack `checkedAt` entirely. Earlier
-> versions of this file told the agent to read `checkedAt`, which silently found nothing there.
-
-If that timestamp is older than 7 days, or a class/member is not found locally, **proceed with the
-live web fallback below and tell the user the local dump looks stale.** Offer to refresh it:
-
+If older than 7 days or missing, **fall back to Priority 2** and offer to refresh (never
+background or auto-run without user approval):
 ```bash
-# Only after the user agrees — this downloads and re-splits the API dump
 ~/RobloxDocs/scripts/roblox-api-monitor.sh                      # macOS, Linux, WSL, Git Bash
 python "%USERPROFILE%\RobloxDocs\scripts\roblox-api-monitor.py"    # Windows without bash
 ```
-
-If `~/RobloxDocs` does not exist at all, the user never set it up. Say so and point them at the
-installer's `--docs-only` option (`-DocsOnly` in PowerShell) rather than creating it yourself.
-
-> **Do not background this and do not run it unasked.** Earlier versions of this file told the
-> agent to fire `roblox-api-monitor.sh &` automatically, which contradicted both the
-> Knowledge Freshness Check below ("NEVER auto-update without user approval") and the README.
-> There is no scheduler and no background job in this skill; a human triggers the refresh.
-> Staleness never blocks the answer — fall through to the web sources and say so.
+If `~/RobloxDocs` does not exist, point the user to the installer's `--docs-only` (`-DocsOnly`) flag.
 
 ### Priority 2: Live Web Sources (Fallback)
-
-Use these when local data doesn't cover a topic, is obsolete, or you need prose docs:
 
 | Resource | URL | Use For |
 |----------|-----|--------|
@@ -255,44 +204,23 @@ Use these when local data doesn't cover a topic, is obsolete, or you need prose 
 | **Engine API index** | `https://create.roblox.com/docs/reference/engine/llms.txt` | Luau API classes, methods, events |
 | **Open Cloud API index** | `https://create.roblox.com/docs/cloud/llms.txt` | **Primary discovery** for all Cloud REST API: features, domains, guides, auth |
 | **OpenAPI spec (raw)** | `https://create.roblox.com/docs/cloud/openapi.json` | Machine-readable OpenAPI spec for MCP/code-gen tools |
-| **Deprecated API check** | `https://robloxapi.github.io/ref/class/<Name>.html` | Check individual class/member status (deprecated items marked visually) |
+| **Deprecated API check** | `https://robloxapi.github.io/ref/class/<Name>.html` | Visual deprecated member check |
 
-> **If you are fetching these through Studio's `http_get` tool, note its allowlist:** only
-> `create.roblox.com/docs` (incl. `/reference/engine`, `/cloud`, `/performance-optimization`) and
-> `github.com/Roblox/libmp`, and **the URL must end in `.md` or be `llms.txt`**. So
-> `llms-full.txt`, `openapi.json`, and `robloxapi.github.io` are **rejected** by `http_get` — use
-> the host's own fetch tool or `curl` for those. `http_get`'s `query` argument returns only
-> matching sections, which is much cheaper than pulling a whole page into context. A
-> `github.com/Roblox/libmp/blob/….md` URL is accepted but comes back as GitHub's HTML page
-> (measured 2026-10-21); read LibMP files from `raw.githubusercontent.com` with curl instead.
+> **`http_get` allowlist**: only `create.roblox.com/docs` and `github.com/Roblox/libmp` ending in
+> `.md` or `llms.txt` (`llms-full.txt`, `openapi.json`, `robloxapi.github.io` are rejected — use
+> the host fetch tool or `curl`; read LibMP via `raw.githubusercontent.com`). Use `query` to save tokens.
 
 ### Lookup Workflow
-1. Check if a **reference file** covers the topic (Routing Table above)
-2. Check **`~/RobloxDocs/RobloxAPI/classes/<Name>.json`** for Engine API details
-3. If not found locally, fetch the per-page markdown URL with whatever web-fetch tool the host
-   provides (`WebFetch` in Claude Code, `curl` in a shell — the URL is the portable part)
-   - Example: `https://create.roblox.com/docs/en-us/studio/importer.md`
-4. If unsure which page to read, browse `llms.txt` for the right URL
-5. For **Open Cloud / REST API** topics, read `https://create.roblox.com/docs/cloud/llms.txt`
-   - Search Features section first, then Domains
-   - Prefer Open Cloud endpoints (API key / OAuth) over legacy cookie-auth endpoints
-   - From an MCP client, call them with `open_cloud_invoke`: Studio supplies the token, so no key
-6. **Fallback**: Context7. Its MCP tools are `resolve-library-id` then `query-docs` (the
-   upstash/context7 README, checked 2026-10-11; an earlier version of this file called the second
-   one `get-library-docs` and said `query-docs` did not exist). Where the
-   MCP server is not connected, the CLI does the same job:
-   `npx ctx7@latest library "Roblox"` then `npx ctx7@latest docs <libraryId> "<question>"`
-7. If still unclear, ask the user before proceeding
+1. Check the matching **reference file** (Routing Table) and, when MCP is connected, `get_roblox_skill`.
+2. Check **`~/RobloxDocs/RobloxAPI/classes/<Name>.json`** (`Security`, `Capabilities`, `Tags`).
+3. Fetch per-page markdown (`https://create.roblox.com/docs/en-us/{path}.md`) or browse `llms.txt`.
+4. For **Open Cloud / REST**, check `https://create.roblox.com/docs/cloud/llms.txt` (call via `open_cloud_invoke` from MCP — no API key needed).
+5. **Fallback**: Context7 (`resolve-library-id` → `query-docs`, or `npx ctx7@latest library "Roblox"` → `docs <id> "<question>"`).
+6. If still unclear, ask the user before proceeding.
 
-> **Important**: Engine APIs (Luau via `game:GetService()`) and Open Cloud APIs
-> (HTTP REST via `x-api-key`, or `open_cloud_invoke` from an MCP client) are **completely separate
-> systems**. Using the wrong index will produce non-functional code.
-
-> **Checking deprecated APIs**: Use these approaches (in priority order):
-> 1. `cat ~/RobloxDocs/RobloxAPI/deprecated-index.json` — instant local lookup
-> 2. `cat ~/RobloxDocs/RobloxAPI/deprecated/<ClassName>.json` — full deprecated class detail
-> 3. Check `robloxapi.github.io/ref/class/<Name>.html` — deprecated members marked visually
-> 4. Use Context7 (`resolve-library-id` → `get-library-docs`, or the `ctx7` CLI) to query specific APIs
+> **Important**: Engine APIs (`game:GetService()`) and Open Cloud REST APIs (`x-api-key` /
+> `open_cloud_invoke`) are **completely separate systems**. For deprecations, check
+> `deprecated-index.json` → `deprecated/<ClassName>.json` → `robloxapi.github.io/ref` → Context7 (`resolve-library-id` → `query-docs`).
 
 ---
 
@@ -423,29 +351,27 @@ end
 ## Common Workflows
 
 ### New Feature
-1. Read existing project structure (MCP: `search_game_tree`)
-2. Identify where the feature fits in the architecture
-3. Create ModuleScript(s) in the appropriate container
-4. Wire up server/client communication if needed
-5. Test via playtest (MCP: `start_stop_play` + `get_console_output`)
+1. Run MCP Pre-Flight (`list_roblox_studios`, `get_studio_state`, `list_roblox_skills` / `get_roblox_skill` if domain matches — e.g. `rbx-configs-experimentation`, `rbx-input-action-system`, `rbx-instrument-analytics`)
+2. Read existing project structure (`search_game_tree`) and matching `references/*.md`
+3. Create `--!strict` ModuleScript(s) in the appropriate container (`multi_edit`)
+4. Wire up validated server/client communication if needed
+5. Test via playtest (`start_stop_play` + `get_console_output` + `execute_luau` assertions)
 
 ### Debug Issue
-1. Read the relevant script (MCP: `script_read`)
-2. Check console output (MCP: `get_console_output`)
-3. Identify the root cause — look for:
-   - Missing `pcall` around DataStore/HTTP calls
-   - Client-server boundary issues
-   - Connection leaks (missing Disconnect)
-   - Race conditions (script execution order)
-4. Apply minimal fix
-5. Verify fix via playtest
+1. Check `list_roblox_skills` / `get_roblox_skill("rbx-debug")` when breakpoints or thread inspection are needed
+2. Read console output (`get_console_output`) and the offending script (`script_read` — confirm `script_grep` line numbers first)
+3. Inspect live state (`execute_luau` on `Server`/`Client`), then **stop playtest** (`start_stop_play`) before editing
+4. Apply minimal exact-match fix (`multi_edit` in `Edit` datamodel) and verify via playtest (`0` errors, `0` new warnings)
+
+### Concept-Image / 3D Generation & Automated Playtest
+1. Local concept image → `store_image` (≤5 MB png/jpg → `IMAGEID_`) → `generate_procedural_model` / `generate_mesh` / `generate_material` / `generate_animation` (`async: true` → loop `wait_job_finished` while `status == "Running"`, 45s per-call cap). Duplicate before `generate_texture`; pass a single `MeshPart` to `segment_mesh`.
+2. Add `--!strict` physics/gameplay scripts (`multi_edit`), then `start_stop_play` → `character_navigation` / `user_keyboard_input` / `user_mouse_input` → `execute_luau` (`Server`/`Client` attribute assertions) → `screen_capture` (keep primary; `video_capture` failed in 0.748.0.7481526) → stop playtest → `save_place` only when asked.
 
 ### Code Review
-1. Read scripts in the project (MCP: `script_grep`)
-2. Check against Core Coding Standards above
-3. Flag security issues (client trust, exposed data)
-4. Flag performance issues (expensive loops, part count)
-5. Suggest improvements with before/after examples
+1. Read scripts in the project (`script_grep` + `script_read`)
+2. Check against Core Coding Standards above and `references/security-hardening.md`
+3. Flag security issues (client trust, exposed data) and performance issues (hot loops, part count)
+4. Suggest improvements with before/after examples
 
 ---
 

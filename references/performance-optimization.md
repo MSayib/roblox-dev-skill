@@ -645,7 +645,7 @@ run. Use `WaitForChild()` or `ModelStreamingMode.Atomic` for critical models. In
 streamed in now, so a search over it can silently miss an instance. To find something that may be
 far away, ask the server.
 
-To convert a place, read `skill("rbx-convert-to-streaming")`. `Workspace:ApplyRecommendedStreamingSettings()`
+To convert a place, read `get_roblox_skill("rbx-convert-to-streaming")`. `Workspace:ApplyRecommendedStreamingSettings()`
 sets the recommended properties in one call, and it is plugin-only: a game Script fails `lacking
 capability Plugin` (*tested*; the call itself was not run on the test place, because it changes it).
 
@@ -727,9 +727,9 @@ Always test on target devices, especially mobile and low-end hardware:
   - `PlaceScriptMemory` — per-script memory breakdown
 - Enable **Render Stats** (`Shift+F2`) to see draw calls and frame timing in-client
 - Test with lower graphics quality settings to match low-end device experience
-- From an MCP client, `skill("rbx-device-simulator-lua")` switches devices and orientation through
+- From an MCP client, `get_roblox_skill("rbx-device-simulator-lua")` switches devices and orientation through
   `StudioDeviceSimulatorService` (plugin-only; `GetDeviceListAsync()` returned 43 devices), and
-  `skill("rbx-network-simulator")` adds latency and packet loss to a playtest
+  `get_roblox_skill("rbx-network-simulator")` adds latency and packet loss to a playtest
 
 ---
 
@@ -790,20 +790,20 @@ immediately. The Collections Debugger widget in Studio shows every active collec
 
 ## 13. Measuring Memory and Scene Cost
 
-`SceneAnalysisService` works from a game Script (*tested* 2026-11-07, Studio 0.746.0.7461269), and
-`skill("rbx-scene-analysis")` builds a full audit on it. `GetInstanceCompositionAsync`,
+`SceneAnalysisService` works from a game Script (*tested* 2026-11-23, Studio `0.748.0.7481526`), and
+`get_roblox_skill("rbx-scene-analysis")` builds a full audit on it. `GetInstanceCompositionAsync`,
 `GetScriptMemoryAsync`, `GetUnparentedInstancesAsync`, `GetAnimationMemoryAsync`,
-`GetAudioMemoryAsync` and `GetTriangleCompositionAsync` each return a table of nested
-`{ Name, Children, Size }` nodes. `GetTriangleCompositionAsync` depends on what the camera sees, and
-each of its entries holds `Sizes.Triangles` and `Sizes.Drawcalls`. Only
-**`GetCollisionGeometryMemoryAsync` still fails**, with `SceneAnalysisService is not enabled`.
+`GetAudioMemoryAsync`, `GetTriangleCompositionAsync`, and **`GetCollisionGeometryMemoryAsync`**
+(flipped in 0.748 with `FFlagSceneAnalysisCollisionGeometryMemoryEnabled = True`) each return a table of nested
+`{ Name, Children, Size }` nodes (both in Play `Server`/`Client`/`Actor` and in `Edit` mode, measured 5.14 ms in Play Server). `GetTriangleCompositionAsync` depends on what the camera sees, and
+each of its entries holds `Sizes.Triangles` and `Sizes.Drawcalls`.
 
 `HeapProfilerService` takes a full Luau heap snapshot, and it is plugin-only: a game Script fails
 `lacking capability Plugin`. Through `execute_luau` in the `Server` datamodel during a playtest,
-`ServerRequestDataAsync()` returned a JSON string of 1.6 MB with the keys `Report` and `Refs` in 0.4 s,
+`ServerRequestDataAsync()` returned a JSON string of 1.6 MB with the keys `Report` and `Refs` in 0.24–0.4 s,
 so summarize it rather than returning it to the agent. **In `Edit` it never returns:** the call hangs
 until `Request timeout`. For leaks, take a snapshot before and after the action and compare them; see
-`skill("rbx-luau-heap-profiling")`.
+`get_roblox_skill("rbx-luau-heap-profiling")`.
 
 ---
 

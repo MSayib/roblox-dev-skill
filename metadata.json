@@ -1,13 +1,21 @@
 {
   "skill_name": "roblox-dev-skill",
-  "version": "2.22.0",
-  "last_updated": "2026-11-07T17:00:00+07:00",
-  "last_updated_by": "claude-code (Studio MCP Open Cloud + MCP Permissions, 17 first-party skills cross-checked, every not-enabled claim re-run in 0.746.0.7461269, creator-docs a47045f..031a0e3)",
-  "update_source": "clientsettings client-version (WindowsStudio64, MacStudio, WindowsPlayer, MacPlayer); luau-lang/luau 0.745 release + 0.744/0.745 source tarballs; clientsettingscdn PCStudioApp/MacStudioApp/PCDesktopClient/MacDesktopClient/AndroidApp/iOSApp flags; roblox-api-monitor 0.745->0.746 dump diff (111 changes, 85 developer-visible); Roblox/creator-docs c8f5276..a47045f (2026-10-30..11-04); live Roblox Studio 0.746.0.7461264 via MCP (playtest probe Script/LocalScript/Actor, execute_luau) and the Rojo 34871 harness",
-  "engine_version_at_update": "0.746.0.7461269",
-  "luau_version_at_update": "0.745",
+  "version": "2.23.0",
+  "last_updated": "2026-11-23T14:00:00+07:00",
+  "last_updated_by": "antigravity (Engine 0.748.0.7481526 + Luau 0.748 sync, 39 MCP tools, list_roblox_skills/get_roblox_skill + 17 rbx-* routing matrix, concept-image-to-3D & automated playtest workflows, creator-docs through a23352b2)",
+  "update_source": "clientsettings client-version (WindowsStudio64, MacStudio, WindowsPlayer, MacPlayer all 0.748.0.7481526); luau-lang/luau 0.746/0.747/0.748 releases + flag diff; clientsettingscdn PCStudioApp/MacStudioApp/PCDesktopClient/MacDesktopClient/AndroidApp/iOSApp flags; 0.746.0.7461269->0.748.0.7481526 dump diff (186 changes, 136 developer-visible; 960 classes, 664 enums); Roblox/creator-docs through a23352b2 (2026-11-04..23); 39 live MCP tool schemas + 17 built-in rbx-* skills; live Studio 0.748.0.7481526 via MCP (probe_claims.luau across Plugin/Server/Client/Actor, physics_samples.luau 6,800 ticks, store_image/generate_*, start_stop_play/screen_capture/video_capture, Rojo 34871 harness)",
+  "engine_version_at_update": "0.748.0.7481526",
+  "luau_version_at_update": "0.748",
   "update_interval_days": 7,
   "update_history": [
+    {
+      "date": "2026-11-23T14:00:00+07:00",
+      "version": "2.23.0",
+      "changes": "Engine 0.748.0.7481526 + Luau 0.748 (960 classes +12/-2, 664 enums +10/-2). NOW USABLE (tested): EditableMesh:AddFace, EditableImage:DrawCircle non-Default ImageAlphaType (LockCanvasAlpha), AssetService:GetLatestVersionUriAsync (even public asset 1818), SceneAnalysisService:GetCollisionGeometryMemoryAsync (5.14 ms; all 7 methods work in Edit/Server/Client/Actor), TestService:ListTests() in Play, BoxHandleAdornment.DoubleSided, PhysicsActivitySensor (Capabilities InternalTest->Basic), GuiObject.SelectionGained inputDirection (Enum.GuiNavigationDirection), CreateVirtualInput(target). PLUGIN-ONLY (tested): PlaceSettings:GetActiveRollouts(), Decal.*Map*, VoiceChatService.*, Chat.LoadDefaultChat, Lighting.LightAttenuationMode (None+PluginOrOpenCloud; GeometryService:NegateAsync/SeparateAsync throw 'not enabled yet' in Plugin and PluginOrOpenCloud in Scripts). REMOVED: ImprovedAnimationConstraint (fixed CI defect), PlayerDataRecord*, ParticleEmitter2D.LightEmission (->LightInfluence), Enum.DomainType.EXPERIENCE/OAUTH (->Experience/OAuth, fixed CI defect). LUAU 0.748: integer clipped in 0.747 (still nil), buffer.readvector*f32 nil, LuauCodegenRuntimeFeedback/LuauPromoteProto True in all 6 apps, LuauModularity Studio beta (0% rollout). MCP (39 tools, +generate_animation/save_place/submit_feedback/video_capture, list_skills->list_roblox_skills, skill->get_roblox_skill): mandatory Pre-Flight + 17 rbx-* routing/stale-step matrix, wait_job_finished 45s external-client cap, segment_mesh single-MeshPart constraint (SegmentRequiresSingleMeshPart), video_capture Play Client 'Target is not reachable' in 0.748, Workflow #6 (concept-image->3D) & #7 (automated playtest), Worked Examples 9 & 10, agent-safety rules. Claims 1184->1267 (0 unverified, 138 false); evals 100->110 (95 pos, 15 neg).",
+      "engine_version": "0.748.0.7481526",
+      "decision_by": "user (sayib) -- 2026-11-23 full update to Studio 0.748.0.7481526, Luau 0.748, 39 MCP tools, automatic rbx-* skill routing, concept-image-to-3D & automated playtest verification",
+      "verified_by": "Studio 0.748.0.7481526 (place MieGede NewWorld 118652544255235) via MCP: probe_claims.luau across Plugin/Server/Client/Actor + physics_samples.luau (6,800 ticks, 0 errors) + store_image/generate_material/generate_mesh/generate_procedural_model/generate_scene/generate_texture/segment_mesh/screen_capture/video_capture/character_navigation/user_keyboard_input + settings().Network + open_cloud_invoke + 12 large rbx-* skills audited (all temporary instances cleaned up, 0 left); Rojo 34871 harness (rebuilt 146 cases, actor=1 client=28 plugin=3 server=105 skip=9): server 106/106 cases, 28/28 expectations (including worked-examples__L630 Example 9 3/3), client 28/28 cases, 5/5 expectations, plugin 3/3 cases, 2/2 expectations, 0 runtime-error, 0 infinite-yield; run_static --strict with luau-lsp 1.70.1: 146 blocks (60 with prelude/expect), 0 unexplained; audit-skill-examples 0 defects; check_claims --strict 1267 claims, 0 stale, 0 uncovered, 0 missing; check_sources passed; test_unix.sh 48/48; skills-ref validate Valid skill"
+    },
     {
       "date": "2026-11-07T17:00:00+07:00",
       "version": "2.22.0",

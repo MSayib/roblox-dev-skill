@@ -11,7 +11,7 @@
 - [Managed Pricing](#managed-pricing)
 - [What's Allowed vs Not Allowed](#whats-allowed-vs-not-allowed)
 - [Implementation Guide: Donation System](#implementation-guide)
-- [LEGACY: Cross-Game Sales (Discontinued)](#legacy-cross-game-sales)
+- [LEGACY: Cross-Game Sales (Discontinued)](#legacy-cross-game-sales-discontinued)
 
 ---
 
@@ -120,7 +120,7 @@ MarketplaceService.ProcessReceipt = processReceipt
 > successfully purchased an item", and it only concerns a prompt the player saw. Roblox checks each
 > **Listed** product's implementation on an ongoing basis; a flagged one "stops showing on surfaces
 > outside your game until you fix it", with a banner under **Creator Hub → Monetization → Shop**.
-> To audit a place, `skill("rbx-process-receipt-misuse")` reports PASS, FAIL or REVIEW without
+> To audit a place, `get_roblox_skill("rbx-process-receipt-misuse")` reports PASS, FAIL or REVIEW without
 > editing anything.
 
 > **`BindReceiptHandler` is the newer route.** The official `MarketplaceService` reference

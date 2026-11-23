@@ -702,7 +702,7 @@ real key presses through MCP `user_keyboard_input`:
 
 `InputContext.Priority` defaults to `1000`; only the order between contexts matters. A mouse button is
 `Enum.KeyCode.MouseLeftButton`, not `Enum.KeyCode.MouseButton1`, which errors (`MouseButton1 is not a
-valid member of "Enum.KeyCode"`). To migrate existing input code, read `skill("rbx-input-action-system")`.
+valid member of "Enum.KeyCode"`). To migrate existing input code, read `get_roblox_skill("rbx-input-action-system")`.
 
 ### Foundation for Future Features
 
@@ -727,7 +727,7 @@ IAS underpins two newer systems:
 ## Values You Tune Live (ConfigService)
 
 A price, drop rate or feature flag you may change while servers run belongs in an **Experience Config**,
-not in a constant or a DataStore. `skill("rbx-configs-experimentation")` covers setup and A/B
+not in a constant or a DataStore. `get_roblox_skill("rbx-configs-experimentation")` covers setup and A/B
 experiments. Player progress still belongs in a DataStore, and secrets in neither.
 
 <!-- skilltest: expect config-service -->
