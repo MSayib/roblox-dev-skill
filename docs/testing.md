@@ -134,11 +134,12 @@ Use the HTML form for anything that only concerns the tests (`prelude`, `expect`
 
 ## Claims register
 
-Code is checked by running it; prose is checked against the register. Each entry anchors to an
-exact quote of the text and records its status: **studio** (run in Studio), **docs** (official
-documentation), **dump** (the API dump), **source** (Luau/Roblox source, release notes, published
-flags), **advice** (a recommendation, nothing to verify), **unverified**, or **false** (verified
-wrong and fixed; the old wrong text must not come back). `check_claims.py`:
+Code is checked by running it; prose is checked against the register (`SKILL.md` and
+`references/*.md`; `README.md` and `docs/*.md` are outside the register and audited by hand on each
+release). Each entry anchors to an exact quote of the text and records its status: **studio** (run in
+Studio), **docs** (official documentation), **dump** (the API dump), **source** (Luau/Roblox source,
+release notes, published flags), **advice** (a recommendation, nothing to verify), **unverified**,
+or **false** (verified wrong and fixed; the old wrong text must not come back). `check_claims.py`:
 
 - fails on a **stale** claim (its quote is no longer in the text: re-verify and update it);
 - finds every **high-risk line** (numbers and limits, versions, "cannot / only / not enabled /

@@ -12,7 +12,7 @@
 5. [Rate Limits & Throttling](#rate-limits--throttling)
 6. [OrderedDataStore](#ordereddatastore)
 7. [Versioning](#versioning)
-8. [Storage & Access Limits (2026)](#storage--access-limits-2026)
+8. [Storage & Access Limits (Updated April 2026)](#storage--access-limits-updated-april-2026)
 9. [ProfileStore (Community Framework)](#profilestore-community-framework)
 10. [Data Schema Best Practices](#data-schema-best-practices)
 11. [LEGACY](#legacy)

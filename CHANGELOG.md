@@ -11,6 +11,71 @@ reference content was verified against at that time.
 
 ---
 
+## 2.23.0 — Nov 23, 2026
+
+**Engine `0.748.0.7481526`, Luau `0.748`, `39` Studio MCP tools, automatic `rbx-*` skill routing, and
+live concept-image-to-3D + automated playtest measurements.** All four live Roblox client/Studio
+endpoints serve `0.748.0.7481526` (`960` classes `+12/-2`, `664` enums `+10/-2`, `270` `*Service`
+files, `351` `Service`-tagged, `48` deprecated classes, `579` deprecated members, `8,798,639` B dump).
+Probes ran across `Plugin` (`execute_luau`), `Server` (`Script`), `Client` (`LocalScript`), and
+`Actor` (Parallel), alongside a 6,800-tick `--!strict` physics/input playtest and live `generate_*`
+runs in MieGede NewWorld (0 test debris left). `luau-lsp 1.70.1 --strict`: `146` blocks, `0`
+unexplained; `audit-skill-examples.py`: `0` defects; `check_claims.py --strict`: `1267` claims (`0`
+unverified, `138` false, `0` stale, `0` missing); `check_sources.py`: passed; `test_unix.sh`:
+`48/48`; `skills-ref validate`: valid (`SKILL.md` `440` lines); evals `100 → 110` (`95` positive,
+`15` negative); Rojo `34871` harness (`146` cases: `actor=1 client=28 plugin=3 server=105 skip=9`):
+server `106/106` (`28/28` expectations, including Example 9 `worked-examples__L630` `3/3`), client
+`28/28` (`5/5`), plugin `3/3` (`2/2`), `0` runtime errors, `0` infinite yields.
+
+### Engine `0.747` / `0.748` & Luau `0.748`
+
+- **Flipped to usable in Studio `0.748.0.7481526` (*tested*):** `EditableMesh:AddFace()`,
+  non-`Default` `Enum.ImageAlphaType` (`LockCanvasAlpha`) in `EditableImage:DrawCircle()`,
+  `AssetService:GetLatestVersionUriAsync()` (even on public asset `1818`),
+  `SceneAnalysisService:GetCollisionGeometryMemoryAsync()` (`5.14 ms` in Play `Server`; all 7
+  methods work across `Edit`, `Server`, `Client`, and `Actor`), `TestService:ListTests()` in Play,
+  `BoxHandleAdornment.DoubleSided`, `PhysicsActivitySensor` (`Capabilities` `InternalTest` → `Basic`),
+  `GuiObject.SelectionGained` `inputDirection` (`Enum.GuiNavigationDirection`), and
+  `UserInputService:CreateVirtualInput(target)`. `HapticEffect:GetWaveformKeys()` now requires
+  `HapticEffect.Type == Enum.HapticEffectType.Custom` instead of reporting "not enabled".
+- **Moved to `None` + `PluginOrOpenCloud` (*tested*):** `PlaceSettings:GetActiveRollouts()`,
+  `Decal.*Map*` (`MetalnessMap`, `NormalMap`, `RoughnessMap`, `EmissiveMaskContent`),
+  `VoiceChatService.*`, `Chat.LoadDefaultChat`, `Lighting.LightAttenuationMode`, `BaseWrap`/`WrapLayer`/
+  `WrapTarget.Stiffness`, and `TextDocument:ReadAsync()`. `GeometryService:NegateAsync()` /
+  `SeparateAsync()` error `not enabled yet` in `execute_luau` and `lacking capability
+  PluginOrOpenCloud` in game Scripts.
+- **Removed & CI defects fixed:** `Workspace.ImprovedAnimationConstraint` (removed in `0.748`),
+  `Enum.DomainType.EXPERIENCE` / `OAUTH` (replaced by `Experience` / `OAuth`), `PlayerDataRecord*`,
+  `ParticleEmitter2D.LightEmission` (replaced by `LightInfluence`), and
+  `WrapLayer.*DeformationMap`.
+- **Luau `0.746`–`0.748`:** `while local` gate renamed `LuauExperimentalWhileLocalSyntax` / `Analysis`
+  (still off); `integer` RFC clipped in `0.747` (`nil` in Studio `0.748`); `buffer.readvector*f32`
+  added behind `DebugLuauBufferVectorLibrary` (`nil` in Studio `0.748`); `LuauCodegenRuntimeFeedback`
+  and `LuauPromoteProto` now `True` across all 6 apps; **Luau Modularity** (`FFlagLuauModularityBetaFeature`)
+  is an opt-in Studio beta (`0%` rollout).
+
+### Studio MCP (`39` tools), `rbx-*` Skill Routing & Measured Workflows
+
+- **Breaking MCP renames & new tools:** `list_skills` / `skill` → `list_roblox_skills` /
+  `get_roblox_skill` (legacy-host fallback noted); added `generate_animation`, `save_place`,
+  `submit_feedback`, and `video_capture` (`39` live vs `30` in `studio/mcp.md`).
+- **Two-layer routing & stale-step verification:** Added a **Mandatory MCP Pre-Flight & Built-in
+  `rbx-*` Skill Gate** in `SKILL.md` (`description`, `## MCP Detection`, `## Routing Table`, `## Common
+  Workflows`) and a complete **17-skill `rbx-*` Routing, Ownership & Stale-Step Matrix** in
+  `references/mcp-integration.md` (8 of 12 large `rbx-*` skills still name `skill`, 2 name
+  `set_active_studio`, 1 names `ask_questions`; `rbx-device-simulator-lua` and `rbx-scene-analysis`
+  still contain stale behavioral claims).
+- **Measured generative & playtest workflows:** Added Workflow #6 (concept-image `store_image` →
+  `generate_procedural_model` / `generate_mesh` / `generate_material` / `generate_texture`
+  duplicate-first / `segment_mesh` single-`MeshPart` constraint / `generate_scene` /
+  `generate_animation` + `wait_job_finished` 45s external-client loop), Workflow #7 (`start_stop_play`
+  → input → `ServerStorage` attributes vs 512-line `LogService` → `screen_capture` primary over
+  0.748 `video_capture` `Target is not reachable`), Worked Examples 9 & 10, `agent-safety.md` rules
+  for `save_place` / `submit_feedback` / `generate_animation` / `video_capture`, and TOCs + anchor
+  fixes across `docs/` and `references/`.
+
+---
+
 ## 2.22.0 — Nov 7, 2026
 
 **Studio's MCP got Open Cloud and a permission system, Roblox shipped three new skills, and a re-run

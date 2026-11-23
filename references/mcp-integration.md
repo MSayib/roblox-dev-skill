@@ -1,6 +1,6 @@
 # Roblox Studio MCP Integration
 
-> **Primary source (re-verified 2026-11-07):**
+> **Primary source (re-verified 2026-11-23, Studio 0.748.0.7481526):**
 > https://create.roblox.com/docs/studio/mcp — raw markdown at
 > `https://raw.githubusercontent.com/Roblox/creator-docs/main/content/en-us/studio/mcp.md` —
 > and, since 2026-11-05, https://create.roblox.com/docs/studio/mcp-open-cloud for Open Cloud and
@@ -79,10 +79,10 @@ the schema with tool-search before calling.
   `Resumed` — but **every one of those members is `PluginSecurity`** (verified against the API
   dump). A Script or LocalScript calling them errors; only a plugin, the command bar, or
   `execute_luau` can. Roblox ships a first-party `rbx-debug` skill for exactly this — reach it
-  through the `skill` tool rather than improvising.
+  through `get_roblox_skill("rbx-debug")` rather than improvising.
 - **Studio Assistant "Planning Mode" is not exposed by any MCP tool**, and this file has never
   carried a source for it. Build nothing on it. For multi-step verification, drive
-  `start_stop_play` + `get_console_output` yourself, or hand the steps to the user.
+  `start_stop_play` + `get_console_output` / `screen_capture` yourself, or hand the steps to the user.
 
 ---
 
@@ -129,19 +129,15 @@ and re-check the JSON syntax. Any client that supports `stdio` works.
 
 ## Tool Reference
 
-**Counts, stated precisely.** The official docs page lists **26 tools** (recounted 2026-10-17; its
-only later change, on 2026-11-05, links the Open Cloud page). **On 2026-11-07 (Studio
-0.746.0.7461269) the build exposes 35**: the 34 of 2026-11-05 plus `open_cloud_invoke`, the one
-addition that has a docs page of its own. **On 2026-10-29 (Studio
-0.745.0.7451137) the build exposed 31**: the 28 below plus three undocumented skill-authoring
-tools, `list_skills`, `create_skill` and `edit_skill` (see *Documentation and skills*); the other
-28 schemas were unchanged. The build observed on
-2026-10-17 and again on 2026-10-21 (Studio 0.743.0.7431133) and 2026-10-22 (Studio 0.744.0.7441077,
-`StudioMCP` binary of 2026-10-20) exposes **28**: those 26 plus `generate_texture` and
-`segment_mesh`, which are present but undocumented. Their schemas were unchanged across the three
-dates. On 2026-10-11 (Studio 0.742) it also exposed
-`list_plugin_guis` and `capture_plugin_gui`; on 2026-10-17 both were gone. Tool sets move; when a call fails with an unknown-tool error, list what
-your host actually exposes instead of trusting this table.
+**Counts, stated precisely.** The official docs page (`studio/mcp.md`) lists **30 tools** (updated
+for `generate_avatar`, `generate_animation`, `save_place`, and `submit_feedback`, though the page
+still names `skill` instead of `get_roblox_skill`). **On 2026-11-23 (Studio 0.748.0.7481526) the
+live build exposes 39 tools**: the 35 of Studio 0.746.0.7461269 (2026-11-07) plus
+`generate_animation`, `save_place`, `submit_feedback`, and `video_capture`, with `list_skills` /
+`skill` renamed to **`list_roblox_skills`** / **`get_roblox_skill`**. (Earlier snapshots: 35 on
+2026-11-07 in Studio 0.746, 31 on 2026-10-29 in Studio 0.745, 28 in Studio 0.743–0.744; `list_plugin_guis`
+and `capture_plugin_gui` appeared in 0.742 and were removed in 0.743.) Tool sets move, and older
+hosts (0.745–0.746) exposed `list_skills` / `skill`: check the host's live tool list before calling.
 
 ### Scripts
 
@@ -234,8 +230,9 @@ nested. `explore` answered a read-only question correctly during a playtest (run
 | `get_studio_state` | Current play state **and which datamodel types are available**. Call this before anything that takes `datamodel_type`. |
 | `start_stop_play` | Starts or stops playtesting. |
 | `get_console_output` | Reads the Studio output log. |
-| `screen_capture` | Captures the viewport and returns image data; optionally takes a custom camera position and look-at target. **`capture_id` is required** (for example `ScreenCapture_1`). |
-| `list_plugin_guis` / `capture_plugin_gui` | **Not in the 2026-10-17 build (Studio 0.743).** On 2026-10-11 they listed plugin widgets with a `pluginGuiId` (hidden ones too) and screenshotted a **visible** one by that id. Undocumented; do not plan on them |
+| `screen_capture` | Captures the viewport and returns image data (`capture_id` required, e.g. `ScreenCapture_1`). `camera_position` and `look_at_position` must be 3-element `[x, y, z]` arrays passed together (`look_at` errors). In `Edit` it captures the Studio viewport tab (and shows a dark backdrop if a non-viewport tab is focused); in `Play` it captures the live client game view. **Primary visual check.** |
+| `video_capture` | Records playtest video in `datamodel_type: "Client"` (`is_start: true` then `false`), returning `recording_id`, `status` (`"completed"` / `"partial"`), artifact paths (`video`, `manifest`, `frame_times`), and capture warnings. Schema says to prefer `screen_capture` unless diagnosing motion/stutter/flicker. **0.748.0.7481526 note:** calling `video_capture` in Play `Client` returned `Network action VideoCaptureTool.CaptureVideo sent to DMN_ID_PLAYCLIENT failed - Target is not reachable`; keep `screen_capture` primary. |
+| `list_plugin_guis` / `capture_plugin_gui` | **Not in Studio 0.743+.** On 2026-10-11 they listed plugin widgets with a `pluginGuiId` (hidden ones too) and screenshotted a **visible** one by that id. Undocumented; do not plan on them. |
 
 ### Player input simulation
 
@@ -253,11 +250,12 @@ nested. `explore` answered a read-only question correctly during a playtest (run
 | `insert_asset` | Inserts an asset by numeric asset ID — models, meshes, images, audio, video, animations, packages. |
 | `generate_mesh` | Generates a textured 3D mesh from a text prompt. Options: `maxTriangles` (12–20000), `size`, and `segmentation` (`auto`, `none`, or `explicit` with up to 8 `partNames`). |
 | `generate_procedural_model` | Builds an object from primitive parts (blocks, spheres, cylinders, wedges) as a `ProceduralModel` with configurable attributes; accepts reference images and custom part schemas. |
-| `generate_material` | Generates a material variant; returns the base material plus the variant name to apply. |
-| `generate_scene` | **Undocumented; first seen 2026-11-05 (Studio 0.746).** Generates models and parts from `textPrompt` and/or `images`, in an optional `boundingBoxPosition` / `boundingBoxSize`, and **runs the generated script in the DataModel**. Schema read, not run: review what it may change first. |
-| `generate_avatar` | **Undocumented; first seen 2026-11-05.** Generates a rigged R15 avatar from `textPrompt` (options `pipelineName` `npc` / `modesty`, `dynamicHead`, `r15Plus`), **uploads it as a persistent asset** and inserts it into Workspace. Usually several minutes. Its description says to prefer `async`, but the schema has no `async` property (read 2026-11-07), so expect the call to block. Schema read, not run. |
+| `generate_material` | Generates a material variant; returns `BaseMaterial` and `Name` (stored in an `AssistantMaterials` folder under `MaterialService`) to set on `BasePart.Material` and `BasePart.MaterialVariant`. |
+| `generate_animation` | Generates new R15+ animations from `textPrompt` or upscales an existing R6 animation (`inputAssetId`) to R15. Optional `duration` (1–30 s per schema; `studio/mcp.md` says up to 10 s) and `instance_path` (rig Model; otherwise uses selected rig or inserts a default rig). Uploads/modifies the rig. |
+| `generate_scene` | **Undocumented; first seen 2026-11-05 (Studio 0.746).** Generates models and parts from `textPrompt` and/or `images`, in an optional `boundingBoxPosition` / `boundingBoxSize`, with `useMeshGen` (default `true`), and **runs the generated script in the DataModel**. Review what it may change first. |
+| `generate_avatar` | **Undocumented; first seen 2026-11-05.** Generates a rigged R15 avatar from `textPrompt` (options `pipelineName` `npc` / `modesty`, `dynamicHead`, `r15Plus`), **uploads it as a persistent asset** and inserts it into Workspace. Usually several minutes. Its description says to prefer `async`, but the schema has no `async` property (still absent in 0.748), so expect the call to block. Schema read, not run. |
 | `auto_setup_avatar` | **Undocumented; first seen 2026-11-05.** Rigs a static Workspace Model (`instance_path`, or the single selected Model) as an R15 avatar and places the result beside it; `setup_type` `Platform` (marketplace-compatible, the default) or `Development` (experience-only NPCs). Its schema says do not set Selection with `execute_luau`. Usually 3-5 minutes. Schema read, not run. |
-| `wait_job_finished` | Waits for a background job to reach a terminal state (Completed / Failed / Cancelled) and returns its status. |
+| `wait_job_finished` | Waits for a background job (`jobId` from `async: true`) to reach a terminal state (`Completed` / `Failed` / `Cancelled`). Schema `timeout` defaults to 600 s, **capped at 45 seconds for external MCP clients** — loop while `status == "Running"`. |
 | `store_image` | **Local file → URI.** Loads a png/jpg/jpeg from an absolute local path (**max 5 MB**) and returns an `IMAGEID_<id>` URI for other tools, e.g. as `attachedImageUri` for `generate_procedural_model`. |
 | `upload_image` | **HTTP URLs → asset IDs.** Uploads a *batch* of images **fetched from HTTP(S) URLs** and returns an imagePath→assetId map, e.g. `{"https://…/image.png": "rbxassetid://12345678"}`. |
 
@@ -266,22 +264,26 @@ nested. `explore` answered a read-only question correctly during a playtest (run
 > file goes through `store_image`, which returns an `IMAGEID_` URI, **not** an asset ID.
 
 > **`wait_job_finished` takes a `jobId`**, which you get back from a tool that was called with
-> its own `async: true` argument. Its `timeout` defaults to 600 s. Async is a per-tool argument,
-> **not** a separate wrapper tool — see the corrections log.
+> its own `async: true` argument. Its `timeout` defaults to 600 s in the schema, **but is capped
+> at 45 seconds for external MCP clients**: if a job is still running when a call returns,
+> `status` is `"Running"` — call `wait_job_finished` again with the same `jobId` in a loop until
+> `Completed`, `Failed`, or `Cancelled`. Async is a per-tool argument, **not** a separate wrapper
+> tool — see the corrections log.
 
 ### Documentation and skills
 
 | Tool | What it does |
 |---|---|
 | `http_get` | Fetches Roblox documentation **from an allowlist only**. Supports in-content keyword search via `query`, with `context_lines` (default 3) and `return_full`. |
-| `skill` | Retrieves Roblox's own first-party reference material for a named skill. |
-| `list_skills` | Lists every available skill with its source (`Roblox` for the first-party ones) and description. Read-only. *New 2026-10-29, undocumented* |
-| `create_skill` | Creates a **user** skill from `skill_name` (lowercase, digits, `_` and `-`; may not start with `rbx-`), a one-line `skill_description` and a markdown `skill_body`, and "**publishes**" it, available immediately. *New 2026-10-29; not run here* |
-| `edit_skill` | Renames or rewrites a user-created skill (`new_name`, `new_description`, `new_skill_body` replaces the whole body). Roblox's own skills cannot be edited. *New 2026-10-29; not run here* |
+| `list_roblox_skills` | Lists all 17 built-in `rbx-*` skills (and any user skills) with when to use each. Read-only. Call this before starting unfamiliar Studio work. *(Older 0.745–0.746 hosts exposed `list_skills`; check the live tool list.)* |
+| `get_roblox_skill` | Loads Roblox's first-party guide for a named `rbx-*` or user skill (`skill_name`, `studio_id`). *(Older 0.745–0.746 hosts and `studio/mcp.md` name `skill`; check the live tool list.)* |
+| `create_skill` | Creates a **user** skill from `skill_name` (lowercase, digits, `_` and `-`; may not start with `rbx-`), a one-line `skill_description` and a markdown `skill_body`, and "**publishes**" it, available immediately. |
+| `edit_skill` | Renames or rewrites a user-created skill (`new_name`, `new_description`, `new_skill_body` replaces the whole body). Roblox's own skills cannot be edited. |
+| `submit_feedback` | Sends Studio/MCP tool feedback (`feedback` ≤4000 bytes, `studio_id`) to Roblox. One specific issue per call; **never** send source code, PII, or credentials; do not call if the user asked not to; report in one short sentence after succeeding. |
 
 **`create_skill` and `edit_skill` write persistent state outside the place**, which a place
 revert does not undo, and `edit_skill` replaces the body without a diff. Ask before calling
-either, and read the current body with `skill` before an edit. Per the `Assistant/Skills` docs
+either, and read the current body with `get_roblox_skill` before an edit. Per the `Assistant/Skills` docs
 page, a skill belongs to the **Roblox account**, so it is available in every place that account
 opens, and it is deleted in **Assistant Settings → Skills**: no MCP tool deletes one. Duplicating a
 Roblox-authored skill there disables the original in favour of your copy, and the copy gets no
@@ -301,55 +303,60 @@ than the whole page.
 > `query` returned GitHub's page markup, about 1 MB in 7 lines, so the one "matching section" was
 > a whole line of embedded JSON. For LibMP docs, fetch
 > `raw.githubusercontent.com/Roblox/libmp/main/…` with the host's own fetch tool or `curl`
-> (that host is not on the allowlist), or use `skill("rbx-perf-profiling")`.
+> (that host is not on the allowlist), or use `get_roblox_skill("rbx-perf-profiling")`.
 
-**First-party skills exposed by the `skill` tool (2026-11-07, Studio 0.746.0.7461269, seventeen):**
-`rbx-configs-experimentation`, `rbx-convert-to-streaming`, `rbx-create-skill`, `rbx-debug`,
-`rbx-device-simulator-lua`, `rbx-docs-search`, `rbx-import-asset`, `rbx-input-action-system`,
-`rbx-instrument-analytics`, `rbx-luau-heap-profiling`, `rbx-network-simulator`,
-`rbx-open-cloud-usage`, `rbx-perf-profiling`, `rbx-permissions`, `rbx-process-receipt-misuse`,
-`rbx-scene-analysis`, `rbx-unit-test`. The three added since 2026-11-05 are the Open Cloud set:
-`rbx-open-cloud-usage`, `rbx-permissions` and `rbx-import-asset` (bring a model in from Blender or
-another tool, then repair what the importer changed). The `Assistant` docs page lists
-fewer, so run `list_skills` for the current set.
+#### Built-in `rbx-*` Skills Routing, Ownership & Stale-Step Verification Matrix
 
-These are Roblox's, shipped inside Studio, and they go **deeper than this skill on their specific
-topics**: use `skill("rbx-debug")` for breakpoint work, `skill("rbx-perf-profiling")` for MicroProfiler
-and LibMP analysis, `skill("rbx-luau-heap-profiling")` for leaks, `skill("rbx-scene-analysis")` for
-SceneAnalysisService, `skill("rbx-permissions")` before an Open Cloud call, and
-`skill("rbx-input-action-system")` to migrate input. Use this repository's references for
-architecture, security, and Luau standards, which they do not cover.
+Studio **0.748.0.7481526** exposes **17** first-party skills via `list_roblox_skills` /
+`get_roblox_skill`. Use both layers together with a clear ownership split:
 
-**Read them, then check them: first-party does not mean current.** On 2026-11-07, eleven were read
-in full; for the six long ones (input, streaming, network, analytics, scene, profiling, 50–120 KB
-each) the rule sections were read and every API and tool name was checked against the dump and the
-live tool list. These statements failed when run:
+- **`rbx-*` owns:** Studio MCP execution procedures — debugger breakpoints, MicroProfiler/LibMP,
+  heap snapshots, `SceneAnalysisService`, Network/Device Simulator, Streaming conversion,
+  `ConfigService`, Analytics, UnitTest, `ProcessReceipt` audit, Open Cloud/Permissions, Blender/FBX
+  import, Docs search, and custom skill CRUD.
+- **`roblox-dev-skill` owns:** `--!strict` Luau semantics, server-authoritative security,
+  DataStore/ProfileStore persistence, UI/monetization architecture, `NotScriptable` /
+  `PluginOrOpenCloud` / docs-ahead engine truth, agent→Studio safety, and **verifying stale steps
+  inside `rbx-*`**.
 
-| A Roblox skill says | What happened (Studio 0.746.0.7461269) |
-|---|---|
-| `rbx-device-simulator-lua`: `execute_luau` "cannot access `PlayerGui`, `LocalPlayer`, or live `AbsolutePosition`/`AbsoluteSize` during Play mode" | With `datamodel_type: "Client"` it read `LocalPlayer.PlayerGui`, a `ScreenGui`'s `AbsoluteSize` and the viewport |
-| `rbx-device-simulator-lua`, `rbx-network-simulator`: call `list_roblox_studios` + `set_active_studio` | `set_active_studio` is not a tool. Pass `studio_id` on each call |
-| `rbx-scene-analysis`: `SceneAnalysisService` "doesn't work in edit mode" | `GetInstanceCompositionAsync()` returned a table in `Edit`. Runtime numbers still need a playtest |
-| `rbx-input-action-system`: `StarterGui` "Never registers" an `InputContext` | True of the template. The copy the engine places in `PlayerGui` fired on a real key press (`project-structure.md`) |
-| `rbx-create-skill`: gather requirements with `ask_questions` | Not an MCP tool; ask the user directly |
+**Read them, then check them: first-party does not mean current.** In Studio **0.748.0.7481526**,
+**8 of the 12** large `rbx-*` skills still name the old `skill` tool instead of `get_roblox_skill`,
+**2** call phantom `set_active_studio`, **1** calls phantom `ask_questions`, and all previously
+observed behavioral errors remain unfixed:
 
-Also check what a skill leaves out. `rbx-process-receipt-misuse` audits `ProcessReceipt` and never
-mentions `BindReceiptHandler` (see `monetization.md`), and `rbx-luau-heap-profiling` does not warn
-that its call hangs in `Edit`. Its "Plugin-level security" line held: a game Script gets `lacking
-capability Plugin`.
+| Built-in `rbx-*` skill | When to load via `get_roblox_skill` | Paired `roblox-dev-skill` ref | Stale steps / caveats verified in Studio 0.748 |
+|---|---|---|---|
+| `rbx-configs-experimentation` | Live values without restart via `ConfigService`, feature flags, A/B tests | `project-structure.md` | Clean (0 stale MCP tool names) |
+| `rbx-convert-to-streaming` | Convert a non-streaming place to `StreamingEnabled` or fix streaming bugs | `project-structure.md`, `physics-and-world.md` | Uses old `skill` (6×); references `Workspace.ModelStreamingBehavior` (`NotScriptable` in 0.748) and `Model:SetPrimaryPartCFrame` (marked deprecated in its own migration list) |
+| `rbx-create-skill` | Create, edit, update, or rename a custom user skill | `mcp-integration.md`, `agent-safety.md` | References phantom `ask_questions` tool — ask the user directly |
+| `rbx-debug` | Breakpoints and thread inspection via `ScriptDebuggerService` | `mcp-integration.md`, `luau-fundamentals.md` | Clean (0 stale MCP tool names); `ScriptDebuggerService` is `PluginSecurity` (`execute_luau` only) |
+| `rbx-device-simulator-lua` | Test UI across device sizes and orientations | `ui-systems.md` | Uses phantom `set_active_studio` (5×) & `skill` (2×); falsely claims `execute_luau` cannot access `PlayerGui`, `LocalPlayer`, or `AbsolutePosition`/`AbsoluteSize` during Play — works in `datamodel_type: "Client"` |
+| `rbx-docs-search` | Look up current Engine API, creator guides, or Cloud API via `http_get` | `mcp-integration.md` | Clean; `http_get` requires allowlisted host + `.md` or `llms.txt` |
+| `rbx-import-asset` | Import a Blender/Maya/FBX/glTF model via Open Cloud upload | `file-formats-and-assets.md` | Uses old `skill` (2×); requires user-approved upload directory in MCP Permissions |
+| `rbx-input-action-system` | Any input or controls work (keyboard, mouse, gamepad, touch) via IAS | `project-structure.md`, `ui-systems.md` | Uses old `skill` (18×) & phantom `ask_questions` (3×); notes `StarterGui` is template-only & `Workspace.PlayerScriptsUseInputActionSystem` is `RobloxScriptSecurity` |
+| `rbx-instrument-analytics` | Audit and add `AnalyticsService` economy, funnel, and custom events | `monetization.md`, `security-hardening.md` | Uses old `skill` (6×); uses shorthand `Enum.AnalyticsCustomFieldKeys.CustomField0X.Name` (0.748 dump has `CustomField01`–`03`) |
+| `rbx-luau-heap-profiling` | Profile Luau heap memory and debug memory leaks | `performance-optimization.md` | Does not warn that `HeapProfilerService:ServerRequestDataAsync()` hangs (`Request timeout`) in `Edit`; run in Play `Server` (243.85 ms in 0.748) |
+| `rbx-network-simulator` | Simulate latency, packet loss, 3G/4G; measure lag/desync | `networking.md`, `performance-optimization.md` | Uses phantom `set_active_studio` (7×) & `skill` (32×); `settings().Network` persists across restarts & clamps silently (`InboundNetworkLossPercent=200` → `0.5`, `InboundNetworkMinDelayMs=5000` → `500`) — record and restore (`0`) |
+| `rbx-open-cloud-usage` | Manage dev products, passes, assets, settings with `open_cloud_invoke` | `mcp-integration.md`, `monetization.md` | Clean; check `rbx-permissions` first |
+| `rbx-perf-profiling` | MicroProfiler CPU/GPU bottlenecks, frame spikes, subsystem memory | `performance-optimization.md` | Clean (0 stale MCP tool names) |
+| `rbx-permissions` | Open Cloud scopes, 403s, HTTP allowlist, DataStore/MemoryStore access | `mcp-integration.md`, `agent-safety.md` | Clean; never work around refusals |
+| `rbx-process-receipt-misuse` | Audit Developer Product `ProcessReceipt` handling | `monetization.md`, `datastore-persistence.md` | Uses old `skill` (4×); omits `MarketplaceService:BindReceiptHandler` |
+| `rbx-scene-analysis` | `SceneAnalysisService` rendering, memory, instance counts, leaks | `performance-optimization.md` | Uses old `skill` (3×); falsely says `SceneAnalysisService` fails in `Edit` — all 7 methods returned tables in `Edit` in 0.748 (`GetCollisionGeometryMemoryAsync()` also works in `Edit`/`Server`/`Client`/`Actor` in ~5.14 ms) |
+| `rbx-unit-test` | Write, run, and debug Luau unit tests for `ModuleScript`s | `luau-fundamentals.md`, `worked-examples.md` | Clean (0 stale MCP tool names) |
 
-`rbx-network-simulator` drives `settings().Network` from `execute_luau`. Its values **persist on the
-machine across Studio restarts** (per that skill), so record and restore them. Writes clamp silently,
-measured: `InboundNetworkLossPercent = 200` read back `0.5`, and `InboundNetworkMinDelayMs = 5000`
-read back `500`. A game Script fails on `settings()` with `lacking capability Plugin`.
+`rbx-network-simulator` drives `settings().Network` from `execute_luau` (game Scripts fail with
+`lacking capability Plugin`). Its values **persist on the machine across Studio restarts**, and
+writes clamp silently (`InboundNetworkLossPercent = 200` → `0.5`, `InboundNetworkMinDelayMs = 5000`
+→ `500`, re-verified in Studio 0.748), so always record and restore them.
 
 ### Open Cloud and MCP Permissions
 
 `open_cloud_invoke` (first seen 2026-11-07; docs page 2026-11-05) calls a path under
 `https://apis.roblox.com`. **There is no API key:** Studio requests a short-lived token for each call,
 limited to what the user enabled. Pass `method`, `endpoint` (a path), and optionally `body` (a JSON
-string), `scopes` and `files`. Read `skill("rbx-permissions")` and `skill("rbx-open-cloud-usage")`
-first; `http_get` on `https://create.roblox.com/docs/cloud/llms.txt` finds the endpoints.
+string), `scopes` and `files`. Read `get_roblox_skill("rbx-permissions")` and
+`get_roblox_skill("rbx-open-cloud-usage")` first; `http_get` on
+`https://create.roblox.com/docs/cloud/llms.txt` finds the endpoints.
 
 From the docs page:
 
@@ -363,7 +370,7 @@ From the docs page:
 - **Use `DataStoreService` and `MemoryStoreService` through `execute_luau`, not Open Cloud.**
 - **Uploads create permanent assets** owned by the game's owner. Open Cloud cannot archive or delete
   them; only the Creator Dashboard can. Files must be in a folder the user approved. To bring a model
-  in from Blender or another tool, follow `skill("rbx-import-asset")`: the importer changes scale,
+  in from Blender or another tool, follow `get_roblox_skill("rbx-import-asset")`: the importer changes scale,
   rotation, colours and anchoring, so it records what to expect before uploading.
 - These cannot be granted to MCP at all: badge scopes, `universe-datastores.control:*`,
   `universe-datastores.objects:create`, analytics alerts, and every `legacy-*` scope.
@@ -416,21 +423,22 @@ ones `rbx-permissions` says never to bundle into a general request: name each an
 | Tool | What it does |
 |---|---|
 | `list_roblox_studios` | Lists connected Studio instances with name, Studio instance ID, and place ID. |
+| `save_place` | Saves the open place (`studio_id`, optional `notes` version-history label, ignored for local `.rbxl`/`.rbxlx` files). Returns `status`: `Saved`, `NotNeeded`, `NeedsUserAction`, `Busy`, or `Failed`. **Never publishes.** Call only when requested — each save to Roblox creates a version in version history. |
 
 ### Present in this build but undocumented officially
 
 | Tool | What it does |
 |---|---|
-| `generate_texture` | **Re-textures an existing** MeshPart or Model from `textPrompt` (optional `hintImage`; `model` `Fast` or `Quality`, where `Quality` supports only a single MeshPart), and **replaces the source in place**. Targets `instance_path`, or the current Studio selection when it is omitted. Duplicate the source first if the user may want the original |
-| `segment_mesh` | Splits an existing MeshPart or Model into up to **5** named `parts` and inserts the result as a **new Model next to the source** (the source stays). Same `instance_path` / selection fallback |
+| `generate_texture` | **Re-textures an existing** MeshPart or Model from `textPrompt` (optional `hintImage`; `model` `Fast` or `Quality`, where `Quality` supports only a single MeshPart), and **replaces the source in place**. Targets `instance_path`, or the current Studio selection when it is omitted. Duplicate the source first if the user may want the original. |
+| `segment_mesh` | Splits an existing **single `MeshPart`** into up to **5** named `parts` and inserts the result as a **new Model next to the source** (the source stays). Schema says `MeshPart or Model`, **but measured in Studio 0.748.0.7481526**: passing a multi-MeshPart `Model` fails with `Studio.Assistant.SegmentMesh.SegmentRequiresSingleMeshPart`. |
 
 > Treat these two as unsupported: they are not on the docs page, so they may change or vanish
 > without a release note (`list_plugin_guis` / `capture_plugin_gui` did, between 2026-10-11 and
-> 2026-10-17). Descriptions are from the live schemas of 2026-10-17 (unchanged 2026-10-21 and 2026-10-22);
-> neither was run. The Studio **Texture Generator** page (rewritten 2026-10-16, extended
-> 2026-10-20) describes the same two modes for the Studio tool: `Fast` gives 1K diffuse
-> textures and `Quality` 4K PBR textures, and Ctrl/Cmd+Z undoes a result. Whether the MCP tool
-> produces the same output, or can be undone the same way, was not checked; duplicate first.
+> 2026-10-17). Both were run in Studio 0.748.0.7481526 (`generate_texture` `Fast` on a duplicated
+> mesh ~62 s; `segment_mesh` on a single child `MeshPart` ~41 s, while a multi-MeshPart `Model`
+> errored `SegmentRequiresSingleMeshPart`). The Studio **Texture Generator** page describes `Fast`
+> (1K diffuse textures) and `Quality` (4K PBR textures); duplicate the source first before running
+> `generate_texture`.
 
 ### Known tool defect
 
@@ -504,10 +512,54 @@ project conventions, and destroy work done outside the agent session.
 
 ### 5. Read Roblox's Own Skill First
 
-For debugging, device-form-factor UI testing, MicroProfiler performance analysis, scene
-analysis, Open Cloud, or a permission error, call `skill` with the matching `rbx-*` name before
-hand-rolling an approach. It ships with Studio and is cheaper than rediscovering the same API
-surface. Run what it tells you before you rely on it: see the table under *Documentation and skills*.
+For debugging, device-form-factor UI testing, MicroProfiler or heap analysis, scene analysis,
+streaming, analytics, Open Cloud, permissions, or a `ProcessReceipt` audit, call
+`list_roblox_skills` and then `get_roblox_skill` with the matching `rbx-*` name before hand-rolling
+an approach. These skills ship with Studio and are cheaper than rediscovering the same MCP
+procedure. Cross-check their steps against the 17-skill matrix under *Documentation and skills*
+before executing (for example, pass `studio_id` instead of phantom `set_active_studio`, and
+`get_roblox_skill` instead of `skill`).
+
+### 6. Concept-Image & Generative Asset Pipeline
+
+```text
+1. store_image                →  local png/jpg/jpeg (≤5 MB) → IMAGEID_<id> (~3 s in 0.748; NOT upload_image)
+2. generate_procedural_model  →  pass attachedImageUri + async: true; segmentation auto/none/explicit (≤8 partNames) (~101–107 s)
+   OR generate_mesh           →  maxTriangles (12–20000), size {x,y,z}, async: true (~99 s, returns publishedAssetId)
+   OR generate_material       →  baseMaterial + materialPattern + async: true (~24 s → BaseMaterial + Name)
+   OR generate_scene          →  images / textPrompt + boundingBox* + useMeshGen; runs script in DataModel (~80 s)
+3. wait_job_finished          →  poll jobId in a loop while status == "Running" (45 s per-call cap for external clients)
+4. Post-process (optional):
+   - generate_texture         →  DUPLICATE target first (replaces in place; Fast ~62 s, Quality single MeshPart only)
+   - segment_mesh             →  target a SINGLE MeshPart (~41 s, ≤5 parts; multi-MeshPart Model fails SegmentRequiresSingleMeshPart)
+   - generate_animation       →  textPrompt or R6 inputAssetId, duration 1–30 s, instance_path (uploads/modifies rig)
+5. Inspect & verify           →  search_game_tree / inspect_instance / screen_capture
+```
+
+**Why:** External MCP clients cap `wait_job_finished` at **45 s** per call, whereas Studio 0.748
+generative jobs routinely run **24–107 s** (`generate_material` ~24 s, `segment_mesh` ~41 s,
+`generate_texture` `Fast` ~62 s, `generate_scene` ~80 s, `generate_mesh` ~99 s,
+`generate_procedural_model` ~101–107 s). Loop on `status == "Running"` rather than treating the
+first 45 s return as a failure.
+
+### 7. Automated Playtest, Input & Physics/Visual Verification
+
+```text
+1. get_studio_state       →  confirm Edit is ready, then start_stop_play (start playtest)
+2. Drive inputs (Client)  →  character_navigation (navmesh-reachable target), user_keyboard_input, or user_mouse_input
+3. Assert state           →  execute_luau (Server & Client): read ServerStorage attributes or return structured tables
+                             directly instead of relying on LogService / get_console_output (512-line truncation)
+4. Visual verification    →  screen_capture (primary; focus viewport tab in Edit, live game view in Play)
+5. start_stop_play        →  stop playtest before any multi_edit fix
+```
+
+**Observed Studio 0.748.0.7481526 caveats:**
+- `character_navigation` fails with `Can not find a route to the destination` when the target lacks
+  a walkable navmesh path from spawn; verify terrain/floor continuity before navigating.
+- `video_capture` in Play `Client` returned `Network action VideoCaptureTool.CaptureVideo sent to
+  DMN_ID_PLAYCLIENT failed - Target is not reachable`; keep `screen_capture` primary.
+- In `Edit`, `screen_capture` requires `[x, y, z]` arrays for `camera_position` and
+  `look_at_position` passed together, and captures a dark backdrop if a non-viewport tab is focused.
 
 ---
 
@@ -574,7 +626,12 @@ version does not reintroduce them.
 | 28 tools (2026-10-17 to 2026-10-22) | **31 on 2026-10-29** (Studio 0.745): +`list_skills`, +`create_skill`, +`edit_skill`. | Live tool list |
 | 31 tools (2026-10-29) | **34 on 2026-11-05** (Studio 0.746): +`generate_scene`, +`generate_avatar`, +`auto_setup_avatar`. | Live tool list |
 | 34 tools (2026-11-05) | **35 on 2026-11-07** (Studio 0.746.0.7461269): +`open_cloud_invoke`. | Live tool list |
+| 35 tools (2026-11-07) | **39 on 2026-11-23** (Studio 0.748.0.7481526; **30** in `studio/mcp.md`): +`generate_animation`, +`save_place`, +`submit_feedback`, +`video_capture`. | Live schemas + docs, 2026-11-23 |
+| `list_skills` / `skill` as primary names | Renamed to **`list_roblox_skills`** / **`get_roblox_skill`** in Studio 0.748.0.7481526 (older 0.745–0.746 hosts and `studio/mcp.md` still show `list_skills` / `skill`; check the live tool list). | Live schemas, 2026-11-23 |
+| `segment_mesh` works on any `Model` | Schema says `MeshPart or Model`, **but Studio 0.748 fails on a multi-MeshPart `Model` with `SegmentRequiresSingleMeshPart`**; pass a single `MeshPart`. | Run in Studio 0.748.0.7481526 |
+| `wait_job_finished` waits up to 600 s in one call | Schema `timeout` defaults to 600 s, **capped at 45 s per call for external MCP clients**; loop while `status == "Running"`. | Live schema + Studio 0.748 run |
+| `video_capture` works in Play `Client` | In Studio 0.748.0.7481526 Play `Client`, `video_capture` returned `Target is not reachable`; keep `screen_capture` primary. | Run in Studio 0.748.0.7481526 |
 | `execute_luau` has only plugin privilege to think about | HTTP goes through the Assistant allowlist and data stores through the **Save & load data** scopes, in addition to plugin privilege. | Run 2026-11-07 + docs |
-| Roblox's `rbx-*` skills are "more current than this skill" | They go deeper, and some steps in them are stale. Run them. | Run 2026-11-07 |
-| `skill` and `subagent` absent from this file | Both are real and officially documented. Roblox ships 7 first-party `rbx-*` skills that partly supersede hand-rolled approaches (9 on 2026-10-29, 14 on 2026-11-05, 17 on 2026-11-07). | Official docs + live schemas |
+| Roblox's `rbx-*` skills are "more current than this skill" | They go deeper, and some steps in them are stale (8 of 12 large `rbx-*` skills still name `skill`, 2 call `set_active_studio`, 1 calls `ask_questions`). Verify before running. | Runs 2026-11-07 & 2026-11-23 |
+| `get_roblox_skill` and `subagent` absent from this file | Both are real and officially documented. Roblox ships 7 first-party `rbx-*` skills that partly supersede hand-rolled approaches (9 on 2026-10-29, 14 on 2026-11-05, 17 on 2026-11-07 & 2026-11-23). | Official docs + live schemas |
 | `set_active_studio` is a tool | Does not exist. Targeting is per call via `studio_id`. (Corrected in v2.7.0, kept here as a guard.) | Official docs |

@@ -8,6 +8,19 @@
 > https://create.roblox.com/docs/projects/assets/packages ·
 > https://create.roblox.com/docs/projects/external-tools
 
+## Table of Contents
+
+1. [1. Roblox Native File Formats](#1-roblox-native-file-formats)
+2. [2. Saving & Exporting](#2-saving--exporting)
+3. [3. Importing / Inserting](#3-importing--inserting)
+4. [4. Universal Importer Settings (3D Models)](#4-universal-importer-settings-3d-models)
+5. [5. Asset Management](#5-asset-management)
+6. [6. Place File Troubleshooting](#6-place-file-troubleshooting)
+7. [7. Auto-Recovery Files](#7-auto-recovery-files)
+8. [8. External Tools & File Mapping (Rojo)](#8-external-tools--file-mapping-rojo)
+9. [9. Community Specifications](#9-community-specifications)
+10. [Quick Reference: All Supported File Types](#quick-reference-all-supported-file-types)
+
 ---
 
 ## 1. Roblox Native File Formats
@@ -110,6 +123,17 @@ uncompressed `END` chunk.
 ```
 
 ### Import 3D Meshes (Universal Importer)
+
+> **Studio MCP workflows for 3D & concept-image assets:**
+> - **Importing from Blender / Maya / local `.fbx` / `.gltf` via MCP:** call
+>   `get_roblox_skill("rbx-import-asset")` (from `list_roblox_skills`) before uploading — the
+>   importer alters scale, rotation, colors, and anchoring, and Open Cloud uploads require an
+>   approved directory (`mcp-integration.md`).
+> - **Generating 3D objects, PBR materials, textures, or animations from concept images:** see
+>   Workflow #6 (*Concept-Image & Generative Asset Pipeline*) in `references/mcp-integration.md`
+>   (`store_image` → `generate_procedural_model` / `generate_mesh` / `generate_material` /
+>   `generate_texture` duplicate-first / `segment_mesh` single `MeshPart` / `generate_animation` +
+>   `wait_job_finished` loop).
 
 The **Universal Importer** handles all third-party 3D asset imports.
 

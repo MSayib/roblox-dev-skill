@@ -307,6 +307,40 @@ failure recovery. Data loss is irreversible.
 | Input Action System (IAS) full release | June 11 | `Workspace.PlayerScriptsUseInputActionSystem` — a Studio Properties-window setting. No script (MCP `execute_luau` included) can read or set it: it was `NotScriptable` until 0.742, and since 0.743 it is `RobloxScriptSecurity` ("lacking capability RobloxScript", Studio 0.743). See `references/project-structure.md` |
 | Roblox Connect calling APIs **SUNSET** | **July 15** | Remove usage before deadline |
 
+### November 2026 — engine 0.747 & 0.748 (`0.748.0.7481526`, ingested 2026-11-23)
+
+Derived by diffing the **0.746.0.7461269 and 0.748.0.7481526 Full API Dumps locally** (`0.747.0.7471481` deployed 2026-11-09; `0.748.0.7481526` live across `MacStudio`, `WindowsStudio64`, `MacPlayer`, `WindowsPlayer` since 2026-11-16). **960 classes (+12, −2), 664 enums (+10, −2), 270 class files named `*Service` (351 tagged `Service`), 48 deprecated classes (579 members).** 186 diff events (136 developer-visible). Luau **0.748** (2026-11-20), see `luau-fundamentals.md`. Every row marked *(Studio)* was run in Studio `0.748.0.7481526` across `Script` (Server), `LocalScript` (Client), `Actor` (Parallel), and MCP `execute_luau` (Plugin), and all probe scripts were removed afterwards.
+
+**Now usable in Studio 0.748 (flipped from 0.746, or new and working):**
+
+| Change | Result *(Studio 0.748.0.7481526)* |
+|---|---|
+| `EditableMesh:AddFace(...)` | **Works** from Script, LocalScript, Actor, and `execute_luau` (alongside `AddTriangle`) |
+| `EditableImage:DrawCircle` / `DrawImage` / `DrawLine` / `DrawRectangle` (`alphaBlendType`, plus defaults for `transparency` and `combineType`) | **Works** with non-`Default` `Enum.ImageAlphaType` (e.g. `LockCanvasAlpha`) across all four contexts |
+| `AssetService:GetLatestVersionUriAsync(content)` | **Works** across all four contexts even on public/unowned assets (e.g. `Content.fromAssetId(1818)` → `rbxassetid://1818&version=96`; HTTP 403 restriction lifted) |
+| `SceneAnalysisService:GetCollisionGeometryMemoryAsync()` | **Works** across Edit, Server, Client, and Actor (`table`; `FFlagSceneAnalysisCollisionGeometryMemoryEnabled = True`) — see `performance-optimization.md` |
+| `TestService:ListTests()` | **Returns a `table`** during Play mode (Server, Client, Actor); in Edit mode throws that it runs in Play/Run/Team Test only. `TestService:RegisterTest` requires a `TestSuite` / function signature rather than a bare string |
+| `BoxHandleAdornment.DoubleSided` (plus `ConeHandleAdornment`, `CylinderHandleAdornment`, `ImageHandleAdornment`, `PyramidHandleAdornment`, `SphereHandleAdornment`): `RobloxScriptSecurity` + `Hidden` → **`None`** | **Usable.** Readable and writable (`false` → `true`) across all four contexts |
+| `PhysicsActivitySensor.Active`, `Position`, `Size`: Capabilities `InternalTest` → **`Basic`** (`Position`/`Size` serialization `True` → `False`) | **`Instance.new("PhysicsActivitySensor")` works** across all four contexts (`Active` read-only `true`, `Position`/`Size` readable) |
+| `GuiObject.SelectionGained` / `SelectionLost` gain `inputDirection` (`Enum.GuiNavigationDirection`); `UserInputService:CreateVirtualInput(target?)` gains `target: Instance = nil` | **In engine.** `Enum.GuiNavigationDirection` exists (`None`, `Up`, `Down`, `Left`, `Right`, `Forward`, `Backward`), `SelectionGained` fires with 1 argument (`Enum.GuiNavigationDirection.None`), `CreateVirtualInput(screenGui)` returns an `Object` on Client, and `GamepadService:EnableGamepadCursor()` succeeds with no argument |
+| `+DataModel.ServerRegion` (`string`, `ReadOnly`, `NotReplicated`), `+TeleportOptions.ForcePublicServer` (`bool`, cap `Teleport`), `+ColorCorrectionEffect.ColorLutContent` / `ColorLutIntensity`, `+SocialService:PromptRateExperienceAsync()`, `+Folder`/`Model.ExplorerIconContent`, `+VideoFrame.SubtitlesChanged`, `+ParticleEmitter2D.LightInfluence`, `+AudioStreamReader` / `AudioStreamWriter`, `+ModelInfoService`, `+FilePickerService` / `PickedFile`, `+GameDownloaderService`, `+Blob`, `+SceneSnapshot`, `+SessionStorage`, `+FollowRotationBoneBehavior` / `FollowTwistBoneBehavior` | `DataModel.ServerRegion` reads `""` in Studio/client (live server IATA code per docs); `TeleportOptions.ForcePublicServer` is writable (`Teleport` capability, see `networking.md`); `ParticleEmitter2D` is behind the UI Particles Studio beta (`LightInfluence` replaced removed `LightEmission`); `AudioStreamReader` / `ModelInfoService` exist in the dump |
+| `+AvatarCollisionRules.HitboxSize`, `TouchAndQueryDetectionMode` (`Enum.AvatarSettingsTouchAndQueryDetectionMode`); `+AvatarAccessoryRules.EnableSpawnEffects`; `+Humanoid:GetCanCollideOnDeath()`, `UsesAvatarCollider` (`OverrideDefaultCollisions` deprecated) | `HitboxSize` and `TouchAndQueryDetectionMode` exist; old `AvatarCollisionRules.HitAndTouchDetectionMode` is now `RobloxScriptSecurity` + `Deprecated` |
+| `Enum.DomainType`: `EXPERIENCE`, `OAUTH` removed → **`Experience` (1), `Group` (2), `OAuth` (3)**; `Enum.ImageCombineType` +7 blend modes (`Darken`, `Lighten`, `Screen`, `Overlay`, `SoftLight`, `HardLight`, `Difference`) | Update any `Enum.DomainType.EXPERIENCE` / `OAUTH` code to PascalCase (`Experience` / `OAuth`) |
+| `HapticEffect:GetWaveformKeys()` (`DFFlagHapticEffectGetWaveformKeys = True`) | No longer says "not enabled" — requires `HapticEffect.Type == Enum.HapticEffectType.Custom` (throws `HapticEffect.Type is not Custom` otherwise) |
+
+**Now plugin-only (`None` + `PluginOrOpenCloud` in 0.748 — `execute_luau` succeeds, game `Script` fails `lacking capability PluginOrOpenCloud`):**
+
+- `PlaceSettings:GetActiveRollouts()` (`FFlagPlaceSettingsService = True`; `GetService("PlaceSettings")` still returns `nil` from Server/Client/Actor)
+- `Decal.MetalnessMap`, `NormalMap`, `RoughnessMap`, `EmissiveMaskContent`, `MetalnessMapContent`, `NormalMapContent`, `RoughnessMapContent`
+- `VoiceChatService.DefaultDistanceAttenuation`, `EnableDefaultVoice`, `UseAudioApi`
+- `Chat.LoadDefaultChat`, `Lighting.LightAttenuationMode` (`Enum.LightAttenuationMode`), `BaseWrap` (`CageMeshContent`, `CageMeshId`, `CageOrigin`, `ImportOrigin`), `WrapLayer` (`BindOffset`, `ReferenceMeshContent`, `ReferenceMeshId`, `ReferenceOrigin`; `TargetShaping` write `AvatarAppearance`), `WrapTarget.Stiffness` (deprecated), `TextDocument:ReadAsync()` (`Yields`)
+
+**Removed in 0.747–0.748:** `PlayerDataRecord`, `PlayerDataRecordConfig`, `Player.GetData`, `PlayerData.GetPlayer` / `GetRecordAsync`, `PlayerDataService.GetRecordConfig` / `LoadFailureBehavior`, `Enum.PlayerDataErrorState`, `Enum.PlayerDataLoadFailureBehavior`; `Workspace.ImprovedAnimationConstraint` (was `NotScriptable`), `ParticleEmitter2D.LightEmission` (replaced by `LightInfluence`), `WrapLayer.RotateScaleDeformationMap` / `ScaleOnlyDeformationMap`.
+
+**Still NOT enabled / refused / unchanged in Studio 0.748 *(Studio)*:** `buffer.readvectorf32x2/x3` and `writevectorf32x2/x3` (`nil`, `DebugLuauBufferVectorLibrary` off), `integer` global (`nil`, clipped from Luau 0.747), `GeometryService:BakeToMeshAsync()` (`This API is not available yet`), `GeometryService:SplitApartAsync()` (`This API is not yet released!`), `GeometryService:NegateAsync()` / `SeparateAsync()` (added in dump with `CSG` + `PluginOrOpenCloud`, fail `the function is not enabled yet.` in `execute_luau` and `lacking capability PluginOrOpenCloud` in game Scripts), `SerializationService:SerializeValue` (`not yet enabled`), `MeshPart:GetSurfaceSlotsAsync` (`not yet enabled`), `ModerationService:BindViolationProcessor` (`Safety callback API is not enabled`), `TweenInfo.new` / `TweenService:GetValue` / `UIPageLayout` with `EasingStyle.Spring` or `Bezier` (error / stay `Back`), `Camera.ProjectionType = Enum.ProjectionType.Orthographic` / `OrthographicSize` (silently ignored), `PartType.Capsule` (accepts enum, behaves as Block with mass `56` on `4×10×2`), `Player.DeviceTrustLevel` (`Pending` in Studio; callback assignable on Server/Actor only), `MarketplaceService:CanUsersTransferRobuxAsync` (`not enabled`), `GetPassOwnershipAsync` (`{ Owned, Active }`), `RunService:BindToSimulationParallel` / `BindToAnimationParallel` (Actor-only), and existing `PluginOrOpenCloud` / `RobloxScriptSecurity` / `InternalTest` gates (`AnimationPlayer`, `Stats:GetMemoryUsageMbFiltered`, `SoundService:GetInputDevice`).
+
+**Creator-docs sync (2026-11-07 to 2026-11-23, `Roblox/creator-docs` through `a23352b2`):** `STUDIO_VERSION` updated to `0.748.0.7481526`; `studio/mcp.md` lists 30 tools (`generate_avatar`, `generate_animation`, `save_place`, `submit_feedback`, notes cross-teleport playtest automation); `projects/teleport.md` adds *Test teleports in Studio*; the `TestService` reference page was rewritten for automated Luau unit tests; `ui/2D-particle-emitters.md` documents `ParticleEmitter2D` (UI Particles beta); `ui/temporary-limits.md` documents the 24h+ / 60s `⏱️⏱️⏱️` limit on non-`TextChatService` player conversation surfaces; `studio/testing-modes.md` adds `LogService:GetLogHistoryAsync()` in Team Test; `studio/explorer.md` adds JSON copy/paste; `studio/cli.md` adds `--background` (Mac).
+
 ### November 2026 — re-run of 2026-11-07 on 0.746.0.7461269 (an empty dump diff, and changed behaviour)
 
 **The dump diff from 0.746.0.7461264 to 0.746.0.7461269 has zero events, yet these results changed
@@ -396,7 +430,7 @@ row below says which were run.
 | `DataModel.ServerLowMemoryWarning` page: can fire more than once, no guarantee of shutdown or survival | See `performance-optimization.md`. The signal exists *(Studio)*; it cannot be triggered on demand, so a handler is untested here |
 | **VIP server access checks** (`projects/teleport-private-servers.md`) | See `networking.md`: each player is checked at connect time, and `TeleportInitFailed` must be handled (*docs*) |
 | **Chat guidelines rewritten** (`chat/guidelines.md`): any player conversation in under 60 seconds must use `TextChatService`, and player-editable text needs filtering **and** a one-minute rate limit | See `networking.md` (*docs*) |
-| Character Controller Library pages now carry a beta notice; `Workspace.ImprovedAnimationConstraint` and `PrimalPhysicsSolver` left the `Workspace` page (the first is still `NotScriptable` in the 0.746 dump); Experiments gain metric sets (Default, Rewarded Video Earnings, up to three custom metrics); Marketplace share links (up to 20 active per item); promotional text beta; stricter error-report rule validation | No code change (*docs*) |
+| Character Controller Library pages now carry a beta notice; the deprecated `ImprovedAnimationConstraint` and `PrimalPhysicsSolver` properties left the `Workspace` page (both were later removed from the API dump by 0.748); Experiments gain metric sets (Default, Rewarded Video Earnings, up to three custom metrics); Marketplace share links (up to 20 active per item); promotional text beta; stricter error-report rule validation | No code change (*docs*) |
 
 ### October 2026 — engine 0.745.0.7451137 (ingested 2026-10-29)
 
@@ -743,7 +777,7 @@ Modified return behavior. Check current documentation for updated return values.
 -- NEW: User data type (available now for early testing)
 local player: Player = ... -- from PlayerAdded
 local user = player.User
-print(user.DomainType)  -- Enum.DomainType.EXPERIENCE
+print(user.DomainType)  -- Enum.DomainType.Experience (renamed from EXPERIENCE in 0.748; also Group, OAuth)
 print(user.DomainId)    -- Current Universe ID
 
 -- Convert legacy Global ID → User object
